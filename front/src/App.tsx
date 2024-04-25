@@ -1,35 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+
+import { LandingPage } from './pages/landingPage/LandingPage';
+import { WaitingPage } from './pages/waitingPage/WaitingPage';
+import { HeaderBar } from './components/header/HeaderBar';
+
+import './App.css';
+import 'semantic-ui-css/semantic.min.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+	const [isModal, setModal] = useState(false);
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	const changeModal = () => {
+		setModal(!isModal);
+		console.log(isModal);
+	};
+
+	return (
+		<>
+			<LandingPage></LandingPage>
+			<HeaderBar $main={true}></HeaderBar>
+			<HeaderBar $ide={true} $mode={1}></HeaderBar>
+			<HeaderBar $ide={true} $mode={2}></HeaderBar>
+			<div>
+				<button onClick={() => changeModal()}> 방 만들기 </button>
+			</div>
+			{isModal && <WaitingPage changeModal={changeModal}></WaitingPage>}
+		</>
+	);
 }
 
-export default App
+export default App;

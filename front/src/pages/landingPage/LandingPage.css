@@ -1,0 +1,33 @@
+.LandingPage {
+  width: 100%;
+}
+
+.Content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5vw;
+}
+
+.HeaderSection {
+  width: 90vw;
+}
+
+.ButtonColor {
+  background-color: #453C41 !important;
+  color: white !important;
+
+  display: flex !important;
+  align-items: center;
+}
+
+.VideoSection {
+  margin: 5vh 0 5vh 0;
+}
+
+.CTASection {
+  margin-bottom: 5vh;
+}
+
+.FontSize {
+  font-size: 1.25rem;
+}
