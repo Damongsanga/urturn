@@ -1,0 +1,76 @@
+.WaitingRoomBackground {
+  position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+
+	backdrop-filter: blur(3px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	z-index: 2;
+}
+
+.WaitingRoom {
+	width: 70vw;
+	height: 80vh;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+
+	background-color: rgb(246, 246, 246);
+	border-radius: 5px;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	/* box-shadow: 2px 7px 15px 8px rgba(0, 0, 0, 0.3); */
+}
+
+.Content {
+	display: flex;
+	flex-direction: column;
+	margin-left: 5vw;
+}
+
+.AllSection {
+	display: flex;
+}
+
+.HeaderSection {
+	margin-bottom: 1vh;
+}
+
+.Header {
+	margin-left: 0px !important;
+	padding-left: 0px !important;
+	margin-right: 5vw;
+}
+
+.RightSection {
+	width: 70%;
+}
+
+.Card-without-border {
+  border: none !important;
+  box-shadow: none !important;
+	background: none !important;
+
+	width: 200px !important;
+}
+
+.FitContent {
+	width: fit-content;
+}
+
+.Volume {
+	width: 100vw;
+}
+
+.Icon {
+	margin: 0 !important;
+}
+
+.StartButton {
+	margin-top: 5vh;
+}

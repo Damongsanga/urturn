@@ -1,0 +1,38 @@
+.HeaderBar {
+  width: 100vw;
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.HeaderBar.Main {
+  background-color: #3A2302;
+}
+
+.HeaderBar.Ide {
+  background-color: #A67A6A;
+}
+
+.HeaderAlign {
+  margin-left: auto;
+}
+
+.QuitButton {
+  margin-right: 2vw;
+}
+
+.FontColor {
+  color: white !important;
+}
+
+.Main .ButtonColor {
+  background-color: #D4DBE2 !important;
+  color: black !important;
+}
+
+.Ide .ButtonColor {
+  background-color: #F2CAB3 !important;
+  color: black !important;
+}
