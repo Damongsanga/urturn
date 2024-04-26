@@ -1,5 +1,5 @@
-import Editor, { DiffEditor, useMonaco, loader } from '@monaco-editor/react';
-import { useEffect, useRef, useState } from 'react';
+import Editor, { loader } from '@monaco-editor/react';
+import { useRef,} from 'react';
 
 import * as monaco from 'monaco-editor';
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
@@ -30,11 +30,11 @@ loader.config({ monaco });
 
 loader.init().then(/* ... */);
 
-export default function CodeEditor(lang: string) {
+export default function CodeEditor({lang}: {lang: string}) {
 
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
-    function handleEditorDidMount(editor: monaco.editor.IStandaloneCodeEditor, monaco: any) {
+    function handleEditorDidMount(editor: monaco.editor.IStandaloneCodeEditor) {
       editorRef.current = editor;
     }
 

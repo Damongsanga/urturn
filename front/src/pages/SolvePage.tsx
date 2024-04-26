@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
@@ -44,7 +44,7 @@ export default function SolvePage() {
             <Allotment vertical>
               <Allotment.Pane minSize={350}>
                 <div style={{ height: '100%', width: '100%' }}>
-                  <CodeEditor/>
+                  <CodeEditor lang="javascript" />
                 </div>
               </Allotment.Pane>
               <Allotment.Pane minSize={100}>
