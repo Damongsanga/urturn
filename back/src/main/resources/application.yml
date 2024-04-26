@@ -1,0 +1,64 @@
+spring:
+  profiles:
+    include: secret
+
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name:
+
+  jpa:
+    hibernate:
+      ddl-auto:
+    properties:
+      hibernate:
+        format_sql:
+        dialect:
+        default_batch_fetch_size:
+  #    show-sql: true
+
+  jwt:
+    header:
+    secret:
+    access-token-validity-in-seconds :
+    refresh-token-validity-in-seconds :
+
+  data:
+    redis:
+      host:
+      port:
+#      password:
+
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id:
+            client-secret:
+          password-salt:
+
+#  servlet:
+#    multipart:
+#      max-file-size:
+#      max-request-size:
+
+logging.level:
+  org.hibernate.SQL:
+
+aes:
+  secret-key:
+
+#cloud:
+#  aws:
+#    s3:
+#      bucket:
+#    credentials:
+#      access-key:
+#      secret-key:
+#    region:
+#      static:
+#      auto:
+#    stack:
+#      auto:
