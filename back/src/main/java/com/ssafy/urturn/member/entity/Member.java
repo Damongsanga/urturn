@@ -38,7 +38,6 @@ public class Member extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String password;
     @Column(nullable = false, unique = true)
     private String nickname;
@@ -63,6 +62,10 @@ public class Member extends BaseEntity implements UserDetails {
             .nickname(nickname)
             .profileImage("testProfileImage")
             .level(Level.LEVEL1).build();
+    }
+
+    public void updateGithubRepository(String repository){
+        this.repository = repository;
     }
 
 

@@ -18,6 +18,7 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,17 +59,21 @@ public class JwtTokenProvider {
 
     // Member 정보를 가지고 AccessToken, RefreshToken을 생성하는 메서드
     public JwtToken generateToken(Authentication authentication) {
+
+        Claims claims = Jwts.claims().setSubject(authentication.getName());
         // 권한 가져오기
-        String authorities = authentication.getAuthorities().stream()
+        Set<String> roles = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+                .collect(Collectors.toSet());
+
+        claims.put("roles", roles);
 
         long now = (new Date()).getTime();
 
         // Access Token 생성
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
-                .claim("auth", authorities)
+                .setClaims(claims)
                 .setExpiration(new Date(now + accessTokenValidityInSeconds * 1000))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -76,7 +81,7 @@ public class JwtTokenProvider {
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
                 .setSubject(authentication.getName())
-                .claim("auth", authorities)
+                .setClaims(claims)
                 .setExpiration(new Date(now + refreshTokenValidityInSeconds * 1000))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -101,14 +106,17 @@ public class JwtTokenProvider {
         // Jwt 토큰 복호화 (Claim이 권한 정보)
         Claims claims = parseClaims(accessToken);
 
-        if (claims.get("auth") == null) {
+        if (claims.get("roles") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
 
-        // 클레임에서 권한 정보 가져오기
-        Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get("auth").toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        // 클레임에서 권한 정보 가져오기 (권한 정보가 Set<String>으로 저장되어 있다고 가정)
+        @SuppressWarnings("unchecked")
+        Set<String> roles = (Set<String>) claims.get("roles");
+
+        Collection<? extends GrantedAuthority> authorities = roles.stream()
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toSet());
 
         // UserDetails 객체를 만들어서 Authentication return
         // UserDetails: interface, User: UserDetails를 구현한 class
