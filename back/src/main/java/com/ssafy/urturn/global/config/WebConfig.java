@@ -1,8 +1,10 @@
 package com.ssafy.urturn.global.config;
 
 import com.ssafy.urturn.global.auth.ReferrerCheckInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.filter.ForwardedHeaderFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -41,6 +43,12 @@ public class WebConfig implements WebMvcConfigurer {
             .allowedHeaders("Authorization", "content-type")
             .allowedMethods("GET", "POST", "DELETE", "PATCH", "OPTIONS")
             .allowCredentials(true);
+    }
+
+    // nginx 요청 기준으로 swagger에 연결하지 않도록 forward-proxy 사용 설정
+    @Bean
+    ForwardedHeaderFilter forwardedHeaderFilter() {
+        return new ForwardedHeaderFilter();
     }
 
 }
