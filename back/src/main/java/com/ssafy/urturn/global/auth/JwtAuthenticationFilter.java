@@ -7,11 +7,13 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends GenericFilterBean {
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -20,6 +22,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         // 1. Request Header에서 JWT 토큰 추출
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
+
+
+        log.info("filter token : {}", token);
+        log.info("getRequestURI : {}", httpServletRequest.getRequestURI());
+        log.info("getRequestURL : {}", httpServletRequest.getRequestURL());
+
         // reissue일 경우는 토큰 검사 X
         if (!httpServletRequest.getRequestURI().equals("/auth/reissue")) {
             // 2. validateToken으로 토큰 유효성 검사
