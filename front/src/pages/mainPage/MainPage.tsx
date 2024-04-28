@@ -1,8 +1,11 @@
 import React from 'react';
 import { Button, Card, Grid, Image, GridRow, GridColumn } from 'semantic-ui-react';
+import { useRoomStore } from '../../stores/roomStore';
 import 'semantic-ui-css/semantic.min.css';
 
 const MainPage: React.FC = () => {
+    const roomStore = useRoomStore();
+
     const cardStyle = {
         backgroundColor: '#f8d1c2', // Replace with the exact color from the image
         color: '#4f4f4f', // Replace with the exact text color from the image
@@ -33,7 +36,7 @@ const MainPage: React.FC = () => {
                                 </Card.Description>
                             </Card.Content>
                             <Card.Content extra>
-                                <Button style={buttonStyle}>방 만들기</Button>
+                                <Button style={buttonStyle} onClick={(e) => {roomStore.createRoom()}}>방 만들기</Button>
                             </Card.Content>
                         </Card>
                     </GridColumn>
