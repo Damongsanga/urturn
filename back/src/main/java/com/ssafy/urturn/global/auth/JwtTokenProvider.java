@@ -18,6 +18,7 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -112,7 +113,7 @@ public class JwtTokenProvider {
 
         // 클레임에서 권한 정보 가져오기 (권한 정보가 Set<String>으로 저장되어 있다고 가정)
         @SuppressWarnings("unchecked")
-        Set<String> roles = (Set<String>) claims.get("roles");
+        List<String> roles = (List<String>) claims.get("roles");
 
         Collection<? extends GrantedAuthority> authorities = roles.stream()
             .map(SimpleGrantedAuthority::new)
