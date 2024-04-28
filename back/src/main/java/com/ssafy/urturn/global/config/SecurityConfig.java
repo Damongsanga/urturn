@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // 해당 API에 대해서는 모든 요청을 허가
                         .requestMatchers("/auth/reissue", "/auth/oauth2/login/github").permitAll()
+                    .requestMatchers("/actuator/health").permitAll()
                         // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정
                         .anyRequest().authenticated())
                 // 에러 핸들링
@@ -63,7 +64,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() { // security를 적용하지 않을 리소스
         return web -> web.ignoring()
             // error endpoint를 열어줘야 함, favicon.ico 추가!
-            .requestMatchers("/error", "/favicon.ico", "/actuator/health");
+            .requestMatchers("/error", "/favicon.ico");
     }
 
 }
