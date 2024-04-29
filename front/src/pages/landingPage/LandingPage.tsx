@@ -34,11 +34,6 @@ export const LandingPage = () => {
 								referrerPolicy='strict-origin-when-cross-origin'
 								allowFullScreen
 							></iframe>
-							{/* <video
-							src='https://youtu.be/rub7vg6YG7k?si=5-SYZemFFNfS9Cfp'
-							controls
-							style={{ width: '40vw' }}
-						></video> */}
 						</div>
 
 						{/* CTA 문구 & 버튼 영역 */}
