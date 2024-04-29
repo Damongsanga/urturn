@@ -31,7 +31,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         // favicon.ico 요청을 비어 있는 응답으로 처리
         registry.addViewController("/favicon.ico").setStatusCode(HttpStatus.NO_CONTENT);
-
         // /error 요청을 비어 있는 응답으로 처리
         registry.addViewController("/error").setStatusCode(HttpStatus.NO_CONTENT);
     }
@@ -39,7 +38,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOrigins("k10a206.p.ssafy.io:3001", "https://k10a206.p.ssafy.io", "http://localhost:3000")
+            .allowedOrigins("http://k10a206.p.ssafy.io:3001", "https://k10a206.p.ssafy.io", "http://localhost:3000", "http://localhost:5173")
             .allowedHeaders("Authorization", "content-type")
             .allowedMethods("GET", "POST", "DELETE", "PATCH", "OPTIONS")
             .allowCredentials(true);

@@ -37,6 +37,7 @@ public class OAuthController {
 
     @GetMapping("/oauth2/login/github")
     public ResponseEntity<LoginResponse> gitHubLogin(@RequestParam String code){
+        log.info("code : {}", code);
         LoginResponse res = oAuthService.githubOAuthLogin(code);
         HttpHeaders headers = getHeadersWithCookie(res);
         return new ResponseEntity<>(res, headers, HttpStatus.OK);
