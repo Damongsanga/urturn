@@ -12,7 +12,7 @@
 }
 
 .HeaderBar.Ide {
-  background-color: #A67A6A;
+  background-color: #DBB39A !important;
 }
 
 .HeaderAlign {
@@ -32,7 +32,23 @@
   color: black !important;
 }
 
+.Main .ButtonColor:hover,
+.Main .ButtonColor:active  {
+  background-color: #b4b9bf !important; 
+  border-color: #b4b9bf  !important;
+
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
+}
+
 .Ide .ButtonColor {
   background-color: #F2CAB3 !important;
   color: black !important;
+}
+
+.Ide .ButtonColor:hover,
+.Ide .ButtonColor:active  {
+  background-color: #b78567 !important; 
+  border-color: #b78567  !important;
+
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
 }
