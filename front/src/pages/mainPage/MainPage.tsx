@@ -1,5 +1,7 @@
+import React from 'react';
 import { Button, Card, Grid, Image, GridRow, GridColumn } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
+import {HeaderBar} from "../../components/header/HeaderBar.tsx";
 import './MainPage.css';
 
 const MainPage: React.FC = () => {
@@ -23,6 +25,8 @@ const MainPage: React.FC = () => {
 	};
 
 	return (
+        <>
+            <HeaderBar $main={true}/>
 		<div style={{ width: '100vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 			<div style={{}}>
 				<Grid columns={2}>
@@ -66,6 +70,7 @@ const MainPage: React.FC = () => {
 				</Grid>
 			</div>
 		</div>
+        </>
 	);
 };
 
