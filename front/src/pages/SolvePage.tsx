@@ -1,18 +1,22 @@
 import { useEffect, useState } from 'react';
 
 import { Allotment } from "allotment";
-import "allotment/dist/style.css";
 import CodeEditor from '../components/solve/CodeEditor';
 import Markdown from 'markdown-to-jsx'
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown, Grid, GridColumn } from 'semantic-ui-react'
 
-import 'semantic-ui-css/semantic.min.css'
+import "allotment/dist/style.css";
+
+import { HeaderBar } from '../components/header/HeaderBar';
+import { SolveSubHeader } from '../components/solve/sloveSubHeader';
+
+import './SolvePage.css'
 
 const langOptions = [
-  { key: 100, text: '100', value: 100 },
-  { key: 200, text: '200', value: 200 },
-  { key: 300, text: '300', value: 300 },
-  { key: 400, text: '400', value: 400 },
+  { key: 'C++', text: 'C++', value: 'C++' },
+  { key: 'Java', text: 'Java', value: 'Java' },
+  { key: 'Python', text: 'Python', value: 'Python' },
+  { key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
 ]
 
 export default function SolvePage() {
@@ -23,24 +27,36 @@ export default function SolvePage() {
     }, []);
   
     return (
-      <div style={{ width: '100%', height: '100%' }}>
-        <div>
-        <Dropdown
-            search
-            defaultValue={langOptions[0].value}
-            searchInput={{ type: 'string' }}
-            selection
-            options={langOptions}
-            style={{ backgroundColor: 'green' }}
-          />
-        </div>
+      <div className='Page'>
+
+          <HeaderBar $ide={true} $mode={1}/>
+          
+          <SolveSubHeader $mode={1}/>
+        
+        <div style={{height: '80vh' }}>
         <Allotment>
           <Allotment.Pane minSize={350}>
-          <div style={{ height: '100%', overflowY: 'auto'  }}>
-            <Markdown>{fileContent}</Markdown>
-          </div>
+            <div className='HeaderBar Ide' style={{ height: '70px'}}>
+              <div style={{width: '98%', textAlign: 'left', fontSize: '20px', fontWeight: 'bold', color: 'white'}}>
+              양과 늑대
+              </div>
+
+            </div>
+            <div style={{ height: '100%', overflowY: 'auto'  }}>
+              <Markdown>{fileContent}</Markdown>
+            </div>
           </Allotment.Pane>
           <Allotment.Pane minSize={350}>
+            <div className='HeaderBar Ide' style={{ height: '70px'}}>
+              <div style={{width: '98%', textAlign: 'left', fontSize: '20px', fontWeight: 'bold', color: 'white'}}>
+              <Dropdown
+                search
+                defaultValue={langOptions[0].value}
+                searchInput={{ type: 'string' }}
+                options={langOptions}
+              />
+              </div> 
+            </div>
             <Allotment vertical>
               <Allotment.Pane minSize={350}>
                 <div style={{ height: '100%', width: '100%' }}>
@@ -53,6 +69,19 @@ export default function SolvePage() {
             </Allotment>
           </Allotment.Pane>
         </Allotment>
+        </div>
+  
       </div>
     );
   }
+
+  // <div>
+  //       <Dropdown
+  //           search
+  //           defaultValue={langOptions[0].value}
+  //           searchInput={{ type: 'string' }}
+  //           selection
+  //           options={langOptions}
+  //           style={{ backgroundColor: 'green' }}
+  //         />
+  //       </div>

@@ -4,6 +4,7 @@ import  MainPage  from './pages/mainPage/MainPage.tsx';
 import { LandingPage} from "./pages/landingPage/LandingPage.tsx";
 import {GithubCallback} from "./utils/Github.tsx";
 import { MyPage } from './pages/myPage/MyPage.tsx';
+import SolvePage from './pages/SolvePage.tsx';
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
 					<Route path='/main' element={<MainPage />} />
 					<Route path='/auth/github' element={<GithubCallback/>}/>
 					<Route path='/myPage' element={<MyPage />} />
+					<Route path='/solve' element={<SolvePage />} />
 				</Routes>
 			</BrowserRouter>
 		</>
