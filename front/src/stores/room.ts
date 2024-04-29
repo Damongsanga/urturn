@@ -12,9 +12,15 @@ export const useRoomStore = create<roomState>() (
             client: null,
             players: [],
 
-            createRoom: () => {
+            createRoom: (token:string) => {
+                console.log(token);
                 const client = new Client({
                     brokerURL: 'ws://' + url + ':' + port + '/app/createRoom',
+                    
+                    connectHeaders: {
+                        Authorization: 'Bearer ' + token,
+                      },
+                    
                     debug: function (str: string) {
                       console.log("debug:" + str);
                     },

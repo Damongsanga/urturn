@@ -7,9 +7,13 @@ import './MainPage.css';
 
 import { WaitingPage } from '../waitingPage/WaitingPage';
 
+import { useAuthStore } from '../../stores/useAuthStore.ts';
+
 const MainPage: React.FC = () => {
     const roomStore = useRoomStore();
     const [open, setOpen] = React.useState(false);
+
+	const authStore = useAuthStore();
 
     useEffect(() => {
         roomStore.clearRoom();
@@ -35,7 +39,8 @@ const MainPage: React.FC = () => {
 	};
 
     const createRoom = () => {
-        roomStore.createRoom();
+		if(authStore.accessToken===undefined || authStore.accessToken===null) { console.log("로그인 해야합니다."); return;}
+        roomStore.createRoom(authStore.accessToken);
         setOpen(true);
     }
 
