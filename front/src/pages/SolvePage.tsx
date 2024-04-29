@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Allotment } from "allotment";
 import CodeEditor from '../components/solve/CodeEditor';
 import Markdown from 'markdown-to-jsx'
-import { Dropdown, Grid, GridColumn } from 'semantic-ui-react'
+import { Dropdown } from 'semantic-ui-react'
 
 import "allotment/dist/style.css";
 
