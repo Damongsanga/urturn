@@ -26,7 +26,7 @@ public class MemberController {
     }
 
     @PatchMapping()
-    public ResponseEntity<Void> update(@RequestParam String repository){
+    public ResponseEntity<Void> update( @RequestParam String repository){
         memberService.updateGithubRepository(repository);
         return ResponseEntity.ok().build();
     }
