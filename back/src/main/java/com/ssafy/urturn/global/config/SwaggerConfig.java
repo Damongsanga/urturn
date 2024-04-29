@@ -7,6 +7,8 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityScheme.Type;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +23,16 @@ public class SwaggerConfig {
 		final String moduleName = "urturn";
 		final String apiTitle = String.format("%s API", StringUtils.capitalize(moduleName));
 
-		return new OpenAPI()
+		// 테스트할 서버 세팅
+		Server localServer = new Server();
+		localServer.setDescription("local");
+		localServer.setUrl("http://localhost:8080");
+
+		Server testServer = new Server();
+		testServer.setDescription("server");
+		testServer.setUrl("https://k10a206.p.ssafy.io/api");
+
+		OpenAPI openAPI = new OpenAPI()
 			.components(new Components()
 				.addSecuritySchemes(securitySchemeName,
 					new SecurityScheme()
@@ -38,6 +49,11 @@ public class SwaggerConfig {
 				.title(apiTitle)
 				.description("어마어마하게 재밌고 유용한 페어프로그래밍 서비스입니다")
 				.version("1.0.0"));
+
+		openAPI.setServers(Arrays.asList(localServer, testServer));
+
+		return openAPI;
+
 
 	}
 }
