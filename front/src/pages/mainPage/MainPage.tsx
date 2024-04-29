@@ -1,10 +1,17 @@
-import React from 'react';
-import { Button, Card, Grid, Image, GridRow, GridColumn } from 'semantic-ui-react';
-import { useRoomStore } from '../../stores/roomStore';
+import React, { useEffect } from 'react';
+import { Button, Card, Grid, Image, GridRow, GridColumn, Modal, Header } from 'semantic-ui-react';
+import { useRoomStore } from '../../stores/room';
 import 'semantic-ui-css/semantic.min.css';
+
+import { WaitingPage } from '../waitingPage/WaitingPage';
 
 const MainPage: React.FC = () => {
     const roomStore = useRoomStore();
+    const [open, setOpen] = React.useState(false);
+
+    useEffect(() => {
+        roomStore.clearRoom();
+    }, []);
 
     const cardStyle = {
         backgroundColor: '#f8d1c2', // Replace with the exact color from the image
@@ -22,6 +29,11 @@ const MainPage: React.FC = () => {
         width: '100%', // Make the button fill the card width
     };
 
+    const createRoom = () => {
+        roomStore.createRoom();
+        setOpen(true);
+    }
+
     return (
         <div style={{width : '100vw', display : 'flex', justifyContent : 'center', alignItems: 'center'}}>
             <div style={{}}>
@@ -36,7 +48,7 @@ const MainPage: React.FC = () => {
                                 </Card.Description>
                             </Card.Content>
                             <Card.Content extra>
-                                <Button style={buttonStyle} onClick={(e) => {roomStore.createRoom()}}>방 만들기</Button>
+                                <Button style={buttonStyle} onClick={(e) => {createRoom()}}>방 만들기</Button>
                             </Card.Content>
                         </Card>
                     </GridColumn>
@@ -56,6 +68,14 @@ const MainPage: React.FC = () => {
                 </GridRow>
             </Grid>
         </div>
+
+        <Modal open={open}>
+            <Header icon='archive' content='준비 중' />
+            <Modal.Content>
+                <WaitingPage changeModal={() => {setOpen(false)}} />
+            </Modal.Content>
+        </Modal>
+
         </div>
     );
 }

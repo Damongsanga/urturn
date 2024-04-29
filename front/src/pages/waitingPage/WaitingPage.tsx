@@ -23,12 +23,17 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import logo from '../../assets/images/logo.svg';
 import './WaitingPage.css';
 
+import { useRoomStore } from '../../stores/room';
+
 interface ModalProps {
 	changeModal: () => void;
 	// 모달을 닫는 함수
 } 
 
 export const WaitingPage = ({changeModal} : ModalProps ) => {
+
+	const roomStore = useRoomStore();
+
 	const [volume, setVolume] = useState({ speaker: 50, microphone: 50 });
 	const { speaker, microphone } = volume;
 	// 스피커 볼륨, 마이크 볼륨
@@ -83,7 +88,12 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 									<Card className='Card-without-border'>
 										<CardContent>
 											<Image
-												src='https://avatars.githubusercontent.com/u/19562994?v=4'
+												src={
+													roomStore.players[0].profileImgUrl?
+													roomStore.players[0].profileImgUrl
+													:
+													'https://avatars.githubusercontent.com/u/19562994?v=4'
+												}
 												size='small'
 												rounded
 											/>

@@ -1,21 +1,17 @@
-import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { create } from "zustand";
 import { persist } from 'zustand/middleware';
+import { roomState } from '../types/roomTypes';
 
-interface roomState {
-    client: Client | null,
-
-    createRoom: () => void
-}
-
-const url = import.meta.env.WEBSOCKET_URL
-const port = import.meta.env.WEBSOCKET_PORT
+const url = import.meta.env.VITE_API_WEBSOCKET_URL
+const port = import.meta.env.VITE_API_WEBSOCKET_PORT
 
 export const useRoomStore = create<roomState>() (
     persist(
         (set) => ({
             client: null,
+            players: [],
+
             createRoom: () => {
                 const client = new Client({
                     brokerURL: 'ws://' + url + ':' + port + '/app/createRoom',
@@ -47,10 +43,21 @@ export const useRoomStore = create<roomState>() (
                 
                 set((state) => ({ ...state, client }));
             },
+
+            clearRoom: () => {
+                set({ client: null });
+                set({ players: [
+                    { profileImgUrl: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png', nickname: 'empty' },
+                    { profileImgUrl: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png', nickname: 'empty' },
+                    ] 
+                });
+            }
             
         }),
         {
             name: 'room',
         },
     ),
+
+
 );
