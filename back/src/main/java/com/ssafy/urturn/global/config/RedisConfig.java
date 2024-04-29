@@ -2,11 +2,13 @@ package com.ssafy.urturn.global.config;
 
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -23,10 +25,24 @@ public class RedisConfig {
     private final EntityManagerFactory entityManagerFactory;
     private final RedisProperties redisProperties;
 
+    @Value("${spring.data.redis.host}")
+    private String host;
+    @Value("${spring.data.redis.port}")
+    private int port;
+    @Value("${spring.data.redis.password}")
+    private String password;
+
     // RedisProperties로 yaml에 저장한 host, port를 연결
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
+
+        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
+
+        configuration.setHostName(host);
+        configuration.setPort(port);
+        configuration.setPassword(password);
+
+        return new LettuceConnectionFactory(configuration);
     }
 
     @Bean
