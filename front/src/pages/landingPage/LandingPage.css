@@ -23,6 +23,14 @@
   align-items: center;
 }
 
+.ButtonColor:hover,
+.ButtonColor:active  {
+  background-color: #1b1217 !important; 
+  border-color: #1b1217 !important;
+
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
+}
+
 .Navigation {
   margin-top: 2vh;
 }
