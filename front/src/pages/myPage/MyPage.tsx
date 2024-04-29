@@ -1,29 +1,52 @@
 import {
-	Button,
 	Card,
-	Grid,
 	Image,
-	GridRow,
-	GridColumn,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardMeta,
-	Icon,
 	CardGroup,
+	Segment,
+	SegmentGroup,
+	Header,
+	Pagination,
+	Button,
 } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import { HeaderBar } from '../../components/header/HeaderBar';
 import './MyPage.css';
+import { useState } from 'react';
 
 export const MyPage = () => {
+	const [pageState, setPageState] = useState({
+		activePage: 5,
+		boundaryRange: 1,
+		siblingRange: 1,
+		showEllipsis: true,
+		showFirstAndLastNav: true,
+		showPreviousAndNextNav: true,
+		totalPages: 50,
+	});
+
+	// 페이지 변경 핸들러 함수
+	const handlePaginationChange = (_e: React.MouseEvent, { activePage }: any) => {
+		setPageState((prevState) => ({
+			...prevState,
+			activePage: activePage,
+		}));
+	};
+
 	return (
 		<div className='MyPage'>
+			{/* 헤더 */}
 			<div className='MainHeader'>
-				<HeaderBar $main={true}></HeaderBar>
+				<HeaderBar $main={true}
+				></HeaderBar>
 			</div>
 			<div className='MyRecord'>
+				{/* 왼쪽 프로필 영역 */}
 				<div className='Profile'>
+					{/* 프로필 영역 카드 상단 - 개인정보 */}
 					<Card className='ProfileCard'>
 						<CardGroup stackable={true}>
 							<Card className='MyProfile'>
@@ -32,7 +55,9 @@ export const MyPage = () => {
 										내 정보
 									</CardHeader>
 								</CardContent>
+								{/* 프로필 사진과 닉네임 */}
 								<CardContent
+									className='ContentBorder'
 									style={{
 										display: 'flex',
 										justifyContent: 'center',
@@ -47,33 +72,107 @@ export const MyPage = () => {
 									<CardHeader
 										className='CardTextColor'
 										textAlign='center'
-										style={{ marginLeft: '20vh' }}
+										style={{ marginLeft: '5vh' }}
 									>
 										한별이
 									</CardHeader>
 								</CardContent>
-								<CardContent extra>
+								{/* 깃허브 주소 */}
+								<CardContent className='ContentBorder'>
 									<CardDescription className='CardTextColor'>깃허브 주소 :</CardDescription>
+									<Button className='EditButton' floated='right'>
+										수정
+									</Button>
 								</CardContent>
 							</Card>
+							{/* 프로필 영역 카드 하단 - 레벨 */}
 							<Card className='MyProfile'>
 								<CardContent>
-									<CardHeader textAlign='center'>현재 레벨</CardHeader>
+									<CardHeader className='CardTextColor' textAlign='center'>
+										레벨
+									</CardHeader>
 									<CardMeta>
 										<span className='date'>Joined in 2015</span>
 									</CardMeta>
 									<CardDescription>Matthew is a musician living in Nashville.</CardDescription>
 								</CardContent>
-								<CardContent extra>
-									<CardDescription>
-										Steve wants to add you to the group <strong>best friends</strong>
-									</CardDescription>
+								{/* 레벨 관련 문구 */}
+								<CardContent className='ContentBorder'>
+									<CardHeader className='CardTextColor' textAlign='center'>
+										현재 레벨
+									</CardHeader>
+									<CardHeader
+										className='CardTextColor'
+										textAlign='center'
+										style={{ marginTop: '2vh' }}
+									>
+										다음 레벨까지
+									</CardHeader>
 								</CardContent>
 							</Card>
 						</CardGroup>
 					</Card>
 				</div>
-				<div className='History'>기록</div>
+				{/* 오른쪽 문제 풀이 기록 리스트 */}
+				<div className='History'>
+					<Header as='h2' style={{ marginBottom: '0px' }}>
+						히스토리
+					</Header>
+					{/* 문제 기록 */}
+					{/* 성공 */}
+					<Segment className='Problems Success' size='small'>
+						<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>
+							성공
+						</Header>
+						<Image
+							size='tiny'
+							src='https://item.kakaocdn.net/do/592728ea7408bcf69f797c0446b584a6d0bbab1214a29e381afae56101ded106'
+							style={{ marginLeft: '2vw' }}
+						/>
+						<SegmentGroup className='ProblemName'>
+							<Segment textAlign='right' className='CardTextColor Success'>
+								문제1
+							</Segment>
+							<Segment textAlign='right' className='CardTextColor ContentBorder Success '>
+								문제2
+							</Segment>
+						</SegmentGroup>
+					</Segment>
+
+					{/* 실패 */}
+					<Segment className='Problems Fail' size='small'>
+						<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>
+							실패
+						</Header>
+						<Image
+							size='tiny'
+							src='https://item.kakaocdn.net/do/592728ea7408bcf69f797c0446b584a6f604e7b0e6900f9ac53a43965300eb9a'
+							style={{ marginLeft: '2vw' }}
+						/>
+						<SegmentGroup className='ProblemName'>
+							<Segment textAlign='right' className='CardTextColor Fail'>
+								문제1
+							</Segment>
+							<Segment textAlign='right' className='CardTextColor ContentBorder Fail'>
+								문제2
+							</Segment>
+						</SegmentGroup>
+					</Segment>
+					<Pagination
+						activePage={pageState.activePage}
+						boundaryRange={pageState.boundaryRange}
+						onPageChange={handlePaginationChange}
+						size='mini'
+						siblingRange={pageState.siblingRange}
+						totalPages={pageState.totalPages}
+						// Heads up! All items are powered by shorthands, if you want to hide one of them, just pass `null` as value
+						ellipsisItem={pageState.showEllipsis ? undefined : null}
+						firstItem={null}
+						prevItem={pageState.showPreviousAndNextNav ? undefined : null}
+						nextItem={pageState.showPreviousAndNextNav ? undefined : null}
+						style={{ marginTop: '3vh' }}
+					/>
+				</div>
 			</div>
 		</div>
 	);
