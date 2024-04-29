@@ -37,7 +37,7 @@ out/
 .vscode/
 
 .idea/
-**/generated
+src/main/generated
 
 src/main/resources/application-secret.yml
 src/test/resources/application-secret.yml

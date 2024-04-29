@@ -1,8 +1,9 @@
-package com.ssafy.urturn.member.entity;
+package com.ssafy.urturn.problem.entity;
 
 import static lombok.AccessLevel.PROTECTED;
 
 import com.ssafy.urturn.global.common.BaseEntity;
+import com.ssafy.urturn.member.entity.Member;
 import com.ssafy.urturn.problem.entity.Problem;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

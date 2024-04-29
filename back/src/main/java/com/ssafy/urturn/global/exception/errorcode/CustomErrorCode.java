@@ -25,9 +25,12 @@ public enum CustomErrorCode implements ErrorCode{
     GITHUB_AUTHORIZATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "GITHUB 정보를 얻어오는데 실패하였습니다"),
 
     // Member
-    NO_MEMBER(HttpStatus.BAD_REQUEST, "ID에 해당하는 사용자가 존재하지 않습니다");
+    NO_MEMBER(HttpStatus.BAD_REQUEST, "ID에 해당하는 사용자가 존재하지 않습니다"),
 
     // History
+
+    //Problem
+    NO_PROBLEM(HttpStatus.BAD_REQUEST, "ID에 해당하는 문제가 존재하지 않습니다");
 
 
     private final HttpStatus httpStatus;

@@ -3,12 +3,12 @@ package com.ssafy.urturn.problem;
 import lombok.Getter;
 
 @Getter
-public enum LanguageId {
+public enum Language {
 
     JAVA(1);
 
     private int id;
 
-    LanguageId(int i) {
+    Language(int i) {
     }
 }
