@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 
 import { Allotment } from "allotment";
-import CodeEditor from '../components/solve/CodeEditor';
+import CodeEditor from '../../components/solve/CodeEditor';
 import Markdown from 'markdown-to-jsx'
 import { Dropdown } from 'semantic-ui-react'
 
 import "allotment/dist/style.css";
 
-import { HeaderBar } from '../components/header/HeaderBar';
-import { SolveSubHeader } from '../components/solve/sloveSubHeader';
+import { HeaderBar } from '../../components/header/HeaderBar';
+import { SolveSubHeader } from '../../components/solve/sloveSubHeader';
 
 import './SolvePage.css'
 

@@ -4,7 +4,7 @@ import  MainPage  from './pages/mainPage/MainPage.tsx';
 import { LandingPage} from "./pages/landingPage/LandingPage.tsx";
 import {GithubCallback} from "./utils/Github.tsx";
 import { MyPage } from './pages/myPage/MyPage.tsx';
-import SolvePage from './pages/SolvePage.tsx';
+import SolvePage from './pages/solvePage/SolvePage.tsx';
 
 function App() {
 
