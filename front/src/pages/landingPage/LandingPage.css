@@ -23,7 +23,6 @@
   align-items: center;
 }
 
-<<<<<<< HEAD
 .ButtonColor:hover,
 .ButtonColor:active  {
   background-color: #1b1217 !important; 
@@ -32,8 +31,6 @@
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
 }
 
-=======
->>>>>>> 2b3d7e4443d104e535beda6917ccefb600f50c7a
 .Navigation {
   margin-top: 2vh;
 }
