@@ -1,15 +1,18 @@
+.Entire {
+  width: 100vw;
+  height: 100vh;
+}
+
 .LandingPage {
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
 }
 
 .Content {
+  width: 90vw;
   display: flex;
   flex-direction: column;
   margin-left: 5vw;
-}
-
-.HeaderSection {
-  width: 90vw;
 }
 
 .ButtonColor {
@@ -20,11 +23,20 @@
   align-items: center;
 }
 
-.VideoSection {
+.Navigation {
+  margin-top: 2vh;
+}
+
+.Video{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 50vh;
   margin: 5vh 0 5vh 0;
 }
 
-.CTASection {
+.CTA {
   margin-bottom: 5vh;
 }
 

@@ -1,0 +1,52 @@
+.MyPage {
+  width: 100vw;
+  height: 100vh;
+}
+
+.MainHeader {
+  width: 100vw;
+  height: 70px;
+}
+
+.MyRecord {
+  width: 100vw;
+  height: calc(100vh - 70px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Profile {
+  width: 42vw;
+  height: calc(100vh - 70px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.CardTextColor {
+  color: #fff !important;
+}
+
+.ProfileCard {
+  width: 35vw !important;
+  padding: 20px !important;
+  background-color: #DBB39A !important;
+  border: 3px solid white !important;
+}
+
+.MyProfile {
+  width: calc(35vw - 40px) !important;
+  background-color: #DBB39A !important;
+  color: #fff !important;
+
+  border: 3px solid white !important;
+  border-radius: 15px !important;
+}
+
+.History {
+  width: 58vw;
+  height: calc(100vh - 70px);
+}
