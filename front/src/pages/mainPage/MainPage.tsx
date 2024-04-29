@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Card, Grid, Image, GridRow, GridColumn } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
+import {HeaderBar} from "../../components/header/HeaderBar.tsx";
 
 const MainPage: React.FC = () => {
     const cardStyle = {
@@ -20,40 +21,45 @@ const MainPage: React.FC = () => {
     };
 
     return (
-        <div style={{width : '100vw', display : 'flex', justifyContent : 'center', alignItems: 'center'}}>
-            <div style={{}}>
-            <Grid columns={2}>
-                <GridRow>
-                    <GridColumn>
-                        <Card style={cardStyle} centered>
-                            <Image src='https://avatars.githubusercontent.com/u/19562994?v=4' circular size='medium' centered/>
-                            <Card.Content textAlign='center'>
-                                <Card.Description>
-                                    직접 방을 만들어주세요
-                                </Card.Description>
-                            </Card.Content>
-                            <Card.Content extra>
-                                <Button style={buttonStyle}>방 만들기</Button>
-                            </Card.Content>
-                        </Card>
-                    </GridColumn>
-                    <GridColumn>
-                        <Card style={cardStyle} centered>
-                            <Image src='https://avatars.githubusercontent.com/u/19562994?v=4' circular size='medium' centered/>
-                            <Card.Content textAlign='center'>
-                                <Card.Description>
-                                    참여하세요
-                                </Card.Description>
-                            </Card.Content>
-                            <Card.Content extra>
-                                <Button style={buttonStyle}>입장하기</Button>
-                            </Card.Content>
-                        </Card>
-                    </GridColumn>
-                </GridRow>
-            </Grid>
-        </div>
-        </div>
+        <>
+            <HeaderBar $main={true}/>
+            <div style={{width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <div style={{}}>
+                    <Grid columns={2}>
+                        <GridRow>
+                            <GridColumn>
+                                <Card style={cardStyle} centered>
+                                    <Image src='https://avatars.githubusercontent.com/u/19562994?v=4' circular
+                                           size='medium' centered/>
+                                    <Card.Content textAlign='center'>
+                                        <Card.Description>
+                                            직접 방을 만들어주세요
+                                        </Card.Description>
+                                    </Card.Content>
+                                    <Card.Content extra>
+                                        <Button style={buttonStyle}>방 만들기</Button>
+                                    </Card.Content>
+                                </Card>
+                            </GridColumn>
+                            <GridColumn>
+                                <Card style={cardStyle} centered>
+                                    <Image src='https://avatars.githubusercontent.com/u/19562994?v=4' circular
+                                           size='medium' centered/>
+                                    <Card.Content textAlign='center'>
+                                        <Card.Description>
+                                            참여하세요
+                                        </Card.Description>
+                                    </Card.Content>
+                                    <Card.Content extra>
+                                        <Button style={buttonStyle}>입장하기</Button>
+                                    </Card.Content>
+                                </Card>
+                            </GridColumn>
+                        </GridRow>
+                    </Grid>
+                </div>
+            </div>
+        </>
     );
 }
 

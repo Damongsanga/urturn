@@ -3,6 +3,13 @@ import logo from '../../assets/images/logo.svg';
 import './LandingPage.css';
 
 export const LandingPage = () => {
+	const githubAuth = () => {
+		location.href = `https://github.com/login/oauth/authorize?client_id=${
+			import.meta.env.VITE_GITHUB_CLIENT_ID
+		}&redirect_uri=${import.meta.env.VITE_GITHUB_REDIRECT_URI}`;
+	};
+	//&response_type=code
+
 	return (
 		<>
 			<div className='LandingPage'>
@@ -14,7 +21,7 @@ export const LandingPage = () => {
 								<img alt='URTurn' src={logo} style={{ width: '125px' }} />
 							</MenuItem>
 							<MenuItem name='Waiting Room' position='right'>
-								<Button circular className='ButtonColor'>
+								<Button circular className='ButtonColor' onClick={githubAuth}>
 									<Icon name='github' size='big' /> 로그인
 								</Button>
 							</MenuItem>
@@ -34,7 +41,7 @@ export const LandingPage = () => {
 							협업 능력을 향상시키는 <br />
 							URTurn에서 함께 성장하세요!
 						</Header>
-						<Button circular className='ButtonColor'>
+						<Button circular className='ButtonColor' onClick={githubAuth}>
 							<Icon name='github' size='huge' /> <span className='FontSize'>Github로 시작하기</span>
 						</Button>
 					</div>
