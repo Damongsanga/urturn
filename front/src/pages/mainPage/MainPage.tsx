@@ -1,10 +1,20 @@
-import React from 'react';
-import { Button, Card, Grid, Image, GridRow, GridColumn } from 'semantic-ui-react';
+import React, { useEffect } from 'react';
+import { Button, Card, Grid, Image, GridRow, GridColumn, Modal, Header } from 'semantic-ui-react';
+import { useRoomStore } from '../../stores/room';
 import 'semantic-ui-css/semantic.min.css';
 import {HeaderBar} from "../../components/header/HeaderBar.tsx";
 import './MainPage.css';
 
+import { WaitingPage } from '../waitingPage/WaitingPage';
+
 const MainPage: React.FC = () => {
+    const roomStore = useRoomStore();
+    const [open, setOpen] = React.useState(false);
+
+    useEffect(() => {
+        roomStore.clearRoom();
+    }, []);
+
 	const cardStyle = {
 		width: '22vw',
 		height: '55vh',
@@ -23,6 +33,11 @@ const MainPage: React.FC = () => {
 		color: '#4f4f4f', // Button text color
 		width: '100%', // Make the button fill the card width
 	};
+
+    const createRoom = () => {
+        roomStore.createRoom();
+        setOpen(true);
+    }
 
 	return (
         <>
@@ -43,7 +58,7 @@ const MainPage: React.FC = () => {
 										<Card.Description>직접 방을 만들어주세요</Card.Description>
 									</Card.Content>
 									<Card.Content extra>
-										<Button style={buttonStyle}>방 만들기</Button>
+										<Button style={buttonStyle} onClick={(_e) => {createRoom()}}>방 만들기</Button>
 									</Card.Content>
 								</Card>
 							</Card>
@@ -70,6 +85,14 @@ const MainPage: React.FC = () => {
 				</Grid>
 			</div>
 		</div>
+
+        <Modal open={open}>
+            <Header icon='archive' content='준비 중' />
+            <Modal.Content>
+                <WaitingPage changeModal={() => {setOpen(false)}} />
+            </Modal.Content>
+        </Modal>
+
         </>
 	);
 };
