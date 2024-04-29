@@ -1,5 +1,5 @@
 import { Button, Header } from 'semantic-ui-react';
-
+import {useLogout } from "../../utils/logout.ts";
 import './HeaderBar.css';
 
 interface HeaderProp {
@@ -16,6 +16,7 @@ mode : 1이면 스위칭 모드 / 2이면 페어 프로그래밍 모드
 main과 ide는 상태가 달라야함
 */
 export const HeaderBar = ({ $main, $ide, $mode }: HeaderProp) => {
+	const logout = useLogout();
 	return (
 		<>
 		{/* 메인 헤더 */}
@@ -27,7 +28,7 @@ export const HeaderBar = ({ $main, $ide, $mode }: HeaderProp) => {
 						</Header>
 					</div>
 					<div className='HeaderAlign QuitButton'>
-						<Button size='large' className='ButtonColor'>로그아웃</Button>
+						<Button size='large' className='ButtonColor' onClick={logout}>로그아웃</Button>
 					</div>
 				</div>
 			)}
