@@ -1,6 +1,7 @@
 import { MenuItem, Menu, Header, Icon, Button } from 'semantic-ui-react';
 import logo from '../../assets/images/logo.svg';
 import './LandingPage.css';
+import { TestLogin } from './TestLogin';
 
 export const LandingPage = () => {
 	const githubAuth = () => {
@@ -56,6 +57,8 @@ export const LandingPage = () => {
 					</div>
 				</div>
 			</div>
+
+			<TestLogin/>
 		</>
 	);
 };

@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 interface JwtToken {
     grantType: string;
     accessToken: string;
+    refreshToken?: string | undefined;
 }
 
 interface LoginResponse {
@@ -15,6 +16,7 @@ interface LoginResponse {
 
 interface AuthState {
     accessToken: string | undefined;
+    refreshToken?: string | undefined;
     memberId: number | undefined;
     nickname: string | undefined;
     profileImage: string | undefined;
@@ -29,6 +31,7 @@ const useAuthStore = create<AuthState>()(
     persist(
         (set) => ({
             accessToken: undefined,
+            refreshToken: undefined,
             memberId: undefined,
             nickname: undefined,
             profileImage: undefined,
@@ -49,6 +52,7 @@ const useAuthStore = create<AuthState>()(
             clearAuth: () => {
                 set({
                     accessToken: undefined,
+                    refreshToken: undefined,
                     memberId: undefined,
                     nickname: undefined,
                     profileImage: undefined,
