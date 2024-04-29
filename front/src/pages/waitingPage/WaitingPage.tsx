@@ -36,11 +36,11 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 	// 난이도
 
 	const difficulties = [
-		{ label: '100m', value: '100m' },
-		{ label: '1km', value: '1km' },
-		{ label: '10km', value: '10km' },
-		{ label: '하프 마라톤', value: '하프 마라톤' },
-		{ label: '풀 마라톤', value: '풀 마라톤' },
+		{ label: '100m 달리기', value: '100m', color: '#AAD79F'},
+		{ label: '1km 달리기', value: '1km', color: '#A9D9DC' },
+		{ label: '10km 달리기', value: '10km', color: '#E5ACAC' },
+		{ label: '하프 마라톤', value: '하프 마라톤', color: '#C1ABE4' },
+		{ label: '풀 마라톤', value: '풀 마라톤', color: '#9B9B9B' },
 	];
 	// 난이도 목록
 
@@ -50,7 +50,7 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 	};
 	// 슬라이더 수치 조정 함수
 
-	const handleDifficulty = (e: FormEvent<HTMLInputElement>, data: any) => {
+	const handleDifficulty = (_e: FormEvent<HTMLInputElement>, data: any) => {
 		setDifficulty(data.value);
 	}; // 난이도 설정 조정 함수
 
@@ -68,6 +68,11 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 								<MenuItem name='Waiting Room'>
 									<Header as='h3' textAlign='center'>
 										Waiting Room
+									</Header>
+								</MenuItem>
+								<MenuItem name='Entry Code'>
+									<Header as='h3' textAlign='center'>
+										입장 코드 : {'A206'}
 									</Header>
 								</MenuItem>
 								<MenuItem name='close' position='right' onClick={changeModal}>
@@ -162,10 +167,10 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 										{/* 난이도 버튼 그룹 */}
 										{difficulties.map((item) => (
 											<FormField key={item.value}>
-												<Segment size='small'>
+												<Segment size='small' style={{ backgroundColor:item.color }}>
 													<Checkbox
 														label={item.label}
-														name='checkboxRadioGroup'
+														name='difficulties group'
 														value={item.value}
 														checked={difficulty === item.value}
 														onChange={handleDifficulty}
@@ -177,7 +182,7 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 								</div>
 								{/* 시작 버튼 */}
 								<div className='StartButton'>
-									<Button size='massive'>시작하기</Button>
+									<Button size='massive' className='StartButtonStyle'>시작하기</Button>
 								</div>
 							</div>
 						</div>
