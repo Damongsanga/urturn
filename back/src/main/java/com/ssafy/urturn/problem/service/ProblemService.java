@@ -2,9 +2,14 @@ package com.ssafy.urturn.problem.service;
 
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
+import com.ssafy.urturn.global.util.MemberUtil;
+import com.ssafy.urturn.member.Level;
 import com.ssafy.urturn.problem.dto.ProblemCreateRequest;
 import com.ssafy.urturn.problem.entity.Problem;
+import com.ssafy.urturn.problem.repository.ProblemRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +32,12 @@ public class ProblemService {
                 .build();
 
         return problemRepository.save(problem);
+    }
+
+    // dto 변환 필요. TC까지 필요한지 여부에 따라 응답 다름
+    public List<Problem> selectProblem(Level level, Long pairId){
+        Long memberId = MemberUtil.getMemberId();
+        return problemRepository.selectTwoProblemByLevel(level, memberId, pairId);
     }
 
     // DTO 변환 필요
