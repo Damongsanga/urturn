@@ -4,7 +4,6 @@ import {
 	CardContent,
 	CardDescription,
 	CardHeader,
-	CardMeta,
 	CardGroup,
 	Segment,
 	SegmentGroup,
@@ -14,10 +13,11 @@ import {
 } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import { HeaderBar } from '../../components/header/HeaderBar';
-import './MyPage.css';
 import { useState } from 'react';
+import './MyPage.css';
 
 export const MyPage = () => {
+
 	const [pageState, setPageState] = useState({
 		activePage: 5,
 		boundaryRange: 1,
@@ -40,8 +40,7 @@ export const MyPage = () => {
 		<div className='MyPage'>
 			{/* 헤더 */}
 			<div className='MainHeader'>
-				<HeaderBar $main={true}
-				></HeaderBar>
+				<HeaderBar $main={true}></HeaderBar>
 			</div>
 			<div className='MyRecord'>
 				{/* 왼쪽 프로필 영역 */}
@@ -91,10 +90,6 @@ export const MyPage = () => {
 									<CardHeader className='CardTextColor' textAlign='center'>
 										레벨
 									</CardHeader>
-									<CardMeta>
-										<span className='date'>Joined in 2015</span>
-									</CardMeta>
-									<CardDescription>Matthew is a musician living in Nashville.</CardDescription>
 								</CardContent>
 								{/* 레벨 관련 문구 */}
 								<CardContent className='ContentBorder'>

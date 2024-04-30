@@ -1,8 +1,28 @@
+.MainPage {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.EntrySection {
+  width: 100vw; 
+  height: calc(100vh - 70px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .EntryCard {
-  width: 25vw !important;
-  height: 60vh !important;
-  background-color: #f8d1c2 !important;
+  width: 28vw !important;
+  height: 66vh !important;
+
+  background-color: #DBB39A !important;
+
   padding: 20px !important;
+
   border: 3px solid white !important;
-  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25) !important; 
+  border-radius: 10px !important;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25) !important;
 }
