@@ -68,3 +68,6 @@ springdoc:
 
 server:
   forward-headers-strategy: framework
+
+OPENVIDU_URL: http://localhost:4443/
+OPENVIDU_SECRET: MY_SECRET
