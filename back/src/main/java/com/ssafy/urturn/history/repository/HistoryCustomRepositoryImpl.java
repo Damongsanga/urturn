@@ -14,6 +14,8 @@ import com.ssafy.urturn.member.entity.QMember;
 import com.ssafy.urturn.problem.entity.QProblem;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -26,7 +28,7 @@ public class HistoryCustomRepositoryImpl implements HistoryCustomRepository{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Slice<HistoryResponse> getHistories(Long memberId, Pageable pageable) {
+    public Page<HistoryResponse> getHistories(Long memberId, Pageable pageable) {
         QProblem problem1 = new QProblem("problem1");
         QProblem problem2 = new QProblem("problem2");
 
@@ -60,12 +62,14 @@ public class HistoryCustomRepositoryImpl implements HistoryCustomRepository{
             .where(history.manager.id.eq(memberId))
             .orderBy(history.createdAt.desc())
             .offset(pageable.getOffset())
-            .limit(pageable.getPageSize() + 1)
+            .limit(pageable.getPageSize())
             .fetch();
 
-        boolean hasNext = content.size() > pageable.getPageSize();
-        content = hasNext ? content.subList(0, pageable.getPageSize()) : content;
+        Long count = jpaQueryFactory.select(history.count())
+            .from(history)
+            .where(history.manager.id.eq(memberId))
+            .fetchOne();
 
-        return new SliceImpl<>(content, pageable, hasNext);
+        return new PageImpl<>(content, pageable, count);
     }
 }
