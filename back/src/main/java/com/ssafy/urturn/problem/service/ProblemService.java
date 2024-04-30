@@ -4,6 +4,7 @@ import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.problem.dto.ProblemCreateRequest;
 import com.ssafy.urturn.problem.entity.Problem;
+import com.ssafy.urturn.problem.repository.ProblemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

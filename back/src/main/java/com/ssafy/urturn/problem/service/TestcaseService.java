@@ -5,6 +5,7 @@ import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.problem.dto.TestcaseCreateRequest;
 import com.ssafy.urturn.problem.entity.Problem;
 import com.ssafy.urturn.problem.entity.Testcase;
+import com.ssafy.urturn.problem.repository.ProblemRepository;
 import com.ssafy.urturn.problem.repository.TestcaseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
