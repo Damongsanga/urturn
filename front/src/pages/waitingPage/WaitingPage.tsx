@@ -103,19 +103,38 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 												rounded
 											/>
 											<Divider hidden />
-											<CardHeader textAlign='center'>페르디</CardHeader>
+											<CardHeader textAlign='center'>
+												{
+													roomStore.players[0].nickname?
+													roomStore.players[0].nickname
+													:
+													'내 정보 로딩 에러'
+												}
+											</CardHeader>
 										</CardContent>
 									</Card>
 									{/* 입장 파트너 */}
 									<Card className='Card-without-border'>
 										<CardContent>
 											<Image
-												src='https://shiftpsh-blog.s3.amazonaws.com/uploads/2022/04/listing216.png'
+												src={
+													roomStore.players[1].profileImgUrl?
+													roomStore.players[1].profileImgUrl
+													:
+													'https://avatars.githubusercontent.com/u/19562994?v=4'
+												}
 												size='small'
 												rounded
 											/>
 											<Divider hidden />
-											<CardHeader textAlign='center'>한별이</CardHeader>
+											<CardHeader textAlign='center'>
+												{
+													roomStore.players[1].nickname?
+													roomStore.players[1].nickname
+													:
+													'미접속'
+												}
+											</CardHeader>
 										</CardContent>
 									</Card>
 								</CardGroup>

@@ -11,6 +11,6 @@ export interface roomState {
     
 
 
-    createRoom: (token : string) => void
+    createRoom: (token : string, userId : number) => void
     clearRoom: () => void
 }

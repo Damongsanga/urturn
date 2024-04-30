@@ -1,4 +1,4 @@
-import { Client } from '@stomp/stompjs';
+import { Client} from '@stomp/stompjs';
 import { create } from "zustand";
 import { persist } from 'zustand/middleware';
 import { roomState } from '../types/roomTypes';
@@ -12,30 +12,57 @@ export const useRoomStore = create<roomState>() (
             client: null,
             players: [],
 
-            createRoom: (token:string) => {
-                console.log(token);
+            createRoom: ( token:string, userId: number ) => {
+                // const socket = new SockJS('ws://' + url + ':' + port + '/app/createRoom');
+                // const client = Stomp.over(socket);
+                // const headers = {
+                //     Authorization: 'Bearer ' + token,
+                // }
+                // client.connect(headers, function(frame : string){
+                //     client.subscribe('/topic/test', (msg) => {
+                //         console.log('Received message: ' + msg.body);
+                //         client.publish({
+                //             destination: '/hello',
+                //             body: 'Hello world',
+                //             });
+                //     });
+                //     console.log('Connected: ' + frame);
+                // })
+                // client
+                console.log("이걸 웹소켓 연결에 보냇어오 : " + token);
+
                 const client = new Client({
-                    brokerURL: 'ws://' + url + ':' + port + '/app/createRoom',
+                    brokerURL: 'ws://' + url + ':' + port + '/ws',
+                    // webSocketFactory: function () {
+                    //     return new SockJS('ws://' + url + ':' + port + '/app/createRoom');
+                    // },
                     
                     connectHeaders: {
                         Authorization: 'Bearer ' + token,
-                      },
+                    },
                     
                     debug: function (str: string) {
                       console.log("debug:" + str);
                     },
-                    reconnectDelay: 5000, //자동 재 연결
+                    reconnectDelay: 5000000, //자동 재 연결
                     heartbeatIncoming: 4000,
                     heartbeatOutgoing: 4000,
                   });
             
                 client.onConnect = function (frame) {
-                    client.subscribe('/topic/test', (msg) => {
+                    client.publish({
+                        destination: '/app/createRoom',
+                        body: JSON.stringify({
+                           memberId : userId,
+                        }),
+                    });
+
+                    client.subscribe('user/' + userId + '/queue/roomInfo', (msg) => {
                         console.log('Received message: ' + msg.body);
-                        client.publish({
-                            destination: '/hello',
-                            body: 'Hello world',
-                          });
+                        // client.publish({
+                        //     destination: '/hello',
+                        //     body: 'Hello world',
+                        //   });
                     });
                     console.log('Connected: ' + frame);
                 };
