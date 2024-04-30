@@ -46,9 +46,14 @@ export const LandingPage = () => {
 
 						{/* CTA 문구 & 버튼 영역 */}
 						<div className='CTA'>
+							<Header as='h3' textAlign='left' style={{ marginBottom: '-1vh' }}>
+								URTurn으로 코드를 넘어서
+							</Header>
+							<Header as='h3' textAlign='left' style={{ marginBottom: '-1vh' }}>
+								당신의 개발 역량을 한 단계 업그레이드하세요.
+							</Header>
 							<Header as='h3' textAlign='left' style={{ marginBottom: '2vh' }}>
-								협업 능력을 향상시키는 <br />
-								URTurn에서 함께 성장하세요!
+								지금 바로 시작해보세요!
 							</Header>
 							<Button circular className='ButtonColor' onClick={githubAuth}>
 								<Icon name='github' size='huge' /> <span className='FontSize'>Github로 시작하기</span>

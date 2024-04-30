@@ -8,15 +8,19 @@
 }
 
 .HeaderBar.Main {
-  background-color: #3A2302;
+  background-color: #3A2302 !important;
+  margin-bottom: 0px;
+  border-radius: 0;
 }
 
 .HeaderBar.Ide {
   background-color: #DBB39A !important;
+  margin-bottom: 0px;
+  border-radius: 0;
 }
 
 .HeaderAlign {
-  margin-left: auto;
+  margin-left: 46vw;
 }
 
 .QuitButton {
