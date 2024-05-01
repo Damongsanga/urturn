@@ -73,6 +73,10 @@ dependencies {
 	// webclient
 	implementation 'org.springframework:spring-webflux'
 
+	// openvidu
+	implementation 'io.openvidu:openvidu-java-client:2.29.0'
+
+
 }
 
 tasks.named('test') {

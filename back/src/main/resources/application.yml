@@ -71,3 +71,6 @@ server:
 
 grading-server:
   ip:
+
+OPENVIDU_URL:
+OPENVIDU_SECRET:
