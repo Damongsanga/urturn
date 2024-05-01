@@ -3,6 +3,7 @@ package com.ssafy.urturn.problem.service;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.problem.dto.ProblemCreateRequest;
+import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.problem.entity.Problem;
 import com.ssafy.urturn.problem.repository.ProblemRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,10 @@ public class ProblemService {
     }
 
     // DTO 변환 필요
-    public Problem getProblem(Long problemId) {
-        return problemRepository.findById(problemId).orElseThrow(() -> new RestApiException(CustomErrorCode.NO_PROBLEM));
+    public ProblemTestcaseDto getProblemWithPublicTestcase(Long problemId) {
+
+        return problemRepository.getProblemWithPublicTestcase(problemId).orElseThrow(() -> new RestApiException(
+            CustomErrorCode.NO_PROBLEM));
+
     }
 }

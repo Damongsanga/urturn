@@ -5,10 +5,11 @@ import lombok.Getter;
 @Getter
 public enum Language {
 
-    JAVA(1);
+    JAVA(62);
 
-    private int id;
+    private int langId;
 
-    Language(int i) {
+    Language(int langId) {
+        this.langId = langId;
     }
 }
