@@ -27,7 +27,7 @@ public class ProblemController {
 
     // validation 필요
     @PostMapping(value="", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createProblem(
+    public ResponseEntity<Long> createProblem(
             @RequestParam("title") String title,
             @RequestParam("content") MultipartFile file,
             @RequestParam("level") Level level){
