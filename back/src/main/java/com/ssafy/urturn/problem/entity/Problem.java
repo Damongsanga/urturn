@@ -5,6 +5,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 import com.ssafy.urturn.global.common.BaseEntity;
 import com.ssafy.urturn.member.Level;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,7 +35,7 @@ public class Problem extends BaseEntity {
     private String content;
     private Level level;
 
-    @OneToMany(mappedBy = "problem")
+    @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
     private List<Testcase> testcases;
 
 }

@@ -69,5 +69,8 @@ springdoc:
 server:
   forward-headers-strategy: framework
 
+grading-server:
+  ip:
+
 OPENVIDU_URL:
 OPENVIDU_SECRET:

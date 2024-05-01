@@ -70,6 +70,9 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 
+	// webclient
+	implementation 'org.springframework:spring-webflux'
+
 	// openvidu
 	implementation 'io.openvidu:openvidu-java-client:2.29.0'
 

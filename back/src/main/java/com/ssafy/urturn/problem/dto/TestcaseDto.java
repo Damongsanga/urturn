@@ -1,18 +1,14 @@
 package com.ssafy.urturn.problem.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.urturn.problem.Language;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class TestcaseCreateRequest {
+public class TestcaseDto {
+    private Long id;
     private Language language;
     private String stdin;
     private String expectedOutput;
-    @JsonProperty("public")
-    private boolean isPublic;
 }
