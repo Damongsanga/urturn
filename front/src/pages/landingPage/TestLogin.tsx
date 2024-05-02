@@ -26,7 +26,7 @@ export const TestLogin = () => {
         <input value={id} onChange={e => setId(e.target.value)}/>
         비번
         <input value={pwd} onChange={e => setPwd(e.target.value)}/>
-        <button onClick={forceInjectToken}> 짜치는 테스트 로그인 버튼</button>
+        <button onClick={forceInjectToken}> 테스트 로그인 버튼</button>
         </>
     )
 }
