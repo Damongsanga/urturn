@@ -43,6 +43,9 @@ public class JwtTokenProvider {
     private long refreshTokenValidityInSeconds;
     private final AES128Util aes128Util;
 
+    public static final String HEADER = "Authorization";
+    public static final String TOKEN_PREFIX = "Bearer";
+
     // application.yml에서 secret 값 가져와서 key에 저장
     @Autowired
     public JwtTokenProvider(@Value("${spring.jwt.secret}") String secretKey,
@@ -95,7 +98,7 @@ public class JwtTokenProvider {
                refreshToken, refreshTokenValidityInSeconds);
 
         return JwtToken.builder()
-                .grantType("Bearer")
+                .grantType(TOKEN_PREFIX)
                 .accessToken(accessToken)
                 .refreshToken(encryptedRefreshToken)
                 .build();
@@ -170,9 +173,9 @@ public class JwtTokenProvider {
 
     // Request Header에서 토큰 정보 추출
     public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
-            return bearerToken.substring(7);
+        String bearerToken = request.getHeader(HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
+            return bearerToken.substring(TOKEN_PREFIX.length()+1);
         }
         return null;
     }
