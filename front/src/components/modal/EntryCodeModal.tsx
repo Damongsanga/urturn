@@ -1,12 +1,41 @@
+import { useState } from 'react';
 import { Menu, MenuItem, Header, Icon, Input, Button } from 'semantic-ui-react';
+import { useAxios } from '../../utils/useAxios';
+import { useRoomStore } from '../../stores/room';
+import { useAuthStore } from '../../stores/useAuthStore';
 import './EntryCodeModal.css';
 
 interface ModalProps {
 	changeModal: () => void;
-	// 모달을 닫는 함수
+	successConnect: () => void;
 }
 
-export const EntryCodeModal = ({ changeModal }: ModalProps) => {
+export const EntryCodeModal = ({ changeModal, successConnect }: ModalProps) => {
+	const [entryCode, setEntryCode] = useState('');
+	const axios = useAxios();
+	const roomStore = useRoomStore();
+	const authStore = useAuthStore();
+
+	const checkCode = () => {
+		console.log("참가자 checkCode 디버그");
+		console.log(authStore.accessToken);
+		console.log(authStore.memberId);
+		console.log(entryCode);
+		axios.get(`/room/enter/${entryCode}`)
+		.then((res: { data: string }) => {
+			const roomId = res.data;
+			if(authStore.accessToken===undefined || authStore.accessToken===null || authStore.memberId === undefined)  { console.log("로그인 해야됩니다."); return;}
+			roomStore.enterRoom(authStore.accessToken, authStore.memberId, roomId);
+		})
+
+		if(roomStore.createRoom !== undefined || roomStore.client !== null) {
+			successConnect();
+		}
+		else{
+			alert("존재하지 않는 방입니다.");
+		}
+	}
+
 	return (
 		<>
 			<div className='EntryCodeModalBackground'>
@@ -27,11 +56,11 @@ export const EntryCodeModal = ({ changeModal }: ModalProps) => {
 						</div>
             {/* 입장 코드 입력 input폼 */}
 						<div className='CodeInputForm'>
-							<Input placeholder='입장 코드 입력' />
+							<Input onChange={(e) => setEntryCode(e.target.value)} placeholder='입장 코드 입력' />
 						</div>
             {/* 입장 버튼 */}
 						<div className='InputButton'>
-							<Button>입장하기</Button>
+							<Button onClick={checkCode}>입장하기</Button>
 						</div>
 					</div>
 				</div>

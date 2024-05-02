@@ -41,14 +41,15 @@ const MainPage: React.FC = () => {
 	};
 
     const createRoom = () => {
-		if(authStore.accessToken===undefined || authStore.accessToken===null) { console.log("로그인 해야합니다."); return;}
-        roomStore.createRoom(authStore.accessToken);
+		if(authStore.accessToken===undefined || authStore.accessToken===null || authStore.memberId === undefined)  { console.log("로그인 해야합니다."); return;}
+        roomStore.createRoom(authStore.accessToken, authStore.memberId);
         setOpen(true);
     }
 
 	const enterEntryCode = () => {
 		setOpenModal(true);
 	};
+	
 	return (
 		<>
 			<div className='MainPage'>
@@ -136,6 +137,10 @@ const MainPage: React.FC = () => {
 					<EntryCodeModal
 						changeModal={() => {
 							setOpenModal(false);
+						  }}
+						successConnect={() => {
+							setOpenModal(false);
+							setOpen(true);
 						}}
 					/>
 				</Modal.Content>

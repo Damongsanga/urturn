@@ -1,16 +1,24 @@
 import { Client } from "@stomp/stompjs";
 
-export interface player {
-    profileImgUrl: string,
-    nickname: string
+export interface roomInfo {
+    roomId: number,
+    entryCode: string,
+    host: boolean,
+}
+
+export interface userInfo {
+    myUserProfileUrl: string,
+    myUserNickName: string
+    relativeUserProfileUrl: string,
+    relativeUserNickName: string
 }
 
 export interface roomState {
     client: Client | null,
-    players: player[],
-    
+    userInfo: userInfo | null,
+    roomInfo: roomInfo | null,
 
-
-    createRoom: (token : string) => void
+    createRoom: (token : string, userId : number) => void
+    enterRoom: (token :string, userId : number, roomId : string) => void
     clearRoom: () => void
 }

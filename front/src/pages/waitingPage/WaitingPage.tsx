@@ -77,7 +77,7 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 								</MenuItem>
 								<MenuItem name='Entry Code'>
 									<Header as='h3' textAlign='center'>
-										입장 코드 : {'A206'}
+										입장 코드 : {roomStore.roomInfo?.entryCode}
 									</Header>
 								</MenuItem>
 								<MenuItem name='close' position='right' onClick={changeModal}>
@@ -94,28 +94,51 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 										<CardContent>
 											<Image
 												src={
-													roomStore.players[0].profileImgUrl?
-													roomStore.players[0].profileImgUrl
+													roomStore.userInfo?.myUserProfileUrl
+													?
+													roomStore.userInfo!.myUserProfileUrl
 													:
-													'https://avatars.githubusercontent.com/u/19562994?v=4'
+													'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
 												}
 												size='small'
 												rounded
 											/>
 											<Divider hidden />
-											<CardHeader textAlign='center'>페르디</CardHeader>
+											<CardHeader textAlign='center'>
+												{
+													roomStore.userInfo?.myUserNickName
+													?
+													roomStore.userInfo.myUserNickName
+													:
+													'내 정보 로딩 에러'
+												}
+											</CardHeader>
 										</CardContent>
 									</Card>
 									{/* 입장 파트너 */}
 									<Card className='Card-without-border'>
 										<CardContent>
 											<Image
-												src='https://shiftpsh-blog.s3.amazonaws.com/uploads/2022/04/listing216.png'
+												src={
+													roomStore.userInfo?.relativeUserProfileUrl
+													?
+													roomStore.userInfo.relativeUserProfileUrl
+													:
+													'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+												}
 												size='small'
 												rounded
 											/>
 											<Divider hidden />
-											<CardHeader textAlign='center'>한별이</CardHeader>
+											<CardHeader textAlign='center'>
+												{
+													roomStore.userInfo?.relativeUserNickName
+													?
+													roomStore.userInfo.relativeUserNickName
+													:
+													'미접속'
+												}
+											</CardHeader>
 										</CardContent>
 									</Card>
 								</CardGroup>

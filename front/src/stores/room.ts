@@ -10,34 +10,95 @@ export const useRoomStore = create<roomState>() (
     persist(
         (set) => ({
             client: null,
-            players: [],
+            userInfo: null,
+            roomInfo: null,
 
-            createRoom: (token:string) => {
-                console.log(token);
+            createRoom: ( token:string, userId: number ) => {
                 const client = new Client({
-                    brokerURL: 'ws://' + url + ':' + port + '/app/createRoom',
+                    brokerURL: 'ws://' + url + ':' + port + '/ws',
                     
                     connectHeaders: {
                         Authorization: 'Bearer ' + token,
-                      },
+                    },
                     
                     debug: function (str: string) {
                       console.log("debug:" + str);
                     },
-                    reconnectDelay: 5000, //자동 재 연결
+                    reconnectDelay: 5000000, //자동 재 연결
                     heartbeatIncoming: 4000,
                     heartbeatOutgoing: 4000,
                   });
             
                 client.onConnect = function (frame) {
-                    client.subscribe('/topic/test', (msg) => {
-                        console.log('Received message: ' + msg.body);
-                        client.publish({
-                            destination: '/hello',
-                            body: 'Hello world',
-                          });
+                    client.subscribe('/user/' + userId + '/roomInfo', (msg) => {
+                        console.log('Received message: roomInfo' + msg.body);
+                        const roomInfo = JSON.parse(msg.body);
+                        //순환참조 발생 코드
+
+                        set((state) => ({ ...state, roomInfo: roomInfo }));
+                    });
+                    client.subscribe('/user/' + userId + '/userInfo', (msg) => {
+                        console.log('Received message: userInfo' + msg.body);
+                        const userInfo = JSON.parse(msg.body);
+                        set((state) => ({ ...state, userInfo: userInfo }));
                     });
                     console.log('Connected: ' + frame);
+
+                    client.publish({
+                        destination: '/app/createRoom',
+                        body: JSON.stringify({
+                           memberId : userId,
+                        }),
+                    });
+                };
+                
+                client.onStompError = function (frame) {
+                console.log('Broker reported error: ' + frame.headers['message']);
+                console.log('Additional details: ' + frame.body);
+                };
+            
+                client.activate();
+                
+                set((state) => ({ ...state, client }));
+
+            },
+
+            enterRoom: (token : string, userId : number, roomId : string) => {
+                const client = new Client({
+                    brokerURL: 'ws://' + url + ':' + port + '/ws',
+                    
+                    connectHeaders: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                    
+                    debug: function (str: string) {
+                      console.log("debug:" + str);
+                    },
+                    reconnectDelay: 5000000, //자동 재 연결
+                    heartbeatIncoming: 4000,
+                    heartbeatOutgoing: 4000,
+                  });
+            
+                client.onConnect = function (frame) {
+                    client.subscribe('/user/' + userId + '/roomInfo', (msg) => {
+                        console.log('Received message: roomInfo' + msg.body);
+                        const roomInfo = JSON.parse(msg.body);
+                        //순환참조 발생 코드
+                        set((state) => ({ ...state, roomInfo: roomInfo }));
+                    });
+                    client.subscribe('/user/' + userId + '/userInfo', (msg) => {
+                        console.log('Received message: userInfo' + msg.body);
+                        const userInfo = JSON.parse(msg.body);
+                        set((state) => ({ ...state, userInfo: userInfo }));
+                    });
+                    console.log('Connected: ' + frame);
+
+                    client.publish({
+                        destination: '/app/enterRoom',
+                        body: JSON.stringify({
+                           roomId : roomId,
+                        }),
+                    });
                 };
                 
                 client.onStompError = function (frame) {
@@ -52,11 +113,8 @@ export const useRoomStore = create<roomState>() (
 
             clearRoom: () => {
                 set({ client: null });
-                set({ players: [
-                    { profileImgUrl: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png', nickname: 'empty' },
-                    { profileImgUrl: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png', nickname: 'empty' },
-                    ] 
-                });
+                set({ userInfo: null });
+                set({ roomInfo: null });
             }
             
         }),
