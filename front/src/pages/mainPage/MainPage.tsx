@@ -1,25 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Grid, Image, GridRow, GridColumn, Modal, Header, CardGroup } from 'semantic-ui-react';
 import { useRoomStore } from '../../stores/room';
-import 'semantic-ui-css/semantic.min.css';
 import { HeaderBar } from '../../components/header/HeaderBar.tsx';
-import './MainPage.css';
-
 import { WaitingPage } from '../waitingPage/WaitingPage';
 import { EntryCodeModal } from '../../components/modal/EntryCodeModal.tsx';
-
 import { useAuthStore } from '../../stores/useAuthStore.ts';
+
+import 'semantic-ui-css/semantic.min.css';
+import './MainPage.css';
 
 const MainPage: React.FC = () => {
 	const roomStore = useRoomStore();
-	const [open, setOpen] = React.useState(false);
-	const [openModal, setOpenModal] = React.useState(false);
+	const [open, setOpen] = useState(false);
+	const [openModal, setOpenModal] = useState(false);
 
 	const authStore = useAuthStore();
 
-    useEffect(() => {
-        roomStore.clearRoom();
-    }, []);
+	useEffect(() => {
+		roomStore.clearRoom();
+	}, []);
 
 	const cardStyle = {
 		width: '28vw',
@@ -40,16 +39,19 @@ const MainPage: React.FC = () => {
 		width: '100%', // Make the button fill the card width
 	};
 
-    const createRoom = () => {
-		if(authStore.accessToken===undefined || authStore.accessToken===null || authStore.memberId === undefined)  { console.log("로그인 해야합니다."); return;}
-        roomStore.createRoom(authStore.accessToken, authStore.memberId);
-        setOpen(true);
-    }
+	const createRoom = () => {
+		if (authStore.accessToken === undefined || authStore.accessToken === null || authStore.memberId === undefined) {
+			console.log('로그인 해야합니다.');
+			return;
+		}
+		roomStore.createRoom(authStore.accessToken, authStore.memberId);
+		setOpen(true);
+	};
 
 	const enterEntryCode = () => {
 		setOpenModal(true);
 	};
-	
+
 	return (
 		<>
 			<div className='MainPage'>
@@ -75,6 +77,7 @@ const MainPage: React.FC = () => {
 											</Card.Content>
 											<Card.Content style={{ borderTop: 'none' }}>
 												<Button
+													className='EntryButtons'
 													style={buttonStyle}
 													onClick={(_e) => {
 														createRoom();
@@ -103,6 +106,7 @@ const MainPage: React.FC = () => {
 											</Card.Content>
 											<Card.Content style={{ borderTop: 'none' }}>
 												<Button
+													className='EntryButtons'
 													style={buttonStyle}
 													onClick={(_e) => {
 														enterEntryCode();
@@ -137,7 +141,7 @@ const MainPage: React.FC = () => {
 					<EntryCodeModal
 						changeModal={() => {
 							setOpenModal(false);
-						  }}
+						}}
 						successConnect={() => {
 							setOpenModal(false);
 							setOpen(true);

@@ -19,10 +19,9 @@ import {
 	Segment,
 	Button,
 } from 'semantic-ui-react';
-import { ChangeEvent, FormEvent, useState } from 'react';
 import logo from '../../assets/images/logo.svg';
 import './WaitingPage.css';
-
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useRoomStore } from '../../stores/room';
 
 interface ModalProps {
@@ -76,7 +75,7 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 									</Header>
 								</MenuItem>
 								<MenuItem name='Entry Code'>
-									<Header as='h3' textAlign='center'>
+									<Header className='EntryCode' as='h3' textAlign='center'>
 										입장 코드 : {roomStore.roomInfo?.entryCode}
 									</Header>
 								</MenuItem>

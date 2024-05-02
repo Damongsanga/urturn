@@ -14,10 +14,10 @@ import {
 import 'semantic-ui-css/semantic.min.css';
 import { HeaderBar } from '../../components/header/HeaderBar';
 import { useState } from 'react';
+import ProgressBar from '@ramonak/react-progress-bar';
 import './MyPage.css';
 
 export const MyPage = () => {
-
 	const [pageState, setPageState] = useState({
 		activePage: 5,
 		boundaryRange: 1,
@@ -86,10 +86,23 @@ export const MyPage = () => {
 							</Card>
 							{/* 프로필 영역 카드 하단 - 레벨 */}
 							<Card className='MyProfile'>
-								<CardContent>
+								<CardContent className='ExpBar'>
 									<CardHeader className='CardTextColor' textAlign='center'>
 										레벨
 									</CardHeader>
+									{/* 레벨 바 */}
+									<div className='ExpBar'>
+									<ProgressBar
+										completed={80}
+										width='24vw'
+										height='2.5vh'
+										baseBgColor='#A67A6A'
+										bgColor='#5297FF'
+										labelAlignment='center'
+										labelSize='1.1rem'
+										animateOnRender={true}
+									/>
+									</div>
 								</CardContent>
 								{/* 레벨 관련 문구 */}
 								<CardContent className='ContentBorder'>
