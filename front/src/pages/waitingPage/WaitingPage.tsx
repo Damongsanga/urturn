@@ -77,7 +77,7 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 								</MenuItem>
 								<MenuItem name='Entry Code'>
 									<Header as='h3' textAlign='center'>
-										입장 코드 : {'A206'}
+										입장 코드 : {roomStore.roomInfo?.entryCode}
 									</Header>
 								</MenuItem>
 								<MenuItem name='close' position='right' onClick={changeModal}>
@@ -94,10 +94,11 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 										<CardContent>
 											<Image
 												src={
-													roomStore.players[0].profileImgUrl?
-													roomStore.players[0].profileImgUrl
+													roomStore.userInfo?.myUserProfileUrl
+													?
+													roomStore.userInfo!.myUserProfileUrl
 													:
-													'https://avatars.githubusercontent.com/u/19562994?v=4'
+													'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
 												}
 												size='small'
 												rounded
@@ -105,8 +106,9 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 											<Divider hidden />
 											<CardHeader textAlign='center'>
 												{
-													roomStore.players[0].nickname?
-													roomStore.players[0].nickname
+													roomStore.userInfo?.myUserNickName
+													?
+													roomStore.userInfo.myUserNickName
 													:
 													'내 정보 로딩 에러'
 												}
@@ -118,10 +120,11 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 										<CardContent>
 											<Image
 												src={
-													roomStore.players[1].profileImgUrl?
-													roomStore.players[1].profileImgUrl
+													roomStore.userInfo?.relativeUserProfileUrl
+													?
+													roomStore.userInfo.relativeUserProfileUrl
 													:
-													'https://avatars.githubusercontent.com/u/19562994?v=4'
+													'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
 												}
 												size='small'
 												rounded
@@ -129,8 +132,9 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 											<Divider hidden />
 											<CardHeader textAlign='center'>
 												{
-													roomStore.players[1].nickname?
-													roomStore.players[1].nickname
+													roomStore.userInfo?.relativeUserNickName
+													?
+													roomStore.userInfo.relativeUserNickName
 													:
 													'미접속'
 												}

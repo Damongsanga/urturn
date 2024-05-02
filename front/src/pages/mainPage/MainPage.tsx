@@ -49,6 +49,7 @@ const MainPage: React.FC = () => {
 	const enterEntryCode = () => {
 		setOpenModal(true);
 	};
+	
 	return (
 		<>
 			<div className='MainPage'>
@@ -136,6 +137,10 @@ const MainPage: React.FC = () => {
 					<EntryCodeModal
 						changeModal={() => {
 							setOpenModal(false);
+						  }}
+						successConnect={() => {
+							setOpenModal(false);
+							setOpen(true);
 						}}
 					/>
 				</Modal.Content>
