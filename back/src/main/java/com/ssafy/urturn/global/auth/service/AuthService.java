@@ -48,8 +48,8 @@ public class AuthService {
             Member member = Member.builder()
                 .nickname(req.getNickname())
                 .password(passwordEncoder.encode(req.getPassword() + salt))
-                .profileImage("testProfileImage")
-                .githubToken("githubToken")
+                .profileImage("https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/UserProfileImage/baseImage.jpg")
+                .githubAccessToken("githubAccessToken")
                 .level(Level.LEVEL1)
                 .roles(List.of(Role.USER)).build();
             memberRepository.save(member);

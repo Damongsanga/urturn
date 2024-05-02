@@ -16,6 +16,7 @@ public class UtilConfig {
     public WebClient webClient(WebClient.Builder builder) {
         return builder.baseUrl(url).build();
     }
+
     @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper();

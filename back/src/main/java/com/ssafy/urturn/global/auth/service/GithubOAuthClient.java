@@ -3,6 +3,7 @@ package com.ssafy.urturn.global.auth.service;
 
 import com.ssafy.urturn.global.auth.dto.GithubOAuthAccessTokenRequest;
 import com.ssafy.urturn.global.auth.dto.GithubOAuthMemberInfoResponse;
+import com.ssafy.urturn.global.auth.dto.GithubOAuthRefreshTokenRequest;
 import com.ssafy.urturn.global.auth.dto.OAuthAccessTokenResponse;
 import com.ssafy.urturn.global.auth.dto.OAuthMemberInfoResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,14 +38,20 @@ public class GithubOAuthClient implements OAuthClient {
     }
 
     @Override
-    public OAuthMemberInfoResponse getMemberInfo(String accessToken) {
+    public OAuthMemberInfoResponse getMemberInfo(OAuthAccessTokenResponse tokens) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(accessToken);
-        return restTemplate.exchange(
+
+        headers.setBearerAuth(tokens.getAccessToken());
+        GithubOAuthMemberInfoResponse res = restTemplate.exchange(
                 MEMBER_INFO_URL,
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
                 GithubOAuthMemberInfoResponse.class
         ).getBody();
+
+        res.setAccessToken(tokens.getAccessToken());
+        return res;
     }
+
+
 }

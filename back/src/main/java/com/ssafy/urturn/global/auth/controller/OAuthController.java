@@ -35,6 +35,15 @@ public class OAuthController {
     @Value("${spring.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenValidityInSeconds;
 
+    @GetMapping("/oauth2/token")
+    public ResponseEntity<?> refreshAccessToken(@RequestParam String code){
+        log.info("code : {}", code);
+        oAuthService.refreshAccessToken(code);
+
+
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/oauth2/login/github")
     public ResponseEntity<LoginResponse> gitHubLogin(@RequestParam String code){
         log.info("code : {}", code);

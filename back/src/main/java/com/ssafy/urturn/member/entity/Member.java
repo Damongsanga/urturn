@@ -3,6 +3,7 @@ package com.ssafy.urturn.member.entity;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.ssafy.urturn.global.auth.Role;
+import com.ssafy.urturn.global.auth.dto.OAuthAccessTokenResponse;
 import com.ssafy.urturn.global.common.BaseEntity;
 import com.ssafy.urturn.member.Level;
 import jakarta.persistence.Column;
@@ -43,10 +44,11 @@ public class Member extends BaseEntity implements UserDetails {
     private String nickname;
     @Column(name= "profile_image", nullable = false)
     private String profileImage;
+    private String email;
     private String repository;
 
-    @Column(name= "github_token")
-    private String githubToken;
+    @Column(name= "github_access_token")
+    private String githubAccessToken;
 
     @Column(nullable = false)
     private int exp;
@@ -66,6 +68,10 @@ public class Member extends BaseEntity implements UserDetails {
 
     public void updateGithubRepository(String repository){
         this.repository = repository;
+    }
+
+    public void updateGithubTokens(String githubAccessToken){
+        this.githubAccessToken = githubAccessToken;
     }
 
 

@@ -33,6 +33,7 @@ public enum CustomErrorCode implements ErrorCode{
     NO_PROBLEM(HttpStatus.BAD_REQUEST, "ID에 해당하는 문제가 존재하지 않습니다");
 
 
+
     private final HttpStatus httpStatus;
     private final String message;
 }

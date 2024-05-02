@@ -6,5 +6,5 @@ import com.ssafy.urturn.global.auth.dto.OAuthMemberInfoResponse;
 
 public interface OAuthClient {
     OAuthAccessTokenResponse getAccessToken(String code);
-    OAuthMemberInfoResponse getMemberInfo(String accessToken);
+    OAuthMemberInfoResponse getMemberInfo(OAuthAccessTokenResponse tokens);
 }

@@ -17,4 +17,6 @@ public class OAuthMemberInfoResponse {
 
     private String email;
 
+    private String accessToken;
+
 }

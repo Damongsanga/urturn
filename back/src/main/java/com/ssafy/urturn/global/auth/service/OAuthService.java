@@ -59,8 +59,9 @@ public class OAuthService {
         log.info("res.getName() : {}", res.getName());
         log.info("res.getEmail() : {}", res.getEmail());
         log.info("res.getProfileUrl() : {}", res.getProfileUrl());
+        log.info("res.getAccessToken() : {}", res.getAccessToken());
         createIfNewMember(res);
-        return login(res.getOauthId());
+        return login(res.getAccessToken());
     }
 
     @Transactional
@@ -69,14 +70,27 @@ public class OAuthService {
         jwtRedisRepository.delete(KeyUtil.getRefreshTokenKey(memberId.toString()));
     }
 
+    @Transactional
+    public void refreshAccessToken(String code){
+        OAuthMemberInfoResponse res = getGithubUserInfo(code);
+        updateAccessToken(res);
+    }
 
-    private LoginResponse login(String githubToken) {
-        Member member = memberRepository.findByGithubToken(githubToken).orElseThrow(() -> new RestApiException(NO_MEMBER));
+    // memberId로 조회하는 것으로 수정 필요
+    private void updateAccessToken(OAuthMemberInfoResponse res){
+//        Long memberId = MemberUtil.getMemberId();
+        Member member = memberRepository.findByNickname(res.getName()).orElseThrow(() -> new RestApiException(NO_MEMBER));
+        member.updateGithubTokens(res.getAccessToken());
+    }
+
+
+    private LoginResponse login(String githubAccessToken) {
+        Member member = memberRepository.findByGithubAccessToken(githubAccessToken).orElseThrow(() -> new RestApiException(NO_MEMBER));
         log.info("id : {}", member.getId());
         log.info("role : {}", member.getRoles());
-        log.info("githubToken : {}", member.getGithubToken());
+        log.info("githubAccessToken : {}", member.getGithubAccessToken());
 
-        JwtToken jwtToken = makeJwtToken(member.getId().toString(), member.getGithubToken());
+        JwtToken jwtToken = makeJwtToken(member.getId().toString(), member.getNickname());
 
         return LoginResponse.builder()
                 .memberId(member.getId())
@@ -89,28 +103,31 @@ public class OAuthService {
     private OAuthMemberInfoResponse getGithubUserInfo(String code) {
         try {
             OAuthAccessTokenResponse tokenResponse = githubOAuthClient.getAccessToken(code);
-            return githubOAuthClient.getMemberInfo(tokenResponse.getAccessToken());
+            return githubOAuthClient.getMemberInfo(tokenResponse);
         } catch (HttpClientErrorException e) {
             throw new RestApiException(CustomErrorCode.GITHUB_AUTHORIZATION_ERROR);
         }
     }
 
+
     // githubToken으로 비밀번호 대싱 사용
-    private JwtToken makeJwtToken(String memberId, String githubToken) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberId, githubToken + salt);
+    private JwtToken makeJwtToken(String memberId, String nickname) {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberId, nickname + salt);
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         return jwtTokenProvider.generateToken(authentication);
     }
 
     private void createIfNewMember(OAuthMemberInfoResponse res) {
-        if (!memberRepository.existsByGithubToken(res.getOauthId())){
+        log.info("access token : {}", res.getAccessToken());
+        if (!memberRepository.existsByGithubAccessToken(res.getOauthId())){
             Member member =
                 Member.builder()
                     .profileImage(res.getProfileUrl())
-                    .githubToken(res.getOauthId())
-                    .nickname(res.getName()) // 이거 github nickname으로 수정해야함
+                    .githubAccessToken(res.getAccessToken())
+                    .nickname(res.getName())
+                    .email(res.getEmail())
                     .roles(List.of(Role.USER))
-                    .password(passwordEncoder.encode(res.getOauthId() + salt))
+                    .password(passwordEncoder.encode(res.getName() + salt))
                     .level(Level.LEVEL1)
                     .build();
             memberRepository.save(member);

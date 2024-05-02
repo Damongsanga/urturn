@@ -38,7 +38,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         // 해당 API에 대해서는 모든 요청을 허가
-                        .requestMatchers("/auth/reissue", "/auth/oauth2/login/github", "/auth/test/login", "/actuator/health", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs").permitAll()
+                        .requestMatchers("/auth/reissue", "/auth/oauth2/login/github", "/auth/test/login", "/actuator/health", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs", "/auth/oauth2/token").permitAll() ///auth/oauth2/token 삭제 필요
                         // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정
                         .anyRequest().authenticated())
                 // 에러 핸들링
