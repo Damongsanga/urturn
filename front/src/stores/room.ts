@@ -2,16 +2,23 @@ import { Client } from '@stomp/stompjs';
 import { create } from "zustand";
 import { persist } from 'zustand/middleware';
 import { roomState } from '../types/roomTypes';
+import { NavigateFunction } from 'react-router-dom';
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
 const port = import.meta.env.VITE_API_WEBSOCKET_PORT
 
 export const useRoomStore = create<roomState>() (
     persist(
-        (set) => ({
+        (set, get) => ({
+            navigate: null,
             client: null,
             userInfo: null,
             roomInfo: null,
+            questionInfos: [],
+
+            setNavigate: (navigate: NavigateFunction) => {
+                set({ navigate: navigate })
+            },
 
             createRoom: ( token:string, userId: number ) => {
                 const client = new Client({
@@ -34,13 +41,19 @@ export const useRoomStore = create<roomState>() (
                         console.log('Received message: roomInfo' + msg.body);
                         const roomInfo = JSON.parse(msg.body);
                         //순환참조 발생 코드
-
                         set((state) => ({ ...state, roomInfo: roomInfo }));
                     });
                     client.subscribe('/user/' + userId + '/userInfo', (msg) => {
                         console.log('Received message: userInfo' + msg.body);
                         const userInfo = JSON.parse(msg.body);
                         set((state) => ({ ...state, userInfo: userInfo }));
+                    });
+                    client.subscribe('/user/' + userId + '/questionInfo', (msg) => {
+                        console.log('Received message: questionInfo ' + msg.body);
+                        const questionInfos = JSON.parse(msg.body);
+                        const navi = get().navigate;
+                        navi!('/solve');
+                        set((state) => ({...state, questionInfos: questionInfos}));
                     });
                     console.log('Connected: ' + frame);
 
@@ -90,6 +103,13 @@ export const useRoomStore = create<roomState>() (
                         console.log('Received message: userInfo' + msg.body);
                         const userInfo = JSON.parse(msg.body);
                         set((state) => ({ ...state, userInfo: userInfo }));
+                    });
+                    client.subscribe('/user/' + userId + '/questionInfo', (msg) => {
+                        console.log('Received message: questionInfo ' + msg.body);
+                        const questionInfos = JSON.parse(msg.body);
+                        const navi = get().navigate;
+                        navi!('/solve');
+                        set((state) => ({...state, questionInfos: questionInfos}));
                     });
                     console.log('Connected: ' + frame);
 

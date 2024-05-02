@@ -40,11 +40,11 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 	// 난이도
 
 	const difficulties = [
-		{ label: '100m 달리기', value: '100m', color: '#AAD79F'},
-		{ label: '1km 달리기', value: '1km', color: '#A9D9DC' },
-		{ label: '10km 달리기', value: '10km', color: '#E5ACAC' },
-		{ label: '하프 마라톤', value: '하프 마라톤', color: '#C1ABE4' },
-		{ label: '풀 마라톤', value: '풀 마라톤', color: '#9B9B9B' },
+		{ label: '100m 달리기', value: 'VERY_EASY', color: '#AAD79F'},
+		{ label: '1km 달리기', value: 'EASY', color: '#A9D9DC' },
+		{ label: '10km 달리기', value: 'MEDIUM', color: '#E5ACAC' },
+		{ label: '하프 마라톤', value: 'HARD', color: '#C1ABE4' },
+		{ label: '풀 마라톤', value: 'VERY_HARD', color: '#9B9B9B' },
 	];
 	// 난이도 목록
 
@@ -57,6 +57,25 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 	const handleDifficulty = (_e: FormEvent<HTMLInputElement>, data: any) => {
 		setDifficulty(data.value);
 	}; // 난이도 설정 조정 함수
+
+	const selectDifficulty = () => {
+		if(roomStore.client === undefined || roomStore.client === null) {
+			alert('문제가 발생했습니다. 재접속 해주세요.');
+			return
+		}
+		if(roomStore.roomInfo === undefined || roomStore.roomInfo === null) {
+			alert('문제가 발생했습니다. 재접속 해주세요.');
+			return
+		}
+
+		roomStore.client.publish({
+			destination: '/app/selectDifficulty',
+			body: JSON.stringify({
+				roomId: roomStore.roomInfo.roomId,
+				difficulty: difficulty,
+			}),
+		})
+	}
 
 	return (
 		<>
@@ -214,7 +233,7 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 								</div>
 								{/* 시작 버튼 */}
 								<div className='StartButton'>
-									<Button size='massive' className='StartButtonStyle'>시작하기</Button>
+									<Button onClick={selectDifficulty} size='massive' className='StartButtonStyle'>시작하기</Button>
 								</div>
 							</div>
 						</div>

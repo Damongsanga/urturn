@@ -5,6 +5,7 @@ import { HeaderBar } from '../../components/header/HeaderBar.tsx';
 import { WaitingPage } from '../waitingPage/WaitingPage';
 import { EntryCodeModal } from '../../components/modal/EntryCodeModal.tsx';
 import { useAuthStore } from '../../stores/useAuthStore.ts';
+import { useNavigate } from 'react-router-dom';
 
 import 'semantic-ui-css/semantic.min.css';
 import './MainPage.css';
@@ -13,11 +14,13 @@ const MainPage: React.FC = () => {
 	const roomStore = useRoomStore();
 	const [open, setOpen] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
+	const navigate = useNavigate();
 
 	const authStore = useAuthStore();
 
 	useEffect(() => {
 		roomStore.clearRoom();
+		roomStore.setNavigate(navigate);
 	}, []);
 
 	const cardStyle = {
