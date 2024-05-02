@@ -10,6 +10,8 @@ import "allotment/dist/style.css";
 import { HeaderBar } from '../../components/header/HeaderBar';
 import { SolveSubHeader } from '../../components/solve/sloveSubHeader';
 
+import { useRoomStore } from '../../stores/room';
+
 import './SolvePage.css'
 
 const langOptions = [
@@ -20,11 +22,55 @@ const langOptions = [
 ]
 
 export default function SolvePage() {
+    const roomStore = useRoomStore();
+
     const [fileContent, setFileContent] = useState('');
-  
+
+    const [nowIdxState, setNowIdxState] = useState(-1);
+    //const nowIdxRef = useRef(-1);
+
     useEffect(() => {
-      setFileContent("# 테스트 문제");
-    }, []);
+        if(roomStore.roomInfo?.host==true){
+          setNowIdxState(0);
+          //nowIdxRef.current = 0;
+        }
+        else{
+          setNowIdxState(1);
+          //nowIdxRef.current = 1;
+        }
+        console.log("페이지가 바뀌엇어오")
+        if(roomStore.questionInfos){
+          console.log("퀘스천 인포: " + roomStore.questionInfos[0].algoQuestionUrl);
+        }
+        console.log("인덱스:" + nowIdxState);
+    }, [roomStore.questionInfos]);
+
+    useEffect(() => {
+      const loadMarkdown = async () => {
+        if(roomStore.questionInfos){
+          const txt = await loadMarkdownFromCDN(roomStore.questionInfos[nowIdxState].algoQuestionUrl);
+          console.log("변환결과?!!?!???????????: ", txt);
+          setFileContent(txt);
+        }
+      };
+
+      loadMarkdown();
+    }, [nowIdxState]);
+
+    async function loadMarkdownFromCDN(url: string): Promise<string> {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Error fetching Markdown file: ${response.statusText}`);
+        }
+        const markdown = await response.text();
+        return markdown;
+      } catch (error) {
+        console.error(error);
+        return '';
+      }
+    }
+
   
     return (
       <div className='Page'>
