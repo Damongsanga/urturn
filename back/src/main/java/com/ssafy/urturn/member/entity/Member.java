@@ -50,6 +50,9 @@ public class Member extends BaseEntity implements UserDetails {
     @Column(name= "github_access_token")
     private String githubAccessToken;
 
+    @Column(name ="github_unique_id")
+    private String githubUniqueId;
+
     @Column(nullable = false)
     private int exp;
     @Column(nullable = false)

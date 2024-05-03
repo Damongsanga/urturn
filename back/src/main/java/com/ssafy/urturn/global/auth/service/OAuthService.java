@@ -79,13 +79,13 @@ public class OAuthService {
     // memberId로 조회하는 것으로 수정 필요
     private void updateAccessToken(OAuthMemberInfoResponse res){
 //        Long memberId = MemberUtil.getMemberId();
-        Member member = memberRepository.findByNickname(res.getName()).orElseThrow(() -> new RestApiException(NO_MEMBER));
+        Member member = memberRepository.findByGithubUniqueId(res.getOauthId()).orElseThrow(() -> new RestApiException(NO_MEMBER));
         member.updateGithubTokens(res.getAccessToken());
     }
 
 
-    private LoginResponse login(String nickname) {
-        Member member = memberRepository.findByNickname(nickname).orElseThrow(() -> new RestApiException(NO_MEMBER));
+    private LoginResponse login(String githubUniqueId) {
+        Member member = memberRepository.findByGithubUniqueId(githubUniqueId).orElseThrow(() -> new RestApiException(NO_MEMBER));
         log.info("id : {}", member.getId());
         log.info("role : {}", member.getRoles());
         log.info("githubAccessToken : {}", member.getGithubAccessToken());
@@ -124,6 +124,7 @@ public class OAuthService {
                 Member.builder()
                     .profileImage(res.getProfileUrl())
                     .githubAccessToken(res.getAccessToken())
+                    .githubUniqueId(res.getOauthId())
                     .nickname(res.getName())
                     .email(res.getEmail())
                     .roles(List.of(Role.USER))
