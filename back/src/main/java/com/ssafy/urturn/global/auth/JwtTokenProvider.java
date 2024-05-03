@@ -2,6 +2,8 @@ package com.ssafy.urturn.global.auth;
 
 
 import com.ssafy.urturn.global.auth.repository.JwtRedisRepository;
+import com.ssafy.urturn.global.exception.RestApiException;
+import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
 import com.ssafy.urturn.global.util.AES128Util;
 import com.ssafy.urturn.global.util.KeyUtil;
 import io.jsonwebtoken.Claims;
@@ -13,7 +15,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,6 +30,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -105,6 +112,8 @@ public class JwtTokenProvider {
     }
 
 
+
+
     // Jwt 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
         // Jwt 토큰 복호화 (Claim이 권한 정보)
@@ -180,7 +189,24 @@ public class JwtTokenProvider {
         return null;
     }
 
-    public String generateAccessToken(String memberId, String authorities){
+    public String resolveRefreshToken(HttpServletRequest req){
+        Cookie[] cookies = req.getCookies();
+        if (cookies == null) throw new RestApiException(CommonErrorCode.WRONG_REQUEST, "쿠키가 존재하지 않습니다");
+
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("refreshToken")){
+                return URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+            }
+        }
+        return null;
+    }
+
+    public String generateNewAccessToken(String refreshToken){
+
+        Authentication authentication = this.getAuthentication(refreshToken);
+        String memberId = authentication.getName();
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
         Date accessTokenExpiresIn = new Date((new Date()).getTime() + accessTokenValidityInSeconds * 1000);
         return Jwts.builder()
                 .setSubject(memberId)
@@ -190,4 +216,14 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public boolean existsRefreshToken(String refreshToken) {
+        // userId 정보를 가져와서 redis에 있는 refreshtoken과 같은지 확인
+        Claims claims = this.parseClaims(refreshToken);
+        String memberId = claims.getSubject();
+        return refreshToken.equals(jwtRedisRepository.find(KeyUtil.getRefreshTokenKey(memberId)).orElse(""));
+    }
+
+    public void setHeaderAccessToken(HttpServletResponse response, String accessToken) {
+        response.setHeader("authorization", "bearer "+ accessToken);
+    }
 }

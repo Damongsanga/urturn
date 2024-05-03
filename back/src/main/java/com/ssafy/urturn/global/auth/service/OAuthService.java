@@ -1,8 +1,6 @@
 package com.ssafy.urturn.global.auth.service;
 
 
-import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.COOKIE_REFRESH_TOKEN_NOT_EXISTS;
-import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.INVALID_REFRESH_TOKEN;
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_MEMBER;
 
 import com.ssafy.urturn.global.auth.JwtToken;
@@ -45,7 +43,6 @@ public class OAuthService {
     private final OAuthClient githubOAuthClient;
     private final PasswordEncoder passwordEncoder;
     private final JwtRedisRepository jwtRedisRepository;
-    private final AES128Util aes128Util;
 
 
     @Value("spring.security.oauth2.client.registration.password-salt")
@@ -135,16 +132,4 @@ public class OAuthService {
         }
     }
 
-    public String reissueAccessToken(String encryptedRefreshToken) {
-        // 유저가 제공한 refreshToken이 있는지 확인
-        if (encryptedRefreshToken == null) throw new RestApiException(COOKIE_REFRESH_TOKEN_NOT_EXISTS);
-        String refreshToken = aes128Util.decryptAes(encryptedRefreshToken);
-        // userId 정보를 가져와서 redis에 있는 refreshtoken과 같은지 확인
-        Claims claims = jwtTokenProvider.parseClaims(refreshToken);
-        String memberId = claims.getSubject();
-        String redisRefreshToken = jwtRedisRepository.find(KeyUtil.getRefreshTokenKey(memberId));
-        if (redisRefreshToken == null || !redisRefreshToken.equals(refreshToken)) throw new RestApiException(INVALID_REFRESH_TOKEN);
-        // 같다면 refreshToken을 활용하여 새로운 accessToken을 발급
-        return jwtTokenProvider.generateAccessToken(memberId, claims.get("auth").toString());
-    }
 }

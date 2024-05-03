@@ -58,22 +58,6 @@ public class OAuthController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/reissue")
-    public ResponseEntity<String> reissue(HttpServletRequest req) {
-        Cookie[] cookies = req.getCookies();
-        if (cookies == null) throw new RestApiException(CommonErrorCode.WRONG_REQUEST, "쿠키가 존재하지 않습니다");
-
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("refreshToken")){
-                String encryptedRefreshToken = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
-                String newAccessToken = oAuthService.reissueAccessToken(encryptedRefreshToken);
-                return ResponseEntity.ok(newAccessToken);
-            }
-        }
-
-        return new ResponseEntity<String>("필요한 쿠키가 존재하지 않습니다", HttpStatus.BAD_REQUEST);
-    }
-
     private HttpHeaders getHeadersWithCookie(LoginResponse res) {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", res.getJwtToken().deleteRefreshToken())
                 .maxAge(refreshTokenValidityInSeconds)
@@ -87,7 +71,5 @@ public class OAuthController {
         headers.add("Set-Cookie", cookie.toString());
         return headers;
     }
-
-
 
 }

@@ -2,6 +2,7 @@ package com.ssafy.urturn.global.config;
 
 import com.ssafy.urturn.global.auth.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.urturn.global.util.AES128Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,7 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final ObjectMapper objectMapper;
+    private final AES128Util aes128Util;
 
     // Spring Security 7.0 부터 삭제될 예정으로, 체이닝 방식에서 람다식으로 변경필요
     @Bean
@@ -47,7 +49,7 @@ public class SecurityConfig {
                             .accessDeniedHandler(jwtAccessDeniedHandler);
                 })
                 // JWT 인증을 위하여 직접 구현한 필터를 UsernamePasswordAuthenticationFilter 전에 실행
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, aes128Util), UsernamePasswordAuthenticationFilter.class)
                 // JwtException 핸들링을 위한 Exception 필터
                 .addFilterBefore(new JwtExceptionFilter(objectMapper), JwtAuthenticationFilter.class).build();
     }
