@@ -119,7 +119,7 @@ public class OAuthService {
 
     private void createIfNewMember(OAuthMemberInfoResponse res) {
         log.info("access token : {}", res.getAccessToken());
-        if (!memberRepository.existsByGithubAccessToken(res.getOauthId())){
+        if (!memberRepository.existsByNickname(res.getName())){
             Member member =
                 Member.builder()
                     .profileImage(res.getProfileUrl())
