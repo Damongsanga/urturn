@@ -16,9 +16,12 @@ export const useRoomStore = create<roomState>() (
             roomInfo: null,
             questionInfos: [],
 
-            setNavigate: (navigate: NavigateFunction) => {
-                set({ navigate: navigate })
-            },
+            round: 0,
+            code: '',
+            
+
+            setNavigate: (navigate: NavigateFunction) => {set({ navigate: navigate })},
+            setCode: (code: string) => {set({ code: code })},
 
             createRoom: ( token:string, userId: number ) => {
                 const client = new Client({

@@ -29,6 +29,9 @@ export interface roomState {
     roomInfo: roomInfo | null,
     questionInfos: questionInfo[] | null
 
+    round: number
+    code: string
+
     setNavigate: (navigate: NavigateFunction) => void
 
     createRoom: (token : string, userId : number) => void
