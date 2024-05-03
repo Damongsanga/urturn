@@ -26,7 +26,7 @@ export default function ReviewPage() {
 
     //const [fileContent, setFileContent] = useState('');
 
-    const [nowIdxState, setNowIdxState] = useState(-1);
+    const [nowIdxState, setNowIdxState] = useState(0);
     //const nowIdxRef = useRef(-1);
 
     useEffect(() => {
@@ -46,7 +46,7 @@ export default function ReviewPage() {
           
           <SolveSubHeader $mode={1}/>
         
-        <div style={{height: '80vh' }}>
+        <div style={{height: '80vh'}}>
         <Allotment>
           <Allotment.Pane minSize={350}>
             <div className='HeaderBar Ide' style={{ height: '70px'}}>

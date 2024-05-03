@@ -26,16 +26,11 @@ export default function CheckPage() {
 
     //const [fileContent, setFileContent] = useState('');
 
-    const [nowIdxState, setNowIdxState] = useState(-1);
+    const [nowIdxState, setNowIdxState] = useState(0);
     //const nowIdxRef = useRef(-1);
 
     useEffect(() => {
-        if(roomStore.roomInfo?.host==true){
-          setNowIdxState(0);
-        }
-        else{
-          setNowIdxState(1);
-        }
+        console.log(roomStore.questionInfos);
     }, []);
 
 
@@ -56,7 +51,7 @@ export default function CheckPage() {
 
             </div>
             <div style={{ height: '100%', overflowY: 'auto'  }}>
-              <Markdown>{roomStore.questionInfos![nowIdxState].algoQuestion[0]}</Markdown>
+              {/* <Markdown>{roomStore.questionInfos![nowIdxState].algoQuestionContent[0]}</Markdown> */}
             </div>
           </Allotment.Pane>
           <Allotment.Pane minSize={350}>
