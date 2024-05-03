@@ -13,11 +13,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final JwtChannelInterceptor jwtChannelInterceptor;
 
-    // /ws  경로로 연결
+    // /wss  경로로 연결
 //    @Override
 //    public void registerStompEndpoints(StompEndpointRegistry registry) {
 //        System.out.println("test");
-////        registry.addEndpoint("/ws")
+////        registry.addEndpoint("/wss")
 ////                .setAllowedOriginPatterns("*") // 변경된 부분
 ////                .withSockJS();
 //        registry.addEndpoint("/ws").setAllowedOrigins("*");
@@ -32,7 +32,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws")
+        registry.addEndpoint("/wss")
                 .setAllowedOrigins("*");
 //                .withSockJS();
     }
