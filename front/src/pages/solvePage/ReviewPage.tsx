@@ -21,7 +21,7 @@ const langOptions = [
   { key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
 ]
 
-export default function SolvePage() {
+export default function ReviewPage() {
     const roomStore = useRoomStore();
 
     //const [fileContent, setFileContent] = useState('');

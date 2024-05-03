@@ -1,8 +1,9 @@
 import { Client } from '@stomp/stompjs';
 import { create } from "zustand";
 import { persist } from 'zustand/middleware';
-import { roomState } from '../types/roomTypes';
+import { questionInfo, roomState } from '../types/roomTypes';
 import { NavigateFunction } from 'react-router-dom';
+import { loadMarkdownFromCDN } from '../utils/solve/loadMarkdownFromCDN';
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
 const port = import.meta.env.VITE_API_WEBSOCKET_PORT
@@ -50,9 +51,17 @@ export const useRoomStore = create<roomState>() (
                     });
                     client.subscribe('/user/' + userId + '/questionInfo', (msg) => {
                         console.log('Received message: questionInfo ' + msg.body);
-                        const questionInfos = JSON.parse(msg.body);
+                        const res = JSON.parse(msg.body);
+                        const questionInfos : questionInfo[]  = [];
+                        res.forEach(async (res: { algoQuestionUrl: any; algoQuestionId: any; }) => {
+                            // algoQuestionUrl에 funcA 함수 적용
+                            const txt = await loadMarkdownFromCDN(res.algoQuestionUrl);
+                          
+                            // 변환된 결과를 algoQuestion 속성에 할당
+                            questionInfos.push({algoQuestion: txt, algoQuestionId: res.algoQuestionId});
+                          });
                         const navi = get().navigate;
-                        navi!('/solve');
+                        navi!('/check');
                         set((state) => ({...state, questionInfos: questionInfos}));
                     });
                     console.log('Connected: ' + frame);
@@ -106,9 +115,17 @@ export const useRoomStore = create<roomState>() (
                     });
                     client.subscribe('/user/' + userId + '/questionInfo', (msg) => {
                         console.log('Received message: questionInfo ' + msg.body);
-                        const questionInfos = JSON.parse(msg.body);
+                        const res = JSON.parse(msg.body);
+                        const questionInfos : questionInfo[]  = [];
+                        res.forEach(async (res: { algoQuestionUrl: any; algoQuestionId: any; }) => {
+                            // algoQuestionUrl에 funcA 함수 적용
+                            const txt = await loadMarkdownFromCDN(res.algoQuestionUrl);
+                          
+                            // 변환된 결과를 algoQuestion 속성에 할당
+                            questionInfos.push({algoQuestion: txt, algoQuestionId: res.algoQuestionId});
+                          });
                         const navi = get().navigate;
-                        navi!('/solve');
+                        navi!('/check');
                         set((state) => ({...state, questionInfos: questionInfos}));
                     });
                     console.log('Connected: ' + frame);

@@ -16,7 +16,7 @@ export interface userInfo {
 
 export interface questionInfo {
     algoQuestionId: number,
-    algoQuestionUrl: string
+    algoQuestion: string
 }
 
 
