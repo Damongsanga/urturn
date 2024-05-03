@@ -191,7 +191,7 @@ public class JwtTokenProvider {
 
     public String resolveRefreshToken(HttpServletRequest req){
         Cookie[] cookies = req.getCookies();
-        if (cookies == null) throw new RestApiException(CommonErrorCode.WRONG_REQUEST, "쿠키가 존재하지 않습니다");
+        if (cookies == null) return null;
 
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("refreshToken")){

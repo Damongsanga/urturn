@@ -30,7 +30,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("getRequestURI : {}", request.getRequestURI());
         log.info("getRequestURL : {}", request.getRequestURL());
 
-
         if (accessToken != null){
             if (jwtTokenProvider.validateToken(accessToken)) {
                 this.setAuthentication(accessToken);
