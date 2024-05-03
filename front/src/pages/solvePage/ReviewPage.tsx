@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+//import { useEffect, useState } from 'react';
 
 import { Allotment } from "allotment";
 import CodeEditor from '../../components/solve/CodeEditor';
-import Markdown from 'markdown-to-jsx'
+//import Markdown from 'markdown-to-jsx'
 import { Dropdown } from 'semantic-ui-react'
 
 import "allotment/dist/style.css";
@@ -10,7 +10,7 @@ import "allotment/dist/style.css";
 import { HeaderBar } from '../../components/header/HeaderBar';
 import { SolveSubHeader } from '../../components/solve/sloveSubHeader';
 
-import { useRoomStore } from '../../stores/room';
+//import { useRoomStore } from '../../stores/room';
 
 import './SolvePage.css'
 
@@ -22,22 +22,12 @@ const langOptions = [
 ]
 
 export default function ReviewPage() {
-    const roomStore = useRoomStore();
+    //const roomStore = useRoomStore();
 
     //const [fileContent, setFileContent] = useState('');
 
-    const [nowIdxState, setNowIdxState] = useState(0);
+    // const [nowIdxState, setNowIdxState] = useState(0);
     //const nowIdxRef = useRef(-1);
-
-    useEffect(() => {
-        if(roomStore.roomInfo?.host==true){
-          setNowIdxState(0);
-        }
-        else{
-          setNowIdxState(1);
-        }
-    }, []);
-
 
     return (
       <div className='Page'>
@@ -56,7 +46,7 @@ export default function ReviewPage() {
 
             </div>
             <div style={{ height: '100%', overflowY: 'auto'  }}>
-              <Markdown>{roomStore.questionInfos![nowIdxState].algoQuestion[0]}</Markdown>
+              {/* <Markdown>{roomStore.questionInfos![nowIdxState].algoQuestion[0]}</Markdown> */}
             </div>
           </Allotment.Pane>
           <Allotment.Pane minSize={350}>

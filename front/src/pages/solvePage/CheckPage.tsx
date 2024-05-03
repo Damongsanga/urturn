@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+//import { useEffect, useState } from 'react';
 
 import { Allotment } from "allotment";
 import CodeEditor from '../../components/solve/CodeEditor';
-import Markdown from 'markdown-to-jsx'
-import { Dropdown } from 'semantic-ui-react'
+//import Markdown from 'markdown-to-jsx'
+import { Button, Dropdown } from 'semantic-ui-react'
 
 import "allotment/dist/style.css";
 
@@ -24,14 +24,22 @@ const langOptions = [
 export default function CheckPage() {
     const roomStore = useRoomStore();
 
-    //const [fileContent, setFileContent] = useState('');
+    const readyToSolve = () =>{
+      const idx = roomStore.roomInfo?.host ? 0 : 1
+      console.log(roomStore.roomInfo?.roomId)
+      console.log(roomStore.questionInfos?.[idx]?.algoQuestionId);
+      console.log(roomStore.roomInfo?.host)
 
-    const [nowIdxState, setNowIdxState] = useState(0);
-    //const nowIdxRef = useRef(-1);
+      roomStore.client?.publish({
+        destination: '/app/readyToSolve',
+        body: JSON.stringify({
+          roomId: roomStore.roomInfo?.roomId,
+          algoQuestionId: roomStore.questionInfos?.[idx]?.algoQuestionId,
+          isHost: roomStore.roomInfo?.host
+        })
 
-    useEffect(() => {
-        console.log(roomStore.questionInfos);
-    }, []);
+      })
+    }
 
 
     return (
@@ -78,18 +86,12 @@ export default function CheckPage() {
           </Allotment.Pane>
         </Allotment>
         </div>
+
+        <Button onClick={readyToSolve}>
+          시작하기
+        </Button>
   
       </div>
     );
   }
 
-  // <div>
-  //       <Dropdown
-  //           search
-  //           defaultValue={langOptions[0].value}
-  //           searchInput={{ type: 'string' }}
-  //           selection
-  //           options={langOptions}
-  //           style={{ backgroundColor: 'green' }}
-  //         />
-  //       </div>

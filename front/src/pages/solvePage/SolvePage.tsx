@@ -24,17 +24,15 @@ const langOptions = [
 export default function SolvePage() {
     const roomStore = useRoomStore();
 
-    //const [fileContent, setFileContent] = useState('');
+    const [nowQIdx, setnowQIdx] = useState(0);
 
-    const [nowIdxState, setNowIdxState] = useState(-1);
-    //const nowIdxRef = useRef(-1);
 
     useEffect(() => {
         if(roomStore.roomInfo?.host==true){
-          setNowIdxState(0);
+          setnowQIdx(0);
         }
         else{
-          setNowIdxState(1);
+          setnowQIdx(1);
         }
     }, []);
 
@@ -56,7 +54,7 @@ export default function SolvePage() {
 
             </div>
             <div style={{ height: '100%', overflowY: 'auto'  }}>
-              <Markdown>{roomStore.questionInfos![nowIdxState].algoQuestion[0]}</Markdown>
+              <Markdown>{roomStore.questionInfos![nowQIdx].algoQuestionContent[nowQIdx]}</Markdown>
             </div>
           </Allotment.Pane>
           <Allotment.Pane minSize={350}>
