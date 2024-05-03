@@ -21,6 +21,7 @@ export const useRoomStore = create<roomState>() (
             },
 
             createRoom: ( token:string, userId: number ) => {
+                console.log("웹소켓 요청: " + url + '/ws');
                 const client = new Client({
                     brokerURL: url + '/ws',
                     
