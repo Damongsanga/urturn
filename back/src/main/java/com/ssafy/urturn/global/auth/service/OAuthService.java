@@ -61,7 +61,7 @@ public class OAuthService {
         log.info("res.getProfileUrl() : {}", res.getProfileUrl());
         log.info("res.getAccessToken() : {}", res.getAccessToken());
         createIfNewMember(res);
-        return login(res.getAccessToken());
+        return login(res.getName());
     }
 
     @Transactional
@@ -84,8 +84,8 @@ public class OAuthService {
     }
 
 
-    private LoginResponse login(String githubAccessToken) {
-        Member member = memberRepository.findByGithubAccessToken(githubAccessToken).orElseThrow(() -> new RestApiException(NO_MEMBER));
+    private LoginResponse login(String nickname) {
+        Member member = memberRepository.findByNickname(nickname).orElseThrow(() -> new RestApiException(NO_MEMBER));
         log.info("id : {}", member.getId());
         log.info("role : {}", member.getRoles());
         log.info("githubAccessToken : {}", member.getGithubAccessToken());
