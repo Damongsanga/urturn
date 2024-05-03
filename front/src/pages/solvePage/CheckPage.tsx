@@ -2,7 +2,7 @@
 
 import { Allotment } from "allotment";
 import CodeEditor from '../../components/solve/CodeEditor';
-//import Markdown from 'markdown-to-jsx'
+import Markdown from 'markdown-to-jsx'
 import { Button, Dropdown } from 'semantic-ui-react'
 
 import "allotment/dist/style.css";
@@ -59,7 +59,7 @@ export default function CheckPage() {
 
             </div>
             <div style={{ height: '100%', overflowY: 'auto'  }}>
-              {/* <Markdown>{roomStore.questionInfos![nowIdxState].algoQuestionContent[0]}</Markdown> */}
+              <Markdown>{roomStore.questionInfos![0].algoQuestionContent}</Markdown>
             </div>
           </Allotment.Pane>
           <Allotment.Pane minSize={350}>
