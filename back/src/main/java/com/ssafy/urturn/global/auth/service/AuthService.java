@@ -50,6 +50,7 @@ public class AuthService {
                 .password(passwordEncoder.encode(req.getPassword() + salt))
                 .profileImage("https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/UserProfileImage/baseImage.jpg")
                 .githubAccessToken("githubAccessToken")
+                .email("damongsanga@email.com")
                 .level(Level.LEVEL1)
                 .roles(List.of(Role.USER)).build();
             memberRepository.save(member);
