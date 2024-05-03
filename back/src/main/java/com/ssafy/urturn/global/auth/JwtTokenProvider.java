@@ -157,7 +157,7 @@ public class JwtTokenProvider {
         } catch (ExpiredJwtException e) {
             // access token이 expire될 시에 바로 reissue로 redirect
             log.info("Expired JWT Token", e);
-            throw new ExpiredJwtException(null, null,"Expired JWT Token");
+            return false;
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT Token", e);
             throw new JwtException("Unsupported JWT Token");
