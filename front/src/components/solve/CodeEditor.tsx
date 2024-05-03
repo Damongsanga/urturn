@@ -7,6 +7,7 @@ import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
 import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
 import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
+import { useRoomStore } from '../../stores/room';
 
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -31,16 +32,20 @@ loader.config({ monaco });
 loader.init().then(/* ... */);
 
 export default function CodeEditor({lang}: {lang: string}) {
+    const roomStore = useRoomStore();
 
-    const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
     function handleEditorDidMount(editor: monaco.editor.IStandaloneCodeEditor) {
-      editorRef.current = editor;
+      try{
+        roomStore.setEditor(editor);
+      }catch(e){
+        console.log(e)
+      }
     }
 
     function showValue() {
-      if(editorRef.current === null) return
-      alert(editorRef.current.getValue());
+      if(roomStore.editor === null) return
+      alert(roomStore.editor.getValue());
     }
 
     return (

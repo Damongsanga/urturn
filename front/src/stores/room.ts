@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 import { questionInfo, roomState } from '../types/roomTypes';
 import { NavigateFunction } from 'react-router-dom';
 import { loadMarkdownFromCDN } from '../utils/solve/loadMarkdownFromCDN';
+import * as monaco from "monaco-editor";
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
 
@@ -17,11 +18,20 @@ export const useRoomStore = create<roomState>() (
             questionInfos: [],
 
             round: 0,
-            code: '',
+            editor: null,
+            sec: 99999999,
             
-
-            setNavigate: (navigate: NavigateFunction) => {set({ navigate: navigate })},
-            setCode: (code: string) => {set({ code: code })},
+            setTimer: (maxTime: number) => {
+                set({ sec: maxTime })
+                setInterval(() => {
+                    set({ sec: get().sec - 1 })
+                    if (get().sec <= 0) {
+                        get().client?.publish({
+                            destination: '/app/stopToSolve',
+                        })
+                    }
+                },1000)
+            },
 
             createRoom: ( token:string, userId: number ) => {
                 const client = new Client({
@@ -134,6 +144,11 @@ export const useRoomStore = create<roomState>() (
                         navi!('/check');
                         set((state) => ({...state, questionInfos: questionInfos}));
                     });
+                    client.subscribe('/user/' + userId + '/startToSolve', () => {
+                        
+                        const navi = get().navigate;
+                        navi!('/solve');
+                    });
                     console.log('Connected: ' + frame);
 
                     client.publish({
@@ -153,6 +168,9 @@ export const useRoomStore = create<roomState>() (
                 
                 set((state) => ({ ...state, client }));
             },
+
+            setNavigate: (navigate: NavigateFunction) => {set({ navigate: navigate })},
+            setEditor: (editor: monaco.editor.IStandaloneCodeEditor) => {set({ editor: editor })},
 
             clearRoom: () => {
                 set({ client: null });
