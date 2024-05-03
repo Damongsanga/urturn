@@ -1,7 +1,8 @@
-package com.ssafy.urturn.github;
+package com.ssafy.urturn.github.service;
 
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_MEMBER;
 
+import com.ssafy.urturn.github.GithubUploadClient;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;

@@ -1,5 +1,6 @@
 package com.ssafy.urturn.github;
 
+import com.ssafy.urturn.github.service.GithubUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
