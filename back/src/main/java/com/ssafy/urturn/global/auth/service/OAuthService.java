@@ -61,7 +61,7 @@ public class OAuthService {
         log.info("res.getProfileUrl() : {}", res.getProfileUrl());
         log.info("res.getAccessToken() : {}", res.getAccessToken());
         createIfNewMember(res);
-        return login(res.getName());
+        return login(res.getOauthId());
     }
 
     @Transactional
