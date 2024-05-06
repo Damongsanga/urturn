@@ -172,6 +172,7 @@ public class RoomService {
     }
 
     public submitResponse submitCode(submitRequest submitRequest){
+        // 제출 광클 하는 경우 채점중입니다. 에러 메시지 처리 필요.
         submitResponse submitResponse=new submitResponse();
 
         // db 조회 후 채점 서버로 Code 및 문제 데이터, 테케 전송
