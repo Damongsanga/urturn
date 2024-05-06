@@ -35,19 +35,19 @@ public class History extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = "manager_id", nullable = false)
     private Member manager;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pair_id")
+    @JoinColumn(name = "pair_id", nullable = false)
     private Member pair;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "problem1_id")
+    @JoinColumn(name = "problem1_id", nullable = false)
     private Problem problem1;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "problem2_id")
+    @JoinColumn(name = "problem2_id", nullable = false)
     private Problem problem2;
     private String code1;
     private String code2;
