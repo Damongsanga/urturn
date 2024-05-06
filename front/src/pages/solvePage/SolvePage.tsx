@@ -21,24 +21,28 @@ const langOptions = [
   { key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
 ]
 
+const TIME = 10;
+
 export default function SolvePage() {
     const roomStore = useRoomStore();
 
-    const [nowQIdx, setnowQIdx] = useState(0);
+    //const [nowQIdx, setnowQIdx] = useState(-1);
 
+    // useEffect(() => {
+    //     if(roomStore.roomInfo?.host==true){
+    //       setnowQIdx(0);
+    //     }
+    //     else{
+    //       setnowQIdx(1);
+    //     }
+    // }, []);
 
-    useEffect(() => {
-        if(roomStore.roomInfo?.host==true){
-          setnowQIdx(0);
-        }
-        else{
-          setnowQIdx(1);
-        }
-    }, []);
+    //use
 
 
     return (
       <div className='Page'>
+          <p>{roomStore.sec}</p>
 
           <HeaderBar $ide={true} $mode={1}/>
           
@@ -54,7 +58,10 @@ export default function SolvePage() {
 
             </div>
             <div style={{ height: '100%', overflowY: 'auto'  }}>
-              <Markdown>{roomStore.questionInfos![nowQIdx].algoQuestionContent[nowQIdx]}</Markdown>
+              {
+                roomStore.questionIdx == -1 ? <div></div> :
+                <Markdown>{roomStore.questionInfos![roomStore.questionIdx].algoQuestionContent}</Markdown>
+              }
             </div>
           </Allotment.Pane>
           <Allotment.Pane minSize={350}>
