@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TestcaseCreateRequest {
-    private Language language;
     private String stdin;
     private String expectedOutput;
     @JsonProperty("public")

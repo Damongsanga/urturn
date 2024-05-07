@@ -37,9 +37,6 @@ public class Testcase extends BaseEntity {
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
-    @Column(name = "language")
-    @Enumerated(EnumType.STRING)
-    private Language language;
     private String stdin;
     @Column(name = "expected_output")
     private String expectedOutput;
@@ -49,7 +46,6 @@ public class Testcase extends BaseEntity {
 
     public Testcase(TestcaseCreateRequest req, Problem problem){
         this.problem = problem;
-        this.language = req.getLanguage();
         this.stdin = req.getStdin();
         this.expectedOutput = req.getExpectedOutput();
         this.isPublic = req.isPublic();

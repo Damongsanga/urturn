@@ -15,9 +15,8 @@ public class TestGradingController {
     private final GradingService gradingService;
 
     @PostMapping("/getResult")
-    public ResponseEntity<?> getResult(@RequestBody TestGetResultDto inputCode)
-        throws InterruptedException {
-        return ResponseEntity.ok(gradingService.getResult(inputCode.getProblemId(), inputCode.getInputCode()));
+    public ResponseEntity<?> getResult(@RequestBody TestGetResultDto inputCode) {
+        return ResponseEntity.ok(gradingService.getResult(inputCode.getProblemId(), inputCode.getInputCode(), inputCode.getLanguage()));
     }
 
 }

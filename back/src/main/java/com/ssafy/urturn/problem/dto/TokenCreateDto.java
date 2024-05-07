@@ -2,6 +2,7 @@ package com.ssafy.urturn.problem.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.ssafy.urturn.problem.Language;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,9 +16,9 @@ public class TokenCreateDto {
     private String stdin;
     private String expectedOutput;
 
-    public TokenCreateDto(TestcaseDto testcase, String sourceCode) {
+    public TokenCreateDto(TestcaseDto testcase, String sourceCode, Language language) {
         this.sourceCode = sourceCode;
-        this.languageId = testcase.getLanguage().getLangId();
+        this.languageId = language.getLangId();
         this.stdin = testcase.getStdin();
         this.expectedOutput = testcase.getExpectedOutput();
     }

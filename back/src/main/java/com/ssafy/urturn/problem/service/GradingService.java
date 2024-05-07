@@ -1,10 +1,13 @@
 package com.ssafy.urturn.problem.service;
 
+import static com.ssafy.urturn.global.exception.errorcode.CommonErrorCode.INTERNAL_SERVER_ERROR;
 import static com.ssafy.urturn.problem.Grading.*;
 import static com.ssafy.urturn.problem.SubmissionStatus.*;
 
 import com.ssafy.urturn.global.exception.RestApiException;
+import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
+import com.ssafy.urturn.problem.Language;
 import com.ssafy.urturn.problem.SubmissionStatus;
 import com.ssafy.urturn.problem.dto.GradingResponse;
 import com.ssafy.urturn.problem.dto.GradingTestcaseDto;
@@ -40,7 +43,7 @@ public class GradingService {
     // 정답인 status Id
     private final int answerStatusId = 3;
 
-    public GradingResponse getResult(Long problemId, String inputCode) throws InterruptedException {
+    public GradingResponse getResult(Long problemId, String inputCode, Language language){
         int count = 0;
 
         // 문제 id를 기반으로 문제 + 전체 테스트케이스 조회
@@ -49,7 +52,7 @@ public class GradingService {
 
         // 제출한 코드를 기반으로 채점
         // 토큰 추출
-        List<TokenDto> tokens = createTokens(problemTestcaseDto.getTestcases(), inputCode).block();
+        List<TokenDto> tokens = createTokens(problemTestcaseDto.getTestcases(), inputCode, language).block();
 
         for (TokenDto token : tokens) {
             log.info("token : {}", token);
@@ -61,7 +64,11 @@ public class GradingService {
         // 3초 대기 & 총 5회 재요청.
         outer : while(count < 5){
             // 3초 대기, 바로 토큰 결과를 요청하면 채점 서버에서 완료하지 못함
-            Thread.sleep(3000);
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e){
+                throw new RestApiException(INTERNAL_SERVER_ERROR);
+            }
             // 응답받은 토큰을 기반으로 다시 응답 추출
             submissionsBatchResponse = getSubmissions(tokens).block();
 
@@ -113,14 +120,14 @@ public class GradingService {
     }
 
     // 채점 서버에 inputCode들을 제공하여 토큰을 반환받음
-    private Mono<List<TokenDto>> createTokens(List<TestcaseDto> testcases, String inputCode){
+    private Mono<List<TokenDto>> createTokens(List<TestcaseDto> testcases, String inputCode, Language language){
 
         return webClient.post().uri(uriBuilder -> uriBuilder
             .path(CREATE_TOKENS.getPath())
             .query(CREATE_TOKENS.getQuery())
             .build())
             .body(BodyInserters
-                .fromValue(new TokenBatchCreateDto(testcases, inputCode)))
+                .fromValue(new TokenBatchCreateDto(testcases, inputCode, language)))
             .retrieve()
             .bodyToFlux(TokenDto.class)
             .collectList();

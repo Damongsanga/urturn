@@ -93,7 +93,6 @@ public class ProblemCustomRepositoryImpl implements ProblemCustomRepository{
                         problem.level,
                         list((Projections.constructor(TestcaseDto.class,
                             testcase.id,
-                            testcase.language,
                             testcase.stdin,
                             testcase.expectedOutput)
                         ))

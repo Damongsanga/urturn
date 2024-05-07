@@ -1,5 +1,9 @@
 package com.ssafy.urturn.solving.service;
 
+import static com.ssafy.urturn.global.RequestLockType.*;
+
+import com.ssafy.urturn.global.RequestLockService;
+import com.ssafy.urturn.global.RequestLockType;
 import com.ssafy.urturn.global.util.MemberUtil;
 import com.ssafy.urturn.history.repository.HistoryRepository;
 import com.ssafy.urturn.member.Level;
@@ -12,6 +16,7 @@ import com.ssafy.urturn.solving.cache.cacheDatas;
 import com.ssafy.urturn.solving.dto.*;
 import com.ssafy.urturn.solving.temp.WebSocketSessionManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,11 +31,13 @@ public class RoomService {
     private final MemberService memberService;
     private final GradingService gradingService;
     private final ProblemService problemService;
-    private final HistoryRepository historyRepository;
     private final cacheDatas cachedatas;
-    private final WebSocketSessionManager webSocketSessionManager;
     private final ReentrantLock lock;
-    /*
+
+    private final RequestLockService requestLockService;
+
+
+    /**
     방생성
      */
     @Transactional
@@ -194,13 +201,15 @@ public class RoomService {
     }
 
     @Transactional
-    public SubmitResponse submitCode(SubmitRequest submitRequest) throws InterruptedException {
-        // 제출 광클 하는 경우 채점중입니다. 에러 메시지 처리 필요.
+    public SubmitResponse submitCode(SubmitRequest submitRequest){
+        // 제출 광클 방지 Lock -> AOP로 디벨롭하면 좋을듯
+        String key = requestLockService.generateLockKey(GRADING, submitRequest.getRoomId(), submitRequest.isHost());
+        requestLockService.ifLockedThrowExceptionElseLock(key, GRADING.getDuration());
 
         // db 조회 후 채점 서버로 Code 및 문제 데이터, 테케 전송
         // 결과 수신
         GradingResponse result = gradingService.getResult(submitRequest.getAlgoQuestionId(),
-            submitRequest.getCode());
+            submitRequest.getCode(), submitRequest.getLanguage());
 
         // 오답 일 경우 실패 응답 + 관련 메시지 전송
         // 정답 일 경우 DB에 정답 코드 저장.
@@ -217,6 +226,9 @@ public class RoomService {
         submitResponse.setMessage("테케 1 정답\n 테케 2 오답");
         dto 채점서버 반환 형태에 따라 수정 필요하면 수정 후 API 명세에 적어주세용 -> 반환 엔티티 및 API 명세 수정했습니돠
          */
+
+        // Lock 헤제
+        requestLockService.unlock(key);
 
         return SubmitResponse.builder()
             .result(result.isSucceeded())

@@ -136,7 +136,7 @@ public class WebSocketController {
     }
 
     @MessageMapping("/submitCode")
-    public void submitCode(@Payload SubmitRequest submitRequest) throws InterruptedException {
+    public void submitCode(@Payload SubmitRequest submitRequest){
 
         Long participantId=cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getParticipantId();
         Long managerId=cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getManagerId();
