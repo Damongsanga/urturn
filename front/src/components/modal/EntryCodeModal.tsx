@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Menu, MenuItem, Header, Icon, Input, Button } from 'semantic-ui-react';
 import { useAxios } from '../../utils/useAxios';
-import { useRoomStore } from '../../stores/room';
 import { useAuthStore } from '../../stores/useAuthStore';
 import './EntryCodeModal.css';
+import { useWebSocket } from '../../hooks/webSocket';
 
 interface ModalProps {
 	changeModal: () => void;
@@ -13,8 +13,8 @@ interface ModalProps {
 export const EntryCodeModal = ({ changeModal, successConnect }: ModalProps) => {
 	const [entryCode, setEntryCode] = useState('');
 	const axios = useAxios();
-	const roomStore = useRoomStore();
 	const authStore = useAuthStore();
+	const webSocket = useWebSocket();
 
 	const checkCode = () => {
 		console.log("참가자 checkCode 디버그");
@@ -24,16 +24,12 @@ export const EntryCodeModal = ({ changeModal, successConnect }: ModalProps) => {
 		axios.get(`/room/enter/${entryCode}`)
 		.then((res: { data: string }) => {
 			const roomId = res.data;
-			if(authStore.accessToken===undefined || authStore.accessToken===null || authStore.memberId === undefined)  { console.log("로그인 해야됩니다."); return;}
-			roomStore.enterRoom(authStore.accessToken, authStore.memberId, roomId);
-		})
-
-		if(roomStore.createRoom !== undefined || roomStore.client !== null) {
+			webSocket.connect(roomId);
 			successConnect();
-		}
-		else{
+		})
+		.catch(() => {
 			alert("존재하지 않는 방입니다.");
-		}
+		})
 	}
 
 	return (

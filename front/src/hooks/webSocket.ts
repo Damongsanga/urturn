@@ -1,0 +1,136 @@
+
+import { useNavigate } from "react-router-dom";
+import { Client } from "@stomp/stompjs";
+
+import { useAuthStore } from "../stores/useAuthStore";
+import { useRoomStore } from "../stores/room";
+import { loadMarkdownFromCDN } from "../utils/solve/loadMarkdownFromCDN";
+import { questionInfo } from "../types/roomTypes";
+
+const url = import.meta.env.VITE_API_WEBSOCKET_URL
+
+export const useWebSocket = () => {
+    const navi = useNavigate();
+    const authStore = useAuthStore();
+    const roomStore = useRoomStore();
+    
+    const connect = (roomId: string|null = null) => {
+        const userId = authStore.memberId;
+        const token = authStore.accessToken;
+
+        const setTimer= (maxSec: number) => {
+            
+            roomStore.setSec(maxSec);
+        
+            const timer = setInterval(() => {
+                if(roomStore.getSec() > 0){
+                    roomStore.setSec(roomStore.getSec() - 1);
+                }
+                else if (roomStore.getSec() <= 0) {
+                    roomStore.getClient()?.publish({
+                        destination: '/app/switchCode',
+                        body: JSON.stringify({ 
+                            code: roomStore.getEditor()?.getValue(),
+                            roomId: roomStore.getRoomInfo()?.roomId,
+                            round: roomStore.getRound(),
+                            algoQuestionId: roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId,
+                            isHost: roomStore.getRoomInfo()?.host,
+                        })
+                    })
+                    clearInterval(timer);
+                }
+            }, 1000)
+        }
+        
+
+        console.log("웹소켓 요청: " + url + '/ws');
+        const client = new Client({
+            brokerURL: url + '/ws',
+            
+            connectHeaders: {
+                Authorization: 'Bearer ' + token,
+            },
+            
+            debug: function (str: string) {
+            console.log("debug:" + str);
+            },
+            reconnectDelay: 5000000, //자동 재 연결
+            heartbeatIncoming: 4000,
+            heartbeatOutgoing: 4000,
+        });
+
+        client.onConnect = function (frame) {
+            client.subscribe('/user/' + userId + '/roomInfo', (msg) => {
+                console.log('Received message: roomInfo' + msg.body);
+                const roomInfo = JSON.parse(msg.body);
+                roomStore.setRoomInfo(roomInfo);
+            });
+            client.subscribe('/user/' + userId + '/userInfo', (msg) => {
+                console.log('Received message: userInfo' + msg.body);
+                const userInfo = JSON.parse(msg.body);
+                roomStore.setUserInfo(userInfo);
+            });
+            client.subscribe('/user/' + userId + '/questionInfo', (msg) => {
+                const questionInfos: questionInfo[] = JSON.parse(msg.body);
+                questionInfos.forEach(
+                    async (questionInfo: questionInfo) => {
+                        const content = await loadMarkdownFromCDN(questionInfo.algoQuestionUrl);
+                        questionInfo.algoQuestionContent = content;
+                    }
+                )
+                navi('/check');
+                roomStore.setQuestionInfos(questionInfos);
+            });
+            client.subscribe('/user/' + userId + '/startToSolve', () => {
+                const idx = roomStore.getRoomInfo()?.host ? 0 : 1;
+                console.log('idx: ' + idx);
+                roomStore.setQuestionIdx(idx);
+                setTimer(10);
+                navi!('/solve');
+            });
+            client.subscribe('/user/' + userId + '/switchCode', (msg) => {
+                const data = JSON.parse(msg.body);
+                roomStore.getEditor()?.setValue(data.code);
+                roomStore.setRound(data.round);
+
+                const idx = roomStore.getQuestionIdx() === 0 ? 1 : 0;
+                roomStore.setQuestionIdx(idx);
+                setTimer(10);
+
+            });
+            
+            console.log('Connected: ' + frame);
+
+
+            if(roomId===null){
+                client.publish({
+                    destination: '/app/createRoom',
+                    body: JSON.stringify({
+                    memberId : userId,
+                    }),
+                });
+            }
+            else{
+                client.publish({
+                    destination: '/app/enterRoom',
+                    body: JSON.stringify({
+                        roomId : roomId,
+                    }),
+                });
+            }
+        };
+        
+        client.onStompError = function (frame) {
+            console.log('Broker reported error: ' + frame.headers['message']);
+            console.log('Additional details: ' + frame.body);
+        };
+
+        client.activate();
+        
+        roomStore.setClient(client);
+    }
+
+    return {
+        connect
+    }
+}
