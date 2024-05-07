@@ -1,12 +1,22 @@
 package com.ssafy.urturn.problem.service;
 
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_MEMBER;
+
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
+import com.ssafy.urturn.global.util.MemberUtil;
+import com.ssafy.urturn.member.entity.Member;
+import com.ssafy.urturn.member.repository.MemberRepository;
+import com.ssafy.urturn.global.util.MemberUtil;
+import com.ssafy.urturn.member.Level;
 import com.ssafy.urturn.problem.dto.ProblemCreateRequest;
 import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.problem.entity.Problem;
 import com.ssafy.urturn.problem.repository.ProblemRepository;
+import java.util.List;
+import com.ssafy.urturn.problem.repository.ProblemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProblemService {
 
     private final ProblemRepository problemRepository;
+    private final MemberRepository memberRepository;
 
     // ADMIN만 접근할 수 있도록 검증해야함
     // DTO 변환 필요
@@ -31,11 +42,23 @@ public class ProblemService {
         return problemRepository.save(problem).getId();
     }
 
+    // dto 변환 필요. TC까지 필요한지 여부에 따라 응답 다름
+    public List<ProblemTestcaseDto> selectProblem(Level level, Long pairId){
+        Long memberId = MemberUtil.getMemberId();
+        return problemRepository.selectTwoProblemByLevel(level, memberId, pairId);
+    }
+
     // DTO 변환 필요
     public ProblemTestcaseDto getProblemWithPublicTestcase(Long problemId) {
 
         return problemRepository.getProblemWithPublicTestcase(problemId).orElseThrow(() -> new RestApiException(
             CustomErrorCode.NO_PROBLEM));
-
     }
+
+    // 문제 2개랑 전체 테스트케이스 반환
+    // 공개 테스트케이스만 필요한가??
+    public List<ProblemTestcaseDto> getTwoProblem(Long managerId, Long pairId, Level level){
+        return problemRepository.selectTwoProblemByLevel(level, managerId, pairId);
+    }
+
 }

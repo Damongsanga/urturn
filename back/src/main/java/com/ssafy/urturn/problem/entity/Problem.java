@@ -38,4 +38,7 @@ public class Problem extends BaseEntity {
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
     private List<Testcase> testcases;
 
+    @OneToMany(mappedBy = "problem")
+    private List<MemberProblem> memberProblems;
+
 }

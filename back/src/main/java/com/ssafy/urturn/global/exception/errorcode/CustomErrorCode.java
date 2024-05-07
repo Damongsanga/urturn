@@ -36,6 +36,7 @@ public enum CustomErrorCode implements ErrorCode{
     TOO_MUCH_TRAFFIC(HttpStatus.TOO_MANY_REQUESTS, "채점 서버가 많은 부하를 받고 있습니다. 잠시 후에 다시 시도해주세요!");
 
 
+
     private final HttpStatus httpStatus;
     private final String message;
 }

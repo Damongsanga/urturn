@@ -12,4 +12,5 @@ public class OAuthAccessTokenResponse {
 
     @JsonProperty("access_token")
     private String accessToken;
+
 }

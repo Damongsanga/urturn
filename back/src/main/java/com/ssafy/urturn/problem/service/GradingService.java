@@ -64,7 +64,7 @@ public class GradingService {
             Thread.sleep(3000);
             // 응답받은 토큰을 기반으로 다시 응답 추출
             submissionsBatchResponse = getSubmissions(tokens).block();
-            
+
             switch (status = confirmStatus(Objects.requireNonNull(submissionsBatchResponse).getSubmissions())){
                 case PROCESSING -> {
                     count++;
@@ -85,7 +85,7 @@ public class GradingService {
 
     // 응답을 확인하면서 전부 Accepted일 때만 결과 반환
     private GradingResponse makeResponse(List<SubmissionDto> submissions, Long problemId, String inputCode, SubmissionStatus status) {
-        List<GradingTestcaseDto> testcaseResults = 
+        List<GradingTestcaseDto> testcaseResults =
             submissions.stream().map(sub -> new GradingTestcaseDto(statusIdToStatus[sub.getStatusId()], sub.getStderr())).toList();
 
         return GradingResponse.builder()
@@ -114,6 +114,7 @@ public class GradingService {
 
     // 채점 서버에 inputCode들을 제공하여 토큰을 반환받음
     private Mono<List<TokenDto>> createTokens(List<TestcaseDto> testcases, String inputCode){
+
         return webClient.post().uri(uriBuilder -> uriBuilder
             .path(CREATE_TOKENS.getPath())
             .query(CREATE_TOKENS.getQuery())
