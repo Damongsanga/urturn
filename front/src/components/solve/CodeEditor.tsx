@@ -1,5 +1,4 @@
 import Editor, { loader } from '@monaco-editor/react';
-import { useRef,} from 'react';
 
 import * as monaco from 'monaco-editor';
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';

@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import { Allotment } from "allotment";
 import CodeEditor from '../../components/solve/CodeEditor';
 import Markdown from 'markdown-to-jsx'
@@ -20,8 +18,6 @@ const langOptions = [
   { key: 'Python', text: 'Python', value: 'Python' },
   { key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
 ]
-
-const TIME = 10;
 
 export default function SolvePage() {
     const roomStore = useRoomStore();
