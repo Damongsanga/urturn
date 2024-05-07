@@ -42,7 +42,7 @@ export const HeaderBar = ({ $main, $ide }: HeaderProp) => {
 						</MenuItem>
 						<MenuMenu position='right'>
 							<MenuItem name='Profile' onClick={() => {goToMyPage()}}>
-								<img alt='profile' src='' />
+								<img alt='profile' src={auth.profileImage} />
 							</MenuItem>
 							<MenuItem name='Welcome'>
 								<Header as='h3' textAlign='center' className='FontColor'>
