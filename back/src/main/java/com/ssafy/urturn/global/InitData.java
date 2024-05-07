@@ -804,31 +804,27 @@ public class InitData {
 
     private void createProblem(String title, String content, Level level){
 
+        if (problemRepository.existsByTitle(title)) return;
+
         Problem problem = Problem.builder()
             .title(title)
             .content(content)
             .level(level).build();
+        problemRepository.save(problem);
 
-        try{
-            problemRepository.save(problem);
-        } catch (Exception e){
-            log.info(e.getMessage());
-        }
     }
 
     private void createTestcase(String title, String stdin, String expectedOutput, boolean isPublic){
         Problem problem = problemRepository.findByTitle(title);
 
-        try {
-            testcaseRepository.save(Testcase.builder()
-                .problem(problem)
-                .stdin(stdin)
-                .expectedOutput(expectedOutput)
-                .isPublic(isPublic)
-                .build());
-        } catch (Exception e){
-            log.info(e.getMessage());
-        }
+        if (testcaseRepository.existsByStdin(stdin)) return;
+        testcaseRepository.save(Testcase.builder()
+            .problem(problem)
+            .stdin(stdin)
+            .expectedOutput(expectedOutput)
+            .isPublic(isPublic)
+            .build());
+
     }
 
 }

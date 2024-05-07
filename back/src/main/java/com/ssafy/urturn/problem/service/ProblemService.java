@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProblemService {
 
     private final ProblemRepository problemRepository;
-    private final MemberRepository memberRepository;
 
     // ADMIN만 접근할 수 있도록 검증해야함
     // DTO 변환 필요
@@ -42,16 +41,17 @@ public class ProblemService {
         return problemRepository.save(problem).getId();
     }
 
-    // dto 변환 필요. TC까지 필요한지 여부에 따라 응답 다름
-    public List<ProblemTestcaseDto> selectProblem(Level level, Long pairId){
-        Long memberId = MemberUtil.getMemberId();
-        return problemRepository.selectTwoProblemByLevel(level, memberId, pairId);
-    }
 
     // DTO 변환 필요
     public ProblemTestcaseDto getProblemWithPublicTestcase(Long problemId) {
 
         return problemRepository.getProblemWithPublicTestcase(problemId).orElseThrow(() -> new RestApiException(
+            CustomErrorCode.NO_PROBLEM));
+    }
+
+    public ProblemTestcaseDto getProblem(Long problemId) {
+
+        return problemRepository.getProblemAndTestcase(problemId).orElseThrow(() -> new RestApiException(
             CustomErrorCode.NO_PROBLEM));
     }
 

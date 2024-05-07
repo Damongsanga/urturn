@@ -55,5 +55,11 @@ public class ProblemController {
         return ResponseEntity.ok(problemService.getProblemWithPublicTestcase(problemId));
     }
 
+    // admin만 조회 가능하도록 or 삭제
+    @GetMapping("/all/{problemId}")
+    public ResponseEntity<?> getProblemWithAllTestcases(@PathVariable Long problemId){
+        return ResponseEntity.ok(problemService.getProblem(problemId));
+    }
+
 
 }
