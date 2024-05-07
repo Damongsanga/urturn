@@ -200,21 +200,23 @@ public class RoomService {
         }
     }
 
+    // GradeService로 이동하면 좋을 것 같습니다.
     @Transactional
     public SubmitResponse submitCode(SubmitRequest submitRequest){
-        // 제출 광클 방지 Lock -> AOP로 디벨롭하면 좋을듯
+
+        // 제출 광클 방지 Lock by Redis-> AOP로 디벨롭하면 좋을듯
         String key = requestLockService.generateLockKey(GRADING, submitRequest.getRoomId(), submitRequest.isHost());
         requestLockService.ifLockedThrowExceptionElseLock(key, GRADING.getDuration());
 
         // db 조회 후 채점 서버로 Code 및 문제 데이터, 테케 전송
         // 결과 수신
-        GradingResponse result = gradingService.getResult(submitRequest.getAlgoQuestionId(),
+        GradingResponse gradingResponse = gradingService.getResult(submitRequest.getAlgoQuestionId(),
             submitRequest.getCode(), submitRequest.getLanguage());
 
         // 오답 일 경우 실패 응답 + 관련 메시지 전송
         // 정답 일 경우 DB에 정답 코드 저장.
         // 덕주 : 히스토리를 찾을 방법이 없는뎅.. history id를 저장하거나 history entity에 roomId를 저장해야할 듯합니다. 근데 roomId가 unique하다는 보장이 있는지 모르겠어어 이부분은 스킵할께요
-//        if (result.isSucceeded()){
+//        if (gradingResponse.isSucceeded()){
 //            historyRepository.findById();
 //        }
 
@@ -227,12 +229,13 @@ public class RoomService {
         dto 채점서버 반환 형태에 따라 수정 필요하면 수정 후 API 명세에 적어주세용 -> 반환 엔티티 및 API 명세 수정했습니돠
          */
 
-        // Lock 헤제
+        // Lock 해제
         requestLockService.unlock(key);
 
+        // 결과 반환
         return SubmitResponse.builder()
-            .result(result.isSucceeded())
-            .testcaseResults(result.getTestcaseResults())
+            .result(gradingResponse.isSucceeded())
+            .testcaseResults(gradingResponse.getTestcaseResults())
             .build();
     }
 
