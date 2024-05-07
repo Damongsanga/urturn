@@ -6,21 +6,21 @@ import { WaitingPage } from '../waitingPage/WaitingPage';
 import { EntryCodeModal } from '../../components/modal/EntryCodeModal.tsx';
 import { useAuthStore } from '../../stores/useAuthStore.ts';
 import { useNavigate } from 'react-router-dom';
+import { webSocketConnect } from '../../utils/solve/webSocketConnect.ts';
 
 import 'semantic-ui-css/semantic.min.css';
 import './MainPage.css';
 
 const MainPage: React.FC = () => {
+	const navigate = useNavigate();
 	const roomStore = useRoomStore();
 	const [open, setOpen] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
-	const navigate = useNavigate();
 
 	const authStore = useAuthStore();
 
 	useEffect(() => {
 		roomStore.clearRoom();
-		roomStore.setNavigate(navigate);
 	}, []);
 
 	const cardStyle = {
@@ -47,7 +47,7 @@ const MainPage: React.FC = () => {
 			console.log('로그인 해야합니다.');
 			return;
 		}
-		roomStore.createRoom(authStore.accessToken, authStore.memberId);
+		webSocketConnect(navigate, authStore, roomStore);
 		setOpen(true);
 	};
 

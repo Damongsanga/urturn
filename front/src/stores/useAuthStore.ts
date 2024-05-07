@@ -14,7 +14,7 @@ interface LoginResponse {
     jwtToken: JwtToken;
 }
 
-interface AuthState {
+export interface AuthState {
     accessToken: string | undefined;
     refreshToken?: string | undefined;
     memberId: number | undefined;

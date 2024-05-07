@@ -1,5 +1,4 @@
 import { Client } from "@stomp/stompjs";
-import { NavigateFunction } from "react-router-dom";
 import * as monaco from "monaco-editor";
 
 export interface roomInfo {
@@ -24,7 +23,6 @@ export interface questionInfo {
 
 
 export interface roomState {
-    navigate: NavigateFunction | null,
     client: Client | null,
     userInfo: userInfo | null,
     roomInfo: roomInfo | null,
@@ -35,12 +33,15 @@ export interface roomState {
     editor: monaco.editor.IStandaloneCodeEditor | null
     sec: number
 
-    setNavigate: (navigate: NavigateFunction) => void
-    setTimer: () => void
-    setEditor: (editor: any) => void
-    setQuestionIdx: (idx: number) => void
+    setClient: (client: Client) => void
+    setUserInfo: (userInfo: userInfo) => void
+    setRoomInfo: (roomInfo: roomInfo) => void
+    setQuestionInfos: (questionInfos: questionInfo[]) => void
 
-    createRoom: (token : string, userId : number) => void
-    enterRoom: (token :string, userId : number, roomId : string) => void
+    setRound: (round: number) => void
+    setSec: (sec: number) => void
+    setQuestionIdx: (idx: number) => void
+    setEditor: (editor: any) => void
+
     clearRoom: () => void
 }
