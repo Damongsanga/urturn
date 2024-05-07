@@ -8,6 +8,7 @@ import com.ssafy.urturn.problem.service.S3UploadService;
 import com.ssafy.urturn.problem.service.TestcaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,8 +26,8 @@ public class ProblemController {
     private final S3UploadService s3UploadService;
 
     // validation 필요
-    @PostMapping("")
-    public ResponseEntity<?> createProblem(
+    @PostMapping(value="", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> createProblem(
             @RequestParam("title") String title,
             @RequestParam("content") MultipartFile file,
             @RequestParam("level") Level level){
@@ -51,7 +52,7 @@ public class ProblemController {
 
     @GetMapping("/{problemId}")
     public ResponseEntity<?> getProblem(@PathVariable Long problemId){
-        return ResponseEntity.ok(problemService.getProblem(problemId));
+        return ResponseEntity.ok(problemService.getProblemWithPublicTestcase(problemId));
     }
 
 

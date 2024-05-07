@@ -35,6 +35,15 @@ public class OAuthController {
     @Value("${spring.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenValidityInSeconds;
 
+    @GetMapping("/oauth2/token")
+    public ResponseEntity<?> refreshAccessToken(@RequestParam String code){
+        log.info("code : {}", code);
+        oAuthService.refreshAccessToken(code);
+
+
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/oauth2/login/github")
     public ResponseEntity<LoginResponse> gitHubLogin(@RequestParam String code){
         log.info("code : {}", code);
@@ -47,22 +56,6 @@ public class OAuthController {
     public ResponseEntity<Void> logout(){
         oAuthService.logout();
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/reissue")
-    public ResponseEntity<String> reissue(HttpServletRequest req) {
-        Cookie[] cookies = req.getCookies();
-        if (cookies == null) throw new RestApiException(CommonErrorCode.WRONG_REQUEST, "쿠키가 존재하지 않습니다");
-
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("refreshToken")){
-                String encryptedRefreshToken = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
-                String newAccessToken = oAuthService.reissueAccessToken(encryptedRefreshToken);
-                return ResponseEntity.ok(newAccessToken);
-            }
-        }
-
-        return new ResponseEntity<String>("필요한 쿠키가 존재하지 않습니다", HttpStatus.BAD_REQUEST);
     }
 
     private HttpHeaders getHeadersWithCookie(LoginResponse res) {
@@ -78,7 +71,5 @@ public class OAuthController {
         headers.add("Set-Cookie", cookie.toString());
         return headers;
     }
-
-
 
 }

@@ -1,5 +1,6 @@
 package com.ssafy.urturn.global.auth.repository;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,7 +25,7 @@ public class JwtRedisRepository {
         redisTemplate.delete(refreshTokenKey);
     }
 
-    public String find(String refreshTokenKey){
-        return redisTemplate.opsForValue().get(refreshTokenKey);
+    public Optional<String> find(String refreshTokenKey){
+        return Optional.ofNullable(redisTemplate.opsForValue().get(refreshTokenKey));
     }
 }
