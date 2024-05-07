@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class submitRequest {
+public class SubmitRequest {
     private String code;
     private String roomId;
     private Long algoQuestionId;

@@ -6,7 +6,7 @@ import com.ssafy.urturn.global.util.MemberUtil;
 import com.ssafy.urturn.member.dto.MemberDetailResponse;
 import com.ssafy.urturn.member.entity.Member;
 import com.ssafy.urturn.member.repository.MemberRepository;
-import com.ssafy.urturn.solving.dto.userInfoResponse;
+import com.ssafy.urturn.solving.dto.UserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -57,8 +57,8 @@ public class MemberService {
 //        return userInfo;
 //    }
 
-    public userInfoResponse getMemberInfo(Long myUserId, Long relativeUserId) {
-        userInfoResponse userInfo = new userInfoResponse();
+    public UserInfoResponse getMemberInfo(Long myUserId, Long relativeUserId) {
+        UserInfoResponse userInfo = new UserInfoResponse();
 
         // 사용자 정보 설정
         setUserInfo(userInfo, myUserId, true);
@@ -68,7 +68,7 @@ public class MemberService {
     }
 
     // 사용자 정보를 설정하는 보조 메서드
-    private void setUserInfo(userInfoResponse userInfo, Long userId, boolean isMyUser) {
+    private void setUserInfo(UserInfoResponse userInfo, Long userId, boolean isMyUser) {
         if (userId != null) {
             Member member = memberRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("부적절한 유저 아이디 : " + userId));

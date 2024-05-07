@@ -1,8 +1,10 @@
 package com.ssafy.urturn.problem.service;
 
+import static com.ssafy.urturn.global.exception.errorcode.CommonErrorCode.*;
 import static com.ssafy.urturn.problem.Grading.*;
 
 import com.ssafy.urturn.global.exception.RestApiException;
+import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.problem.dto.GradingResponse;
 import com.ssafy.urturn.problem.dto.GradingTestcaseDto;
@@ -35,7 +37,7 @@ public class GradingService {
 
     private final int answerStatusId = 3;
 
-    public GradingResponse getResult(Long problemId, String inputCode) throws InterruptedException {
+    public GradingResponse getResult(Long problemId, String inputCode)  {
         // 문제 id를 기반으로 문제 + 전체 테스트케이스 조회
         ProblemTestcaseDto problemTestcaseDto = problemRepository.getProblemAndTestcase(problemId).orElseThrow(() -> new RestApiException(
             CustomErrorCode.NO_PROBLEM));
@@ -48,7 +50,11 @@ public class GradingService {
             log.info("token : {}", token);
         }
 
-        Thread.sleep(10000);
+        try{
+            Thread.sleep(10000);
+        } catch (InterruptedException e){
+            throw new RestApiException(INTERNAL_SERVER_ERROR);
+        }
 
         // 응답받은 토큰을 기반으로 다시 응답 추출
         // 여기서 문제 발생, 바로 보내니까 In Queue 반환함

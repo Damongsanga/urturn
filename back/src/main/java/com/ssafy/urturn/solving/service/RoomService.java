@@ -1,32 +1,39 @@
 package com.ssafy.urturn.solving.service;
 
 import com.ssafy.urturn.global.util.MemberUtil;
+import com.ssafy.urturn.history.repository.HistoryRepository;
+import com.ssafy.urturn.member.Level;
 import com.ssafy.urturn.member.service.MemberService;
+import com.ssafy.urturn.problem.dto.GradingResponse;
+import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
+import com.ssafy.urturn.problem.service.GradingService;
+import com.ssafy.urturn.problem.service.ProblemService;
 import com.ssafy.urturn.solving.cache.cacheDatas;
 import com.ssafy.urturn.solving.dto.*;
 import com.ssafy.urturn.solving.temp.WebSocketSessionManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
-
-import static com.ssafy.urturn.solving.dto.RoomStatus.IN_GAME;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RoomService {
     private final MemberService memberService;
+    private final GradingService gradingService;
+    private final ProblemService problemService;
+    private final HistoryRepository historyRepository;
     private final cacheDatas cachedatas;
     private final WebSocketSessionManager webSocketSessionManager;
     private final ReentrantLock lock;
     /*
     방생성
      */
+    @Transactional
     public roomInfoResponse createRoom(Long userId){
         // 방 ID
         String roomId= UUID.randomUUID().toString();
@@ -34,7 +41,7 @@ public class RoomService {
         String entryCode=UUID.randomUUID().toString().substring(0,6);
 
         // 방 정보 DTO 생성
-        roomInfoDto roominfodto=new roomInfoDto();
+        RoomInfoDto roominfodto=new RoomInfoDto();
         roominfodto.setManagerId(userId);
         roominfodto.setRoomStatus(RoomStatus.WAITING);
 
@@ -48,8 +55,7 @@ public class RoomService {
 
     }
 
-    public userInfoResponse getUserInfo(Long myUserId,Long relativeUserId){
-
+    public UserInfoResponse getUserInfo(Long myUserId,Long relativeUserId){
         return memberService.getMemberInfo(myUserId,relativeUserId);
     }
 
@@ -61,7 +67,7 @@ public class RoomService {
         }
 
         // 방 정보 가져오기
-        roomInfoDto roomInfo = cachedatas.cacheroomInfoDto(roomId);
+        RoomInfoDto roomInfo = cachedatas.cacheroomInfoDto(roomId);
         if (roomInfo == null) {
             throw new RuntimeException("방 정보를 가져올 수 없습니다.");
         }
@@ -80,35 +86,51 @@ public class RoomService {
         return roomId;
     }
 
-    public algoQuestionResponse[] getAlgoQuestion(String roomId, Difficulty difficulty){
+//    public AlgoQuestionResponse[] getAlgoQuestion(String roomId, Difficulty difficulty){
+//
+//
+//
+//        AlgoQuestionResponse[] algoQuestion = new AlgoQuestionResponse[2];
+//
+//
+//        // 일단은 하드코딩
+//        // ************* 이부분 사용자가 푼 문제 히스토리 참고해서 두 문제 조회하는 로직으로 변경. ****************
+//        algoQuestion[0]=new AlgoQuestionResponse(0L,"https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/AlgoQuestion/SheepAndWolves.txt",
+//                "양늑이");
+//        algoQuestion[1]=new AlgoQuestionResponse(1L,"https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/AlgoQuestion/test.txt"
+//        ,"늑양이");
+//
+//        roomInfoDto roomInfoDto=cachedatas.cacheroomInfoDto(roomId);
+//
+//        // ******************* 가져온 문제 아이디 캐싱 필요. ****************************
+//        roomInfoDto.setProblem1Id(0L);
+//        roomInfoDto.setProblem2Id(1L);
+//        cachedatas.cacheroomInfoDto(roomId,roomInfoDto);
+//
+//
+//        return algoQuestion;
+//    }
 
+    public List<ProblemTestcaseDto> getAlgoQuestion(String roomId, Level level){
 
+        RoomInfoDto roomInfoDto = cachedatas.cacheroomInfoDto(roomId);
 
-        algoQuestionResponse[] algoQuestion = new algoQuestionResponse[2];
+        List<ProblemTestcaseDto> selectedProblems = problemService.getTwoProblem(
+            roomInfoDto.getManagerId(),
+            roomInfoDto.getParticipantId(), level);
 
+        roomInfoDto.setProblem1Id(selectedProblems.get(0).getProblemId());
+        roomInfoDto.setProblem2Id(selectedProblems.get(1).getProblemId());
 
-        // 일단은 하드코딩
-        // ************* 이부분 사용자가 푼 문제 히스토리 참고해서 두 문제 조회하는 로직으로 변경. ****************
-        algoQuestion[0]=new algoQuestionResponse(0L,"https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/AlgoQuestion/SheepAndWolves.txt",
-                "양늑이");
-        algoQuestion[1]=new algoQuestionResponse(1L,"https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/AlgoQuestion/test.txt"
-        ,"늑양이");
-
-        roomInfoDto roomInfoDto=cachedatas.cacheroomInfoDto(roomId);
-
-        // ******************* 가져온 문제 아이디 캐싱 필요. ****************************
-        roomInfoDto.setProblem1Id(0L);
-        roomInfoDto.setProblem2Id(1L);
         cachedatas.cacheroomInfoDto(roomId,roomInfoDto);
 
-
-        return algoQuestion;
+        return selectedProblems;
     }
 
     public boolean setReadyInRoomInfo(readyInfoRequest readyInfoRequest) {
 
         String roomId = readyInfoRequest.getRoomId();
-        roomInfoDto roomInfo = cachedatas.cacheroomInfoDto(roomId);
+        RoomInfoDto roomInfo = cachedatas.cacheroomInfoDto(roomId);
         boolean isHost = readyInfoRequest.isHost();
 
         // 준비 상태 업데이트
@@ -128,7 +150,7 @@ public class RoomService {
         return false;
     }
 
-    public void updateReadyStatus(String roomId, roomInfoDto roomInfo, boolean isHost) {
+    public void updateReadyStatus(String roomId, RoomInfoDto roomInfo, boolean isHost) {
         lock.lock();
         try{
             if (isHost) {
@@ -144,7 +166,7 @@ public class RoomService {
 
     }
 
-    public boolean areBothParticipantsReady(String roomId, roomInfoDto roomInfo) {
+    public boolean areBothParticipantsReady(String roomId, RoomInfoDto roomInfo) {
         lock.lock();
         try {
             if (roomInfo.isManagerIsReady() && roomInfo.isParticipantIsReady()) {
@@ -163,39 +185,43 @@ public class RoomService {
     public switchCodeResponse getParticipantsCode(switchCodeRequest switchCodeRequest){
 
         if(switchCodeRequest.getAlgoQuestionId().equals(cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem1Id())){
-            List<userCodeDto> codes= cachedatas.cacheCodes(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem2Id().toString());
+            List<UserCodeDto> codes= cachedatas.cacheCodes(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem2Id().toString());
             return new switchCodeResponse(codes.get(codes.size()-1).getCode(), switchCodeRequest.getRound()+1);
         }else{
-            List<userCodeDto> codes= cachedatas.cacheCodes(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem1Id().toString());
+            List<UserCodeDto> codes= cachedatas.cacheCodes(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem1Id().toString());
             return new switchCodeResponse(codes.get(codes.size()-1).getCode(), switchCodeRequest.getRound()+1);
         }
     }
 
-    public submitResponse submitCode(submitRequest submitRequest){
+    @Transactional
+    public SubmitResponse submitCode(SubmitRequest submitRequest) throws InterruptedException {
         // 제출 광클 하는 경우 채점중입니다. 에러 메시지 처리 필요.
-        submitResponse submitResponse=new submitResponse();
 
         // db 조회 후 채점 서버로 Code 및 문제 데이터, 테케 전송
-
-        // 결과 수신.
+        // 결과 수신
+        GradingResponse result = gradingService.getResult(submitRequest.getAlgoQuestionId(),
+            submitRequest.getCode());
 
         // 오답 일 경우 실패 응답 + 관련 메시지 전송
+        // 정답 일 경우 DB에 정답 코드 저장.
+        // 덕주 : 히스토리를 찾을 방법이 없는뎅.. history id를 저장하거나 history entity에 roomId를 저장해야할 듯합니다. 근데 roomId가 unique하다는 보장이 있는지 모르겠어어 이부분은 스킵할께요
+//        if (result.isSucceeded()){
+//            historyRepository.findById();
+//        }
 
-        // 정답 일 경우
-
-        //  DB에 정답 코드 저장.
 
         // 페어프로그래밍 모드 전환 메시지 전송
-
         /*
         ex)
         submitResponse.setResult(false);
         submitResponse.setMessage("테케 1 정답\n 테케 2 오답");
-        dto 채점서버 반환 형태에 따라 수정 필요하면 수정 후 API 명세에 적어주세용
+        dto 채점서버 반환 형태에 따라 수정 필요하면 수정 후 API 명세에 적어주세용 -> 반환 엔티티 및 API 명세 수정했습니돠
          */
 
-
-        return submitResponse;
+        return SubmitResponse.builder()
+            .result(result.isSucceeded())
+            .testcaseResults(result.getTestcaseResults())
+            .build();
     }
 
 
