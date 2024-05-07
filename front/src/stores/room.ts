@@ -4,6 +4,9 @@ import { persist } from 'zustand/middleware';
 import { questionInfo, roomState } from '../types/roomTypes';
 import { NavigateFunction } from 'react-router-dom';
 import { loadMarkdownFromCDN } from '../utils/solve/loadMarkdownFromCDN';
+import * as monaco from "monaco-editor";
+
+const TIME_INTERVAL = 10; //sec
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
 
@@ -16,8 +19,32 @@ export const useRoomStore = create<roomState>() (
             roomInfo: null,
             questionInfos: [],
 
-            setNavigate: (navigate: NavigateFunction) => {
-                set({ navigate: navigate })
+            questionIdx: -1,
+            round: 1,
+            editor: null,
+            sec: 99999999,
+            
+            setTimer: () => {
+                try{set({ sec: TIME_INTERVAL })}catch(e){}
+                const timer = setInterval(() => {
+                    if(get().sec >0){
+                        try{set({ sec: get().sec - 1 })}catch(e){}
+                    }
+                    else if (get().sec <= 0) {
+                        console.log("round:" + get().round);
+                        get().client?.publish({
+                            destination: '/app/switchCode',
+                            body: JSON.stringify({ 
+                                code: get().editor?.getValue(),
+                                roomId: get().roomInfo?.roomId,
+                                round: get().round,
+                                algoQuestionId: get().questionInfos?.[get().questionIdx]?.algoQuestionId,
+                                isHost: get().roomInfo?.host,
+                             })
+                        })
+                        clearInterval(timer);
+                    }
+                }, 1000)
             },
 
             createRoom: ( token:string, userId: number ) => {
@@ -42,12 +69,12 @@ export const useRoomStore = create<roomState>() (
                         console.log('Received message: roomInfo' + msg.body);
                         const roomInfo = JSON.parse(msg.body);
                         //순환참조 발생 코드
-                        set((state) => ({ ...state, roomInfo: roomInfo }));
+                        try{set((state) => ({ ...state, roomInfo: roomInfo }));}catch(e){}
                     });
                     client.subscribe('/user/' + userId + '/userInfo', (msg) => {
                         console.log('Received message: userInfo' + msg.body);
                         const userInfo = JSON.parse(msg.body);
-                        set((state) => ({ ...state, userInfo: userInfo }));
+                        try{set((state) => ({ ...state, userInfo: userInfo }));}catch(e){}
                     });
                     client.subscribe('/user/' + userId + '/questionInfo', (msg) => {
                         console.log('Received message: questionInfo ' + msg.body);
@@ -64,9 +91,21 @@ export const useRoomStore = create<roomState>() (
                         set((state) => ({...state, questionInfos: questionInfos}));
                     });
                     client.subscribe('/user/' + userId + '/startToSolve', () => {
-                        
+                        const idx = get().roomInfo?.host ? 0 : 1;
+                        try{set({ questionIdx: idx })} catch(e){}
+                        get().setTimer();
                         const navi = get().navigate;
                         navi!('/solve');
+                    });
+                    client.subscribe('/user/' + userId + '/switchCode', (msg) => {
+                        const data = JSON.parse(msg.body);
+                        get().editor?.setValue(data.code);
+                        try{set({ round: data.round })}catch(e){}
+                        
+                        const idx = get().questionIdx === 0 ? 1 : 0;
+                        try{set({ questionIdx: idx })}catch(e){}
+                        get().setTimer();
+
                     });
                     
                     console.log('Connected: ' + frame);
@@ -111,12 +150,12 @@ export const useRoomStore = create<roomState>() (
                         console.log('Received message: roomInfo' + msg.body);
                         const roomInfo = JSON.parse(msg.body);
                         //순환참조 발생 코드
-                        set((state) => ({ ...state, roomInfo: roomInfo }));
+                        try{set((state) => ({ ...state, roomInfo: roomInfo }));}catch(e){}
                     });
                     client.subscribe('/user/' + userId + '/userInfo', (msg) => {
                         console.log('Received message: userInfo' + msg.body);
                         const userInfo = JSON.parse(msg.body);
-                        set((state) => ({ ...state, userInfo: userInfo }));
+                        try{set((state) => ({ ...state, userInfo: userInfo }));}catch(e){}
                     });
                     client.subscribe('/user/' + userId + '/questionInfo', (msg) => {
                         console.log('Received message: questionInfo ' + msg.body);
@@ -131,6 +170,23 @@ export const useRoomStore = create<roomState>() (
                         const navi = get().navigate;
                         navi!('/check');
                         set((state) => ({...state, questionInfos: questionInfos}));
+                    });
+                    client.subscribe('/user/' + userId + '/startToSolve', () => {
+                        const idx = get().roomInfo?.host ? 0 : 1;
+                        try{set({ questionIdx: idx })} catch(e){}
+                        get().setTimer();
+                        const navi = get().navigate;
+                        navi!('/solve');
+                    });
+                    client.subscribe('/user/' + userId + '/switchCode', (msg) => {
+                        const data = JSON.parse(msg.body);
+                        get().editor?.setValue(data.code);
+                        try{set({ round: data.round })}catch(e){}
+
+                        const idx = get().questionIdx === 0 ? 1 : 0;
+                        try{set({ questionIdx: idx })}catch(e){}
+                        get().setTimer();
+
                     });
                     console.log('Connected: ' + frame);
 
@@ -149,8 +205,12 @@ export const useRoomStore = create<roomState>() (
             
                 client.activate();
                 
-                set((state) => ({ ...state, client }));
+                set({ client: client });
             },
+
+            setNavigate: (navigate: NavigateFunction) => {set({ navigate: navigate })},
+            setEditor: (editor: monaco.editor.IStandaloneCodeEditor) => {set({ editor: editor })},
+            setQuestionIdx: (idx: number) => {set({ questionIdx: idx })},
 
             clearRoom: () => {
                 set({ client: null });
