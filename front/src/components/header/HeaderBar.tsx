@@ -2,6 +2,7 @@ import { Button, Header, Menu, MenuItem, MenuMenu } from 'semantic-ui-react';
 import {useNavigate} from "react-router-dom";
 import { useLogout } from '../../utils/logout.ts';
 import './HeaderBar.css';
+import { useAuthStore } from "../../stores/useAuthStore.ts";
 
 interface HeaderProp {
 	$main?: boolean;
@@ -19,7 +20,7 @@ main과 ide는 상태가 달라야함
 export const HeaderBar = ({ $main, $ide }: HeaderProp) => {
 	const logout = useLogout();
 	const navigate = useNavigate();
-
+	const auth = useAuthStore();
 	const goToMyPage = () => {
 		navigate('/myPage');
 	}
@@ -41,11 +42,11 @@ export const HeaderBar = ({ $main, $ide }: HeaderProp) => {
 						</MenuItem>
 						<MenuMenu position='right'>
 							<MenuItem name='Profile' onClick={() => {goToMyPage()}}>
-								<img alt='profile' src='https://shiftpsh-blog.s3.amazonaws.com/uploads/2022/04/listing216.png' />
+								<img alt='profile' src='' />
 							</MenuItem>
 							<MenuItem name='Welcome'>
 								<Header as='h3' textAlign='center' className='FontColor'>
-									{'한별이'}
+									{auth.nickname}
 									{'님 환영합니다.'}
 								</Header>
 							</MenuItem>

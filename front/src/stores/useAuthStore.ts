@@ -27,7 +27,7 @@ interface AuthState {
     clearAuth: () => void;
 }
 
-const authStore = create<AuthState>()(
+const useAuthStore = create<AuthState>()(
     persist(
         (set) => ({
             accessToken: undefined,
@@ -66,4 +66,4 @@ const authStore = create<AuthState>()(
     ),
 );
 
-export { authStore };
+export { useAuthStore };
