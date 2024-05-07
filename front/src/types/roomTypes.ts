@@ -34,14 +34,28 @@ export interface roomState {
     sec: number
 
     setClient: (client: Client) => void
+    getClient: () => Client | null
+
     setUserInfo: (userInfo: userInfo) => void
+    getUserInfo: () => userInfo | null
+
     setRoomInfo: (roomInfo: roomInfo) => void
+    getRoomInfo: () => roomInfo | null
+    
     setQuestionInfos: (questionInfos: questionInfo[]) => void
+    getQuestionInfos: () => questionInfo[] | null
 
     setRound: (round: number) => void
+    getRound: () => number
+
     setSec: (sec: number) => void
+    getSec: () => number
+
     setQuestionIdx: (idx: number) => void
+    getQuestionIdx: () => number
+
     setEditor: (editor: any) => void
+    getEditor: () => monaco.editor.IStandaloneCodeEditor | null
 
     clearRoom: () => void
 }

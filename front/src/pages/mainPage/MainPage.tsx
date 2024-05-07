@@ -5,17 +5,16 @@ import { HeaderBar } from '../../components/header/HeaderBar.tsx';
 import { WaitingPage } from '../waitingPage/WaitingPage';
 import { EntryCodeModal } from '../../components/modal/EntryCodeModal.tsx';
 import { useAuthStore } from '../../stores/useAuthStore.ts';
-import { useNavigate } from 'react-router-dom';
-import { webSocketConnect } from '../../utils/solve/webSocketConnect.ts';
+import { useWebSocket } from '../../hooks/webSocket.ts';
 
 import 'semantic-ui-css/semantic.min.css';
 import './MainPage.css';
 
 const MainPage: React.FC = () => {
-	const navigate = useNavigate();
 	const roomStore = useRoomStore();
 	const [open, setOpen] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
+	const webSocket = useWebSocket();
 
 	const authStore = useAuthStore();
 
@@ -47,7 +46,7 @@ const MainPage: React.FC = () => {
 			console.log('로그인 해야합니다.');
 			return;
 		}
-		webSocketConnect(navigate, authStore, roomStore);
+		webSocket.connect();
 		setOpen(true);
 	};
 
