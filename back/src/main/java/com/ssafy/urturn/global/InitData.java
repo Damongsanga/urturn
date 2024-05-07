@@ -20,8 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class InitData {
 
-    private ProblemRepository problemRepository;
-    private TestcaseRepository testcaseRepository;
+    private final ProblemRepository problemRepository;
+    private final TestcaseRepository testcaseRepository;
 
 
 

@@ -8,7 +8,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class TestcaseDto {
     private Long id;
-    private Language language;
     private String stdin;
     private String expectedOutput;
 }

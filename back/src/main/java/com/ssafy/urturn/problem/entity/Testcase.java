@@ -37,6 +37,7 @@ public class Testcase extends BaseEntity {
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
+    @Column(length = 2000)
     private String stdin;
     @Column(name = "expected_output")
     private String expectedOutput;
