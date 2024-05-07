@@ -228,7 +228,7 @@ public class InitData {
             + "14 9 12 10\n"
             + "1 11 5 4\n"
             + "7 15 2 13\n"
-            + "6 3 ", "4", true);
+            + "6 3 16 8", "4", true);
 
         createProblem("미확인 도착지", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/9370%EB%B2%88+%EB%AF%B8%ED%99%95%EC%9D%B8+%EB%8F%84%EC%B0%A9%EC%A7%80.md", LEVEL3);
 
