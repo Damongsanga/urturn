@@ -1,6 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Mousewheel, Pagination } from 'swiper/modules';
 import { FirstLandingPage } from './sliders/first/FirstLanding';
+import { SecondLandingPage } from './sliders/second/SecondLanding';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -23,7 +24,9 @@ export const LandingPage = () => {
 					{/* 최상단 페이지 */}
 					<FirstLandingPage />
 				</SwiperSlide>
-				<SwiperSlide>Slide 2</SwiperSlide>
+				<SwiperSlide>
+					<SecondLandingPage />
+				</SwiperSlide>
 				<SwiperSlide>Slide 3</SwiperSlide>
 				<SwiperSlide>Slide 4</SwiperSlide>
 				<SwiperSlide>Slide 5</SwiperSlide>

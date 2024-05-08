@@ -1,0 +1,21 @@
+.Entire {
+  width: 100vw;
+  height: 100vh;
+}
+
+.SecondPage {
+  width: 100vw;
+  height: 100vh;
+}
+
+.SecondContent {
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
+
+  margin-left: 5vw;
+
+}
+
+
+

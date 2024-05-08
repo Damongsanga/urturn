@@ -21,7 +21,7 @@
 	flex-direction: column;
 	justify-content: center;
 
-	background-color: #DBB39A;
+	background-color: #fff;
 	border-radius: 10px;
 	border: 5px solid rgba(255, 255, 255, 1);
 	box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
@@ -52,4 +52,5 @@
 
 .InputButton {
   margin-top: 10vh;
+
 }
