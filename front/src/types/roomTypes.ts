@@ -38,6 +38,7 @@ export interface roomState {
     round: number
     questionIdx: number
     editor: monaco.editor.IStandaloneCodeEditor | null
+    lang: string
     sec: number
 
     setClient: (client: Client) => void
@@ -63,6 +64,9 @@ export interface roomState {
 
     setEditor: (editor: any) => void
     getEditor: () => monaco.editor.IStandaloneCodeEditor | null
+
+    setLang: (lang: string) => void
+    getLang: () => string
 
     clearRoom: () => void
 }

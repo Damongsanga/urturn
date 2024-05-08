@@ -30,9 +30,8 @@ loader.config({ monaco });
 
 loader.init().then(/* ... */);
 
-export default function CodeEditor({lang}: {lang: string}) {
+export default function CodeEditor() {
     const roomStore = useRoomStore();
-
 
     function handleEditorDidMount(editor: monaco.editor.IStandaloneCodeEditor) {
       try{
@@ -52,7 +51,8 @@ export default function CodeEditor({lang}: {lang: string}) {
             <button onClick={showValue}>Show value</button>
             <Editor
                 height="100%"
-                defaultLanguage={lang}
+                defaultLanguage={'cpp'}
+                language={roomStore.getLang()}
                 defaultValue="// some comment"
                 onMount={handleEditorDidMount}
                 options={{

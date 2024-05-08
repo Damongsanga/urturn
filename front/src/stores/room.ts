@@ -15,6 +15,7 @@ export const useRoomStore = create<roomState>() (
             round: 1,
             questionIdx: -1,
             editor: null,
+            lang: 'JAVASCRIPT',
             sec: 99999999,
 
             setClient: (client: Client) => {set({ client: client })},
@@ -40,6 +41,9 @@ export const useRoomStore = create<roomState>() (
 
             setEditor: (editor: monaco.editor.IStandaloneCodeEditor) => {set({ editor: editor })},
             getEditor: () => {return get().editor},
+
+            setLang: (lang: string) => {set({ lang: lang })},
+            getLang: () => {return get().lang},
 
             clearRoom: () => {
                 set({ client: null });

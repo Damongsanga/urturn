@@ -1,91 +1,116 @@
 import { Allotment } from "allotment";
 import CodeEditor from '../../components/solve/CodeEditor';
 import Markdown from 'markdown-to-jsx'
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown, Menu } from 'semantic-ui-react'
 
 import "allotment/dist/style.css";
 
 import { HeaderBar } from '../../components/header/HeaderBar';
-import { SolveSubHeader } from '../../components/solve/sloveSubHeader';
 
 import { useRoomStore } from '../../stores/room';
 
 import './SolvePage.css'
+import { QuestionSideBar } from "../../components/questionSideBar/QuestionSideBar";
+import { FooterBar } from "../../components/footer/FooterBar";
 
 const langOptions = [
-  { key: 'C++', text: 'C++', value: 'C++' },
-  { key: 'Java', text: 'Java', value: 'Java' },
-  { key: 'Python', text: 'Python', value: 'Python' },
-  { key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
+  { key: 'C++', text: 'C++', value: 'c++' },
+  { key: 'Java', text: 'Java', value: 'java' },
+  { key: 'Python', text: 'Python', value: 'python' },
+  { key: 'JavaScript', text: 'JavaScript', value: 'javascript' },
 ]
 
 export default function SolvePage() {
     const roomStore = useRoomStore();
 
-    //const [nowQIdx, setnowQIdx] = useState(-1);
-
-    // useEffect(() => {
-    //     if(roomStore.roomInfo?.host==true){
-    //       setnowQIdx(0);
-    //     }
-    //     else{
-    //       setnowQIdx(1);
-    //     }
-    // }, []);
-
-    //use
-
-
     return (
       <div className='Page'>
-          <p>{roomStore.sec}</p>
-
-          <HeaderBar $ide={true} $mode={1}/>
-          
-          <SolveSubHeader $mode={1}/>
-        
-        <div style={{height: '80vh' }}>
-        <Allotment>
-          <Allotment.Pane minSize={350}>
-            <div className='HeaderBar Ide' style={{ height: '70px'}}>
-              <div style={{width: '98%', textAlign: 'left', fontSize: '20px', fontWeight: 'bold', color: 'white'}}>
-              양과 늑대
-              </div>
-
-            </div>
-            <div style={{ height: '100%', overflowY: 'auto'  }}>
+			<HeaderBar $ide={true} $mode={1} />
+			<div>
+				<div style={{ display: 'flex', height: 'calc(100vh - 140px)', width: '100vw' }}>
+					{/* 문제 사이드바 */}
+					<div className='QuestionSideBar'>
+						{/* 마이크, 참여자 프로필 컴포넌트 */}
+						<QuestionSideBar></QuestionSideBar>
+					</div>
+					<Allotment>
+						<Allotment.Pane minSize={350}>
+							<div className='HeaderBar' style={{ height: '70px' }}>
+								<div
+									style={{
+										width: '98%',
+										textAlign: 'left',
+										fontSize: '20px',
+										fontWeight: 'bold',
+										color: 'white',
+									}}
+								>
+									{
+                roomStore.questionIdx == -1 ? <div></div> :
+                <Markdown>{roomStore.questionInfos![roomStore.questionIdx].algoQuestionTitle}</Markdown>
+                }
+								</div>
+							</div>
+							<div style={{ height: '100%', overflowY: 'auto' }}>
               {
                 roomStore.questionIdx == -1 ? <div></div> :
                 <Markdown>{roomStore.questionInfos![roomStore.questionIdx].algoQuestionContent}</Markdown>
               }
-            </div>
-          </Allotment.Pane>
-          <Allotment.Pane minSize={350}>
-            <div className='HeaderBar Ide' style={{ height: '70px'}}>
-              <div style={{width: '98%', textAlign: 'left', fontSize: '20px', fontWeight: 'bold', color: 'white'}}>
-              <Dropdown
-                search
-                defaultValue={langOptions[0].value}
-                searchInput={{ type: 'string' }}
-                options={langOptions}
-              />
-              </div> 
-            </div>
-            <Allotment vertical>
-              <Allotment.Pane minSize={350}>
-                <div style={{ height: '100%', width: '100%' }}>
-                  <CodeEditor lang="javascript" />
-                </div>
-              </Allotment.Pane>
-              <Allotment.Pane minSize={100}>
-                <div>CONSOLE</div>
-              </Allotment.Pane>
-            </Allotment>
-          </Allotment.Pane>
-        </Allotment>
-        </div>
-  
-      </div>
+							</div>
+						</Allotment.Pane>
+						<Allotment.Pane minSize={350}>
+							<div className='HeaderBar' style={{ height: '70px' }}>
+								<div
+									style={{
+										width: '98%',
+										textAlign: 'left',
+										fontSize: '20px',
+										fontWeight: 'bold',
+										color: 'white',
+									}}
+								>
+									<Dropdown
+										search
+										defaultValue={langOptions[0].value}
+										searchInput={{ type: 'string' }}
+										options={langOptions}
+                    onChange={(_e, { value }) => {roomStore.setLang(value as string);}}
+									/>
+								</div>
+							</div>
+							<Allotment vertical>
+								<Allotment.Pane minSize={325}>
+									<div style={{ height: '100%', width: '100%' }}>
+										<CodeEditor/>
+									</div>
+								</Allotment.Pane>
+								<Allotment.Pane minSize={125}>
+									<div className='ReviewBar' style={{ height: '50px', backgroundColor: '#F2CAB3' }}>
+										<div
+											style={{
+												width: '98%',
+												textAlign: 'left',
+												fontSize: '20px',
+												fontWeight: 'bold',
+												color: 'white',
+											}}
+										>
+										</div>
+									</div>
+									<div>
+                        <p>
+                        CONSOLE
+                        </p>
+									</div>
+								</Allotment.Pane>
+							</Allotment>
+						</Allotment.Pane>
+					</Allotment>
+				</div>
+			</div>
+			{/* footer */}
+			<FooterBar $mode={1} $switch={false} />
+		</div>
     );
   }
 

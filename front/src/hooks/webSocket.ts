@@ -8,6 +8,7 @@ import { loadMarkdownFromCDN } from "../utils/solve/loadMarkdownFromCDN";
 import { questionInfo } from "../types/roomTypes";
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
+const MAX_TIME = 1000000000
 
 export const useWebSocket = () => {
     const navi = useNavigate();
@@ -86,7 +87,7 @@ export const useWebSocket = () => {
                 const idx = roomStore.getRoomInfo()?.host ? 0 : 1;
                 console.log('idx: ' + idx);
                 roomStore.setQuestionIdx(idx);
-                setTimer(10);
+                setTimer(MAX_TIME);
                 navi!('/solve');
             });
             client.subscribe('/user/' + userId + '/switchCode', (msg) => {
@@ -97,9 +98,13 @@ export const useWebSocket = () => {
 
                 const idx = roomStore.getQuestionIdx() === 0 ? 1 : 0;
                 roomStore.setQuestionIdx(idx);
-                setTimer(10);
+                setTimer(MAX_TIME);
 
             });
+            client.subscribe('/user/' + userId + '/submit/result', (msg) => {
+                console.log('Received message: submit/result' + msg.body);
+                //const data = JSON.parse(msg.body);
+            })
             
             console.log('Connected: ' + frame);
 

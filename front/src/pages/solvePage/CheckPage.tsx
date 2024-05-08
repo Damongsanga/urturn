@@ -1,18 +1,18 @@
-//import { useEffect, useState } from 'react';
-
 import { Allotment } from "allotment";
 import CodeEditor from '../../components/solve/CodeEditor';
 import Markdown from 'markdown-to-jsx'
-import { Button, Dropdown } from 'semantic-ui-react'
+import { Dropdown, Menu, MenuItem } from 'semantic-ui-react'
 
 import "allotment/dist/style.css";
 
 import { HeaderBar } from '../../components/header/HeaderBar';
-import { SolveSubHeader } from '../../components/solve/sloveSubHeader';
 
 import { useRoomStore } from '../../stores/room';
 
 import './SolvePage.css'
+import { FooterBar } from "../../components/footer/FooterBar";
+import { useState } from "react";
+import { QuestionSideBar } from "../../components/questionSideBar/QuestionSideBar";
 
 const langOptions = [
   { key: 'C++', text: 'C++', value: 'C++' },
@@ -24,74 +24,116 @@ const langOptions = [
 export default function CheckPage() {
     const roomStore = useRoomStore();
 
-    const readyToSolve = () =>{
-      const idx = roomStore.roomInfo?.host ? 0 : 1
-      console.log(roomStore.roomInfo?.roomId)
-      console.log(roomStore.questionInfos?.[idx]?.algoQuestionId);
-      console.log(roomStore.roomInfo?.host)
-
-      roomStore.client?.publish({
-        destination: '/app/readyToSolve',
-        body: JSON.stringify({
-          roomId: roomStore.roomInfo?.roomId,
-          algoQuestionId: roomStore.questionInfos?.[idx]?.algoQuestionId,
-          isHost: roomStore.roomInfo?.host
-        })
-
-      })
-    }
-
+    const [activeQuestion, setActiveQuestion] = useState(1);
 
     return (
       <div className='Page'>
+			<HeaderBar $ide={true} $mode={1} />
+			<div>
+				<div style={{ display: 'flex', height: 'calc(100vh - 140px)', width: '100vw' }}>
+					{/* 문제 사이드바 */}
+					<div className='QuestionSideBar'>
+						<Menu
+							secondary
+							icon
+							vertical
+							borderless
+							style={{ marginTop: '10vh', backgroundColor: 'transparent' }}
+						>
+							<MenuItem
+								className='QuestionButton'
+								name='1'
+								active={activeQuestion === 1}
+								onClick={() => {setActiveQuestion(1); }}
+								style={{ marginBottom: '5vh' }}
+							></MenuItem>
 
-          <HeaderBar $ide={true} $mode={1}/>
-          
-          <SolveSubHeader $mode={1}/>
-        
-        <div style={{height: '80vh' }}>
-        <Allotment>
-          <Allotment.Pane minSize={350}>
-            <div className='HeaderBar Ide' style={{ height: '70px'}}>
-              <div style={{width: '98%', textAlign: 'left', fontSize: '20px', fontWeight: 'bold', color: 'white'}}>
-              양과 늑대
-              </div>
-
-            </div>
-            <div style={{ height: '100%', overflowY: 'auto'  }}>
-              <Markdown>{roomStore.questionInfos![0].algoQuestionContent}</Markdown>
-            </div>
-          </Allotment.Pane>
-          <Allotment.Pane minSize={350}>
-            <div className='HeaderBar Ide' style={{ height: '70px'}}>
-              <div style={{width: '98%', textAlign: 'left', fontSize: '20px', fontWeight: 'bold', color: 'white'}}>
-              <Dropdown
-                search
-                defaultValue={langOptions[0].value}
-                searchInput={{ type: 'string' }}
-                options={langOptions}
-              />
-              </div> 
-            </div>
-            <Allotment vertical>
-              <Allotment.Pane minSize={350}>
-                <div style={{ height: '100%', width: '100%' }}>
-                  <CodeEditor lang="javascript" />
-                </div>
-              </Allotment.Pane>
-              <Allotment.Pane minSize={100}>
-                <div>CONSOLE</div>
-              </Allotment.Pane>
-            </Allotment>
-          </Allotment.Pane>
-        </Allotment>
-        </div>
-
-        <Button onClick={readyToSolve}>
-          시작하기
-        </Button>
-  
-      </div>
+							<MenuItem
+								className='QuestionButton'
+								name='2'
+								onClick={() => {setActiveQuestion(2);}}
+								active={activeQuestion === 2}
+							></MenuItem>
+						</Menu>
+						{/* 마이크, 참여자 프로필 컴포넌트 */}
+						<QuestionSideBar></QuestionSideBar>
+					</div>
+					<Allotment>
+						<Allotment.Pane minSize={350}>
+							<div className='HeaderBar' style={{ height: '70px' }}>
+								<div
+									style={{
+										width: '98%',
+										textAlign: 'left',
+										fontSize: '20px',
+										fontWeight: 'bold',
+										color: 'white',
+									}}
+								>
+									양과 늑대
+								</div>
+							</div>
+							<div style={{ height: '100%', overflowY: 'auto' }}>
+              {
+                roomStore.questionInfos && activeQuestion > 0 ?
+                <Markdown>{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}</Markdown>
+                :
+                <div></div>
+              }
+							</div>
+						</Allotment.Pane>
+						<Allotment.Pane minSize={350}>
+							<div className='HeaderBar' style={{ height: '70px' }}>
+								<div
+									style={{
+										width: '98%',
+										textAlign: 'left',
+										fontSize: '20px',
+										fontWeight: 'bold',
+										color: 'white',
+									}}
+								>
+									<Dropdown
+										search
+										defaultValue={langOptions[0].value}
+										searchInput={{ type: 'string' }}
+										options={langOptions}
+									/>
+								</div>
+							</div>
+							<Allotment vertical>
+								<Allotment.Pane minSize={325}>
+									<div style={{ height: '100%', width: '100%' }}>
+										<CodeEditor lang='javascript' />
+									</div>
+								</Allotment.Pane>
+								<Allotment.Pane minSize={125}>
+									<div className='ReviewBar' style={{ height: '50px', backgroundColor: '#F2CAB3' }}>
+										<div
+											style={{
+												width: '98%',
+												textAlign: 'left',
+												fontSize: '20px',
+												fontWeight: 'bold',
+												color: 'white',
+											}}
+										>
+										</div>
+									</div>
+									<div>
+                        <p>
+                          두 문제를 모두 확인했으면, 시작하기 버튼을 눌러주세요.
+                        </p>
+									</div>
+								</Allotment.Pane>
+							</Allotment>
+						</Allotment.Pane>
+					</Allotment>
+				</div>
+			</div>
+			{/* footer */}
+			<FooterBar $mode={0} $switch={false}/>
+		</div>
     );
   }
 
