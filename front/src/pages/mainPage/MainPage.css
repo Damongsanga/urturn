@@ -35,16 +35,20 @@
   border-radius: 15px !important;
   box-shadow: 0px 2px 2px 2px rgba(0, 0, 0, 0.25) !important;
 
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
 
 .EntryButtons {
-  width: 100%;
+  width: 21vw;
   height: 8vh;
 
   background-color: #3A2302 !important;
   color: #fff !important;
 
   border-radius: 10px !important;
+
 }
 
 .EntryButtons:hover,
