@@ -1,10 +1,14 @@
 package com.ssafy.urturn.solving.service;
 
 import static com.ssafy.urturn.global.RequestLockType.*;
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.*;
 
 import com.ssafy.urturn.global.RequestLockService;
 import com.ssafy.urturn.global.RequestLockType;
+import com.ssafy.urturn.global.exception.RestApiException;
+import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.global.util.MemberUtil;
+import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.history.repository.HistoryRepository;
 import com.ssafy.urturn.member.Level;
 import com.ssafy.urturn.member.service.MemberService;
@@ -33,6 +37,7 @@ public class RoomService {
     private final ProblemService problemService;
     private final cacheDatas cachedatas;
     private final ReentrantLock lock;
+    private final HistoryRepository historyRepository;
 
     private final RequestLockService requestLockService;
 
@@ -215,11 +220,13 @@ public class RoomService {
 
         // 오답 일 경우 실패 응답 + 관련 메시지 전송
         // 정답 일 경우 DB에 정답 코드 저장.
-        // 덕주 : 히스토리를 찾을 방법이 없는뎅.. history id를 저장하거나 history entity에 roomId를 저장해야할 듯합니다. 근데 roomId가 unique하다는 보장이 있는지 모르겠어어 이부분은 스킵할께요
-//        if (gradingResponse.isSucceeded()){
-//            historyRepository.findById();
-//        }
 
+        if (gradingResponse.isSucceeded()){
+            Long historyId = cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getHistoryId();
+
+            historyRepository.findById(historyId).orElseThrow(() -> new RestApiException(NO_HISTORY))
+                .setCode(submitRequest.getAlgoQuestionId(), submitRequest.getCode());
+        }
 
         // 페어프로그래밍 모드 전환 메시지 전송
         /*

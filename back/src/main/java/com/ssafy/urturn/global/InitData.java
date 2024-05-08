@@ -23,10 +23,20 @@ public class InitData {
     private final ProblemRepository problemRepository;
     private final TestcaseRepository testcaseRepository;
 
-
-
     @PostConstruct
     public void initData(){
+
+        createProblem("test 문제 1", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/0000%EB%B2%88+%ED%85%8C%EC%8A%A4%ED%8A%B8+%EB%AC%B8%EC%A0%9C.md", LEVEL1);
+
+        createTestcase("test 문제 1", "2", "4", true);
+        createTestcase("test 문제 1", "0", "0", false);
+        createTestcase("test 문제 1", "-2", "-4", false);
+
+        createProblem("test 문제 2", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/0000%EB%B2%88+%ED%85%8C%EC%8A%A4%ED%8A%B8+%EB%AC%B8%EC%A0%9C.md", LEVEL1);
+
+        createTestcase("test 문제 2", "SSAFY", "SSAFYHELLO", true);
+        createTestcase("test 문제 2", "010", "010HELLO", false);
+        createTestcase("test 문제 2", "재길", "재길HELLO", false);
 
         createProblem("유기농 양상추", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/1012%EB%B2%88+%EC%9C%A0%EA%B8%B0%EB%86%8D+%EC%96%91%EC%83%81%EC%B6%94.md", LEVEL1);
 
