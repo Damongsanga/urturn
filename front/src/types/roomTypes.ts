@@ -14,11 +14,18 @@ export interface userInfo {
     relativeUserNickName: string
 }
 
+export interface testCase{
+    id: number,
+    stdin: string,
+    expectedOutput: string
+} 
+
 export interface questionInfo {
     algoQuestionId: number,
     algoQuestionUrl: string,
     algoQuestionTitle: string,
     algoQuestionContent: string,
+    testCases: testCase[]
 }
 
 

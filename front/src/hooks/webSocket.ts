@@ -72,6 +72,7 @@ export const useWebSocket = () => {
             });
             client.subscribe('/user/' + userId + '/questionInfo', (msg) => {
                 const questionInfos: questionInfo[] = JSON.parse(msg.body);
+                console.log('Received message: questionInfo' + msg.body);
                 questionInfos.forEach(
                     async (questionInfo: questionInfo) => {
                         const content = await loadMarkdownFromCDN(questionInfo.algoQuestionUrl);
@@ -90,6 +91,7 @@ export const useWebSocket = () => {
             });
             client.subscribe('/user/' + userId + '/switchCode', (msg) => {
                 const data = JSON.parse(msg.body);
+                console.log('Received message: switchCode' + msg.body);
                 roomStore.getEditor()?.setValue(data.code);
                 roomStore.setRound(data.round);
 
@@ -101,7 +103,16 @@ export const useWebSocket = () => {
             
             console.log('Connected: ' + frame);
 
+        };
+        
+        client.onStompError = function (frame) {
+            console.log('Broker reported error: ' + frame.headers['message']);
+            console.log('Additional details: ' + frame.body);
+        };
 
+        client.activate();
+
+        setTimeout(() => {
             if(roomId===null){
                 client.publish({
                     destination: '/app/createRoom',
@@ -118,14 +129,7 @@ export const useWebSocket = () => {
                     }),
                 });
             }
-        };
-        
-        client.onStompError = function (frame) {
-            console.log('Broker reported error: ' + frame.headers['message']);
-            console.log('Additional details: ' + frame.body);
-        };
-
-        client.activate();
+        }, 500);
         
         roomStore.setClient(client);
     }
