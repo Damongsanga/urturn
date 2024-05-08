@@ -11,8 +11,6 @@ import lombok.Setter;
 public class SubmitResponse {
     // 정답 유무
     private boolean result;
-    // 사용자에게 표시하고 싶은 메시지.
-    private String message;
 
     private List<GradingTestcaseDto> testcaseResults;
 }

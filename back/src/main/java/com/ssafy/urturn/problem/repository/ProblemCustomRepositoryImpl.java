@@ -138,8 +138,8 @@ public class ProblemCustomRepositoryImpl implements ProblemCustomRepository{
         }
 
         List<ProblemTestcaseDto> res = new ArrayList<>();
-        res.add(getProblemAndTestcase(problemIds.get(0)).orElseThrow(()-> new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR)));
-        res.add(getProblemAndTestcase(problemIds.get(1)).orElseThrow(()-> new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR)));
+        res.add(getProblemWithPublicTestcase(problemIds.get(0)).orElseThrow(()-> new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR)));
+        res.add(getProblemWithPublicTestcase(problemIds.get(1)).orElseThrow(()-> new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR)));
 
         return res;
 

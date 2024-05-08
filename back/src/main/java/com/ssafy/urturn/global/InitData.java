@@ -23,6 +23,7 @@ public class InitData {
     private final ProblemRepository problemRepository;
     private final TestcaseRepository testcaseRepository;
 
+    // test를 위해 LEVEL1 문제 2개는 주석처리하여 LEVEL1을 선택하면 테스트문제만 반환되도록 하였습니다.
     @PostConstruct
     public void initData(){
 
@@ -32,50 +33,50 @@ public class InitData {
         createTestcase("test 문제 1", "0", "0", false);
         createTestcase("test 문제 1", "-2", "-4", false);
 
-        createProblem("test 문제 2", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/0000%EB%B2%88+%ED%85%8C%EC%8A%A4%ED%8A%B8+%EB%AC%B8%EC%A0%9C.md", LEVEL1);
+        createProblem("test 문제 2", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/0000%EB%B2%88+%ED%85%8C%EC%8A%A4%ED%8A%B8+%EB%AC%B8%EC%A0%9C2.md", LEVEL1);
 
         createTestcase("test 문제 2", "SSAFY", "SSAFYHELLO", true);
         createTestcase("test 문제 2", "010", "010HELLO", false);
         createTestcase("test 문제 2", "재길", "재길HELLO", false);
 
-        createProblem("유기농 양상추", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/1012%EB%B2%88+%EC%9C%A0%EA%B8%B0%EB%86%8D+%EC%96%91%EC%83%81%EC%B6%94.md", LEVEL1);
-
-        createTestcase("유기농 양상추", "2\n"
-            + "10 8 17\n"
-            + "0 0\n"
-            + "1 0\n"
-            + "1 1\n"
-            + "4 2\n"
-            + "4 3\n"
-            + "4 5\n"
-            + "2 4\n"
-            + "3 4\n"
-            + "7 4\n"
-            + "8 4\n"
-            + "9 4\n"
-            + "7 5\n"
-            + "8 5\n"
-            + "9 5\n"
-            + "7 6\n"
-            + "8 6\n"
-            + "9 6\n"
-            + "10 10 1\n"
-            + "5 5 ", "5\n"
-            + "1", true);
-
-        createTestcase("유기농 양상추", "1\n"
-            + "5 3 6\n"
-            + "0 2\n"
-            + "1 2\n"
-            + "2 2\n"
-            + "3 2\n"
-            + "4 2\n"
-            + "4 0", "2", true);
-
-
-        createProblem("술래잡기", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/1697%EB%B2%88+%EC%88%A0%EB%9E%98%EC%9E%A1%EA%B8%B0.md", LEVEL1);
-
-        createTestcase("술래잡기", "5 17", "4", true);
+//        createProblem("유기농 양상추", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/1012%EB%B2%88+%EC%9C%A0%EA%B8%B0%EB%86%8D+%EC%96%91%EC%83%81%EC%B6%94.md", LEVEL1);
+//
+//        createTestcase("유기농 양상추", "2\n"
+//            + "10 8 17\n"
+//            + "0 0\n"
+//            + "1 0\n"
+//            + "1 1\n"
+//            + "4 2\n"
+//            + "4 3\n"
+//            + "4 5\n"
+//            + "2 4\n"
+//            + "3 4\n"
+//            + "7 4\n"
+//            + "8 4\n"
+//            + "9 4\n"
+//            + "7 5\n"
+//            + "8 5\n"
+//            + "9 5\n"
+//            + "7 6\n"
+//            + "8 6\n"
+//            + "9 6\n"
+//            + "10 10 1\n"
+//            + "5 5 ", "5\n"
+//            + "1", true);
+//
+//        createTestcase("유기농 양상추", "1\n"
+//            + "5 3 6\n"
+//            + "0 2\n"
+//            + "1 2\n"
+//            + "2 2\n"
+//            + "3 2\n"
+//            + "4 2\n"
+//            + "4 0", "2", true);
+//
+//
+//        createProblem("술래잡기", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/1697%EB%B2%88+%EC%88%A0%EB%9E%98%EC%9E%A1%EA%B8%B0.md", LEVEL1);
+//
+//        createTestcase("술래잡기", "5 17", "4", true);
 
         createProblem("빙하", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/2573%EB%B2%88+%EB%B9%99%ED%95%98.md", LEVEL2);
 
