@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 public class ReadyInfoRequest {
     private String roomId;
+    @JsonProperty("algoQuestionId")
     private Long problemId;
 
     @JsonProperty("isHost")

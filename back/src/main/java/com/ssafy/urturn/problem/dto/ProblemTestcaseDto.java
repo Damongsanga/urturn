@@ -1,5 +1,7 @@
 package com.ssafy.urturn.problem.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.urturn.member.Level;
 import com.ssafy.urturn.problem.entity.Problem;
 import com.ssafy.urturn.problem.entity.Testcase;
@@ -11,10 +13,18 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ProblemTestcaseDto {
 
+    @JsonProperty("algoQuestionId")
     private Long problemId;
+
+    @JsonProperty("algoQuestionTitle")
     private String title;
+
+    @JsonProperty("algoQuestionUrl")
     private String content;
+
+    @JsonIgnore
     private Level level;
+
     private List<TestcaseDto> testcases;
 
     public ProblemTestcaseDto(Problem problem, List<TestcaseDto> testcases){

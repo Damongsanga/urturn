@@ -63,14 +63,14 @@ public class WebSocketController {
     }
 
 
-    @MessageMapping("/selectDifficulty")
+    @MessageMapping("/selectLevel")
     public void readContext(@Payload SelectLevelRequest SelectLevelRequest){
 
         // 두 유저ID 추출
         Long pairId=cachedatas.cacheroomInfoDto(SelectLevelRequest.getRoomId()).getPairId();
         Long managerId=cachedatas.cacheroomInfoDto(SelectLevelRequest.getRoomId()).getManagerId();
 
-        List< ProblemTestcaseDto> problemTestcases =roomService.getproblem(SelectLevelRequest.getRoomId(), SelectLevelRequest.getLevel());
+        List<ProblemTestcaseDto> problemTestcases =roomService.getproblem(SelectLevelRequest.getRoomId(), SelectLevelRequest.getLevel());
 
         simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/questionInfo",problemTestcases);
         simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/questionInfo",problemTestcases);
@@ -166,7 +166,7 @@ public class WebSocketController {
 
     @MessageMapping("/switchRole")
     public void switchRole(@Payload SwitchCodeRequest switchCodeRequest){
-
+        //
     }
 
 }

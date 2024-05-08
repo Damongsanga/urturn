@@ -7,6 +7,7 @@ import lombok.Getter;
 public class SwitchCodeRequest {
     private String code;
     private String roomId;
+    @JsonProperty("algoQuestionId")
     private Long problemId;
     private int round;
     @JsonProperty("isHost")
