@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class switchCodeResponse {
+public class SwitchCodeResponse {
     private String code;
     private int round;
 }

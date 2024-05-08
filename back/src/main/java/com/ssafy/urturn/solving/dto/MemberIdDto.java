@@ -4,7 +4,7 @@ import com.ssafy.urturn.member.Level;
 import lombok.Getter;
 
 @Getter
-public class memberIdDto {
+public class MemberIdDto {
     private Long memberId;
     private Level level;
 }

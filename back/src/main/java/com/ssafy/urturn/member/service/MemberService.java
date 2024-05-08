@@ -40,7 +40,7 @@ public class MemberService {
         currentMember.updateGithubRepository(repository);
     }
 
-//    public userInfoResponse getMemberInfo(Long myUserId, Long relativeUserId) {
+//    public userInfoResponse getMemberInfo(Long myUserId, Long pairId) {
 //        userInfoResponse userInfo = new userInfoResponse();
 //        if(myUserId!=null) {
 //            Member member = memberRepository.findById(myUserId).orElseThrow(() -> new IllegalArgumentException("Invalid member ID"));
@@ -48,21 +48,21 @@ public class MemberService {
 //            userInfo.setMyUserNickName(member.getNickname());
 //        }
 //
-//        if(relativeUserId!=null) {
-//            Member member = memberRepository.findById(relativeUserId).orElseThrow(() -> new IllegalArgumentException("Invalid member ID"));
-//            userInfo.setRelativeUserProfileUrl(member.getProfileImage());
-//            userInfo.setRelativeUserNickName(member.getNickname());
+//        if(pairId!=null) {
+//            Member member = memberRepository.findById(pairId).orElseThrow(() -> new IllegalArgumentException("Invalid member ID"));
+//            userInfo.setpairProfileUrl(member.getProfileImage());
+//            userInfo.setpairNickName(member.getNickname());
 //        }
 //
 //        return userInfo;
 //    }
 
-    public UserInfoResponse getMemberInfo(Long myUserId, Long relativeUserId) {
+    public UserInfoResponse getMemberInfo(Long myUserId, Long pairId) {
         UserInfoResponse userInfo = new UserInfoResponse();
 
         // 사용자 정보 설정
         setUserInfo(userInfo, myUserId, true);
-        setUserInfo(userInfo, relativeUserId, false);
+        setUserInfo(userInfo, pairId, false);
 
         return userInfo;
     }
@@ -76,8 +76,8 @@ public class MemberService {
                 userInfo.setMyUserProfileUrl(member.getProfileImage());
                 userInfo.setMyUserNickName(member.getNickname());
             } else {
-                userInfo.setRelativeUserProfileUrl(member.getProfileImage());
-                userInfo.setRelativeUserNickName(member.getNickname());
+                userInfo.setPairProfileUrl(member.getProfileImage());
+                userInfo.setPairNickName(member.getNickname());
             }
         }
     }
