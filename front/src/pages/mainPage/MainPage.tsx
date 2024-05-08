@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Grid, Image, GridRow, GridColumn, Modal, Header, CardGroup } from 'semantic-ui-react';
+import { Button, Card, Grid, Image, GridRow, GridColumn, Modal, Header } from 'semantic-ui-react';
 import { useRoomStore } from '../../stores/room';
 import { HeaderBar } from '../../components/header/HeaderBar.tsx';
 import { WaitingPage } from '../waitingPage/WaitingPage';
@@ -22,23 +22,8 @@ const MainPage: React.FC = () => {
 		roomStore.clearRoom();
 	}, []);
 
-	const cardStyle = {
-		width: '28vw',
-		height: '60vh',
-		backgroundColor: '#DBB39A', // Replace with the exact color from the image
-		color: '#4f4f4f', // Replace with the exact text color from the image
-		border: '3px solid white',
-		paddingTop: '3em',
-		paddingBottom: '3em',
-		paddingLeft: '4em',
-		paddingRight: '4em',
-		borderRadius: '10px', // Adjust as needed to match the border-radius in the image
-	};
-
 	const buttonStyle = {
-		backgroundColor: 'white', // Or another color that matches your design
-		color: '#4f4f4f', // Button text color
-		width: '100%', // Make the button fill the card width
+
 	};
 
 	const createRoom = () => {
@@ -61,64 +46,56 @@ const MainPage: React.FC = () => {
 					<HeaderBar $main={true} />
 				</div>
 				<div className='EntrySection'>
-					<Grid columns={2}>
-						<GridRow>
-							<GridColumn>
+					<Grid columns={2} style={{ width: '70vw'}}>
+						<GridRow> 
+							<GridColumn className='MainGridColumn'>
 								<Card className='EntryCard'>
-									<CardGroup>
-										<Card style={cardStyle}>
-											<Image
-												src='https://avatars.githubusercontent.com/u/19562994?v=4'
-												circular
-												size='medium'
-											/>
-											<Card.Content textAlign='center'>
-												<Card.Description style={{ marginTop: '2vh', color: 'white' }}>
-													직접 방을 만들어보세요
-												</Card.Description>
-											</Card.Content>
-											<Card.Content style={{ borderTop: 'none' }}>
-												<Button
-													className='EntryButtons'
-													style={buttonStyle}
-													onClick={(_e) => {
-														createRoom();
-													}}
-												>
-													방 만들기
-												</Button>
-											</Card.Content>
-										</Card>
-									</CardGroup>
+									<Image
+										src='https://avatars.githubusercontent.com/u/19562994?v=4'
+										circular
+										size='medium'
+									/>
+									<Card.Content textAlign='center'>
+										<Card.Description style={{ marginTop: '2vh', color: 'black' }}>
+											직접 방을 만들어보세요
+										</Card.Description>
+									</Card.Content>
+									<Card.Content style={{ borderTop: 'none', paddingLeft: '0px', paddingRight: '0px'}}>
+										<Button
+											className='EntryButtons'
+											style={buttonStyle}
+											onClick={(_e) => {
+												createRoom();
+											}}
+										>
+											방 만들기
+										</Button>
+									</Card.Content>
 								</Card>
 							</GridColumn>
-							<GridColumn>
+							<GridColumn className='MainGridColumn'>
 								<Card className='EntryCard'>
-									<CardGroup>
-										<Card style={cardStyle}>
-											<Image
-												src='https://avatars.githubusercontent.com/u/19562994?v=4'
-												circular
-												size='medium'
-											/>
-											<Card.Content textAlign='center'>
-												<Card.Description style={{ marginTop: '2vh', color: 'white' }}>
-													만들어진 방에 참여해보세요
-												</Card.Description>
-											</Card.Content>
-											<Card.Content style={{ borderTop: 'none' }}>
-												<Button
-													className='EntryButtons'
-													style={buttonStyle}
-													onClick={(_e) => {
-														enterEntryCode();
-													}}
-												>
-													입장하기
-												</Button>
-											</Card.Content>
-										</Card>
-									</CardGroup>
+									<Image
+										src='https://avatars.githubusercontent.com/u/19562994?v=4'
+										circular
+										size='medium'
+									/>
+									<Card.Content textAlign='center'>
+										<Card.Description style={{ marginTop: '2vh', color: 'black' }}>
+											만들어진 방에 참여해보세요
+										</Card.Description>
+									</Card.Content>
+									<Card.Content style={{ borderTop: 'none', paddingLeft: '0px', paddingRight: '0px' }}>
+										<Button
+											className='EntryButtons'
+											style={buttonStyle}
+											onClick={(_e) => {
+												enterEntryCode();
+											}}
+										>
+											입장하기
+										</Button>
+									</Card.Content>
 								</Card>
 							</GridColumn>
 						</GridRow>

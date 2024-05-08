@@ -5,6 +5,7 @@ import { MyPage } from './pages/myPage/MyPage.tsx';
 import  MainPage  from './pages/mainPage/MainPage.tsx';
 import SolvePage from './pages/solvePage/SolvePage.tsx';
 import CheckPage from './pages/solvePage/CheckPage.tsx';
+import ReviewPage from './pages/solvePage/ReviewPage.tsx';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
 					<Route path='/myPage' element={<MyPage />} />
 					<Route path='/solve' element={<SolvePage />} />
 					<Route path='/check' element={<CheckPage />} />
+					<Route path='/review' element={<ReviewPage />} />
 				</Routes>
 			</BrowserRouter>
 		</>

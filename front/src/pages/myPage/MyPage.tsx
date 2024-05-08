@@ -4,7 +4,6 @@ import {
 	CardContent,
 	CardDescription,
 	CardHeader,
-	CardGroup,
 	Segment,
 	SegmentGroup,
 	Header,
@@ -40,58 +39,42 @@ export const MyPage = () => {
 		<div className='MyPage'>
 			{/* 헤더 */}
 			<div className='MainHeader'>
-				<HeaderBar $main={true}></HeaderBar>
+				<HeaderBar $myPage={true}></HeaderBar>
 			</div>
 			<div className='MyRecord'>
 				{/* 왼쪽 프로필 영역 */}
 				<div className='Profile'>
 					{/* 프로필 영역 카드 상단 - 개인정보 */}
+					<Header as='h2' style={{ marginBottom: '0px' }}>
+						내 정보
+					</Header>
 					<Card className='ProfileCard'>
-						<CardGroup stackable={true}>
-							<Card className='MyProfile'>
-								<CardContent>
-									<CardHeader className='CardTextColor' textAlign='center'>
-										내 정보
-									</CardHeader>
-								</CardContent>
-								{/* 프로필 사진과 닉네임 */}
-								<CardContent
-									className='ContentBorder'
-									style={{
-										display: 'flex',
-										justifyContent: 'center',
-										alignItems: 'center',
-									}}
-								>
-									<Image
-										floated='left'
-										size='tiny'
-										src='https://shiftpsh-blog.s3.amazonaws.com/uploads/2022/04/listing216.png'
-									/>
-									<CardHeader
-										className='CardTextColor'
-										textAlign='center'
-										style={{ marginLeft: '5vh' }}
-									>
-										한별이
-									</CardHeader>
-								</CardContent>
-								{/* 깃허브 주소 */}
-								<CardContent className='ContentBorder'>
-									<CardDescription className='CardTextColor'>깃허브 주소 :</CardDescription>
-									<Button className='EditButton' floated='right'>
-										수정
-									</Button>
-								</CardContent>
-							</Card>
+						<Card className='MyProfile'>
+							{/* 프로필 사진과 닉네임 */}
+							<CardContent
+								className='ContentBorder'
+								style={{
+									display: 'flex',
+									flexDirection: 'column',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								<Image
+									size='tiny'
+									src='https://shiftpsh-blog.s3.amazonaws.com/uploads/2022/04/listing216.png'
+								/>
+								<CardHeader className='CardTextColor' textAlign='center' style={{ marginTop: '3vh' }}>
+									한별이
+								</CardHeader>
+							</CardContent>
 							{/* 프로필 영역 카드 하단 - 레벨 */}
-							<Card className='MyProfile'>
-								<CardContent className='ExpBar'>
-									<CardHeader className='CardTextColor' textAlign='center'>
-										레벨
-									</CardHeader>
-									{/* 레벨 바 */}
-									<div className='ExpBar'>
+							<CardContent className='ExpBar'>
+								<CardHeader className='CardTextColor' textAlign='center'>
+									레벨 : 
+								</CardHeader>
+								{/* 레벨 바 */}
+								<div className='ExpBar'>
 									<ProgressBar
 										completed={80}
 										width='24vw'
@@ -102,23 +85,22 @@ export const MyPage = () => {
 										labelSize='1.1rem'
 										animateOnRender={true}
 									/>
-									</div>
-								</CardContent>
-								{/* 레벨 관련 문구 */}
-								<CardContent className='ContentBorder'>
-									<CardHeader className='CardTextColor' textAlign='center'>
-										현재 레벨
-									</CardHeader>
-									<CardHeader
-										className='CardTextColor'
-										textAlign='center'
-										style={{ marginTop: '2vh' }}
-									>
-										다음 레벨까지
-									</CardHeader>
-								</CardContent>
-							</Card>
-						</CardGroup>
+								</div>
+							</CardContent>
+							{/* 레벨 관련 문구 */}
+							<CardContent className='ContentBorder'>
+								<CardHeader className='CardTextColor' textAlign='center' style={{ marginTop: '2vh' }}>
+									다음 레벨까지
+								</CardHeader>
+							</CardContent>
+							{/* 깃허브 주소 */}
+							<CardContent className='ContentBorder'>
+								<CardDescription className='CardTextColor'>깃허브 주소 :</CardDescription>
+								<Button className='EditButton' floated='right'>
+									수정
+								</Button>
+							</CardContent>
+						</Card>
 					</Card>
 				</div>
 				{/* 오른쪽 문제 풀이 기록 리스트 */}
@@ -128,7 +110,7 @@ export const MyPage = () => {
 					</Header>
 					{/* 문제 기록 */}
 					{/* 성공 */}
-					<Segment className='Problems Success' size='small'>
+					<Segment className='Questions Success' size='small'>
 						<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>
 							성공
 						</Header>
@@ -137,7 +119,7 @@ export const MyPage = () => {
 							src='https://item.kakaocdn.net/do/592728ea7408bcf69f797c0446b584a6d0bbab1214a29e381afae56101ded106'
 							style={{ marginLeft: '2vw' }}
 						/>
-						<SegmentGroup className='ProblemName'>
+						<SegmentGroup className='QuestionName'>
 							<Segment textAlign='right' className='CardTextColor Success'>
 								문제1
 							</Segment>
@@ -148,7 +130,7 @@ export const MyPage = () => {
 					</Segment>
 
 					{/* 실패 */}
-					<Segment className='Problems Fail' size='small'>
+					<Segment className='Questions Fail' size='small'>
 						<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>
 							실패
 						</Header>
@@ -157,7 +139,7 @@ export const MyPage = () => {
 							src='https://item.kakaocdn.net/do/592728ea7408bcf69f797c0446b584a6f604e7b0e6900f9ac53a43965300eb9a'
 							style={{ marginLeft: '2vw' }}
 						/>
-						<SegmentGroup className='ProblemName'>
+						<SegmentGroup className='QuestionName'>
 							<Segment textAlign='right' className='CardTextColor Fail'>
 								문제1
 							</Segment>
