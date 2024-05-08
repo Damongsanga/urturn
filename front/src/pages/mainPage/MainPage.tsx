@@ -22,9 +22,7 @@ const MainPage: React.FC = () => {
 		roomStore.clearRoom();
 	}, []);
 
-	const buttonStyle = {
-
-	};
+	const buttonStyle = {};
 
 	const createRoom = () => {
 		if (authStore.accessToken === undefined || authStore.accessToken === null || authStore.memberId === undefined) {
@@ -46,21 +44,41 @@ const MainPage: React.FC = () => {
 					<HeaderBar $main={true} />
 				</div>
 				<div className='EntrySection'>
-					<Grid columns={2} style={{ width: '70vw'}}>
-						<GridRow> 
+					<Grid columns={2} style={{ width: '70vw' }}>
+						<GridRow>
 							<GridColumn className='MainGridColumn'>
 								<Card className='EntryCard'>
-									<Image
-										src='https://avatars.githubusercontent.com/u/19562994?v=4'
-										circular
-										size='medium'
-									/>
-									<Card.Content textAlign='center'>
-										<Card.Description style={{ marginTop: '2vh', color: 'black' }}>
+									<Card.Content style={{ paddingBottom: '0px', paddingLeft: '0px', paddingRight: '0px'}}>
+										<Image
+											src='https://avatars.githubusercontent.com/u/19562994?v=4'
+											size='medium'
+											style={{ width: '21vw', height: 'auto' }}
+										/>
+									</Card.Content>
+									<Card.Content textAlign='center' style={{ borderTop: 'none' }}>
+										<Card.Description
+											style={{
+												display: 'flex',
+												alignItems: 'center',
+												justifyContent: 'center',
+												marginTop: '2vh',
+												color: 'black',
+											}}
+										>
 											직접 방을 만들어보세요
 										</Card.Description>
 									</Card.Content>
-									<Card.Content style={{ borderTop: 'none', paddingLeft: '0px', paddingRight: '0px'}}>
+									<Card.Content
+										style={{
+											display: 'flex',
+											alignItems: 'center',
+											justifyContent: 'center',
+											borderTop: 'none',
+											paddingLeft: '0px',
+											paddingRight: '0px',
+											paddingBottom: '0px'
+										}}
+									>
 										<Button
 											className='EntryButtons'
 											style={buttonStyle}
@@ -75,17 +93,39 @@ const MainPage: React.FC = () => {
 							</GridColumn>
 							<GridColumn className='MainGridColumn'>
 								<Card className='EntryCard'>
-									<Image
-										src='https://avatars.githubusercontent.com/u/19562994?v=4'
-										circular
-										size='medium'
-									/>
-									<Card.Content textAlign='center'>
-										<Card.Description style={{ marginTop: '2vh', color: 'black' }}>
+									<Card.Content style={{ paddingBottom: '0px', paddingLeft: '0px', paddingRight: '0px'}}>
+										<Image
+											src='https://avatars.githubusercontent.com/u/19562994?v=4'
+											size='medium'
+											style={{ width: '21vw', height: 'auto' }}
+										/>
+									</Card.Content>
+									<Card.Content textAlign='center' style={{ borderTop: 'none' }}>
+										<Card.Description
+											style={{
+												display: 'flex',
+												alignItems: 'center',
+												justifyContent: 'center',
+												textAlign: 'center',
+												borderTop: 'none',
+												marginTop: '2vh',
+												color: 'black',
+											}}
+										>
 											만들어진 방에 참여해보세요
 										</Card.Description>
 									</Card.Content>
-									<Card.Content style={{ borderTop: 'none', paddingLeft: '0px', paddingRight: '0px' }}>
+									<Card.Content
+										style={{
+											display: 'flex',
+											alignItems: 'center',
+											justifyContent: 'center',
+											borderTop: 'none',
+											paddingLeft: '0px',
+											paddingRight: '0px',
+											paddingBottom: '0px'
+										}}
+									>
 										<Button
 											className='EntryButtons'
 											style={buttonStyle}

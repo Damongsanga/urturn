@@ -108,7 +108,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 								<CardGroup className='FitContent'>
 									{/* 방장 */}
 									<Card className='Card-without-border'>
-										<CardContent>
+										<CardContent style={{ display:'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
 											<Image
 												src={
 													roomStore.userInfo?.myUserProfileUrl
@@ -128,7 +128,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 									</Card>
 									{/* 입장 파트너 */}
 									<Card className='Card-without-border'>
-										<CardContent>
+										<CardContent style={{ display:'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
 											<Image
 												src={
 													roomStore.userInfo?.relativeUserProfileUrl
@@ -210,6 +210,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 													style={{
 														backgroundColor: difficulty === item.value ? item.color : 'transparent',
 														border: difficulty === item.value ? 'none' : undefined,
+														borderRadius: '10px'
 													}}
 												>
 													<Radio
