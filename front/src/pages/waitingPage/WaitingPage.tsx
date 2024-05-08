@@ -21,8 +21,10 @@ import {
 } from 'semantic-ui-react';
 import logo from '../../assets/images/logo.svg';
 import './WaitingPage.css';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import {ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import { useRoomStore } from '../../stores/room';
+import { useOpenVidu } from "../../hooks/openVidu.ts";
+//import { useRtcStore } from "../../stores/rtc.ts";
 
 interface ModalProps {
 	changeModal: () => void;
@@ -31,13 +33,13 @@ interface ModalProps {
 
 export const WaitingPage = ({changeModal} : ModalProps) => {
 	const roomStore = useRoomStore();
-
+	const { connect } = useOpenVidu();
 	const [volume, setVolume] = useState({ speaker: 50, microphone: 50 });
 	const { speaker, microphone } = volume;
 	// 스피커 볼륨, 마이크 볼륨
 	const [difficulty, setDifficulty] = useState('VERY_EASY');
 	// 난이도
-
+	//const rtcStore = useRtcStore();
 	const difficulties = [
 		{ label: '100m 달리기', value: 'VERY_EASY', color: '#AAD79F' },
 		{ label: '1km 달리기', value: 'EASY', color: '#A9D9DC' },
@@ -75,6 +77,10 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 			}),
 		});
 	};
+
+	useEffect(() => {
+		connect();
+	}, []);
 
 	return (
 		<>
