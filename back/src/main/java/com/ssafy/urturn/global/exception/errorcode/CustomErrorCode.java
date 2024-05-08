@@ -28,6 +28,7 @@ public enum CustomErrorCode implements ErrorCode{
     NO_MEMBER(HttpStatus.BAD_REQUEST, "ID에 해당하는 사용자가 존재하지 않습니다"),
 
     // History
+    NO_HISTORY(HttpStatus.BAD_REQUEST, "ID에 해당하는 history가 존재하지 않습니다"),
 
     //Problem
     NO_PROBLEM(HttpStatus.BAD_REQUEST, "ID에 해당하는 문제가 존재하지 않습니다"),

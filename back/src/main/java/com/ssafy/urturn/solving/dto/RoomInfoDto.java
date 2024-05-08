@@ -20,5 +20,6 @@ public class RoomInfoDto {
     private Long problem2Id;
 //    private LocalDateTime startTime;
 //    private LocalDateTime endTime;
+    private Long historyId; // 추가해야함
 
 }

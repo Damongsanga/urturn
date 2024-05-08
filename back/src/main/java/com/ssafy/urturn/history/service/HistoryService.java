@@ -30,6 +30,7 @@ public class HistoryService {
         return historyRepository.getHistories(currentMemberId, pageable);
     }
 
+    // RoomInfoDto에 historyId 저장
     @Transactional
     public Long createHistory(RoomInfoDto roomInfoDto){
         History history = History.builder()
@@ -41,6 +42,9 @@ public class HistoryService {
             .problem2(problemRepository.findById(roomInfoDto.getProblem2Id()).orElseThrow(() -> new RestApiException(CustomErrorCode.NO_PROBLEM)))
             .build();
 
-        return historyRepository.save(history).getId();
+        Long id = historyRepository.save(history).getId();
+        roomInfoDto.setHistoryId(id);
+
+        return id;
     }
 }
