@@ -12,6 +12,6 @@ import lombok.Setter;
 public class UserInfoResponse {
     private String myUserProfileUrl;
     private String myUserNickName;
-    private String relativeUserProfileUrl;
-    private String relativeUserNickName;
+    private String pairProfileUrl;
+    private String pairNickName;
 }

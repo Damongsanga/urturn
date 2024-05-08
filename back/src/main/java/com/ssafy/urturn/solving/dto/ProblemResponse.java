@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AlgoQuestionResponse {
-    private Long algoQuestionId;
-    private String algoQuestionUrl;
-    private String algoQuestionTitle;
+public class ProblemResponse {
+    private Long problemId;
+    private String problemUrl;
+    private String problemTitle;
 }

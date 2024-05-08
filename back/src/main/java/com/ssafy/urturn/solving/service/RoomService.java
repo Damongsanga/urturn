@@ -41,7 +41,7 @@ public class RoomService {
     방생성
      */
     @Transactional
-    public roomInfoResponse createRoom(Long userId){
+    public RoomInfoResponse createRoom(Long userId){
         // 방 ID
         String roomId= UUID.randomUUID().toString();
         // 입장코드
@@ -58,12 +58,12 @@ public class RoomService {
         // 방 ID 키로 방정보 캐시
         cachedatas.cacheroomInfoDto(roomId,roominfodto);
 
-        return new roomInfoResponse(roomId, entryCode, true);
+        return new RoomInfoResponse(roomId, entryCode, true);
 
     }
 
-    public UserInfoResponse getUserInfo(Long myUserId,Long relativeUserId){
-        return memberService.getMemberInfo(myUserId,relativeUserId);
+    public UserInfoResponse getUserInfo(Long myUserId,Long pairId){
+        return memberService.getMemberInfo(myUserId,pairId);
     }
 
     public String canEnterRoom(String entryCode) {
@@ -85,7 +85,7 @@ public class RoomService {
         }
 
         // 참여자 ID 설정
-        roomInfo.setParticipantId(MemberUtil.getMemberId());
+        roomInfo.setPairId(MemberUtil.getMemberId());
 
         // 방 정보 업데이트
         cachedatas.cacheroomInfoDto(roomId, roomInfo);
@@ -93,18 +93,18 @@ public class RoomService {
         return roomId;
     }
 
-//    public AlgoQuestionResponse[] getAlgoQuestion(String roomId, Difficulty difficulty){
+//    public ProblemResponse[] getproblem(String roomId, Difficulty difficulty){
 //
 //
 //
-//        AlgoQuestionResponse[] algoQuestion = new AlgoQuestionResponse[2];
+//        ProblemResponse[] problem = new ProblemResponse[2];
 //
 //
 //        // 일단은 하드코딩
 //        // ************* 이부분 사용자가 푼 문제 히스토리 참고해서 두 문제 조회하는 로직으로 변경. ****************
-//        algoQuestion[0]=new AlgoQuestionResponse(0L,"https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/AlgoQuestion/SheepAndWolves.txt",
+//        problem[0]=new ProblemResponse(0L,"https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/problem/SheepAndWolves.txt",
 //                "양늑이");
-//        algoQuestion[1]=new AlgoQuestionResponse(1L,"https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/AlgoQuestion/test.txt"
+//        problem[1]=new ProblemResponse(1L,"https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/problem/test.txt"
 //        ,"늑양이");
 //
 //        roomInfoDto roomInfoDto=cachedatas.cacheroomInfoDto(roomId);
@@ -115,16 +115,16 @@ public class RoomService {
 //        cachedatas.cacheroomInfoDto(roomId,roomInfoDto);
 //
 //
-//        return algoQuestion;
+//        return problem;
 //    }
 
-    public List<ProblemTestcaseDto> getAlgoQuestion(String roomId, Level level){
+    public List<ProblemTestcaseDto> getproblem(String roomId, Level level){
 
         RoomInfoDto roomInfoDto = cachedatas.cacheroomInfoDto(roomId);
 
         List<ProblemTestcaseDto> selectedProblems = problemService.getTwoProblem(
             roomInfoDto.getManagerId(),
-            roomInfoDto.getParticipantId(), level);
+            roomInfoDto.getPairId(), level);
 
         roomInfoDto.setProblem1Id(selectedProblems.get(0).getProblemId());
         roomInfoDto.setProblem2Id(selectedProblems.get(1).getProblemId());
@@ -134,7 +134,7 @@ public class RoomService {
         return selectedProblems;
     }
 
-    public boolean setReadyInRoomInfo(readyInfoRequest readyInfoRequest) {
+    public boolean setReadyInRoomInfo(ReadyInfoRequest readyInfoRequest) {
 
         String roomId = readyInfoRequest.getRoomId();
         RoomInfoDto roomInfo = cachedatas.cacheroomInfoDto(roomId);
@@ -143,10 +143,10 @@ public class RoomService {
         // 준비 상태 업데이트
         updateReadyStatus(roomId, roomInfo, isHost);
 
-        cachedatas.updateCodeCache(roomId, readyInfoRequest.getAlgoQuestionId().toString(), null);
+        cachedatas.updateCodeCache(roomId, readyInfoRequest.getProblemId().toString(), null);
 
         // 두 사용자가 모두 준비되었는지 확인
-        if (areBothParticipantsReady(roomId, roomInfo)) {
+        if (areBothpairsReady(roomId, roomInfo)) {
             // 두 사용자가 모두 준비완료를 했을 경우.
             roomInfo.setRoomStatus(RoomStatus.IN_GAME);
 //            roomInfo.setStartTime(LocalDateTime.now());
@@ -164,7 +164,7 @@ public class RoomService {
                 roomInfo.setManagerIsReady(true);
 
             } else {
-                roomInfo.setParticipantIsReady(true);
+                roomInfo.setPairIsReady(true);
             }
             cachedatas.cacheroomInfoDto(roomId, roomInfo);
         }finally {
@@ -173,12 +173,12 @@ public class RoomService {
 
     }
 
-    public boolean areBothParticipantsReady(String roomId, RoomInfoDto roomInfo) {
+    public boolean areBothpairsReady(String roomId, RoomInfoDto roomInfo) {
         lock.lock();
         try {
-            if (roomInfo.isManagerIsReady() && roomInfo.isParticipantIsReady()) {
+            if (roomInfo.isManagerIsReady() && roomInfo.isPairIsReady()) {
                 roomInfo.setManagerIsReady(false);
-                roomInfo.setParticipantIsReady(false);
+                roomInfo.setPairIsReady(false);
                 cachedatas.cacheroomInfoDto(roomId, roomInfo);
                 return true;
             }
@@ -189,14 +189,14 @@ public class RoomService {
         }
     }
 
-    public switchCodeResponse getParticipantsCode(switchCodeRequest switchCodeRequest){
+    public SwitchCodeResponse getpairsCode(SwitchCodeRequest switchCodeRequest){
 
-        if(switchCodeRequest.getAlgoQuestionId().equals(cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem1Id())){
+        if(switchCodeRequest.getProblemId().equals(cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem1Id())){
             List<UserCodeDto> codes= cachedatas.cacheCodes(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem2Id().toString());
-            return new switchCodeResponse(codes.get(codes.size()-1).getCode(), switchCodeRequest.getRound()+1);
+            return new SwitchCodeResponse(codes.get(codes.size()-1).getCode(), switchCodeRequest.getRound()+1);
         }else{
             List<UserCodeDto> codes= cachedatas.cacheCodes(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem1Id().toString());
-            return new switchCodeResponse(codes.get(codes.size()-1).getCode(), switchCodeRequest.getRound()+1);
+            return new SwitchCodeResponse(codes.get(codes.size()-1).getCode(), switchCodeRequest.getRound()+1);
         }
     }
 
@@ -210,7 +210,7 @@ public class RoomService {
 
         // db 조회 후 채점 서버로 Code 및 문제 데이터, 테케 전송
         // 결과 수신
-        GradingResponse gradingResponse = gradingService.getResult(submitRequest.getAlgoQuestionId(),
+        GradingResponse gradingResponse = gradingService.getResult(submitRequest.getProblemId(),
             submitRequest.getCode(), submitRequest.getLanguage());
 
         // 오답 일 경우 실패 응답 + 관련 메시지 전송

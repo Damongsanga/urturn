@@ -4,6 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-public class roomIdDto {
+public class RoomIdDto {
     private String roomId;
 }

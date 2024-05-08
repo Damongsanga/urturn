@@ -9,7 +9,7 @@ public class SubmitRequest {
     private String code;
     private String roomId;
     private Language language;
-    private Long algoQuestionId;
+    private Long problemId;
     private int round;
     @JsonProperty("isHost")
     private boolean isHost;

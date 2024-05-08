@@ -10,10 +10,10 @@ public class RoomInfoDto {
     // 방장 ID
     private Long managerId;
     // 팀원 ID
-    private Long participantId;
+    private Long pairId;
     private RoomStatus roomStatus;
     private boolean managerIsReady;
-    private boolean participantIsReady;
+    private boolean pairIsReady;
     // 문제1 ID
     private Long problem1Id;
     // 문제2 ID
