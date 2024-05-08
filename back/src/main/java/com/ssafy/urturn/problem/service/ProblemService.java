@@ -55,8 +55,7 @@ public class ProblemService {
             CustomErrorCode.NO_PROBLEM));
     }
 
-    // 문제 2개랑 전체 테스트케이스 반환
-    // 공개 테스트케이스만 필요한가??
+    // 문제 2개랑 공개테스트케이스 반환
     public List<ProblemTestcaseDto> getTwoProblem(Long managerId, Long pairId, Level level){
         return problemRepository.selectTwoProblemByLevel(level, managerId, pairId);
     }
