@@ -1,7 +1,7 @@
 package com.ssafy.urturn.solving.cache;
 
-import com.ssafy.urturn.solving.dto.roomInfoDto;
-import com.ssafy.urturn.solving.dto.userCodeDto;
+import com.ssafy.urturn.solving.dto.RoomInfoDto;
+import com.ssafy.urturn.solving.dto.UserCodeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -38,26 +38,26 @@ public class cacheDatas {
     }
 
     @CachePut(value = "roomInfoDtoCache", key="#roomId")
-    public roomInfoDto cacheroomInfoDto(String roomId, roomInfoDto roomInfoDto){
+    public RoomInfoDto cacheroomInfoDto(String roomId, RoomInfoDto roomInfoDto){
         return roomInfoDto;
     }
 
     @Cacheable(value = "roomInfoDtoCache", key="#roomId")
-    public roomInfoDto cacheroomInfoDto(String roomId){
+    public RoomInfoDto cacheroomInfoDto(String roomId){
         return null;
     }
 
     @Cacheable(value = "responseCache", key = "#roomId + '_' + #questionId")
-    public List<userCodeDto> cacheCodes(String roomId, String questionId) {
+    public List<UserCodeDto> cacheCodes(String roomId, String questionId) {
         // 실제 캐시 저장소에서 데이터를 가져오는 로직은 필요하지 않음. 캐시 미스 시 null 반환.
         return null;
     }
 
     @CachePut(value = "responseCache", key = "#roomId + '_' + #questionId")
-    public List<userCodeDto> updateCodeCache(String roomId, String questionId, userCodeDto newCode) {
+    public List<UserCodeDto> updateCodeCache(String roomId, String questionId, UserCodeDto newCode) {
         lock.lock();
         try{
-            List<userCodeDto> currentCodes = cacheCodes(roomId, questionId);
+            List<UserCodeDto> currentCodes = cacheCodes(roomId, questionId);
             if (currentCodes == null) {
                 currentCodes = new ArrayList<>();
             }

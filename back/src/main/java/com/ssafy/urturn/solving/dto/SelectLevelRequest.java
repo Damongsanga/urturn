@@ -1,9 +1,10 @@
 package com.ssafy.urturn.solving.dto;
 
+import com.ssafy.urturn.member.Level;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-public class roomIdDto {
+public class SelectLevelRequest {
     private String roomId;
+    private Level level;
 }

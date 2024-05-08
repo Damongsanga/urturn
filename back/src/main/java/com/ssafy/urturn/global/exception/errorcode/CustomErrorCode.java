@@ -28,10 +28,16 @@ public enum CustomErrorCode implements ErrorCode{
     NO_MEMBER(HttpStatus.BAD_REQUEST, "ID에 해당하는 사용자가 존재하지 않습니다"),
 
     // History
+    NO_HISTORY(HttpStatus.BAD_REQUEST, "ID에 해당하는 history가 존재하지 않습니다"),
 
     //Problem
-    NO_PROBLEM(HttpStatus.BAD_REQUEST, "ID에 해당하는 문제가 존재하지 않습니다");
+    NO_PROBLEM(HttpStatus.BAD_REQUEST, "ID에 해당하는 문제가 존재하지 않습니다"),
 
+    // Grading
+    TOO_MUCH_TRAFFIC(HttpStatus.TOO_MANY_REQUESTS, "채점 서버가 많은 부하를 받고 있습니다. 잠시 후에 다시 시도해주세요!"),
+
+    // Lock
+    REQUEST_LOCKED(HttpStatus.LOCKED, "요청이 이미 진행중입니다");
 
 
     private final HttpStatus httpStatus;

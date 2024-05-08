@@ -1,9 +1,9 @@
 package com.ssafy.urturn.solving.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-public class selectDifficultyRequest {
+public class RoomIdDto {
     private String roomId;
-    private Difficulty difficulty;
 }

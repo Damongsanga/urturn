@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class switchCodeRequest {
+public class SwitchCodeRequest {
     private String code;
     private String roomId;
-    private Long algoQuestionId;
+    @JsonProperty("algoQuestionId")
+    private Long problemId;
     private int round;
     @JsonProperty("isHost")
     private boolean isHost;
@@ -17,7 +18,7 @@ public class switchCodeRequest {
         return "switchCodeRequest{" +
                 "code='" + code + '\'' +
                 ", roomId='" + roomId + '\'' +
-                ", algoQuestionId=" + algoQuestionId +
+                ", problemId=" + problemId +
                 ", round=" + round +
                 ", isHost=" + isHost +
                 '}';

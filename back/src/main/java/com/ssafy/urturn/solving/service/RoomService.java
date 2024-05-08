@@ -1,40 +1,59 @@
 package com.ssafy.urturn.solving.service;
 
+import static com.ssafy.urturn.global.RequestLockType.*;
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.*;
+
+import com.ssafy.urturn.global.RequestLockService;
+import com.ssafy.urturn.global.RequestLockType;
+import com.ssafy.urturn.global.exception.RestApiException;
+import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.global.util.MemberUtil;
+import com.ssafy.urturn.history.entity.History;
+import com.ssafy.urturn.history.repository.HistoryRepository;
+import com.ssafy.urturn.member.Level;
 import com.ssafy.urturn.member.service.MemberService;
+import com.ssafy.urturn.problem.dto.GradingResponse;
+import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
+import com.ssafy.urturn.problem.service.GradingService;
+import com.ssafy.urturn.problem.service.ProblemService;
 import com.ssafy.urturn.solving.cache.cacheDatas;
 import com.ssafy.urturn.solving.dto.*;
 import com.ssafy.urturn.solving.temp.WebSocketSessionManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
-
-import static com.ssafy.urturn.solving.dto.RoomStatus.IN_GAME;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RoomService {
     private final MemberService memberService;
+    private final GradingService gradingService;
+    private final ProblemService problemService;
     private final cacheDatas cachedatas;
-    private final WebSocketSessionManager webSocketSessionManager;
     private final ReentrantLock lock;
-    /*
+    private final HistoryRepository historyRepository;
+
+    private final RequestLockService requestLockService;
+
+
+    /**
     방생성
      */
-    public roomInfoResponse createRoom(Long userId){
+    @Transactional
+    public RoomInfoResponse createRoom(Long userId){
         // 방 ID
         String roomId= UUID.randomUUID().toString();
         // 입장코드
         String entryCode=UUID.randomUUID().toString().substring(0,6);
 
         // 방 정보 DTO 생성
-        roomInfoDto roominfodto=new roomInfoDto();
+        RoomInfoDto roominfodto=new RoomInfoDto();
         roominfodto.setManagerId(userId);
         roominfodto.setRoomStatus(RoomStatus.WAITING);
 
@@ -44,13 +63,12 @@ public class RoomService {
         // 방 ID 키로 방정보 캐시
         cachedatas.cacheroomInfoDto(roomId,roominfodto);
 
-        return new roomInfoResponse(roomId, entryCode, true);
+        return new RoomInfoResponse(roomId, entryCode, true);
 
     }
 
-    public userInfoResponse getUserInfo(Long myUserId,Long relativeUserId){
-
-        return memberService.getMemberInfo(myUserId,relativeUserId);
+    public UserInfoResponse getUserInfo(Long myUserId,Long pairId){
+        return memberService.getMemberInfo(myUserId,pairId);
     }
 
     public String canEnterRoom(String entryCode) {
@@ -61,7 +79,7 @@ public class RoomService {
         }
 
         // 방 정보 가져오기
-        roomInfoDto roomInfo = cachedatas.cacheroomInfoDto(roomId);
+        RoomInfoDto roomInfo = cachedatas.cacheroomInfoDto(roomId);
         if (roomInfo == null) {
             throw new RuntimeException("방 정보를 가져올 수 없습니다.");
         }
@@ -72,7 +90,7 @@ public class RoomService {
         }
 
         // 참여자 ID 설정
-        roomInfo.setParticipantId(MemberUtil.getMemberId());
+        roomInfo.setPairId(MemberUtil.getMemberId());
 
         // 방 정보 업데이트
         cachedatas.cacheroomInfoDto(roomId, roomInfo);
@@ -80,44 +98,60 @@ public class RoomService {
         return roomId;
     }
 
-    public algoQuestionResponse[] getAlgoQuestion(String roomId, Difficulty difficulty){
+//    public ProblemResponse[] getproblem(String roomId, Difficulty difficulty){
+//
+//
+//
+//        ProblemResponse[] problem = new ProblemResponse[2];
+//
+//
+//        // 일단은 하드코딩
+//        // ************* 이부분 사용자가 푼 문제 히스토리 참고해서 두 문제 조회하는 로직으로 변경. ****************
+//        problem[0]=new ProblemResponse(0L,"https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/problem/SheepAndWolves.txt",
+//                "양늑이");
+//        problem[1]=new ProblemResponse(1L,"https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/problem/test.txt"
+//        ,"늑양이");
+//
+//        roomInfoDto roomInfoDto=cachedatas.cacheroomInfoDto(roomId);
+//
+//        // ******************* 가져온 문제 아이디 캐싱 필요. ****************************
+//        roomInfoDto.setProblem1Id(0L);
+//        roomInfoDto.setProblem2Id(1L);
+//        cachedatas.cacheroomInfoDto(roomId,roomInfoDto);
+//
+//
+//        return problem;
+//    }
 
+    public List<ProblemTestcaseDto> getproblem(String roomId, Level level){
 
+        RoomInfoDto roomInfoDto = cachedatas.cacheroomInfoDto(roomId);
 
-        algoQuestionResponse[] algoQuestion = new algoQuestionResponse[2];
+        List<ProblemTestcaseDto> selectedProblems = problemService.getTwoProblem(
+            roomInfoDto.getManagerId(),
+            roomInfoDto.getPairId(), level);
 
+        roomInfoDto.setProblem1Id(selectedProblems.get(0).getProblemId());
+        roomInfoDto.setProblem2Id(selectedProblems.get(1).getProblemId());
 
-        // 일단은 하드코딩
-        // ************* 이부분 사용자가 푼 문제 히스토리 참고해서 두 문제 조회하는 로직으로 변경. ****************
-        algoQuestion[0]=new algoQuestionResponse(0L,"https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/AlgoQuestion/SheepAndWolves.txt",
-                "양늑이");
-        algoQuestion[1]=new algoQuestionResponse(1L,"https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/AlgoQuestion/test.txt"
-        ,"늑양이");
-
-        roomInfoDto roomInfoDto=cachedatas.cacheroomInfoDto(roomId);
-
-        // ******************* 가져온 문제 아이디 캐싱 필요. ****************************
-        roomInfoDto.setProblem1Id(0L);
-        roomInfoDto.setProblem2Id(1L);
         cachedatas.cacheroomInfoDto(roomId,roomInfoDto);
 
-
-        return algoQuestion;
+        return selectedProblems;
     }
 
-    public boolean setReadyInRoomInfo(readyInfoRequest readyInfoRequest) {
+    public boolean setReadyInRoomInfo(ReadyInfoRequest readyInfoRequest) {
 
         String roomId = readyInfoRequest.getRoomId();
-        roomInfoDto roomInfo = cachedatas.cacheroomInfoDto(roomId);
+        RoomInfoDto roomInfo = cachedatas.cacheroomInfoDto(roomId);
         boolean isHost = readyInfoRequest.isHost();
 
         // 준비 상태 업데이트
         updateReadyStatus(roomId, roomInfo, isHost);
 
-        cachedatas.updateCodeCache(roomId, readyInfoRequest.getAlgoQuestionId().toString(), null);
+        cachedatas.updateCodeCache(roomId, readyInfoRequest.getProblemId().toString(), null);
 
         // 두 사용자가 모두 준비되었는지 확인
-        if (areBothParticipantsReady(roomId, roomInfo)) {
+        if (areBothpairsReady(roomId, roomInfo)) {
             // 두 사용자가 모두 준비완료를 했을 경우.
             roomInfo.setRoomStatus(RoomStatus.IN_GAME);
 //            roomInfo.setStartTime(LocalDateTime.now());
@@ -128,14 +162,14 @@ public class RoomService {
         return false;
     }
 
-    public void updateReadyStatus(String roomId, roomInfoDto roomInfo, boolean isHost) {
+    public void updateReadyStatus(String roomId, RoomInfoDto roomInfo, boolean isHost) {
         lock.lock();
         try{
             if (isHost) {
                 roomInfo.setManagerIsReady(true);
 
             } else {
-                roomInfo.setParticipantIsReady(true);
+                roomInfo.setPairIsReady(true);
             }
             cachedatas.cacheroomInfoDto(roomId, roomInfo);
         }finally {
@@ -144,12 +178,12 @@ public class RoomService {
 
     }
 
-    public boolean areBothParticipantsReady(String roomId, roomInfoDto roomInfo) {
+    public boolean areBothpairsReady(String roomId, RoomInfoDto roomInfo) {
         lock.lock();
         try {
-            if (roomInfo.isManagerIsReady() && roomInfo.isParticipantIsReady()) {
+            if (roomInfo.isManagerIsReady() && roomInfo.isPairIsReady()) {
                 roomInfo.setManagerIsReady(false);
-                roomInfo.setParticipantIsReady(false);
+                roomInfo.setPairIsReady(false);
                 cachedatas.cacheroomInfoDto(roomId, roomInfo);
                 return true;
             }
@@ -160,42 +194,56 @@ public class RoomService {
         }
     }
 
-    public switchCodeResponse getParticipantsCode(switchCodeRequest switchCodeRequest){
+    public SwitchCodeResponse getpairsCode(SwitchCodeRequest switchCodeRequest){
 
-        if(switchCodeRequest.getAlgoQuestionId().equals(cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem1Id())){
-            List<userCodeDto> codes= cachedatas.cacheCodes(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem2Id().toString());
-            return new switchCodeResponse(codes.get(codes.size()-1).getCode(), switchCodeRequest.getRound()+1);
+        if(switchCodeRequest.getProblemId().equals(cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem1Id())){
+            List<UserCodeDto> codes= cachedatas.cacheCodes(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem2Id().toString());
+            return new SwitchCodeResponse(codes.get(codes.size()-1).getCode(), switchCodeRequest.getRound()+1);
         }else{
-            List<userCodeDto> codes= cachedatas.cacheCodes(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem1Id().toString());
-            return new switchCodeResponse(codes.get(codes.size()-1).getCode(), switchCodeRequest.getRound()+1);
+            List<UserCodeDto> codes= cachedatas.cacheCodes(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem1Id().toString());
+            return new SwitchCodeResponse(codes.get(codes.size()-1).getCode(), switchCodeRequest.getRound()+1);
         }
     }
 
-    public submitResponse submitCode(submitRequest submitRequest){
-        // 제출 광클 하는 경우 채점중입니다. 에러 메시지 처리 필요.
-        submitResponse submitResponse=new submitResponse();
+    // GradeService로 이동하면 좋을 것 같습니다.
+    @Transactional
+    public SubmitResponse submitCode(SubmitRequest submitRequest){
+
+        // 제출 광클 방지 Lock by Redis-> AOP로 디벨롭하면 좋을듯
+        String key = requestLockService.generateLockKey(GRADING, submitRequest.getRoomId(), submitRequest.isHost());
+        requestLockService.ifLockedThrowExceptionElseLock(key, GRADING.getDuration());
 
         // db 조회 후 채점 서버로 Code 및 문제 데이터, 테케 전송
-
-        // 결과 수신.
+        // 결과 수신
+        GradingResponse gradingResponse = gradingService.getResult(submitRequest.getProblemId(),
+            submitRequest.getCode(), submitRequest.getLanguage());
 
         // 오답 일 경우 실패 응답 + 관련 메시지 전송
+        // 정답 일 경우 DB에 정답 코드 저장.
 
-        // 정답 일 경우
+        if (gradingResponse.isSucceeded()){
+            Long historyId = cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getHistoryId();
 
-        //  DB에 정답 코드 저장.
+            historyRepository.findById(historyId).orElseThrow(() -> new RestApiException(NO_HISTORY))
+                .setCode(submitRequest.getProblemId(), submitRequest.getCode());
+        }
 
         // 페어프로그래밍 모드 전환 메시지 전송
-
         /*
         ex)
         submitResponse.setResult(false);
         submitResponse.setMessage("테케 1 정답\n 테케 2 오답");
-        dto 채점서버 반환 형태에 따라 수정 필요하면 수정 후 API 명세에 적어주세용
+        dto 채점서버 반환 형태에 따라 수정 필요하면 수정 후 API 명세에 적어주세용 -> 반환 엔티티 및 API 명세 수정했습니돠
          */
 
+        // Lock 해제
+        requestLockService.unlock(key);
 
-        return submitResponse;
+        // 결과 반환
+        return SubmitResponse.builder()
+            .result(gradingResponse.isSucceeded())
+            .testcaseResults(gradingResponse.getTestcaseResults())
+            .build();
     }
 
 

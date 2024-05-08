@@ -1,25 +1,20 @@
 package com.ssafy.urturn.solving.socket;
 
 
+import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.util.MemberUtil;
-import java.util.List;
-import com.ssafy.urturn.member.entity.Member;
-import com.ssafy.urturn.member.service.MemberService;
+import com.ssafy.urturn.history.service.HistoryService;
+import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.solving.cache.cacheDatas;
 import com.ssafy.urturn.solving.dto.*;
 import com.ssafy.urturn.solving.service.RoomService;
-import com.ssafy.urturn.solving.temp.WebSocketSessionManager;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.socket.WebSocketSession;
-
-import static com.ssafy.urturn.global.util.JsonUtil.convertObjectToJson;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,14 +23,10 @@ public class WebSocketController {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final RoomService roomService;
-    private final MemberService memberService;
     private final cacheDatas cachedatas;
+    private final HistoryService historyService;
     // 사용자가 데이터를 app/hello 경로로 데이터 날림.
     // 클라이언트는 /topic/greetings 주제를 구독하고 서버에서 이 주제로 메시지가 발행되면 이를 수신.
-
-
-
-
 
     @MessageMapping("/test")
     public void test(){
@@ -45,117 +36,113 @@ public class WebSocketController {
     }
 
     @MessageMapping("/createRoom")
-    public void createRoom(@Payload memberIdDto memberIddto) {
+    public void createRoom(@Payload MemberIdDto memberIddto) {
         cachedatas.clearAllCache();
         Long userId=memberIddto.getMemberId();
-        roomInfoResponse roomInfoResponse = roomService.createRoom(userId);
-        userInfoResponse userInfoResponse = roomService.getUserInfo(userId,null);
+        RoomInfoResponse roomInfoResponse = roomService.createRoom(userId);
+        UserInfoResponse userInfoResponse = roomService.getUserInfo(userId,null);
 //        // response에 포함된 방 정보를 이용하여 방을 생성한 사용자에게만 응답을 보냄
         simpMessagingTemplate.convertAndSendToUser(userId.toString(), "/roomInfo", roomInfoResponse);
         simpMessagingTemplate.convertAndSendToUser(userId.toString(),"/userInfo",userInfoResponse);
     }
 
     @MessageMapping("/enterRoom")
-    public void enterRoom(@Payload roomIdDto roomIddto) {
+    public void enterRoom(@Payload RoomIdDto roomIddto) {
 
         String roomId=roomIddto.getRoomId();
-        Long participantId=cachedatas.cacheroomInfoDto(roomId).getParticipantId();
+        Long pairId=cachedatas.cacheroomInfoDto(roomId).getPairId();
         Long managerId=cachedatas.cacheroomInfoDto(roomId).getManagerId();
-        userInfoResponse userInfoResponse=roomService.getUserInfo(participantId,managerId);
+        UserInfoResponse userInfoResponse=roomService.getUserInfo(pairId,managerId);
 
-        roomInfoResponse roomInfoResponse=new roomInfoResponse(roomId,null, false);
+        RoomInfoResponse roomInfoResponse=new RoomInfoResponse(roomId,null, false);
 
-        simpMessagingTemplate.convertAndSendToUser(participantId.toString(), "/roomInfo", roomInfoResponse);
-        simpMessagingTemplate.convertAndSendToUser(participantId.toString(),"/userInfo",userInfoResponse);
-        userInfoResponse userInfoResponse2=roomService.getUserInfo(managerId,participantId);
+        simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/roomInfo", roomInfoResponse);
+        simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/userInfo",userInfoResponse);
+        UserInfoResponse userInfoResponse2=roomService.getUserInfo(managerId,pairId);
         simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/userInfo",userInfoResponse2);
     }
 
 
-    @MessageMapping("/selectDifficulty")
-    public void readContext(@Payload selectDifficultyRequest selectDifficultyRequest){
-
+    @MessageMapping("/selectLevel")
+    public void readContext(@Payload SelectLevelRequest SelectLevelRequest){
 
         // 두 유저ID 추출
-        Long participantId=cachedatas.cacheroomInfoDto(selectDifficultyRequest.getRoomId()).getParticipantId();
-        Long managerId=cachedatas.cacheroomInfoDto(selectDifficultyRequest.getRoomId()).getManagerId();
+        Long pairId=cachedatas.cacheroomInfoDto(SelectLevelRequest.getRoomId()).getPairId();
+        Long managerId=cachedatas.cacheroomInfoDto(SelectLevelRequest.getRoomId()).getManagerId();
 
-        algoQuestionResponse[] algoQuestions=roomService.getAlgoQuestion(selectDifficultyRequest.getRoomId(), selectDifficultyRequest.getDifficulty());
+        List<ProblemTestcaseDto> problemTestcases =roomService.getproblem(SelectLevelRequest.getRoomId(), SelectLevelRequest.getLevel());
 
-        simpMessagingTemplate.convertAndSendToUser(participantId.toString(), "/questionInfo",algoQuestions);
-        simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/questionInfo",algoQuestions);
+        simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/questionInfo",problemTestcases);
+        simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/questionInfo",problemTestcases);
 
     }
 
     @MessageMapping("/readyToSolve")
-    public synchronized void readyToSolve(@Payload readyInfoRequest readyInfoRequest){
+    public synchronized void readyToSolve(@Payload ReadyInfoRequest readyInfoRequest)
+        throws RestApiException {
 
         System.out.println("readyToSolve");
-        Long participantId=cachedatas.cacheroomInfoDto(readyInfoRequest.getRoomId()).getParticipantId();
+        Long pairId=cachedatas.cacheroomInfoDto(readyInfoRequest.getRoomId()).getPairId();
         Long managerId=cachedatas.cacheroomInfoDto(readyInfoRequest.getRoomId()).getManagerId();
 
         if(roomService.setReadyInRoomInfo(readyInfoRequest)){
             /*
              여기 History Table에 데이터 삽입 로직 구현 (삽입 데이터 : 아이디. 방장, 팀원, 첫번째문제, 두번째문제.)
-             서비스 단 호출해서 구현 시 RoomService에 메서드 만들어서 호출해 주세용
-
-             DB에 problem 테이블이랑 testcase 테이블에 더미 데이터 존재해야함.
-
+             서비스 단 호출해서 구현 시 RoomService에 메서드 만들어서 호출해 주세용 -> history service에 일단 구현했습니당
              */
-
             // 여기 방장, 팀원, 문제1, 문제2 데이터 저장되어 있음.
-            roomInfoDto roomInfoDto=cachedatas.cacheroomInfoDto(readyInfoRequest.getRoomId());
+            RoomInfoDto roomInfoDto=cachedatas.cacheroomInfoDto(readyInfoRequest.getRoomId());
 
-            simpMessagingTemplate.convertAndSendToUser(participantId.toString(), "/startToSolve",true);
+            // 구현 완료
+            historyService.createHistory(roomInfoDto);
+
+            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/startToSolve",true);
             simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/startToSolve",true);
         }
 
     }
 
     @MessageMapping("/switchCode")
-    public synchronized void switchCode(@Payload switchCodeRequest switchCodeRequest){
+    public synchronized void switchCode(@Payload SwitchCodeRequest switchCodeRequest){
         // 방 ID, 문제 ID 확인해 코드 스냅샷 저장.
 
+        cachedatas.updateCodeCache(switchCodeRequest.getRoomId(),switchCodeRequest.getProblemId().toString(),
+                new UserCodeDto(switchCodeRequest.getRound(),switchCodeRequest.getCode()));
 
-        cachedatas.updateCodeCache(switchCodeRequest.getRoomId(),switchCodeRequest.getAlgoQuestionId().toString(),
-                new userCodeDto(switchCodeRequest.getRound(),switchCodeRequest.getCode()));
-
-        Long participantId=cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getParticipantId();
+        Long pairId=cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getPairId();
         Long managerId=cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getManagerId();
         System.out.println("시작 부 host : "+ switchCodeRequest.isHost()+" managerIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isManagerIsReady()+" " +
-                "partcipantIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isParticipantIsReady());
+                "partcipantIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isPairIsReady());
 
         // 준비완료.
         roomService.updateReadyStatus(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()), switchCodeRequest.isHost());
 
         System.out.println("host : "+ switchCodeRequest.isHost()+" managerIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isManagerIsReady()+" " +
-                "partcipantIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isParticipantIsReady());
+                "partcipantIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isPairIsReady());
         // 준비상태 확인
-        if(roomService.areBothParticipantsReady(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()))){
+        if(roomService.areBothpairsReady(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()))){
             if(switchCodeRequest.isHost()){
                 System.out.println("Data 1");
-                simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/switchCode",roomService.getParticipantsCode(switchCodeRequest));
-                simpMessagingTemplate.convertAndSendToUser(participantId.toString(), "/switchCode",new switchCodeResponse(switchCodeRequest.getCode(),switchCodeRequest.getRound()+1));
+                simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/switchCode",roomService.getpairsCode(switchCodeRequest));
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/switchCode",new SwitchCodeResponse(switchCodeRequest.getCode(),switchCodeRequest.getRound()+1));
             }else{
                 System.out.println("Data 2");
-                simpMessagingTemplate.convertAndSendToUser(participantId.toString(),"/switchCode",roomService.getParticipantsCode(switchCodeRequest));
-                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/switchCode",new switchCodeResponse(switchCodeRequest.getCode(),switchCodeRequest.getRound()+1));
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/switchCode",roomService.getpairsCode(switchCodeRequest));
+                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/switchCode",new SwitchCodeResponse(switchCodeRequest.getCode(),switchCodeRequest.getRound()+1));
             }
         }
         System.out.println("모두 false 여야함    host : "+ switchCodeRequest.isHost()+" managerIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isManagerIsReady()+" " +
-                "partcipantIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isParticipantIsReady());
+                "partcipantIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isPairIsReady());
     }
 
     @MessageMapping("/submitCode")
-    public void submitCode(@Payload submitRequest submitRequest){
+    public void submitCode(@Payload SubmitRequest submitRequest){
 
-
-
-        Long participantId=cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getParticipantId();
+        Long pairId=cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getPairId();
         Long managerId=cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getManagerId();
 
         // 구현해야 하는 부분
-        submitResponse submitResponse = roomService.submitCode(submitRequest);
+        SubmitResponse submitResponse = roomService.submitCode(submitRequest);
 
         if(submitResponse.isResult()) {
             //정답 일 경우.
@@ -164,22 +151,22 @@ public class WebSocketController {
                 simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "submit/result", submitResponse);
                 // 일단은 역할을 data를 String(""Navigator")으로 넘기지만, Enum, dto형태든 원하는 형태로 수정 가능.
                 simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "role", "Navigator");
-                simpMessagingTemplate.convertAndSendToUser(participantId.toString(), "role", "Driver");
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "role", "Driver");
             } else {
-                simpMessagingTemplate.convertAndSendToUser(participantId.toString(), "submit/result", submitResponse);
-                simpMessagingTemplate.convertAndSendToUser(participantId.toString(), "role", "Navigator");
-                simpMessagingTemplate.convertAndSendToUser(participantId.toString(), "role", "Driver");
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "submit/result", submitResponse);
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "role", "Navigator");
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "role", "Driver");
             }
         } else{
             // 오답 일 경우
-            simpMessagingTemplate.convertAndSendToUser(participantId.toString(), "submit/result", submitResponse);
+            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "submit/result", submitResponse);
         }
 
     }
 
     @MessageMapping("/switchRole")
-    public void switchRole(@Payload switchCodeRequest switchCodeRequest){
-
+    public void switchRole(@Payload SwitchCodeRequest switchCodeRequest){
+        //
     }
 
 }

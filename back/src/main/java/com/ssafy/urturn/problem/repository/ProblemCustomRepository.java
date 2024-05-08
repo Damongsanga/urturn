@@ -11,6 +11,6 @@ public interface ProblemCustomRepository {
     Optional<ProblemTestcaseDto> getProblemAndTestcase(Long problemId);
     Optional<ProblemTestcaseDto> getProblemWithPublicTestcase(Long problemId);
 
-    public List<Problem> selectTwoProblemByLevel(Level level, Long memberId, Long pairId);
+    public List<ProblemTestcaseDto> selectTwoProblemByLevel(Level level, Long memberId, Long pairId);
 
 }

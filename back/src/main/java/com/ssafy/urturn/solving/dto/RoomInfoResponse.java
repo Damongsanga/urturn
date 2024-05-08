@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 @Getter
-public class roomInfoResponse {
+public class RoomInfoResponse {
     private String roomId;
     private String entryCode;
     private boolean isHost;

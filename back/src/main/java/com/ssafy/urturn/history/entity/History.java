@@ -3,6 +3,9 @@ package com.ssafy.urturn.history.entity;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.ssafy.urturn.global.common.BaseEntity;
+import com.ssafy.urturn.global.exception.RestApiException;
+import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
+import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.member.entity.Member;
 import com.ssafy.urturn.problem.entity.Problem;
@@ -16,10 +19,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
@@ -49,13 +54,29 @@ public class History extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "problem2_id", nullable = false)
     private Problem problem2;
+
+    @Setter
     private String code1;
+    @Setter
     private String code2;
+
     private HistoryResult result;
     private String retro1;
     private String retro2;
     private int totalRound;
     @Column(name="end_time")
     private LocalDateTime endTime;
+
+    public int setCode(Long problemId, String code){
+        if (Objects.equals(this.problem1.getId(), problemId)){
+            this.code1 = code;
+            return 1;
+        } else if (Objects.equals(this.problem2.getId(), problemId)) {
+            this.code2 = code;
+            return 2;
+        } else {
+            throw new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR, "해당 id에 해당하는 문제가 history에 존재하지 않습니다.");
+        }
+    }
 
 }
