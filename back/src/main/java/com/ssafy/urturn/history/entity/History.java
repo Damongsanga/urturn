@@ -9,6 +9,7 @@ import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.member.entity.Member;
 import com.ssafy.urturn.problem.entity.Problem;
+import com.ssafy.urturn.solving.dto.RetroCreateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -61,7 +62,9 @@ public class History extends BaseEntity {
     private String code2;
 
     private HistoryResult result;
+    @Column(length = 500)
     private String retro1;
+    @Column(length = 500)
     private String retro2;
     private int totalRound;
     @Column(name="end_time")
@@ -77,6 +80,11 @@ public class History extends BaseEntity {
         } else {
             throw new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR, "해당 id에 해당하는 문제가 history에 존재하지 않습니다.");
         }
+    }
+
+    public void setRetro(RetroCreateRequest req){
+        this.retro1 = req.getRetro1();
+        this.retro2 = req.getRetro2();
     }
 
 }

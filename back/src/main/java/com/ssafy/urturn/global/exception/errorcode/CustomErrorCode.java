@@ -26,6 +26,7 @@ public enum CustomErrorCode implements ErrorCode{
 
     // Member
     NO_MEMBER(HttpStatus.BAD_REQUEST, "ID에 해당하는 사용자가 존재하지 않습니다"),
+    NO_REPOSITORY(HttpStatus.BAD_REQUEST, "해당 유저에게 github repository 정보가 존재하지 않습니다"),
 
     // History
     NO_HISTORY(HttpStatus.BAD_REQUEST, "ID에 해당하는 history가 존재하지 않습니다"),

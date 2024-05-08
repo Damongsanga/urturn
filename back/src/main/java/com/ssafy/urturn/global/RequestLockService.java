@@ -30,6 +30,7 @@ public class RequestLockService {
                 throw new RestApiException(CustomErrorCode.REQUEST_LOCKED);
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new RestApiException(INTERNAL_SERVER_ERROR, "redis error");
         }
     }

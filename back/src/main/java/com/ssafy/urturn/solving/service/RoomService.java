@@ -247,4 +247,9 @@ public class RoomService {
     }
 
 
+    @Transactional
+    public void updateRetro(RetroCreateRequest req, Long historyId) {
+        historyRepository.findById(historyId).orElseThrow(() -> new RestApiException(NO_HISTORY))
+            .setRetro(req);
+    }
 }
