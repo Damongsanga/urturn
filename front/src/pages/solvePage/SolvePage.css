@@ -1,4 +1,51 @@
-.Page{
+.Page {
     width: 100vw;
     height: 100vh;
+}
+
+.QuestionSideBar {
+    width: 5vw;
+    background-color: #3A2302;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    border-right: solid 0.5px #D4DBE2;
+}
+
+.QuestionButton {
+    width: 3vw;
+
+    background-color: #F2CAB3 !important;
+}
+
+.QuestionButton:hover,
+.QuestionButton:active {
+    background-color: #b78567 !important;
+    border-color: #b78567 !important;
+
+    transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.ui.tabular.menu {
+    border-bottom: solid 1px #fff !important;
+    color: #fff;
+}
+
+.ui.tabular.menu .item {
+    color: #000;
+}
+
+.ui.tabular.menu .active.item {
+    background-color: #b78567 ;
+    border-color: #fff;
+    
+    color: #fff;
+}
+
+.ui.secondary.menu .active.item {
+    background-color: #b78567 !important;
+    color: #fff;
 }

@@ -56,7 +56,7 @@ export const EntryCodeModal = ({ changeModal, successConnect }: ModalProps) => {
 						</div>
             {/* 입장 버튼 */}
 						<div className='InputButton'>
-							<Button onClick={checkCode}>입장하기</Button>
+							<Button onClick={checkCode} style={{ 	backgroundColor: '#3A2302', color: 'white' }}>입장하기</Button>
 						</div>
 					</div>
 				</div>

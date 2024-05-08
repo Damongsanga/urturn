@@ -14,13 +14,25 @@
 }
 
 .HeaderBar.Ide {
+  background-color: #3A2302 !important;
+  margin-bottom: 0px;
+  border-radius: 0;
+
+  border-bottom: solid 0.3px #D4DBE2;
+}
+
+.HeaderBar {
   background-color: #DBB39A !important;
   margin-bottom: 0px;
   border-radius: 0;
 }
 
 .HeaderAlign {
-  margin-left: 46vw;
+  margin-left: 18vw;
+}
+
+.ProfileAlign {
+  margin-right: 15vw !important;
 }
 
 .QuitButton {
@@ -32,14 +44,14 @@
 }
 
 .Main .ButtonColor {
-  background-color: #D4DBE2 !important;
+  background-color: #fff !important;
   color: black !important;
 }
 
 .Main .ButtonColor:hover,
 .Main .ButtonColor:active  {
-  background-color: #b4b9bf !important; 
-  border-color: #b4b9bf  !important;
+  background-color: #D4DBE2 !important; 
+  border-color: #D4DBE2  !important;
 
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
 }

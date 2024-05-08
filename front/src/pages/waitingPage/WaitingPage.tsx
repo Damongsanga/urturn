@@ -14,10 +14,10 @@ import {
 	GridColumn,
 	Grid,
 	GridRow,
-	Checkbox,
 	FormField,
 	Segment,
 	Button,
+	Radio,
 } from 'semantic-ui-react';
 import logo from '../../assets/images/logo.svg';
 import './WaitingPage.css';
@@ -27,20 +27,19 @@ import { useRoomStore } from '../../stores/room';
 interface ModalProps {
 	changeModal: () => void;
 	// 모달을 닫는 함수
-} 
+}
 
-export const WaitingPage = ({changeModal} : ModalProps ) => {
-
+export const WaitingPage = ({changeModal} : ModalProps) => {
 	const roomStore = useRoomStore();
 
 	const [volume, setVolume] = useState({ speaker: 50, microphone: 50 });
 	const { speaker, microphone } = volume;
 	// 스피커 볼륨, 마이크 볼륨
-	const [difficulty , setDifficulty] = useState('100m');
+	const [difficulty, setDifficulty] = useState('VERY_EASY');
 	// 난이도
 
 	const difficulties = [
-		{ label: '100m 달리기', value: 'VERY_EASY', color: '#AAD79F'},
+		{ label: '100m 달리기', value: 'VERY_EASY', color: '#AAD79F' },
 		{ label: '1km 달리기', value: 'EASY', color: '#A9D9DC' },
 		{ label: '10km 달리기', value: 'MEDIUM', color: '#E5ACAC' },
 		{ label: '하프 마라톤', value: 'HARD', color: '#C1ABE4' },
@@ -59,13 +58,13 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 	}; // 난이도 설정 조정 함수
 
 	const selectDifficulty = () => {
-		if(roomStore.client === undefined || roomStore.client === null) {
+		if (roomStore.client === undefined || roomStore.client === null) {
 			alert('문제가 발생했습니다. 재접속 해주세요.');
-			return
+			return;
 		}
-		if(roomStore.roomInfo === undefined || roomStore.roomInfo === null) {
+		if (roomStore.roomInfo === undefined || roomStore.roomInfo === null) {
 			alert('문제가 발생했습니다. 재접속 해주세요.');
-			return
+			return;
 		}
 
 		roomStore.client.publish({
@@ -74,8 +73,8 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 				roomId: roomStore.roomInfo.roomId,
 				difficulty: difficulty,
 			}),
-		})
-	}
+		});
+	};
 
 	return (
 		<>
@@ -113,23 +112,17 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 											<Image
 												src={
 													roomStore.userInfo?.myUserProfileUrl
-													?
-													roomStore.userInfo!.myUserProfileUrl
-													:
-													'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+														? roomStore.userInfo!.myUserProfileUrl
+														: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
 												}
 												size='small'
 												rounded
 											/>
 											<Divider hidden />
 											<CardHeader textAlign='center'>
-												{
-													roomStore.userInfo?.myUserNickName
-													?
-													roomStore.userInfo.myUserNickName
-													:
-													'내 정보 로딩 에러'
-												}
+												{roomStore.userInfo?.myUserNickName
+													? roomStore.userInfo.myUserNickName
+													: '내 정보 로딩 에러'}
 											</CardHeader>
 										</CardContent>
 									</Card>
@@ -139,23 +132,17 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 											<Image
 												src={
 													roomStore.userInfo?.relativeUserProfileUrl
-													?
-													roomStore.userInfo.relativeUserProfileUrl
-													:
-													'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+														? roomStore.userInfo.relativeUserProfileUrl
+														: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
 												}
 												size='small'
 												rounded
 											/>
 											<Divider hidden />
 											<CardHeader textAlign='center'>
-												{
-													roomStore.userInfo?.relativeUserNickName
-													?
-													roomStore.userInfo.relativeUserNickName
-													:
-													'미접속'
-												}
+												{roomStore.userInfo?.relativeUserNickName
+													? roomStore.userInfo.relativeUserNickName
+													: '미접속'}
 											</CardHeader>
 										</CardContent>
 									</Card>
@@ -171,7 +158,7 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 											<Form className='Volume'>
 												<FormInput
 													label={`스피커 볼륨: ${speaker}`}
-													min={1}
+													min={0}
 													max={100}
 													name='speaker'
 													onChange={handleVolume}
@@ -191,7 +178,7 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 											<Form className='Volume'>
 												<FormInput
 													label={`마이크 볼륨: ${microphone}`}
-													min={1}
+													min={0}
 													max={100}
 													name='microphone'
 													onChange={handleVolume}
@@ -218,13 +205,20 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 										{/* 난이도 버튼 그룹 */}
 										{difficulties.map((item) => (
 											<FormField key={item.value}>
-												<Segment size='small' style={{ backgroundColor:item.color }}>
-													<Checkbox
+												<Segment
+													size='small'
+													style={{
+														backgroundColor: difficulty === item.value ? item.color : 'transparent',
+														border: difficulty === item.value ? 'none' : undefined,
+													}}
+												>
+													<Radio
 														label={item.label}
 														name='difficulties group'
 														value={item.value}
 														checked={difficulty === item.value}
 														onChange={handleDifficulty}
+														className={difficulty === item.value ? 'RadioChecked' : ''}
 													/>
 												</Segment>
 											</FormField>
@@ -233,7 +227,13 @@ export const WaitingPage = ({changeModal} : ModalProps ) => {
 								</div>
 								{/* 시작 버튼 */}
 								<div className='StartButton'>
-									<Button onClick={selectDifficulty} size='massive' className='StartButtonStyle'>시작하기</Button>
+									<Button
+										onClick={selectDifficulty}
+										className='StartButtonStyle'
+										style={{ width: '11.5vw', height: '8vh', fontSize: '1.1rem' }}
+									>
+										시작하기
+									</Button>
 								</div>
 							</div>
 						</div>

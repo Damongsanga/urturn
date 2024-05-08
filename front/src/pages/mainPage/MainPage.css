@@ -4,29 +4,48 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  background-color: #efefef;
 }
 
 .EntrySection {
   width: 100vw; 
   height: calc(100vh - 70px);
+
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.EntryCard {
-  width: 28vw !important;
-  height: 66vh !important;
-
-  background-color: #DBB39A !important;
-
-  padding: 20px !important;
-
-  border: 3px solid white !important;
-  border-radius: 10px !important;
-  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25) !important;
+.MainGridColumn {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
 
+.EntryCard {
+  width: 28vw !important;
+  height: 68vh !important;
+
+  color: #4f4f4f !important;
+
+  padding: 3em !important;
+
+  border: 3px solid white !important;
+  border-radius: 15px !important;
+  box-shadow: 0px 2px 2px 2px rgba(0, 0, 0, 0.25) !important;
+
+}
+
+.EntryButtons {
+  width: 100%;
+  height: 8vh;
+
+  background-color: #3A2302 !important;
+  color: #fff !important;
+
+  border-radius: 10px !important;
+}
 
 .EntryButtons:hover,
 .EntryButtons:active  {
