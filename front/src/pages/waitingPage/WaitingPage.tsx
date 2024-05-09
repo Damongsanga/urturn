@@ -21,8 +21,9 @@ import {
 } from 'semantic-ui-react';
 import logo from '../../assets/images/logo.svg';
 import './WaitingPage.css';
-import {ChangeEvent, FormEvent, useState} from 'react';
+import {ChangeEvent, FormEvent, useEffect, useRef, useState} from 'react';
 import { useRoomStore } from '../../stores/room';
+import {useRtcStore} from "../../stores/rtc.ts";
 //import { useRtcStore } from "../../stores/rtc.ts";
 
 interface ModalProps {
@@ -32,6 +33,9 @@ interface ModalProps {
 
 export const WaitingPage = ({changeModal} : ModalProps) => {
 	const roomStore = useRoomStore();
+	const rtcStore = useRtcStore();
+	const myVideoRef = useRef<HTMLVideoElement | null>(null);
+	const otherVideoRef = useRef<HTMLVideoElement | null>(null);
 	const [volume, setVolume] = useState({ speaker: 50, microphone: 50 });
 	const { speaker, microphone } = volume;
 	// 스피커 볼륨, 마이크 볼륨
@@ -46,6 +50,18 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 		{ label: '풀 마라톤', value: 'LEVEL5', color: '#9B9B9B' },
 	];
 	// 난이도 목록
+
+	useEffect(() => {
+		if (rtcStore.streamManager && myVideoRef.current) {
+			rtcStore.streamManager.addVideoElement(myVideoRef.current);
+		}
+	}, [rtcStore.streamManager]);
+
+	useEffect(() => {
+		if(rtcStore.subscriber && otherVideoRef.current) {
+			rtcStore.subscriber.addVideoElement(otherVideoRef.current);
+		}
+	}, [rtcStore.subscriber]);
 
 	const handleVolume = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -87,7 +103,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 							{/* 상위 정보 메뉴 */}
 							<Menu secondary size='large'>
 								<MenuItem className='Header'>
-									<img alt='URTurn' src={logo} style={{ width: '100px' }} />
+									<img alt='URTurn' src={logo} style={{width: '100px'}}/>
 								</MenuItem>
 								<MenuItem name='Waiting Room'>
 									<Header as='h3' textAlign='center'>
@@ -100,7 +116,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 									</Header>
 								</MenuItem>
 								<MenuItem name='close' position='right' onClick={changeModal}>
-									<Icon className='Icon' name='close' size='large' />
+									<Icon className='Icon' name='close' size='large'/>
 								</MenuItem>
 							</Menu>
 						</div>
@@ -110,7 +126,12 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 								<CardGroup className='FitContent'>
 									{/* 방장 */}
 									<Card className='Card-without-border'>
-										<CardContent style={{ display:'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+										<CardContent style={{
+											display: 'flex',
+											flexDirection: 'column',
+											alignItems: 'center',
+											justifyContent: 'center'
+										}}>
 											<Image
 												src={
 													roomStore.userInfo?.myUserProfileUrl
@@ -120,7 +141,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 												size='small'
 												rounded
 											/>
-											<Divider hidden />
+											<Divider hidden/>
 											<CardHeader textAlign='center'>
 												{roomStore.userInfo?.myUserNickName
 													? roomStore.userInfo.myUserNickName
@@ -130,7 +151,12 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 									</Card>
 									{/* 입장 파트너 */}
 									<Card className='Card-without-border'>
-										<CardContent style={{ display:'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+										<CardContent style={{
+											display: 'flex',
+											flexDirection: 'column',
+											alignItems: 'center',
+											justifyContent: 'center'
+										}}>
 											<Image
 												src={
 													roomStore.userInfo?.relativeUserProfileUrl
@@ -140,7 +166,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 												size='small'
 												rounded
 											/>
-											<Divider hidden />
+											<Divider hidden/>
 											<CardHeader textAlign='center'>
 												{roomStore.userInfo?.relativeUserNickName
 													? roomStore.userInfo.relativeUserNickName
@@ -171,7 +197,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 										</GridColumn>
 										<GridColumn width={2} verticalAlign={'middle'}>
 											{/* 스피커 아이콘 */}
-											<Icon className='Icon' name='volume up' size='big' />
+											<Icon className='Icon' name='volume up' size='big'/>
 										</GridColumn>
 									</GridRow>
 									<GridRow>
@@ -192,7 +218,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 										</GridColumn>
 										<GridColumn width={2} verticalAlign={'middle'}>
 											{/* 마이크 아이콘 */}
-											<Icon className='Icon' name='microphone' size='big' />
+											<Icon className='Icon' name='microphone' size='big'/>
 										</GridColumn>
 									</GridRow>
 								</Grid>
@@ -233,7 +259,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 									<Button
 										onClick={selectDifficulty}
 										className='StartButtonStyle'
-										style={{ width: '11.5vw', height: '8vh', fontSize: '1.1rem' }}
+										style={{width: '11.5vw', height: '8vh', fontSize: '1.1rem'}}
 									>
 										시작하기
 									</Button>
@@ -242,6 +268,8 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 						</div>
 					</div>
 				</div>
+				<video autoPlay={true} ref={myVideoRef}/>
+				<video autoPlay={true} ref={otherVideoRef}/>
 			</div>
 		</>
 	);

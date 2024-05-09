@@ -54,20 +54,21 @@ export function useOpenVidu() {
         const ov = new OpenVidu();
         ov.initSession();
 
-        //const subscribers : Publisher | Subscriber | StreamManager[] = [];
-        // subscribers.forEach((_subscriber, index) => {
+        // const subscribers =  rtcStore.getSubscribers();
+        // subscribers?.forEach((subscriber, index) => {
         //     const video = document.createElement('video');
         //     video.autoplay = true;
         //     video.controls = false;
         //     video.id = `subscriberVideo_${index}`;
-        //     // subscriber.addVideoElement(video);
-        //     // subscriberVideosRef.current?.appendChild(video);
+        //     subscriber.addVideoElement(video);
+        //     //subscriberVideosRef.current?.appendChild(video);
         // });
+        // rtcStore.setSubscribers(subscribers);
 
         ov.session.on('streamCreated', (event) => {
             ov.session.subscribe(event.stream, 'session-ui');
-            //const subscriber = ov.session.subscribe(event.stream, 'session-ui');
-            //setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+            const subscriber = ov.session.subscribe(event.stream, 'session-ui');
+            rtcStore.setSubscriber(subscriber);
         });
 
         ov.session.on('streamDestroyed', (_event) => {
@@ -80,10 +81,8 @@ export function useOpenVidu() {
 
         await ov.session.connect(token);
         const _publisher = await ov.initPublisherAsync(undefined, {
-            audioSource: undefined,
-            videoSource: undefined,
             publishAudio: true,
-            publishVideo: false,
+            publishVideo: true,
             resolution: '640x480',
             frameRate: 30,
             insertMode: 'APPEND',
@@ -97,6 +96,7 @@ export function useOpenVidu() {
         // const _currentVideoDevice = videoDevices.find((device) => device.deviceId === currentVideoDeviceId);
 
         rtcStore.setOpenVidu(ov);
+        rtcStore.setStreamManager(_publisher);
     }
 
     // const deleteSession = async (sessionId:string) => {
