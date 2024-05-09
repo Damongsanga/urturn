@@ -43,9 +43,9 @@ export default function ReviewPage() {
 	const toggleReview = (type: 'keep' | 'try'): void => {
 		setReview((prev) => ({
 			...prev,
-			[type]: !prev[type],
+			[type]: true,
 			// 다른 키값의 boolean을 반대로 설정
-			[type === 'keep' ? 'try' : 'keep']: !prev[type === 'keep' ? 'try' : 'keep'],
+			[type === 'keep' ? 'try' : 'keep']: false,
 		}));
 		setActiveItem(type);
 	};
@@ -137,7 +137,7 @@ export default function ReviewPage() {
 									</div>
 								</Allotment.Pane>
 								<Allotment.Pane minSize={125}>
-									<div className='ReviewBar' style={{ height: '50px', backgroundColor: '#F2CAB3' }}>
+									<div className='ReviewBar' style={{ height: '50px', backgroundColor: '#000034' }}>
 										<div
 											style={{
 												width: '98%',
@@ -190,7 +190,7 @@ export default function ReviewPage() {
 				</div>
 			</div>
 			{/* footer */}
-			<FooterBar $mode={2} $switch={false} />
+			<FooterBar $mode={2}/>
 		</div>
 	);
 }

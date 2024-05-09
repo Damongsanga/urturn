@@ -8,7 +8,7 @@
 }
 
 .FooterBar {
-  background-color: #fff !important;
+  background-color: white !important;
   margin-top: 0px !important;
   border-radius: 0 !important
 }
@@ -28,35 +28,34 @@
 }
 
 .RunButtonColor {
-  background-color: #F2CAB3 !important;
-  color: black !important;
+  background-color: #b7b7b7 !important;
+  color: white !important;
 
   margin-left: 2vw !important;
 }
 
 .RunButtonColor:hover,
 .RunButtonColor:active  {
-  background-color: #b78567 !important; 
-  border-color: #b78567  !important;
+  background-color: white !important; 
+  border: solid 1px #b7b7b7  !important;
+
+  color: black !important;
 
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
 }
 
 .ReviewButtonColor {
-  background-color: #F2CAB3 !important;
-  color: black !important;
+  background-color: #b7b7b7 !important;
+  color: white !important;
 
   margin-left: 2vw !important;
-
-  color: black !important;
 }
-
 
 .ReviewButtonColor:hover,
 .ReviewButtonColor:active  {
-  background-color: #b78567 !important; 
-  border-color: #b78567  !important;
-  color: white !important;
+  background-color: white !important; 
+  border: solid 1px #b7b7b7 !important;
+  color: black !important;
 
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
 }

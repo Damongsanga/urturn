@@ -134,7 +134,7 @@ export default function CheckPage() {
 				</div>
 			</div>
 			{/* footer */}
-			<FooterBar $mode={0} $switch={false}/>
+			<FooterBar $mode={0}/>
 		</div>
     );
   }
