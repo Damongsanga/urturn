@@ -1,5 +1,4 @@
-import { useCallback } from 'react';
-import { OpenVidu } from 'openvidu-browser';
+import {OpenVidu} from 'openvidu-browser';
 import { useAxios } from '../utils/useAxios.ts';
 import { useRtcStore } from "../stores/rtc.ts";
 
@@ -7,56 +6,109 @@ export function useOpenVidu() {
     const axios = useAxios();
     const rtcStore = useRtcStore();
 
+    const masterCreate = () => {
+        createSession().then(
+            (sessionId) => {
+                createToken(sessionId).then(
+                    (token) => {
+                        connect(token);
+                    }
+                )
+            }
+        )
 
-    const getToken = async () => {
-        console.log("get to");
+    };
+    //의존성 체크 필요
+
+    const partnerJoin = (sessionId: string) => {
+        createToken(sessionId).then(
+            (token) => {
+                connect(token);
+            }
+        )
+    }
+
+    const createSession = async () => {
         try {
             const response = await axios.post('/sessions');
             const sessionId = response.data;
             rtcStore.setSessionId(sessionId);
-            const response2 = await axios.post('sessions/'+ sessionId+ '/connection');
-            rtcStore.setConnectionId(response2.data.connectionId);
-            console.log("sessionId: ", sessionId)
-            console.log("respone2",response2.data);
-            return response2.data.token;
+            console.log("sessionId: ", sessionId);
+            return sessionId;
         } catch (error) {
-            console.error('Error fetching token:', error);
-            throw error;
+            console.error('세션 열기 실패:', error);
         }
     };
 
-    const connect = useCallback(async () => {
-        let OV = rtcStore.getOpenVidu();
-        console.log("connect하고 ov", OV);
-        console.log("OpenVidu 인스턴스:", typeof OV);
-        if (OV===null) {
-            OV = new OpenVidu();
-            rtcStore.setOpenVidu(OV);
+    const createToken = async (sessionId: string) => {
+        try {
+            const response = await axios.post('sessions/'+ sessionId+ '/connection');
+            rtcStore.setConnectionId(response.data.connectionId);
+            return response.data.token;
+        } catch (error) {
+            console.error('토큰 생성 실패:', error);
         }
-        console.log("connect null인 경우 ov", OV);
-        
-        console.log("initSession 메서드 유무:", typeof OV.initSession);
-        const session = OV.initSession();
-        const token = await getToken();
-        await session.connect(token);
-        session.on('streamCreated', event => {
-            const subscriber = session.subscribe(event.stream, 'video-container');
-            console.log('New stream: ' + subscriber.stream.streamId);
+    };
+
+    const connect = async (token: string) => {
+        const ov = rtcStore.getOpenVidu() ?? new OpenVidu();
+        ov.initSession();
+
+        //const subscribers : Publisher | Subscriber | StreamManager[] = [];
+        // subscribers.forEach((_subscriber, index) => {
+        //     const video = document.createElement('video');
+        //     video.autoplay = true;
+        //     video.controls = false;
+        //     video.id = `subscriberVideo_${index}`;
+        //     // subscriber.addVideoElement(video);
+        //     // subscriberVideosRef.current?.appendChild(video);
+        // });
+
+        ov.session.on('streamCreated', (event) => {
+            ov.session.subscribe(event.stream, 'session-ui');
+            //const subscriber = ov.session.subscribe(event.stream, 'session-ui');
+            //setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
         });
-    }, [rtcStore.getOpenVidu, rtcStore.setOpenVidu, getToken]);
-    //의존성 체크 필요
-    
-    // const disconnect = useCallback(() => {
-    //     const sessionId = rtcStore.getSessionId();
-    //     const OV = rtcStore.getOpenVidu();
-    //
-    // }, []);
 
-    // useEffect(() => {
-    //     return () => {
-    //         disconnect();
-    //     };
-    // }, [disconnect]);
+        ov.session.on('streamDestroyed', (_event) => {
+            //deleteSubscriber(event.stream.streamManager);
+        });
 
-    return { connect };
+        ov.session.on('exception', (exception) => {
+            console.warn(exception);
+        });
+
+        await ov.session.connect(token);
+        const _publisher = await ov.initPublisherAsync(undefined, {
+            audioSource: undefined,
+            videoSource: undefined,
+            publishAudio: true,
+            publishVideo: false,
+            resolution: '640x480',
+            frameRate: 30,
+            insertMode: 'APPEND',
+            mirror: true,
+        });
+        await ov.session.publish(_publisher);
+
+        // let devices = await ov.getDevices();
+        // let videoDevices = devices.filter((device) => device.kind === 'videoinput');
+        // let currentVideoDeviceId = _publisher.stream.getMediaStream().getVideoTracks()[0].getSettings().deviceId;
+        // const _currentVideoDevice = videoDevices.find((device) => device.deviceId === currentVideoDeviceId);
+
+        rtcStore.setOpenVidu(ov);
+    }
+
+    // const deleteSession = async (sessionId:string) => {
+    //     try {
+    //         await axios.delete(`sessions/${sessionId}`);
+    //         rtcStore.clearRtc();
+    //     } catch (error) {
+    //         console.error('세션 삭제 에러:', error);
+    //     }
+    // };
+
+
+
+    return { masterCreate, partnerJoin };
 }

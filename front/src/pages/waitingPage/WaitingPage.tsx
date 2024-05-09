@@ -33,7 +33,6 @@ interface ModalProps {
 
 export const WaitingPage = ({changeModal} : ModalProps) => {
 	const roomStore = useRoomStore();
-	const { connect } = useOpenVidu();
 	const [volume, setVolume] = useState({ speaker: 50, microphone: 50 });
 	const { speaker, microphone } = volume;
 	// 스피커 볼륨, 마이크 볼륨
@@ -79,7 +78,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 	};
 
 	useEffect(() => {
-		connect();
+
 	}, []);
 
 	return (
