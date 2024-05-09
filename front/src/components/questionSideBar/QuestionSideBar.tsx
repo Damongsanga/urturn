@@ -72,12 +72,12 @@ export const QuestionSideBar = () => {
 					pinned
 					// pop을 띄울 버튼
 					trigger={
-						<MenuItem name='Rounds'>
+						<MenuItem name='PopupVolume'>
 							<Icon
 								className='Mic'
 								name='microphone'
 								size='big'
-								color='grey'
+								color='blue'
 								onClick={() => console.log('test')}
 							/>
 						</MenuItem>

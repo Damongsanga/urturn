@@ -10,3 +10,7 @@
 .FooterVolume {
   width: 30vw !important;
 }
+
+.Mic:hover {
+  background-color: #b7b7b7 !important
+}
