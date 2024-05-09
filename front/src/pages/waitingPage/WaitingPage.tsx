@@ -21,23 +21,34 @@ import {
 } from 'semantic-ui-react';
 import logo from '../../assets/images/logo.svg';
 import './WaitingPage.css';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import {ChangeEvent, FormEvent, useEffect, useRef, useState} from 'react';
 import { useRoomStore } from '../../stores/room';
+import {useRtcStore} from "../../stores/rtc.ts";
+//import { useRtcStore } from "../../stores/rtc.ts";
 
 interface ModalProps {
 	changeModal: () => void;
 	// 모달을 닫는 함수
 }
 
-export const WaitingPage = ({changeModal} : ModalProps) => {
-	const roomStore = useRoomStore();
+// const langOptions = [
+// 	{ key: 'C++', text: 'C++', value: 'C++' },
+// 	{ key: 'Java', text: 'Java', value: 'Java' },
+// 	{ key: 'Python', text: 'Python', value: 'Python' },
+// 	{ key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
+// ];
 
+export const WaitingPage = ({ changeModal }: ModalProps) => {
+	const roomStore = useRoomStore();
+	const rtcStore = useRtcStore();
+	const myVideoRef = useRef<HTMLVideoElement | null>(null);
+	const otherVideoRef = useRef<HTMLVideoElement | null>(null);
 	const [volume, setVolume] = useState({ speaker: 50, microphone: 50 });
 	const { speaker, microphone } = volume;
 	// 스피커 볼륨, 마이크 볼륨
-	const [difficulty, setDifficulty] = useState('VERY_EASY');
+	const [difficulty, setDifficulty] = useState('LEVEL1');
 	// 난이도
-
+	//const rtcStore = useRtcStore();
 	const difficulties = [
 		{ label: '100m 달리기', value: 'LEVEL1', color: '#AAD79F'},
 		{ label: '1km 달리기', value: 'LEVEL2', color: '#A9D9DC' },
@@ -46,6 +57,18 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 		{ label: '풀 마라톤', value: 'LEVEL5', color: '#9B9B9B' },
 	];
 	// 난이도 목록
+
+	useEffect(() => {
+		if (rtcStore.streamManager && myVideoRef.current) {
+			rtcStore.streamManager.addVideoElement(myVideoRef.current);
+		}
+	}, [rtcStore.streamManager]);
+
+	useEffect(() => {
+		if(rtcStore.subscriber && otherVideoRef.current) {
+			rtcStore.subscriber.addVideoElement(otherVideoRef.current);
+		}
+	}, [rtcStore.subscriber]);
 
 	const handleVolume = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -108,7 +131,14 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 								<CardGroup className='FitContent'>
 									{/* 방장 */}
 									<Card className='Card-without-border'>
-										<CardContent>
+										<CardContent
+											style={{
+												display: 'flex',
+												flexDirection: 'column',
+												alignItems: 'center',
+												justifyContent: 'center',
+											}}
+										>
 											<Image
 												src={
 													roomStore.userInfo?.myUserProfileUrl
@@ -128,7 +158,14 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 									</Card>
 									{/* 입장 파트너 */}
 									<Card className='Card-without-border'>
-										<CardContent>
+										<CardContent
+											style={{
+												display: 'flex',
+												flexDirection: 'column',
+												alignItems: 'center',
+												justifyContent: 'center',
+											}}
+										>
 											<Image
 												src={
 													roomStore.userInfo?.relativeUserProfileUrl
@@ -208,8 +245,10 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 												<Segment
 													size='small'
 													style={{
-														backgroundColor: difficulty === item.value ? item.color : 'transparent',
+														backgroundColor:
+															difficulty === item.value ? item.color : 'transparent',
 														border: difficulty === item.value ? 'none' : undefined,
+														borderRadius: '10px',
 													}}
 												>
 													<Radio
@@ -239,6 +278,8 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 						</div>
 					</div>
 				</div>
+				<video autoPlay={true} ref={myVideoRef} style={{display: 'none'}}/>
+				<video autoPlay={true} ref={otherVideoRef} style={{display: 'none'}}/>
 			</div>
 		</>
 	);

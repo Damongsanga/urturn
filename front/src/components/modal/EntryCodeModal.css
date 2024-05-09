@@ -52,5 +52,19 @@
 
 .InputButton {
   margin-top: 10vh;
+}
 
+.EntryCodeButton {
+	background-color: #3A2302 !important;
+	color: white !important;
+}
+
+.EntryCodeButton:hover,
+.EntryCodeButton:active {
+    background-color: #F2CAB3 !important;
+    border-color: #F2CAB3 !important;
+
+    transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+
+    color: black !important;
 }

@@ -13,7 +13,7 @@ export const QuestionSideBar = () => {
   
 	return (
 		<>
-			<Menu secondary icon vertical borderless style={{ marginTop: '30vh', backgroundColor: 'transparent' }}>
+			<Menu secondary icon vertical borderless style={{ marginTop: 'auto', backgroundColor: 'transparent' }}>
 				<Popup
 					className='PopUp'
 					position='right center'

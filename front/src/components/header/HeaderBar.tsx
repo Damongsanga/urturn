@@ -9,6 +9,7 @@ interface HeaderProp {
 	$main?: boolean;
 	$myPage?: boolean;
 	$ide?: boolean;
+	$review? : boolean;
 	$mode?: number;
 }
 /* 
@@ -16,11 +17,12 @@ interface HeaderProp {
 main : 메인용 헤더일시 true
 myPage : 마이페이지 헤더일시 true
 ide : ide용 헤더일시 true
+review : review용 헤더일시 true
 mode : 1이면 스위칭 모드 / 2이면 페어 프로그래밍 모드
 
 main과 ide는 상태가 달라야함
 */
-export const HeaderBar = ({ $main, $myPage, $ide }: HeaderProp) => {
+export const HeaderBar = ({ $main, $myPage, $ide, $review }: HeaderProp) => {
 	const logout = useLogout();
 	const navigate = useNavigate();
 	const auth = useAuthStore();
@@ -136,6 +138,23 @@ export const HeaderBar = ({ $main, $myPage, $ide }: HeaderProp) => {
 						<MenuItem name='QuitButton' className='QuitButton'>
 							<Button size='large' className='ButtonColor'>
 								포기하기
+							</Button>
+						</MenuItem>
+					</MenuMenu>
+				</Menu>
+			)}
+
+			{$review && (
+				<Menu className='HeaderBar Ide' borderless>
+					<MenuItem className='HeaderAlign'>
+						{/* <Header as='h2' textAlign='center' className='FontColor'>
+							URTurn
+						</Header> */}
+					</MenuItem>
+					<MenuMenu position='right'>
+						<MenuItem name='QuitButton' className='QuitButton'>
+							<Button size='large' className='ButtonColor'>
+								나가기
 							</Button>
 						</MenuItem>
 					</MenuMenu>

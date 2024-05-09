@@ -42,6 +42,25 @@
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
 }
 
+.ReviewButtonColor {
+  background-color: #F2CAB3 !important;
+  color: black !important;
+
+  margin-left: 2vw !important;
+
+  color: black !important;
+}
+
+
+.ReviewButtonColor:hover,
+.ReviewButtonColor:active  {
+  background-color: #b78567 !important; 
+  border-color: #b78567  !important;
+  color: white !important;
+
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
+}
+
 .PopUp {
   padding: 20px !important; 
 }

@@ -6,6 +6,8 @@ import { useAuthStore } from "../stores/useAuthStore";
 import { useRoomStore } from "../stores/room";
 import { loadMarkdownFromCDN } from "../utils/solve/loadMarkdownFromCDN";
 import { questionInfo } from "../types/roomTypes";
+import {useOpenVidu} from "./openVidu.ts";
+import {useRtcStore} from "../stores/rtc.ts";
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
 const MAX_TIME = 10000000
@@ -14,6 +16,8 @@ export const useWebSocket = () => {
     const navi = useNavigate();
     const authStore = useAuthStore();
     const roomStore = useRoomStore();
+    const rtcStore = useRtcStore();
+    const openVidu = useOpenVidu();
     
     const connect = (roomId: string|null = null) => {
         const userId = authStore.memberId;
@@ -70,8 +74,27 @@ export const useWebSocket = () => {
             client.subscribe('/user/' + userId + '/userInfo', (msg) => {
                 console.log('Received message: userInfo' + msg.body);
                 const userInfo = JSON.parse(msg.body);
+                if(roomStore.getRoomInfo()?.host && userInfo.relativeUserNickName===null){
+                    openVidu.masterCreate();
+                }
+                if(roomStore.getRoomInfo()?.host && userInfo.relativeUserNickName){
+                    console.log("sendOVSession : " + JSON.stringify({ roomId: roomStore.getRoomInfo()?.roomId, sessionId: rtcStore.getSessionId() }));
+                    client.publish({
+                        destination: '/app/sendOVSession',
+                        body: JSON.stringify({
+                            roomId: roomStore.getRoomInfo()?.roomId,
+                            sessionId: rtcStore.getSessionId(),
+                        })
+                    })
+                }
                 roomStore.setUserInfo(userInfo);
             });
+            client.subscribe('/user/' + userId + '/receiveOVSession', (msg) => {
+                console.log('Received message: receiveOVSession' + msg.body);
+                const sessionId = msg.body;
+                rtcStore.setSessionId(sessionId);
+                openVidu.partnerJoin(sessionId);
+            })
             client.subscribe('/user/' + userId + '/questionInfo', (msg) => {
                 const questionInfos: questionInfo[] = JSON.parse(msg.body);
                 console.log('Received message: questionInfo' + msg.body);

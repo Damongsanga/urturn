@@ -9,18 +9,18 @@ import {
 } from 'semantic-ui-react';
 import { HeaderBar } from '../../components/header/HeaderBar';
 import { FooterBar } from '../../components/footer/FooterBar';
-
+import { QuestionSideBar } from '../../components/questionSideBar/QuestionSideBar';
 import CodeEditor from '../../components/solve/CodeEditor';
 
 import 'allotment/dist/style.css';
 import './SolvePage.css';
-import { QuestionSideBar } from '../../components/questionSideBar/QuestionSideBar';
+
 
 const langOptions = [
-	{ key: 'C++', text: 'C++', value: 'C++' },
-	{ key: 'Java', text: 'Java', value: 'Java' },
-	{ key: 'Python', text: 'Python', value: 'Python' },
-	{ key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
+	{ key: '1', text: '1라운드', value: 'C++' },
+	{ key: '2', text: '2라운드', value: 'Java' },
+	{ key: '3', text: '3라운드', value: 'Python' },
+	{ key: '4', text: '4라운드', value: 'JavaScript' },
 ];
 
 export default function ReviewPage() {
@@ -63,11 +63,11 @@ export default function ReviewPage() {
 
 	return (
 		<div className='Page'>
-			<HeaderBar $ide={true} $mode={1} />
+			<HeaderBar $review={true} $mode={1} />
 			<div>
 				<div style={{ display: 'flex', height: 'calc(100vh - 140px)', width: '100vw' }}>
 					{/* 문제 사이드바 */}
-					<div className='QuestionSideBar'>
+					<div className='QuestionSideBars'>
 						<Menu
 							secondary
 							icon
@@ -124,7 +124,7 @@ export default function ReviewPage() {
 								>
 									<Dropdown
 										search
-										defaultValue={langOptions[0].value}
+										defaultValue={langOptions[langOptions.length - 1].value}
 										searchInput={{ type: 'string' }}
 										options={langOptions}
 									/>
@@ -147,7 +147,7 @@ export default function ReviewPage() {
 												color: 'white',
 											}}
 										>
-											<Menu tabular style={{ marginLeft: '1vw', paddingTop: '0.5vh' }}>
+											<Menu tabular style={{ marginLeft: '1vw', paddingTop: '1vh'}}>
 												<MenuItem
 													name='keep'
 													active={activeItem === 'keep'}
