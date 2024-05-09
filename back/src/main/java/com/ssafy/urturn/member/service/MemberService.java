@@ -67,6 +67,11 @@ public class MemberService {
         return userInfo;
     }
 
+    public boolean hasGithubRepository(Long memberId){
+        return memberRepository.findById(memberId).orElseThrow(() ->  new RestApiException(
+            CustomErrorCode.NO_MEMBER)).getRepository() != null;
+    }
+
     // 사용자 정보를 설정하는 보조 메서드
     private void setUserInfo(UserInfoResponse userInfo, Long userId, boolean isMyUser) {
         if (userId != null) {

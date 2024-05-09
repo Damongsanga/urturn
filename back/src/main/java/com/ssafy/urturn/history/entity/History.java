@@ -9,6 +9,7 @@ import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.member.entity.Member;
 import com.ssafy.urturn.problem.entity.Problem;
+import com.ssafy.urturn.solving.dto.RetroCreateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -55,7 +56,11 @@ public class History extends BaseEntity {
     @JoinColumn(name = "problem2_id", nullable = false)
     private Problem problem2;
 
+
+    @Column(length = 5000)
     private String code1;
+
+    @Column(length = 5000)
     private String code2;
 
     private HistoryResult result;
@@ -77,10 +82,14 @@ public class History extends BaseEntity {
         }
     }
 
+    public void setRetro(RetroCreateRequest req){
+        this.retro1 = req.getRetro1();
+        this.retro2 = req.getRetro2();
+    }
+
     public void finalizeUpdateHistory(HistoryResult result, int totalRound){
         this.endTime=LocalDateTime.now();
         this.result=result;
         this.totalRound=totalRound;
     }
-
 }

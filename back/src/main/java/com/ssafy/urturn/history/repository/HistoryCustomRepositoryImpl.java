@@ -2,17 +2,18 @@ package com.ssafy.urturn.history.repository;
 
 import static com.ssafy.urturn.history.entity.QHistory.history;
 import static com.ssafy.urturn.member.entity.QMember.member;
-import static com.ssafy.urturn.problem.entity.QProblem.problem;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.urturn.history.dto.HistoryResponse;
+import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.history.entity.QHistory;
 import com.ssafy.urturn.member.dto.MemberSimpleDto;
 import com.ssafy.urturn.member.dto.ProblemSimpleDto;
 import com.ssafy.urturn.member.entity.QMember;
 import com.ssafy.urturn.problem.entity.QProblem;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -71,5 +72,14 @@ public class HistoryCustomRepositoryImpl implements HistoryCustomRepository{
             .fetchOne();
 
         return new PageImpl<>(content, pageable, count);
+    }
+
+    @Override
+    public History getMostRecentHistoryByMemberId(Long memberId) {
+        return jpaQueryFactory.selectFrom(history)
+            .where(history.manager.id.eq(memberId).or(history.pair.id.eq(memberId)))
+            .orderBy(history.endTime.desc())
+            .limit(1)
+            .fetchOne();
     }
 }

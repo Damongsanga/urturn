@@ -1,7 +1,11 @@
 package com.ssafy.urturn.github;
 
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.*;
+
 import com.ssafy.urturn.github.dto.GithubUploadRequestDto;
 import com.ssafy.urturn.global.auth.dto.GithubOAuthMemberInfoResponse;
+import com.ssafy.urturn.global.exception.RestApiException;
+import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.member.entity.Member;
 import java.time.LocalDateTime;
@@ -25,6 +29,8 @@ public class GithubUploadClient {
     static final String GITHUB_API_URL = "https://api.github.com/repos/";
 
     public String uploadHistory(Member member, History history){
+        if (member.getRepository() == null) throw new RestApiException(NO_REPOSITORY);
+
         log.info("url : {}", githubUtil.makeURl(member));
 
         HttpHeaders headers = new HttpHeaders();

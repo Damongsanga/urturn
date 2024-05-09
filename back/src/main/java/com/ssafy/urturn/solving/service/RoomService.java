@@ -25,7 +25,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -206,33 +209,13 @@ public class RoomService {
         }
     }
 
-    public Map<Long, RetroCodeResponse> makeRetroCodeResponse(String roomId){
-
-        Map<Long, RetroCodeResponse> map= new HashMap<>();
-        RoomInfoDto roomInfoDto = cachedatas.cacheroomInfoDto(roomId);
-        History history = historyRepository.findById(roomInfoDto.getHistoryId())
-                .orElseThrow(()->new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND, "히스토리를 찾을 수 없습니다"));
-
-
-        RetroCodeResponse problem1CodeResponse=new RetroCodeResponse(cachedatas.cacheCodes(roomId, roomInfoDto.getProblem1Id().toString())
-                , history.getCode1());
-        RetroCodeResponse problem2CodeResponse=new RetroCodeResponse(cachedatas.cacheCodes(roomId, roomInfoDto.getProblem2Id().toString())
-                , history.getCode2());
-        map.put(roomInfoDto.getProblem1Id(), problem1CodeResponse);
-        map.put(roomInfoDto.getProblem2Id(), problem1CodeResponse);
-
-        return map;
-    }
-
-
-
     // GradeService로 이동하면 좋을 것 같습니다.
     @Transactional
     public SubmitResponse submitCode(SubmitRequest submitRequest){
 
         // 제출 광클 방지 Lock by Redis-> AOP로 디벨롭하면 좋을듯
-        String key = requestLockService.generateLockKey(GRADING, submitRequest.getRoomId(), submitRequest.isHost());
-        requestLockService.ifLockedThrowExceptionElseLock(key, GRADING.getDuration());
+//        String key = requestLockService.generateLockKey(GRADING, submitRequest.getRoomId(), submitRequest.isHost());
+//        requestLockService.ifLockedThrowExceptionElseLock(key, GRADING.getDuration());
 
         // db 조회 후 채점 서버로 Code 및 문제 데이터, 테케 전송
         // 결과 수신
@@ -258,7 +241,7 @@ public class RoomService {
          */
 
         // Lock 해제
-        requestLockService.unlock(key);
+//        requestLockService.unlock(key);
 
         // 결과 반환
         return SubmitResponse.builder()
@@ -268,6 +251,23 @@ public class RoomService {
     }
 
 
+    public Map<Long, RetroCodeResponse> makeRetroCodeResponse(String roomId){
+
+        Map<Long, RetroCodeResponse> map= new HashMap<>();
+        RoomInfoDto roomInfoDto = cachedatas.cacheroomInfoDto(roomId);
+        History history = historyRepository.findById(roomInfoDto.getHistoryId())
+                .orElseThrow(()->new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND, "히스토리를 찾을 수 없습니다"));
+
+
+        RetroCodeResponse problem1CodeResponse=new RetroCodeResponse(cachedatas.cacheCodes(roomId, roomInfoDto.getProblem1Id().toString())
+                , history.getCode1());
+        RetroCodeResponse problem2CodeResponse=new RetroCodeResponse(cachedatas.cacheCodes(roomId, roomInfoDto.getProblem2Id().toString())
+                , history.getCode2());
+        map.put(roomInfoDto.getProblem1Id(), problem1CodeResponse);
+        map.put(roomInfoDto.getProblem2Id(), problem1CodeResponse);
+
+        return map;
+    }
     @Transactional
     public void updateHistory(String roomId, HistoryResult result, int totalRound){
         History history = historyRepository.findById(cachedatas.cacheroomInfoDto(roomId).getHistoryId())
@@ -275,6 +275,9 @@ public class RoomService {
         history.finalizeUpdateHistory(result, totalRound);
         historyRepository.save(history);
     }
-
-
+    @Transactional
+    public void updateRetro(RetroCreateRequest req, Long historyId) {
+        historyRepository.findById(historyId).orElseThrow(() -> new RestApiException(NO_HISTORY))
+                .setRetro(req);
+    }
 }

@@ -1,10 +1,13 @@
 package com.ssafy.urturn.solving.socket;
 
 
+import com.ssafy.urturn.github.service.GithubUploadService;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.util.MemberUtil;
 import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.history.service.HistoryService;
+import com.ssafy.urturn.member.service.MemberService;
+import com.ssafy.urturn.problem.dto.GradingTestcaseDto;
 import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.solving.cache.cacheDatas;
 import com.ssafy.urturn.solving.dto.*;
@@ -28,6 +31,7 @@ public class WebSocketController {
     private final RoomService roomService;
     private final cacheDatas cachedatas;
     private final HistoryService historyService;
+    private final MemberService memberService;
     // 사용자가 데이터를 app/hello 경로로 데이터 날림.
     // 클라이언트는 /topic/greetings 주제를 구독하고 서버에서 이 주제로 메시지가 발행되면 이를 수신.
 
@@ -68,7 +72,6 @@ public class WebSocketController {
 
     }
 
-
     @MessageMapping("/selectLevel")
     public void readContext(@Payload SelectLevelRequest SelectLevelRequest){
 
@@ -101,6 +104,7 @@ public class WebSocketController {
 
             // 구현 완료
             historyService.createHistory(roomInfoDto);
+            cachedatas.cacheroomInfoDto(readyInfoRequest.getRoomId(), roomInfoDto);
 
             simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/startToSolve",true);
             simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/startToSolve",true);
@@ -213,6 +217,30 @@ public class WebSocketController {
         simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/showRetroCode", map);
     }
 
+    @MessageMapping("/submitRetro")
+    public void submitRetro(@Payload RetroCreateRequest req){
+        RoomInfoDto roomInfo=cachedatas.cacheroomInfoDto(req.getRoomId());
+
+        // history에 retro update
+        roomService.updateRetro(req, roomInfo.getHistoryId());
+
+        // 각 멤버를 확인해서 github repository가 null이 아니면 클라이언트로 github access token refresh가 필요하다고 응답
+        // 이후 웹소켓 끊기
+
+        Long managerId=cachedatas.cacheroomInfoDto(req.getRoomId()).getManagerId();
+        if (memberService.hasGithubRepository(managerId)){
+            simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/githubUpload", "upload");
+        }
+        // 웹소켓 끊으라고 요청
+        simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "끊어!", "끊어!");
+
+        Long pairId=cachedatas.cacheroomInfoDto(req.getRoomId()).getPairId();
+        if (memberService.hasGithubRepository(pairId)){
+            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/githubUpload", "upload");
+        }
+        // 웹소켓 끊으라고 요청
+        simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "끊어!", "끊어!");
+    }
 }
 /*
 convertAndSendToUser(String user, String destination, Object payload)

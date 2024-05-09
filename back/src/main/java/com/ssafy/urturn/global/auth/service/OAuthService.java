@@ -67,10 +67,12 @@ public class OAuthService {
         jwtRedisRepository.delete(KeyUtil.getRefreshTokenKey(memberId.toString()));
     }
 
+    // githubUniqueId 반환
     @Transactional
-    public void refreshAccessToken(String code){
+    public String refreshAccessToken(String code){
         OAuthMemberInfoResponse res = getGithubUserInfo(code);
         updateAccessToken(res);
+        return res.getOauthId();
     }
 
     // memberId로 조회하는 것으로 수정 필요

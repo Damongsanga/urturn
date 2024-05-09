@@ -1,11 +1,14 @@
 package com.ssafy.urturn.github.service;
 
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.*;
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_MEMBER;
 
 import com.ssafy.urturn.github.GithubUploadClient;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
+import com.ssafy.urturn.history.entity.History;
+import com.ssafy.urturn.history.repository.HistoryRepository;
 import com.ssafy.urturn.member.entity.Member;
 import com.ssafy.urturn.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +24,20 @@ import org.springframework.web.client.RestTemplate;
 public class GithubUploadService {
 
     private final MemberRepository memberRepository;
+    private final HistoryRepository historyRepository;
     private final GithubUploadClient githubUploadClient;
 
 
-    public String upload() {
-        Long memberId = 1L;
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RestApiException(
+    public String upload(String githubUniqueId) {
+        Member member = memberRepository.findByGithubUniqueId(githubUniqueId).orElseThrow(() -> new RestApiException(
             NO_MEMBER));
+
+        History history = historyRepository.getMostRecentHistoryByMemberId(member.getId());
+
         try{
-            return githubUploadClient.uploadHistory(member, null);
+            return githubUploadClient.uploadHistory(member, history);
+        } catch (RestApiException e){
+            throw e;
         } catch (Exception e){
             throw new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR, "github 업로드 과정에서 문제가 발생하였습니다.");
         }
