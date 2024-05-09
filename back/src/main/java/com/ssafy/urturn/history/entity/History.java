@@ -56,8 +56,10 @@ public class History extends BaseEntity {
     @JoinColumn(name = "problem2_id", nullable = false)
     private Problem problem2;
 
+
     @Column(length = 5000)
     private String code1;
+
     @Column(length = 5000)
     private String code2;
 

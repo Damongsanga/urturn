@@ -1,13 +1,11 @@
 package com.ssafy.urturn.solving.socket;
 
-
-import com.ssafy.urturn.github.service.GithubUploadService;
 import com.ssafy.urturn.global.exception.RestApiException;
+import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.global.util.MemberUtil;
 import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.history.service.HistoryService;
 import com.ssafy.urturn.member.service.MemberService;
-import com.ssafy.urturn.problem.dto.GradingTestcaseDto;
 import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.solving.cache.cacheDatas;
 import com.ssafy.urturn.solving.dto.*;
@@ -19,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -240,6 +239,11 @@ public class WebSocketController {
         }
         // 웹소켓 끊으라고 요청
         simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "끊어!", "끊어!");
+
+
+        //  캐시 삭제.
+
+
     }
 }
 /*
