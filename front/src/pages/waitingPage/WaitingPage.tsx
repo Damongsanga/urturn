@@ -268,8 +268,8 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 						</div>
 					</div>
 				</div>
-				<video autoPlay={true} ref={myVideoRef}/>
-				<video autoPlay={true} ref={otherVideoRef}/>
+				<video autoPlay={true} ref={myVideoRef} style={{display: 'none'}}/>
+				<video autoPlay={true} ref={otherVideoRef} style={{display: 'none'}}/>
 			</div>
 		</>
 	);

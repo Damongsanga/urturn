@@ -82,11 +82,8 @@ export function useOpenVidu() {
         await ov.session.connect(token);
         const _publisher = await ov.initPublisherAsync(undefined, {
             publishAudio: true,
-            publishVideo: true,
-            resolution: '640x480',
-            frameRate: 30,
-            insertMode: 'APPEND',
-            mirror: true,
+            publishVideo: false,
+            audioSource: true,
         });
         await ov.session.publish(_publisher);
 
