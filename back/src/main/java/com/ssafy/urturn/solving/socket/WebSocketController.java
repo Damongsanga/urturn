@@ -228,17 +228,17 @@ public class WebSocketController {
 
         Long managerId=cachedatas.cacheroomInfoDto(req.getRoomId()).getManagerId();
         if (memberService.hasGithubRepository(managerId)){
-            simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/githubUpload", "upload");
+            simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/githubUpload", true);
         }
         // 웹소켓 끊으라고 요청
-        simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "끊어!", "끊어!");
+        simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/finishSocket", true);
 
         Long pairId=cachedatas.cacheroomInfoDto(req.getRoomId()).getPairId();
         if (memberService.hasGithubRepository(pairId)){
-            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/githubUpload", "upload");
+            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/githubUpload", true);
         }
         // 웹소켓 끊으라고 요청
-        simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "끊어!", "끊어!");
+        simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/finishSocket", true);
 
 
         //  캐시 삭제.

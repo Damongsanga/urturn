@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
+@Slf4j
 public enum Grading {
 
     CREATE_TOKENS("submissions/batch", new String[] {"base64_encoded=false"}, String.class),
-    GET_GRADES("/submissions/batch", new String[] {"tokens=","&fields=token,stdout,stderr,status_id,language_id","&base64_encoded=false"}, String.class);
+    GET_GRADES("/submissions/batch", new String[] {"tokens=","&fields=token,stdout,stderr,status_id,language_id","&base64_encoded=true"}, String.class);
 
     private final String path;
     private final String[] query;
@@ -25,7 +27,13 @@ public enum Grading {
 
     public String getQuery(List<TokenDto> token){
         List<String> tokenStringList = token.stream().map(TokenDto::getToken).toList();
+        for (String tokenString : tokenStringList) {
+            log.info("get query token : {}", tokenString);
+        }
         if (!this.name().equals("GET_GRADES")) return query[0];
+
+        log.info("params : {}", query[0] + String.join(",", tokenStringList) + query[1] +query[2]);
+
         return query[0] + String.join(",", tokenStringList) + query[1] +query[2];
     }
 
