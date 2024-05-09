@@ -3,12 +3,15 @@ package com.ssafy.urturn.solving.socket;
 
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.util.MemberUtil;
+import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.history.service.HistoryService;
 import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.solving.cache.cacheDatas;
 import com.ssafy.urturn.solving.dto.*;
 import com.ssafy.urturn.solving.service.RoomService;
 import java.util.List;
+import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -28,12 +31,7 @@ public class WebSocketController {
     // 사용자가 데이터를 app/hello 경로로 데이터 날림.
     // 클라이언트는 /topic/greetings 주제를 구독하고 서버에서 이 주제로 메시지가 발행되면 이를 수신.
 
-    @MessageMapping("/test")
-    public void test(){
-        System.out.println("test");
-        simpMessagingTemplate.convertAndSendToUser(MemberUtil.getMemberId().toString(),"/queue/test","test");
-        // user/{userId}/queue/test
-    }
+
 
     @MessageMapping("/createRoom")
     public void createRoom(@Payload MemberIdDto memberIddto) {
@@ -60,6 +58,14 @@ public class WebSocketController {
         simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/userInfo",userInfoResponse);
         UserInfoResponse userInfoResponse2=roomService.getUserInfo(managerId,pairId);
         simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/userInfo",userInfoResponse2);
+    }
+
+    @MessageMapping("/sendOVSession")
+    public void sendOVSSession(@Payload SessionIdDto sessionIdDto){
+        System.out.println(sessionIdDto.toString());
+        Long pairId=cachedatas.cacheroomInfoDto(sessionIdDto.getRoomId()).getPairId();
+        simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/receiveOVSession",sessionIdDto.getSessionId());
+
     }
 
 
@@ -104,69 +110,107 @@ public class WebSocketController {
 
     @MessageMapping("/switchCode")
     public synchronized void switchCode(@Payload SwitchCodeRequest switchCodeRequest){
-        // 방 ID, 문제 ID 확인해 코드 스냅샷 저장.
-
+        // 코드 스냅샷 저장.
         cachedatas.updateCodeCache(switchCodeRequest.getRoomId(),switchCodeRequest.getProblemId().toString(),
                 new UserCodeDto(switchCodeRequest.getRound(),switchCodeRequest.getCode()));
 
         Long pairId=cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getPairId();
         Long managerId=cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getManagerId();
-        System.out.println("시작 부 host : "+ switchCodeRequest.isHost()+" managerIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isManagerIsReady()+" " +
-                "partcipantIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isPairIsReady());
 
-        // 준비완료.
+        // 라운드가 20라운드인 경우
+        if(switchCodeRequest.getRound()==20){
+            // DB에 기록 저장
+            roomService.updateHistory(switchCodeRequest.getRoomId(), HistoryResult.FAILURE, 20);
+            // 회고창으로 전환
+            showRetroCode(switchCodeRequest.getRoomId(),pairId,managerId);
+        }
+
+        // 페어프로그래밍 모드, 드라이버에게만 메시지 받음.
+        if(switchCodeRequest.isPair()){
+            // 역할 전환 메시지.
+            simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/switchRole",switchCodeRequest.getRound()+1);
+            simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/switchRole",switchCodeRequest.getRound()+1);
+            return;
+        }
+
+        // 스위칭 모드
+        // 준비완료 업데이트
         roomService.updateReadyStatus(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()), switchCodeRequest.isHost());
 
-        System.out.println("host : "+ switchCodeRequest.isHost()+" managerIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isManagerIsReady()+" " +
-                "partcipantIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isPairIsReady());
-        // 준비상태 확인
+        // 둘다 준비상태 확인
         if(roomService.areBothpairsReady(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()))){
             if(switchCodeRequest.isHost()){
-                System.out.println("Data 1");
-                simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/switchCode",roomService.getpairsCode(switchCodeRequest));
+                simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/switchCode",roomService.getPairsCode(switchCodeRequest));
                 simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/switchCode",new SwitchCodeResponse(switchCodeRequest.getCode(),switchCodeRequest.getRound()+1));
             }else{
-                System.out.println("Data 2");
-                simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/switchCode",roomService.getpairsCode(switchCodeRequest));
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/switchCode",roomService.getPairsCode(switchCodeRequest));
                 simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/switchCode",new SwitchCodeResponse(switchCodeRequest.getCode(),switchCodeRequest.getRound()+1));
             }
         }
-        System.out.println("모두 false 여야함    host : "+ switchCodeRequest.isHost()+" managerIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isManagerIsReady()+" " +
-                "partcipantIsReady : "+cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).isPairIsReady());
+
     }
 
     @MessageMapping("/submitCode")
     public void submitCode(@Payload SubmitRequest submitRequest){
-
         Long pairId=cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getPairId();
         Long managerId=cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getManagerId();
 
-        // 구현해야 하는 부분
         SubmitResponse submitResponse = roomService.submitCode(submitRequest);
 
-        if(submitResponse.isResult()) {
-            //정답 일 경우.
-            if (submitRequest.isHost()) {
-                // 사용자에게 정답 응답 및 메시지 전송.
-                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "submit/result", submitResponse);
-                // 일단은 역할을 data를 String(""Navigator")으로 넘기지만, Enum, dto형태든 원하는 형태로 수정 가능.
-                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "role", "Navigator");
-                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "role", "Driver");
-            } else {
-                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "submit/result", submitResponse);
-                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "role", "Navigator");
-                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "role", "Driver");
+        // 오답인 경우
+        if(!submitResponse.isResult()) {
+            if(submitRequest.isHost()){
+                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/submit/result", submitResponse);
+            }else{
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/submit/result", submitResponse);
             }
-        } else{
-            // 오답 일 경우
-            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "submit/result", submitResponse);
+            return;
         }
+
+        // 정답인 경우.
+        // 호스트 인 경우.
+        if (submitRequest.isHost()) {
+
+            // 사용자에게 정답 응답 및 메시지 전송.
+            simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/submit/result", submitResponse);
+
+            // 페어프로그래밍 모드 인 경우.
+            if(submitRequest.isPair()){
+                // DB 저장 로직.
+                roomService.updateHistory(submitRequest.getRoomId(), HistoryResult.SUCCESS, submitRequest.getRound());
+
+                showRetroCode(submitRequest.getRoomId(),pairId,managerId);
+                return;
+            }
+
+            // 일단은 역할을 data를 String(""Navigator")으로 넘기지만, Enum, dto형태든 원하는 형태로 수정 가능.
+            simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/role", "Navigator");
+            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/role", "Driver");
+
+        } else {
+            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/submit/result", submitResponse);
+
+            if(submitRequest.isPair()){
+                // DB 저장 로직.
+                roomService.updateHistory(submitRequest.getRoomId(), HistoryResult.SUCCESS, submitRequest.getRound());
+
+                showRetroCode(submitRequest.getRoomId(),pairId,managerId);
+                return;
+            }
+
+            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/role", "Navigator");
+            simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/role", "Driver");
+        }
+
 
     }
 
-    @MessageMapping("/switchRole")
-    public void switchRole(@Payload SwitchCodeRequest switchCodeRequest){
-        //
+    private void showRetroCode(String roomId, Long pairId, Long managerId) {
+        // 회고창에서 보여줄 데이터
+        Map<Long, RetroCodeResponse> map = roomService.makeRetroCodeResponse(roomId);
+
+        simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/showRetroCode", map);
+        simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/showRetroCode", map);
     }
 
 }

@@ -55,9 +55,7 @@ public class History extends BaseEntity {
     @JoinColumn(name = "problem2_id", nullable = false)
     private Problem problem2;
 
-    @Setter
     private String code1;
-    @Setter
     private String code2;
 
     private HistoryResult result;
@@ -77,6 +75,12 @@ public class History extends BaseEntity {
         } else {
             throw new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR, "해당 id에 해당하는 문제가 history에 존재하지 않습니다.");
         }
+    }
+
+    public void finalizeUpdateHistory(HistoryResult result, int totalRound){
+        this.endTime=LocalDateTime.now();
+        this.result=result;
+        this.totalRound=totalRound;
     }
 
 }
