@@ -51,7 +51,7 @@ export function useOpenVidu() {
     };
 
     const connect = async (token: string) => {
-        const ov = rtcStore.getOpenVidu() ?? new OpenVidu();
+        const ov = new OpenVidu();
         ov.initSession();
 
         //const subscribers : Publisher | Subscriber | StreamManager[] = [];

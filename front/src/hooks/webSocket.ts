@@ -76,6 +76,7 @@ export const useWebSocket = () => {
                     openVidu.masterCreate();
                 }
                 if(roomStore.getRoomInfo()?.host && userInfo.relativeUserNickName){
+                    console.log("sendOVSession : " + JSON.stringify({ roomId: roomStore.getRoomInfo()?.roomId, sessionId: rtcStore.getSessionId() }));
                     client.publish({
                         destination: '/app/sendOVSession',
                         body: JSON.stringify({
@@ -87,6 +88,7 @@ export const useWebSocket = () => {
                 roomStore.setUserInfo(userInfo);
             });
             client.subscribe('/user/' + userId + '/receiveOVSession', (msg) => {
+                console.log('Received message: receiveOVSession' + msg.body);
                 const sessionId = msg.body;
                 rtcStore.setSessionId(sessionId);
                 openVidu.partnerJoin(sessionId);
