@@ -53,8 +53,10 @@
 
 .EntryButtons:hover,
 .EntryButtons:active  {
-  background-color: #dedede !important; 
-  border-color: #dedede  !important;
+  background-color: #F2CAB3 !important; 
+  border-color: #F2CAB3  !important;
+
+  color: #3A2302 !important;
 
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
 }

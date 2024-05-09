@@ -29,13 +29,20 @@ interface ModalProps {
 	// 모달을 닫는 함수
 }
 
-export const WaitingPage = ({changeModal} : ModalProps) => {
+// const langOptions = [
+// 	{ key: 'C++', text: 'C++', value: 'C++' },
+// 	{ key: 'Java', text: 'Java', value: 'Java' },
+// 	{ key: 'Python', text: 'Python', value: 'Python' },
+// 	{ key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
+// ];
+
+export const WaitingPage = ({ changeModal }: ModalProps) => {
 	const roomStore = useRoomStore();
 
 	const [volume, setVolume] = useState({ speaker: 50, microphone: 50 });
 	const { speaker, microphone } = volume;
 	// 스피커 볼륨, 마이크 볼륨
-	const [difficulty, setDifficulty] = useState('VERY_EASY');
+	const [difficulty, setDifficulty] = useState('LEVEL1');
 	// 난이도
 
 	const difficulties = [
@@ -97,6 +104,17 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 										입장 코드 : {roomStore.roomInfo?.entryCode}
 									</Header>
 								</MenuItem>
+								{/* <MenuItem>
+									<Header className='EntryCode' as='h3' textAlign='center'>
+										선택 언어  :{' '}
+										<Dropdown
+											search
+											defaultValue={langOptions[langOptions.length - 1].value}
+											searchInput={{ type: 'string' }}
+											options={langOptions}
+										/>
+									</Header>
+								</MenuItem> */}
 								<MenuItem name='close' position='right' onClick={changeModal}>
 									<Icon className='Icon' name='close' size='large' />
 								</MenuItem>
@@ -108,7 +126,14 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 								<CardGroup className='FitContent'>
 									{/* 방장 */}
 									<Card className='Card-without-border'>
-										<CardContent style={{ display:'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+										<CardContent
+											style={{
+												display: 'flex',
+												flexDirection: 'column',
+												alignItems: 'center',
+												justifyContent: 'center',
+											}}
+										>
 											<Image
 												src={
 													roomStore.userInfo?.myUserProfileUrl
@@ -128,7 +153,14 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 									</Card>
 									{/* 입장 파트너 */}
 									<Card className='Card-without-border'>
-										<CardContent style={{ display:'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+										<CardContent
+											style={{
+												display: 'flex',
+												flexDirection: 'column',
+												alignItems: 'center',
+												justifyContent: 'center',
+											}}
+										>
 											<Image
 												src={
 													roomStore.userInfo?.relativeUserProfileUrl
@@ -208,9 +240,10 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 												<Segment
 													size='small'
 													style={{
-														backgroundColor: difficulty === item.value ? item.color : 'transparent',
+														backgroundColor:
+															difficulty === item.value ? item.color : 'transparent',
 														border: difficulty === item.value ? 'none' : undefined,
-														borderRadius: '10px'
+														borderRadius: '10px',
 													}}
 												>
 													<Radio
