@@ -22,6 +22,7 @@ import com.ssafy.urturn.solving.cache.cacheDatas;
 import com.ssafy.urturn.solving.dto.*;
 import com.ssafy.urturn.solving.temp.WebSocketSessionManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class RoomService {
     private final MemberService memberService;
     private final GradingService gradingService;
@@ -251,6 +253,7 @@ public class RoomService {
     }
 
 
+    @Transactional
     public Map<Long, RetroCodeResponse> makeRetroCodeResponse(String roomId){
 
         Map<Long, RetroCodeResponse> map= new HashMap<>();
@@ -258,6 +261,8 @@ public class RoomService {
         History history = historyRepository.findById(roomInfoDto.getHistoryId())
                 .orElseThrow(()->new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND, "히스토리를 찾을 수 없습니다"));
 
+        log.info("code 1 : {}", history.getCode1());
+        log.info("code 2 : {}", history.getCode2());
 
         RetroCodeResponse problem1CodeResponse=new RetroCodeResponse(cachedatas.cacheCodes(roomId, roomInfoDto.getProblem1Id().toString())
                 , history.getCode1());
