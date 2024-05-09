@@ -57,8 +57,10 @@ public class History extends BaseEntity {
     private Problem problem2;
 
     @Setter
+    @Column(length = 5000)
     private String code1;
     @Setter
+    @Column(length = 5000)
     private String code2;
 
     private HistoryResult result;

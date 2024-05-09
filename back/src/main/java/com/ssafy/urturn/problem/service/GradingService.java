@@ -49,6 +49,13 @@ public class GradingService {
         // 문제 id를 기반으로 문제 + 전체 테스트케이스 조회
         ProblemTestcaseDto problemTestcaseDto = problemRepository.getProblemAndTestcase(problemId).orElseThrow(() -> new RestApiException(
             CustomErrorCode.NO_PROBLEM));
+        log.info("problemId : {}", problemId);
+        for (TestcaseDto testcase : problemTestcaseDto.getTestcases()) {
+            log.info("testcase : {}", testcase.getId());
+        }
+
+        log.info("language : {}", language.toString());
+        log.info("language id: {}", language.getLangId());
 
         // 제출한 코드를 기반으로 채점
         // 토큰 추출

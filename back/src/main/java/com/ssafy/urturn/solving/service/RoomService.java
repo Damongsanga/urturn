@@ -210,8 +210,8 @@ public class RoomService {
     public SubmitResponse submitCode(SubmitRequest submitRequest){
 
         // 제출 광클 방지 Lock by Redis-> AOP로 디벨롭하면 좋을듯
-        String key = requestLockService.generateLockKey(GRADING, submitRequest.getRoomId(), submitRequest.isHost());
-        requestLockService.ifLockedThrowExceptionElseLock(key, GRADING.getDuration());
+//        String key = requestLockService.generateLockKey(GRADING, submitRequest.getRoomId(), submitRequest.isHost());
+//        requestLockService.ifLockedThrowExceptionElseLock(key, GRADING.getDuration());
 
         // db 조회 후 채점 서버로 Code 및 문제 데이터, 테케 전송
         // 결과 수신
@@ -223,7 +223,6 @@ public class RoomService {
 
         if (gradingResponse.isSucceeded()){
             Long historyId = cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getHistoryId();
-
             historyRepository.findById(historyId).orElseThrow(() -> new RestApiException(NO_HISTORY))
                 .setCode(submitRequest.getProblemId(), submitRequest.getCode());
         }
@@ -237,7 +236,7 @@ public class RoomService {
          */
 
         // Lock 해제
-        requestLockService.unlock(key);
+//        requestLockService.unlock(key);
 
         // 결과 반환
         return SubmitResponse.builder()

@@ -6,6 +6,7 @@ import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.util.MemberUtil;
 import com.ssafy.urturn.history.service.HistoryService;
 import com.ssafy.urturn.member.service.MemberService;
+import com.ssafy.urturn.problem.dto.GradingTestcaseDto;
 import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.solving.cache.cacheDatas;
 import com.ssafy.urturn.solving.dto.*;
@@ -98,6 +99,7 @@ public class WebSocketController {
 
             // 구현 완료
             historyService.createHistory(roomInfoDto);
+            cachedatas.cacheroomInfoDto(readyInfoRequest.getRoomId(), roomInfoDto);
 
             simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/startToSolve",true);
             simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/startToSolve",true);
@@ -146,23 +148,33 @@ public class WebSocketController {
 
         // 구현해야 하는 부분
         SubmitResponse submitResponse = roomService.submitCode(submitRequest);
+        log.info("result : {}", submitResponse.isResult());
+        for (GradingTestcaseDto testcaseResult : submitResponse.getTestcaseResults()) {
+            log.info("status : {}", testcaseResult.getStatus());
+        }
 
         if(submitResponse.isResult()) {
             //정답 일 경우.
             if (submitRequest.isHost()) {
                 // 사용자에게 정답 응답 및 메시지 전송.
-                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "submit/result", submitResponse);
+                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/submit/result", submitResponse);
                 // 일단은 역할을 data를 String(""Navigator")으로 넘기지만, Enum, dto형태든 원하는 형태로 수정 가능.
-                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "role", "Navigator");
-                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "role", "Driver");
+                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/role", "Navigator");
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/role", "Driver");
             } else {
-                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "submit/result", submitResponse);
-                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "role", "Navigator");
-                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "role", "Driver");
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/submit/result", submitResponse);
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/role", "Navigator");
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/role", "Driver");
             }
         } else{
             // 오답 일 경우
-            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "submit/result", submitResponse);
+            if (submitRequest.isHost()) {
+                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/submit/result",
+                    submitResponse);
+            } else {
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/submit/result",
+                    submitResponse);
+            }
         }
 
     }
