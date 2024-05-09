@@ -31,7 +31,14 @@ interface ModalProps {
 	// 모달을 닫는 함수
 }
 
-export const WaitingPage = ({changeModal} : ModalProps) => {
+// const langOptions = [
+// 	{ key: 'C++', text: 'C++', value: 'C++' },
+// 	{ key: 'Java', text: 'Java', value: 'Java' },
+// 	{ key: 'Python', text: 'Python', value: 'Python' },
+// 	{ key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
+// ];
+
+export const WaitingPage = ({ changeModal }: ModalProps) => {
 	const roomStore = useRoomStore();
 	const rtcStore = useRtcStore();
 	const myVideoRef = useRef<HTMLVideoElement | null>(null);
@@ -39,7 +46,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 	const [volume, setVolume] = useState({ speaker: 50, microphone: 50 });
 	const { speaker, microphone } = volume;
 	// 스피커 볼륨, 마이크 볼륨
-	const [difficulty, setDifficulty] = useState('VERY_EASY');
+	const [difficulty, setDifficulty] = useState('LEVEL1');
 	// 난이도
 	//const rtcStore = useRtcStore();
 	const difficulties = [
@@ -92,8 +99,6 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 		});
 	};
 
-
-
 	return (
 		<>
 			<div className='WaitingRoomBackground'>
@@ -103,7 +108,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 							{/* 상위 정보 메뉴 */}
 							<Menu secondary size='large'>
 								<MenuItem className='Header'>
-									<img alt='URTurn' src={logo} style={{width: '100px'}}/>
+									<img alt='URTurn' src={logo} style={{ width: '100px' }} />
 								</MenuItem>
 								<MenuItem name='Waiting Room'>
 									<Header as='h3' textAlign='center'>
@@ -116,7 +121,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 									</Header>
 								</MenuItem>
 								<MenuItem name='close' position='right' onClick={changeModal}>
-									<Icon className='Icon' name='close' size='large'/>
+									<Icon className='Icon' name='close' size='large' />
 								</MenuItem>
 							</Menu>
 						</div>
@@ -126,12 +131,14 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 								<CardGroup className='FitContent'>
 									{/* 방장 */}
 									<Card className='Card-without-border'>
-										<CardContent style={{
-											display: 'flex',
-											flexDirection: 'column',
-											alignItems: 'center',
-											justifyContent: 'center'
-										}}>
+										<CardContent
+											style={{
+												display: 'flex',
+												flexDirection: 'column',
+												alignItems: 'center',
+												justifyContent: 'center',
+											}}
+										>
 											<Image
 												src={
 													roomStore.userInfo?.myUserProfileUrl
@@ -141,7 +148,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 												size='small'
 												rounded
 											/>
-											<Divider hidden/>
+											<Divider hidden />
 											<CardHeader textAlign='center'>
 												{roomStore.userInfo?.myUserNickName
 													? roomStore.userInfo.myUserNickName
@@ -151,12 +158,14 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 									</Card>
 									{/* 입장 파트너 */}
 									<Card className='Card-without-border'>
-										<CardContent style={{
-											display: 'flex',
-											flexDirection: 'column',
-											alignItems: 'center',
-											justifyContent: 'center'
-										}}>
+										<CardContent
+											style={{
+												display: 'flex',
+												flexDirection: 'column',
+												alignItems: 'center',
+												justifyContent: 'center',
+											}}
+										>
 											<Image
 												src={
 													roomStore.userInfo?.relativeUserProfileUrl
@@ -166,7 +175,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 												size='small'
 												rounded
 											/>
-											<Divider hidden/>
+											<Divider hidden />
 											<CardHeader textAlign='center'>
 												{roomStore.userInfo?.relativeUserNickName
 													? roomStore.userInfo.relativeUserNickName
@@ -197,7 +206,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 										</GridColumn>
 										<GridColumn width={2} verticalAlign={'middle'}>
 											{/* 스피커 아이콘 */}
-											<Icon className='Icon' name='volume up' size='big'/>
+											<Icon className='Icon' name='volume up' size='big' />
 										</GridColumn>
 									</GridRow>
 									<GridRow>
@@ -218,7 +227,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 										</GridColumn>
 										<GridColumn width={2} verticalAlign={'middle'}>
 											{/* 마이크 아이콘 */}
-											<Icon className='Icon' name='microphone' size='big'/>
+											<Icon className='Icon' name='microphone' size='big' />
 										</GridColumn>
 									</GridRow>
 								</Grid>
@@ -236,9 +245,10 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 												<Segment
 													size='small'
 													style={{
-														backgroundColor: difficulty === item.value ? item.color : 'transparent',
+														backgroundColor:
+															difficulty === item.value ? item.color : 'transparent',
 														border: difficulty === item.value ? 'none' : undefined,
-														borderRadius: '10px'
+														borderRadius: '10px',
 													}}
 												>
 													<Radio
@@ -259,7 +269,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 									<Button
 										onClick={selectDifficulty}
 										className='StartButtonStyle'
-										style={{width: '11.5vw', height: '8vh', fontSize: '1.1rem'}}
+										style={{ width: '11.5vw', height: '8vh', fontSize: '1.1rem' }}
 									>
 										시작하기
 									</Button>

@@ -1,40 +1,46 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './SecondLanding.css';
 
-export const SecondLandingPage = () => {
-  const refs = useRef<(HTMLDivElement | null)[]>([]);
+interface LandingProp {
+  isActive?: boolean;
+}
+
+export const SecondLandingPage = ({ isActive }: LandingProp) => {
+  const refs = useRef<HTMLDivElement[]>([]);
+
+  // 요소를 refs 배열에 추가하는 함수
+  const addToRefs = (el: HTMLDivElement) => {
+    if (el && !refs.current.includes(el)) {
+      refs.current.push(el);
+    }
+  };
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    refs.current.forEach((el, index) => {
-      if (!el) return; 
-
-      gsap.fromTo(el, { opacity: 0 }, {
-        opacity: 1,
-        duration: 1,
-        delay: (index + 1) * 0.6,
-        scrollTrigger: {
-          trigger: el, 
-          start: "top center+=100%", 
-          toggleActions: "play none none none",
-        },
+    if (isActive) {
+      refs.current.forEach((el, index) => {
+        gsap.to(el, {
+          opacity: 1,
+          duration: 0.5, // 애니메이션 지속 시간
+          delay: index * 0.5, // 각 요소가 순차적으로 나타나도록 지연 시간 설정
+        });
       });
-    });
-
-  }, []); // 초기 마운트 시에만 실행됩니다.
-
+    } 
+    // else {
+    //   // 슬라이드가 비활성화되면 모든 요소의 투명도를 0으로 설정
+    //   refs.current.forEach((el) => {
+    //     gsap.to(el, { opacity: 0, duration: 0 });
+    //   });
+    // }
+  }, [isActive]);
 
   return (
     <>
       <div className='Entire'>
         <div className='SecondPage'>
           <div className='SecondContent'>
-            {/* ref에 요소를 할당할 때, 각 요소마다 고유의 인덱스를 사용하여 할당합니다. */}
-            <div ref={el => refs.current[0] = el}>으앙1</div>
-            <div ref={el => refs.current[1] = el}>으앙2</div>
+            <div ref={addToRefs} style={{ opacity: 0 }}>테스트 문구1</div>
+            <div ref={addToRefs} style={{ opacity: 0 }}>테스트 문구2</div>
           </div>
         </div>
       </div>

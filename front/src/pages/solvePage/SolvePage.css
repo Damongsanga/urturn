@@ -27,6 +27,8 @@
     border-color: #b78567 !important;
 
     transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+
+    color: white !important;
 }
 
 .ui.tabular.menu {
