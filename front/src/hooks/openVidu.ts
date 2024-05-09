@@ -78,6 +78,7 @@ export function useOpenVidu() {
         ov.session.on('exception', (exception) => {
             console.warn(exception);
         });
+        
 
         await ov.session.connect(token);
         const _publisher = await ov.initPublisherAsync(undefined, {

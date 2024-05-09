@@ -34,7 +34,7 @@ export default function PairSolvePage() {
 			<div>
 				<div style={{ display: 'flex', height: 'calc(100vh - 140px)', width: '100vw' }}>
 					{/* 문제 사이드바 */}
-					<div className='QuestionSideBar'>
+					<div className='QuestionSideBars'>
 						{/* 마이크, 참여자 프로필 컴포넌트 */}
 						<QuestionSideBar></QuestionSideBar>
 					</div>
