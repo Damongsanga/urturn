@@ -38,7 +38,11 @@ export interface roomState {
     round: number
     questionIdx: number
     editor: monaco.editor.IStandaloneCodeEditor | null
+    console: string
+    lang: string
     sec: number
+    pairProgramingMode: boolean
+    pairProgramingRole: string | null
 
     setClient: (client: Client) => void
     getClient: () => Client | null
@@ -63,6 +67,18 @@ export interface roomState {
 
     setEditor: (editor: any) => void
     getEditor: () => monaco.editor.IStandaloneCodeEditor | null
+
+    setConsole: (console: string) => void,
+    getConsole: () => string,
+
+    setLang: (lang: string) => void
+    getLang: () => string
+
+    setPairProgramingMode: (mode: boolean) => void
+    getPairProgramingMode: () => boolean
+
+    setPairProgramingRole: (role: string) => void
+    getPairProgramingRole: () => string | null
 
     clearRoom: () => void
 }

@@ -1,7 +1,7 @@
 import { Allotment } from "allotment";
 import CodeEditor from '../../components/solve/CodeEditor';
 import Markdown from 'markdown-to-jsx'
-import { Dropdown, Menu, MenuItem } from 'semantic-ui-react'
+import { Dropdown, Menu } from 'semantic-ui-react'
 
 import "allotment/dist/style.css";
 
@@ -10,24 +10,22 @@ import { HeaderBar } from '../../components/header/HeaderBar';
 import { useRoomStore } from '../../stores/room';
 
 import './SolvePage.css'
-import { FooterBar } from "../../components/footer/FooterBar";
-import { useEffect, useState } from "react";
 import { QuestionSideBar } from "../../components/questionSideBar/QuestionSideBar";
+import { FooterBar } from "../../components/footer/FooterBar";
+import { useEffect } from "react";
 
 const langOptions = [
-  { key: 'C++', text: 'C++', value: 'C++' },
-  { key: 'Java', text: 'Java', value: 'Java' },
-  { key: 'Python', text: 'Python', value: 'Python' },
-  { key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
+  { key: 'C++', text: 'C++', value: 'c++' },
+  { key: 'Java', text: 'Java', value: 'java' },
+  { key: 'Python', text: 'Python', value: 'python' },
+  { key: 'JavaScript', text: 'JavaScript', value: 'javascript' },
 ]
 
-export default function CheckPage() {
+export default function PairSolvePage() {
     const roomStore = useRoomStore();
 
-    const [activeQuestion, setActiveQuestion] = useState(1);
-
 	useEffect(() => {
-		setActiveQuestion(1);
+		roomStore.setLang('c++')
 	}, [])
 
     return (
@@ -37,28 +35,6 @@ export default function CheckPage() {
 				<div style={{ display: 'flex', height: 'calc(100vh - 140px)', width: '100vw' }}>
 					{/* 문제 사이드바 */}
 					<div className='QuestionSideBar'>
-						<Menu
-							secondary
-							icon
-							vertical
-							borderless
-							style={{ marginTop: '10vh', backgroundColor: 'transparent' }}
-						>
-							<MenuItem
-								className='QuestionButton'
-								name='1'
-								active={activeQuestion === 1}
-								onClick={() => {setActiveQuestion(1); }}
-								style={{ marginBottom: '5vh' }}
-							></MenuItem>
-
-							<MenuItem
-								className='QuestionButton'
-								name='2'
-								onClick={() => {setActiveQuestion(2);}}
-								active={activeQuestion === 2}
-							></MenuItem>
-						</Menu>
 						{/* 마이크, 참여자 프로필 컴포넌트 */}
 						<QuestionSideBar></QuestionSideBar>
 					</div>
@@ -74,13 +50,16 @@ export default function CheckPage() {
 										color: 'white',
 									}}
 								>
-									{roomStore.questionInfos && activeQuestion > 0 && roomStore.questionInfos[activeQuestion - 1].algoQuestionTitle}
+									{
+                roomStore.questionIdx == -1 ? <div></div> :
+                <Markdown>{roomStore.questionInfos![roomStore.questionIdx].algoQuestionTitle}</Markdown>
+                }
 								</div>
 							</div>
 							<div style={{ height: '100%', overflowY: 'auto' }}>
               {
-                roomStore.questionInfos && activeQuestion > 0 &&
-                <Markdown>{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}</Markdown>
+                roomStore.questionIdx == -1 ? <div></div> :
+                <Markdown>{roomStore.questionInfos![roomStore.questionIdx].algoQuestionContent}</Markdown>
               }
 							</div>
 						</Allotment.Pane>
@@ -100,13 +79,14 @@ export default function CheckPage() {
 										defaultValue={langOptions[0].value}
 										searchInput={{ type: 'string' }}
 										options={langOptions}
+                    onChange={(_e, { value }) => {roomStore.setLang(value as string);}}
 									/>
 								</div>
 							</div>
 							<Allotment vertical>
 								<Allotment.Pane minSize={325}>
 									<div style={{ height: '100%', width: '100%' }}>
-										<CodeEditor lang='javascript' />
+										<CodeEditor/>
 									</div>
 								</Allotment.Pane>
 								<Allotment.Pane minSize={125}>
@@ -123,8 +103,8 @@ export default function CheckPage() {
 										</div>
 									</div>
 									<div>
-                        <p>
-                          두 문제를 모두 확인했으면, 시작하기 버튼을 눌러주세요.
+                        <p style={{ whiteSpace: 'pre-wrap' }}>
+                        {roomStore.console}
                         </p>
 									</div>
 								</Allotment.Pane>
@@ -134,8 +114,18 @@ export default function CheckPage() {
 				</div>
 			</div>
 			{/* footer */}
-			<FooterBar $mode={0} $switch={false}/>
+			<FooterBar $mode={1} $switch={false} />
 		</div>
     );
   }
 
+  // <div>
+  //       <Dropdown
+  //           search
+  //           defaultValue={langOptions[0].value}
+  //           searchInput={{ type: 'string' }}
+  //           selection
+  //           options={langOptions}
+  //           style={{ backgroundColor: 'green' }}
+  //         />
+  //       </div>

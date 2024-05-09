@@ -2,7 +2,8 @@ import { Button, Header, Menu, MenuItem, MenuMenu } from 'semantic-ui-react';
 import { useNavigate } from 'react-router-dom';
 import { useLogout } from '../../utils/logout.ts';
 import './HeaderBar.css';
-import { useAuthStore } from '../../stores/useAuthStore.ts';
+import { useAuthStore } from "../../stores/useAuthStore.ts";
+import { useRoomStore } from '../../stores/room.ts';
 
 interface HeaderProp {
 	$main?: boolean;
@@ -25,6 +26,7 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review }: HeaderProp) => {
 	const logout = useLogout();
 	const navigate = useNavigate();
 	const auth = useAuthStore();
+	const roomStore = useRoomStore();
 	const goToMyPage = () => {
 		navigate('/myPage');
 	};
@@ -124,8 +126,13 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review }: HeaderProp) => {
 					<MenuMenu position='right'>
 						<MenuItem name='Rounds'>
 							<Header as='h3' textAlign='center' className='FontColor'>
+								{roomStore.sec}
+							</Header>
+						</MenuItem>
+						<MenuItem name='Rounds'>
+							<Header as='h3' textAlign='center' className='FontColor'>
 								{'라운드'}
-								{' 1 '}
+								{roomStore.round}
 							</Header>
 						</MenuItem>
 						<MenuItem name='QuitButton' className='QuitButton'>

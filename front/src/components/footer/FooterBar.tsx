@@ -13,17 +13,22 @@ import {
 } from 'semantic-ui-react';
 import './FooterBar.css';
 import { useState, ChangeEvent } from 'react';
+import { useRoomStore } from '../../stores/room';
+import { convertLangToUpper } from '../../utils/solve/convertProgramLang';
 
 interface FooterProp {
 	$mode?: number;
 	$switch?: boolean;
+	$onClickFunc?: () => void;
 }
 /* 
 헤더 규칙 prop
-mode : 1이면 ide / 2이면 회고
+mode : 0이면 문제확인 / 1이면 ide / 2이면 회고
 $switch : 스위칭 모드이면 true, 아니면 false
 */
 export const FooterBar = ({ $mode, $switch }: FooterProp) => {
+	const roomStore = useRoomStore();
+
 	const [volume, setVolume] = useState({ speaker: 50, microphone: 50 });
 	const { speaker, microphone } = volume;
 
@@ -32,6 +37,45 @@ export const FooterBar = ({ $mode, $switch }: FooterProp) => {
 		setVolume((prevState) => ({ ...prevState, [name]: value }));
 	};
 	// 슬라이더 수치 조정 함수
+
+	const readyToSolve = () =>{
+		const idx = roomStore.roomInfo?.host ? 0 : 1
+		console.log(roomStore.roomInfo?.roomId)
+		console.log(roomStore.questionInfos?.[idx]?.algoQuestionId);
+		console.log(roomStore.roomInfo?.host)
+  
+		roomStore.client?.publish({
+		  destination: '/app/readyToSolve',
+		  body: JSON.stringify({
+			roomId: roomStore.roomInfo?.roomId,
+			algoQuestionId: roomStore.questionInfos?.[idx]?.algoQuestionId,
+			isHost: roomStore.roomInfo?.host
+		  })
+  
+		})
+	  }
+
+	const submitCode = () => {
+		console.log("code: " + roomStore.getEditor()?.getValue())
+		console.log("roomId: " + roomStore.getRoomInfo()?.roomId)
+		console.log("language: " + convertLangToUpper(roomStore.getLang()))
+		console.log("round: " + roomStore.getRound())
+		console.log("questionId: "+ roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId)
+		console.log("host:" + roomStore.getRoomInfo()?.host)
+		roomStore.client?.publish({
+			destination: '/app/submitCode',
+			body: JSON.stringify({
+				code: roomStore.getEditor()?.getValue(),
+				roomId: roomStore.getRoomInfo()?.roomId,
+				language: convertLangToUpper(roomStore.getLang()),
+				round: roomStore.getRound(),
+				algoQuestionId: roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId,
+				isHost: roomStore.getRoomInfo()?.host,
+				pair: roomStore.getPairProgramingMode(),
+			})
+		})
+		
+	}
 
 	return (
 		<>
@@ -123,6 +167,14 @@ export const FooterBar = ({ $mode, $switch }: FooterProp) => {
 						}
 					/>
 				)}
+				{/* 문제 확인에 사용할 버튼 */}
+				{$mode === 0 && (
+					<MenuItem name='RunButton' className='RunButton' position='right'>
+					<Button onClick={readyToSolve} size='large' className='RunButtonColor'>
+						시작하기
+					</Button>
+				</MenuItem>
+				)}
 
 				{/* ide에 사용할 버튼 */}
 				{$mode === 1 && (
@@ -130,7 +182,7 @@ export const FooterBar = ({ $mode, $switch }: FooterProp) => {
 						<Button size='large' className='RunButtonColor'>
 							코드 실행
 						</Button>
-						<Button size='large' className='RunButtonColor'>
+						<Button onClick={submitCode} size='large' className='RunButtonColor'>
 							코드 제출하기
 						</Button>
 					</MenuItem>

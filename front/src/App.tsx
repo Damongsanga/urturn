@@ -6,6 +6,7 @@ import  MainPage  from './pages/mainPage/MainPage.tsx';
 import SolvePage from './pages/solvePage/SolvePage.tsx';
 import CheckPage from './pages/solvePage/CheckPage.tsx';
 import ReviewPage from './pages/solvePage/ReviewPage.tsx';
+import PairSolvePage from './pages/solvePage/PairSolvePage.tsx';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
 					<Route path='/auth/github' element={<GithubCallback/>}/>
 					<Route path='/myPage' element={<MyPage />} />
 					<Route path='/solve' element={<SolvePage />} />
+					<Route path='/pairsolve' element={<PairSolvePage />} />
 					<Route path='/check' element={<CheckPage />} />
 					<Route path='/review' element={<ReviewPage />} />
 				</Routes>
