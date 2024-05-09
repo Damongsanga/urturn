@@ -10,6 +10,9 @@ import { useWebSocket } from '../../hooks/webSocket.ts';
 import 'semantic-ui-css/semantic.min.css';
 import './MainPage.css';
 
+import joinTeam from '../../assets/images/join_team.png'
+import createTeam from '../../assets/images/create_team.png'
+
 const MainPage: React.FC = () => {
 	const roomStore = useRoomStore();
 	const [open, setOpen] = useState(false);
@@ -50,7 +53,7 @@ const MainPage: React.FC = () => {
 								<Card className='EntryCard'>
 									<Card.Content style={{ paddingBottom: '0px', paddingLeft: '0px', paddingRight: '0px'}}>
 										<Image
-											src='https://avatars.githubusercontent.com/u/19562994?v=4'
+											src={createTeam}
 											size='medium'
 											style={{ width: '21vw', height: 'auto' }}
 										/>
@@ -95,7 +98,7 @@ const MainPage: React.FC = () => {
 								<Card className='EntryCard'>
 									<Card.Content style={{ paddingBottom: '0px', paddingLeft: '0px', paddingRight: '0px'}}>
 										<Image
-											src='https://avatars.githubusercontent.com/u/19562994?v=4'
+											src={joinTeam}
 											size='medium'
 											style={{ width: '21vw', height: 'auto' }}
 										/>

@@ -90,7 +90,16 @@
 	color: #fff !important;
 
 	border-radius: 12px !important;
+}
 
+.StartButtonStyle:hover,
+.StartButtonStyle:active {
+    background-color: #F2CAB3 !important;
+    border-color: #F2CAB3 !important;
+
+    transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+
+    color: black !important;
 }
 
 .ui.checkbox input.hidden+label {
