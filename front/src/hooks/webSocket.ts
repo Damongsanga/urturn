@@ -80,8 +80,10 @@ export const useWebSocket = () => {
                         questionInfo.algoQuestionContent = content;
                     }
                 )
-                navi('/check');
                 roomStore.setQuestionInfos(questionInfos);
+                setTimeout(() => {
+                    navi('/check');
+                }, 500)
             });
             client.subscribe('/user/' + userId + '/startToSolve', () => {
                 const idx = roomStore.getRoomInfo()?.host ? 0 : 1;

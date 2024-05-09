@@ -11,7 +11,7 @@ import { useRoomStore } from '../../stores/room';
 
 import './SolvePage.css'
 import { FooterBar } from "../../components/footer/FooterBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { QuestionSideBar } from "../../components/questionSideBar/QuestionSideBar";
 
 const langOptions = [
@@ -25,6 +25,10 @@ export default function CheckPage() {
     const roomStore = useRoomStore();
 
     const [activeQuestion, setActiveQuestion] = useState(1);
+
+	useEffect(() => {
+		setActiveQuestion(1);
+	}, [])
 
     return (
       <div className='Page'>
@@ -70,15 +74,13 @@ export default function CheckPage() {
 										color: 'white',
 									}}
 								>
-									양과 늑대
+									{roomStore.questionInfos && activeQuestion > 0 && roomStore.questionInfos[activeQuestion - 1].algoQuestionTitle}
 								</div>
 							</div>
 							<div style={{ height: '100%', overflowY: 'auto' }}>
               {
-                roomStore.questionInfos && activeQuestion > 0 ?
+                roomStore.questionInfos && activeQuestion > 0 &&
                 <Markdown>{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}</Markdown>
-                :
-                <div></div>
               }
 							</div>
 						</Allotment.Pane>

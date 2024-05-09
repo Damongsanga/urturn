@@ -56,11 +56,12 @@ export const FooterBar = ({ $mode, $switch }: FooterProp) => {
 	  }
 
 	const submitCode = () => {
-		console.log(roomStore.getEditor()?.getValue())
-		console.log(roomStore.getRoomInfo()?.roomId)
-		console.log(roomStore.getRound())
-		console.log(roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId)
-		console.log(roomStore.getRoomInfo()?.host)
+		console.log("code: " + roomStore.getEditor()?.getValue())
+		console.log("roomId: " + roomStore.getRoomInfo()?.roomId)
+		console.log("language: " + convertLangToUpper(roomStore.getLang()))
+		console.log("round: " + roomStore.getRound())
+		console.log("questionId: "+ roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId)
+		console.log("host:" + roomStore.getRoomInfo()?.host)
 		roomStore.client?.publish({
 			destination: '/app/submitCode',
 			body: JSON.stringify({
