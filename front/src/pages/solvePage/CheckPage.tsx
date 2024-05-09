@@ -106,7 +106,7 @@ export default function CheckPage() {
 							<Allotment vertical>
 								<Allotment.Pane minSize={325}>
 									<div style={{ height: '100%', width: '100%' }}>
-										<CodeEditor lang='javascript' />
+										<CodeEditor/>
 									</div>
 								</Allotment.Pane>
 								<Allotment.Pane minSize={125}>
