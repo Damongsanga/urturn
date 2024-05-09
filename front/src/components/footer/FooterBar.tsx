@@ -71,6 +71,7 @@ export const FooterBar = ({ $mode, $switch }: FooterProp) => {
 				round: roomStore.getRound(),
 				algoQuestionId: roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId,
 				isHost: roomStore.getRoomInfo()?.host,
+				pair: roomStore.getPairProgramingMode(),
 			})
 		})
 		

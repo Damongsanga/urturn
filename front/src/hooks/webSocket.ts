@@ -8,7 +8,7 @@ import { loadMarkdownFromCDN } from "../utils/solve/loadMarkdownFromCDN";
 import { questionInfo } from "../types/roomTypes";
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
-const MAX_TIME = 1000000000
+const MAX_TIME = 10000000
 
 export const useWebSocket = () => {
     const navi = useNavigate();
@@ -36,6 +36,7 @@ export const useWebSocket = () => {
                             round: roomStore.getRound(),
                             algoQuestionId: roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId,
                             isHost: roomStore.getRoomInfo()?.host,
+                            pair: roomStore.getPairProgramingMode(),
                         })
                     })
                     clearInterval(timer);
@@ -105,9 +106,39 @@ export const useWebSocket = () => {
             });
             client.subscribe('/user/' + userId + '/submit/result', (msg) => {
                 console.log('Received message: submit/result' + msg.body);
-                //const data = JSON.parse(msg.body);
+                const data = JSON.parse(msg.body);
+                const result = data.result;
+
+                let consoleMsg = '';
+
+                if(result===true){
+                    consoleMsg += '정답입니다!\n\n\n';
+                }
+                else{
+                    consoleMsg += '오답입니다...\n\n\n';
+                }
+
+                const testcaseResults = data.testcaseResults;
+                for(let i = 0; i < testcaseResults.length; i++){
+                    const t = testcaseResults[i];
+                    consoleMsg += (i+1) + '번 테스트케이스 : ' +  t.status + '\n';
+                    if(t.stderr!==null){
+                        consoleMsg += t.stderr + '\n';
+                    }
+                    consoleMsg += '\n';
+                }
+                roomStore.setConsole(consoleMsg);
             })
-            
+            client.subscribe('/user/' + userId + '/role', (msg) => {
+                console.log('Received message: submit/role' + msg.body);
+                const role = msg.body;
+                roomStore.setPairProgramingRole(role);
+                console.log('role: ' + role);
+
+                setTimeout(() => {
+                    navi('/pairsolve');
+                }, 500)
+            })
             console.log('Connected: ' + frame);
 
         };

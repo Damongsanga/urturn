@@ -15,8 +15,11 @@ export const useRoomStore = create<roomState>() (
             round: 1,
             questionIdx: -1,
             editor: null,
+            console: '',
             lang: 'JAVASCRIPT',
             sec: 99999999,
+            pairProgramingMode: false,
+            pairProgramingRole: null,
 
             setClient: (client: Client) => {set({ client: client })},
             getClient: () => {return get().client},
@@ -42,8 +45,17 @@ export const useRoomStore = create<roomState>() (
             setEditor: (editor: monaco.editor.IStandaloneCodeEditor) => {set({ editor: editor })},
             getEditor: () => {return get().editor},
 
+            setConsole: (console: string) => {set({ console: console })},
+            getConsole: () => {return get().console},
+
             setLang: (lang: string) => {set({ lang: lang })},
             getLang: () => {return get().lang},
+
+            setPairProgramingMode: (mode: boolean) => {set({ pairProgramingMode: mode })},
+            getPairProgramingMode: () => {return get().pairProgramingMode},
+
+            setPairProgramingRole: (role: string | null) => {set({ pairProgramingRole: role })},
+            getPairProgramingRole: () => {return get().pairProgramingRole},
 
             clearRoom: () => {
                 set({ client: null });

@@ -21,7 +21,7 @@ const langOptions = [
   { key: 'JavaScript', text: 'JavaScript', value: 'javascript' },
 ]
 
-export default function SolvePage() {
+export default function PairSolvePage() {
     const roomStore = useRoomStore();
 
 	useEffect(() => {
