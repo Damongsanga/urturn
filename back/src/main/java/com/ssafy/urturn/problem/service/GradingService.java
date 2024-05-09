@@ -62,7 +62,7 @@ public class GradingService {
         List<TokenDto> tokens = createTokens(problemTestcaseDto.getTestcases(), inputCode, language).block();
 
         for (TokenDto token : tokens) {
-            log.info("token : {}", token);
+            log.info("token : {}", token.getToken());
         }
 
         SubmissionBatchResponseDto submissionsBatchResponse = null;
@@ -146,7 +146,11 @@ public class GradingService {
                 .path(GET_GRADES.getPath())
                 .query(GET_GRADES.getQuery(tokens))
                 .build()).retrieve()
-            .bodyToMono(SubmissionBatchResponseDto.class);
+            .bodyToMono(SubmissionBatchResponseDto.class) //BASE64 -> UTF-8로 인코딩
+            .map(submissionBatch -> {
+                submissionBatch.decodeBase64toUTF8();
+                return submissionBatch;
+            });
     }
 
 }

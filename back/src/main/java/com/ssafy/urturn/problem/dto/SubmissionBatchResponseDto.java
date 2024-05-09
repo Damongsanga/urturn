@@ -8,4 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SubmissionBatchResponseDto {
     private List<SubmissionDto> submissions;
+
+    public void decodeBase64toUTF8() {
+        for (SubmissionDto submission : submissions) {
+            submission.decodeBase64toUTF8();
+        }
+    }
 }
