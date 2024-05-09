@@ -5,7 +5,7 @@
 
 .QuestionSideBars {
     width: 5vw;
-    background-color: #3A2302;
+    background-color: #000034;
 
     display: flex;
     flex-direction: column;
@@ -18,36 +18,47 @@
 .QuestionButton {
     width: 3vw;
 
-    background-color: #F2CAB3 !important;
+    background-color: #5c5c96 !important;
+    color: white !important;
 }
 
 .QuestionButton:hover,
 .QuestionButton:active {
-    background-color: #b78567 !important;
-    border-color: #b78567 !important;
+    background-color: white !important;
+    border-color: white !important;
 
     transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
 
-    color: white !important;
-}
-
-.ui.tabular.menu {
-    border-bottom: solid 1px #fff !important;
-    color: #fff;
-}
-
-.ui.tabular.menu .item {
-    color: #000;
-}
-
-.ui.tabular.menu .active.item {
-    background-color: #b78567 ;
-    border-color: #fff;
-    
-    color: #fff;
+    color: black !important;
 }
 
 .ui.secondary.menu .active.item {
-    background-color: #b78567 !important;
-    color: #fff;
+    background-color: white !important;
+    color: black !important
 }
+
+.ui.tabular.menu {
+    border-bottom: solid 1px white !important;
+    color: white;
+}
+
+.ui.tabular.menu .item {
+    color: white;
+    margin-left: 0.5vw;
+}
+
+.ui.tabular.menu .item:hover {
+    background-color: white ;
+    color: black;
+
+    border-top-right-radius: 5px !important;
+    border-top-left-radius: 5px !important;
+}
+
+.ui.tabular.menu .active.item {
+    background-color: white ;
+    border-color: white;
+    
+    color: black;
+}
+

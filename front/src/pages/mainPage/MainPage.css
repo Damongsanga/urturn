@@ -44,8 +44,8 @@
   width: 21vw;
   height: 8vh;
 
-  background-color: #3A2302 !important;
-  color: #fff !important;
+  background-color: #000034 !important;
+  color: white !important;
 
   border-radius: 10px !important;
 
@@ -53,10 +53,10 @@
 
 .EntryButtons:hover,
 .EntryButtons:active  {
-  background-color: #F2CAB3 !important; 
-  border-color: #F2CAB3  !important;
+  background-color: #5c5c96 !important; 
+  border-color: #5c5c96  !important;
 
-  color: #3A2302 !important;
+  color: white !important;
 
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
 }

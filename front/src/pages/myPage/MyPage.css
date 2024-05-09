@@ -29,13 +29,13 @@
 }
 
 .CardTextColor {
-  color: #000 !important;
+  color: black !important;
 }
 
 .ProfileCard {
   width: 30vw !important;
 
-  background-color: #fff !important;
+  background-color: white !important;
 
   padding: 20px !important;
   box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25) !important;
@@ -43,8 +43,8 @@
 
 .MyProfile {
   width: calc(35vw - 40px) !important;
-  background-color: #fff !important;
-  color: #fff !important;
+  background-color: white !important;
+  color: white !important;
 
   border-radius: 15px !important;
 

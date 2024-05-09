@@ -90,7 +90,7 @@ export default function SolvePage() {
 									</div>
 								</Allotment.Pane>
 								<Allotment.Pane minSize={125}>
-									<div className='ReviewBar' style={{ height: '50px', backgroundColor: '#F2CAB3' }}>
+									<div className='ReviewBar' style={{ height: '50px', backgroundColor: '#000034' }}>
 										<div
 											style={{
 												width: '98%',
@@ -114,7 +114,7 @@ export default function SolvePage() {
 				</div>
 			</div>
 			{/* footer */}
-			<FooterBar $mode={1} $switch={false} />
+			<FooterBar $mode={1} />
 		</div>
     );
   }

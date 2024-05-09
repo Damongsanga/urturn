@@ -114,7 +114,7 @@ export default function PairSolvePage() {
 				</div>
 			</div>
 			{/* footer */}
-			<FooterBar $mode={1} $switch={false} />
+			<FooterBar $mode={1} />
 		</div>
     );
   }
