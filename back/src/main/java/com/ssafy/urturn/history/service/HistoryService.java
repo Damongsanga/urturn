@@ -36,7 +36,7 @@ public class HistoryService {
         History history = History.builder()
             .manager(memberRepository.findById(roomInfoDto.getManagerId()).orElseThrow(() -> new RestApiException(
                 CustomErrorCode.NO_MEMBER)))
-            .pair(memberRepository.findById(roomInfoDto.getManagerId()).orElseThrow(() -> new RestApiException(
+            .pair(memberRepository.findById(roomInfoDto.getPairId()).orElseThrow(() -> new RestApiException(
                 CustomErrorCode.NO_MEMBER)))
             .problem1(problemRepository.findById(roomInfoDto.getProblem1Id()).orElseThrow(() -> new RestApiException(CustomErrorCode.NO_PROBLEM)))
             .problem2(problemRepository.findById(roomInfoDto.getProblem2Id()).orElseThrow(() -> new RestApiException(CustomErrorCode.NO_PROBLEM)))

@@ -3,6 +3,7 @@ package com.ssafy.urturn.solving.cache;
 import com.ssafy.urturn.solving.dto.RoomInfoDto;
 import com.ssafy.urturn.solving.dto.UserCodeDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.cache.RedisCacheManager;
@@ -36,6 +37,8 @@ public class cacheDatas {
     public String cacheRoomId(String entrycode) {
         return null;
     }
+
+
 
     @CachePut(value = "roomInfoDtoCache", key="#roomId")
     public RoomInfoDto cacheroomInfoDto(String roomId, RoomInfoDto roomInfoDto){
