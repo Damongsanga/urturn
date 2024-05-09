@@ -21,9 +21,8 @@ import {
 } from 'semantic-ui-react';
 import logo from '../../assets/images/logo.svg';
 import './WaitingPage.css';
-import {ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import {ChangeEvent, FormEvent, useState} from 'react';
 import { useRoomStore } from '../../stores/room';
-import { useOpenVidu } from "../../hooks/openVidu.ts";
 //import { useRtcStore } from "../../stores/rtc.ts";
 
 interface ModalProps {
@@ -77,9 +76,7 @@ export const WaitingPage = ({changeModal} : ModalProps) => {
 		});
 	};
 
-	useEffect(() => {
 
-	}, []);
 
 	return (
 		<>
