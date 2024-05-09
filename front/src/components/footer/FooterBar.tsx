@@ -139,8 +139,11 @@ export const FooterBar = ({ $mode, $switch }: FooterProp) => {
 				{/* 회고에 사용할 자리 - 빈칸 용도 */}
 				{$mode === 2 && (
 					<MenuItem name='RunButton' className='RunButton' position='right'>
-						<Button size='large' className='RunButtonColor'>
-							회고 제출하기
+						<Button size='large' className='ReviewButtonColor'>
+							GIT 업로드
+						</Button>
+						<Button size='large' className='ReviewButtonColor'>
+							회고 저장하기
 						</Button>
 					</MenuItem>
 				)}
