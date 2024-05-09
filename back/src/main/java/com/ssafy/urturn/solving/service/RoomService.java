@@ -6,8 +6,10 @@ import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.*;
 import com.ssafy.urturn.global.RequestLockService;
 import com.ssafy.urturn.global.RequestLockType;
 import com.ssafy.urturn.global.exception.RestApiException;
+import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.global.util.MemberUtil;
+import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.history.repository.HistoryRepository;
 import com.ssafy.urturn.member.Level;
@@ -23,7 +25,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
 import org.springframework.transaction.annotation.Transactional;
@@ -194,7 +198,7 @@ public class RoomService {
         }
     }
 
-    public SwitchCodeResponse getpairsCode(SwitchCodeRequest switchCodeRequest){
+    public SwitchCodeResponse getPairsCode(SwitchCodeRequest switchCodeRequest){
 
         if(switchCodeRequest.getProblemId().equals(cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem1Id())){
             List<UserCodeDto> codes= cachedatas.cacheCodes(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getProblem2Id().toString());
@@ -223,6 +227,7 @@ public class RoomService {
 
         if (gradingResponse.isSucceeded()){
             Long historyId = cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getHistoryId();
+
             historyRepository.findById(historyId).orElseThrow(() -> new RestApiException(NO_HISTORY))
                 .setCode(submitRequest.getProblemId(), submitRequest.getCode());
         }
@@ -246,9 +251,33 @@ public class RoomService {
     }
 
 
+    public Map<Long, RetroCodeResponse> makeRetroCodeResponse(String roomId){
+
+        Map<Long, RetroCodeResponse> map= new HashMap<>();
+        RoomInfoDto roomInfoDto = cachedatas.cacheroomInfoDto(roomId);
+        History history = historyRepository.findById(roomInfoDto.getHistoryId())
+                .orElseThrow(()->new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND, "히스토리를 찾을 수 없습니다"));
+
+
+        RetroCodeResponse problem1CodeResponse=new RetroCodeResponse(cachedatas.cacheCodes(roomId, roomInfoDto.getProblem1Id().toString())
+                , history.getCode1());
+        RetroCodeResponse problem2CodeResponse=new RetroCodeResponse(cachedatas.cacheCodes(roomId, roomInfoDto.getProblem2Id().toString())
+                , history.getCode2());
+        map.put(roomInfoDto.getProblem1Id(), problem1CodeResponse);
+        map.put(roomInfoDto.getProblem2Id(), problem1CodeResponse);
+
+        return map;
+    }
+    @Transactional
+    public void updateHistory(String roomId, HistoryResult result, int totalRound){
+        History history = historyRepository.findById(cachedatas.cacheroomInfoDto(roomId).getHistoryId())
+                .orElseThrow(() -> new RestApiException(NO_HISTORY));
+        history.finalizeUpdateHistory(result, totalRound);
+        historyRepository.save(history);
+    }
     @Transactional
     public void updateRetro(RetroCreateRequest req, Long historyId) {
         historyRepository.findById(historyId).orElseThrow(() -> new RestApiException(NO_HISTORY))
-            .setRetro(req);
+                .setRetro(req);
     }
 }
