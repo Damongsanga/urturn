@@ -9,6 +9,7 @@ import ReviewPage from './pages/solvePage/ReviewPage.tsx';
 import PairSolvePage from './pages/solvePage/PairSolvePage.tsx';
 import { TransPage } from './pages/trainsPage/TransPage.tsx';
 
+import {GithubRepoCallback} from "./utils/GithubUpload.tsx";
 function App() {
 
 	return (
@@ -18,6 +19,7 @@ function App() {
 					<Route path='/' element={<LandingPage />} />
 					<Route path='/trans/:next' element={<TransPage />} />
 					<Route path='/main' element={<MainPage />} />
+					<Route path='/auth/github/upload' element={<GithubRepoCallback/>}/>
 					<Route path='/auth/github' element={<GithubCallback/>}/>
 					<Route path='/myPage' element={<MyPage />} />
 					<Route path='/solve' element={<SolvePage />} />

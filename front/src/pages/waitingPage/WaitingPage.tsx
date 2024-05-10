@@ -57,7 +57,8 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 		{ label: '풀 마라톤', value: 'LEVEL5', color: '#9B9B9B' },
 	];
 	// 난이도 목록
-
+	const [isMuted, setIsMuted] = useState(false);
+	const [isMicMuted, setIsMicMuted] = useState(false);
 	useEffect(() => {
 		if (rtcStore.streamManager && myVideoRef.current) {
 			rtcStore.streamManager.addVideoElement(myVideoRef.current);
@@ -98,7 +99,33 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 			}),
 		});
 	};
+	// const toggleMute = () => {
+	// 	if (myVideoRef.current && otherVideoRef.current) {
+	// 		myVideoRef.current.muted = !myVideoRef.current.muted;
+	// 		otherVideoRef.current.muted = !otherVideoRef.current.muted;
+	// 		console.log("mute on");
+	// 		console.log(myVideoRef.current.muted);
+	// 	}
+	// };
+	const toggleMute = () => {
+		if (myVideoRef.current && otherVideoRef.current) {
+			const newMuteStatus = !myVideoRef.current.muted;
+			myVideoRef.current.muted = newMuteStatus;
+			otherVideoRef.current.muted = newMuteStatus; // Assuming you want to mute both videos together
+			setIsMuted(newMuteStatus); // This will trigger a re-render
+			console.log("Mute toggled:", newMuteStatus);
+		}
+	};
 
+	const toggleMicrophone = () => {
+		const publisher = rtcStore.getPublisher(); // Assuming you have a method to get the Publisher
+		if (publisher) {
+			const newMicStatus = !isMicMuted;
+			publisher.publishAudio(!newMicStatus); // Enable or disable audio based on new mute status
+			setIsMicMuted(newMicStatus);
+			console.log("Microphone toggled:", newMicStatus);
+		}
+	};
 	return (
 		<>
 			<div className='WaitingRoomBackground'>
@@ -217,7 +244,10 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 										</GridColumn>
 										<GridColumn width={2} verticalAlign={'middle'}>
 											{/* 스피커 아이콘 */}
-											<Icon className='Icon' name='volume up' size='big' />
+											<Icon     onClick={toggleMute}
+													  className='Icon'
+													  name={isMuted ? 'volume off' : 'volume up'}
+													  size='big' />
 										</GridColumn>
 									</GridRow>
 									<GridRow>
@@ -238,7 +268,12 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 										</GridColumn>
 										<GridColumn width={2} verticalAlign={'middle'}>
 											{/* 마이크 아이콘 */}
-											<Icon className='Icon' name='microphone' size='big' />
+											<Icon
+												onClick={toggleMicrophone}
+												className='Icon'
+												name={isMicMuted ? 'microphone slash' : 'microphone'}
+												size='big'
+											/>
 										</GridColumn>
 									</GridRow>
 								</Grid>
@@ -289,8 +324,8 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 						</div>
 					</div>
 				</div>
-				<video autoPlay={true} ref={myVideoRef} style={{display: 'none'}}/>
-				<video autoPlay={true} ref={otherVideoRef} style={{display: 'none'}}/>
+				<video autoPlay={true} controls={true}  ref={myVideoRef} style={{display: 'none'}}/>
+				<video autoPlay={true} controls={true}  ref={otherVideoRef} style={{display: 'none'}}/>
 			</div>
 		</>
 	);

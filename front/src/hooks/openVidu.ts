@@ -113,6 +113,7 @@ export function useOpenVidu() {
 
         rtcStore.setOpenVidu(ov);
         rtcStore.setStreamManager(_publisher);
+        rtcStore.setPublisher(_publisher);
     }
 
     // const deleteSession = async (sessionId:string) => {
