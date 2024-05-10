@@ -2,8 +2,7 @@ package com.ssafy.urturn.history.controller;
 
 import com.ssafy.urturn.history.dto.HistoryResponse;
 import com.ssafy.urturn.history.service.HistoryService;
-import com.ssafy.urturn.member.dto.MemberDetailResponse;
-import java.util.List;
+import com.ssafy.urturn.solving.cache.CacheDatas;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class HistoryController {
 
     private final HistoryService historyService;
+    private final CacheDatas cachedatas;
+
 
     @GetMapping("")
     public ResponseEntity<Slice<HistoryResponse>> get(@PageableDefault(size = 6) Pageable pagable){
         return ResponseEntity.ok(historyService.getHistories(pagable));
     }
+
 }
