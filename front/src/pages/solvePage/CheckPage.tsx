@@ -1,5 +1,5 @@
 import { Allotment } from "allotment";
-import CodeEditor from '../../components/solve/CodeEditor';
+//import CodeEditor from '../../components/solve/CodeEditor';
 import Markdown from 'markdown-to-jsx'
 import { Dropdown, Menu, MenuItem } from 'semantic-ui-react'
 
@@ -106,7 +106,7 @@ export default function CheckPage() {
 							<Allotment vertical>
 								<Allotment.Pane minSize={325}>
 									<div style={{ height: '100%', width: '100%' }}>
-										<CodeEditor/>
+										{/* <CodeEditor/> */}
 									</div>
 								</Allotment.Pane>
 								<Allotment.Pane minSize={125}>

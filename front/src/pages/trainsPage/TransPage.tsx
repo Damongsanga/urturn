@@ -30,15 +30,18 @@ export const TransPage = () => {
 	const START_TIME = 3;
 
 	useEffect(() => {
-		sec.current = START_TIME;
-		const timer = setInterval(() => {
-			sec.current -= 1;
-			if (sec.current <= 0) {
-				navigate('/' + next);
-				clearInterval(timer);
-			}
-		}, 1000);
-	}, []);
+        sec.current = START_TIME;
+        const timer = setInterval(() => {
+            sec.current -= 1;
+            if (sec.current <= 0) {
+                let n = next;
+                if(n === "solveSwitch") n = "solve";
+                if(n === "pairSolveSwitch") n = "pairsolve";
+                navigate("/" + n);
+                clearInterval(timer);
+            }
+        }, 1000)
+    }, [])
 
 	const contentArray = [
 		{

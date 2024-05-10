@@ -10,7 +10,7 @@ import {useOpenVidu} from "./openVidu.ts";
 import {useRtcStore} from "../stores/rtc.ts";
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
-const MAX_TIME = 20
+const MAX_TIME = 30
 
 export const useWebSocket = () => {
     const navi = useNavigate();
@@ -32,18 +32,20 @@ export const useWebSocket = () => {
                     roomStore.setSec(roomStore.getSec() - 1);
                 }
                 else if (roomStore.getSec() <= 0) {
-                    roomStore.getClient()?.publish({
-                        destination: '/app/switchCode',
-                        body: JSON.stringify({ 
-                            code: roomStore.getEditor()?.getValue(),
-                            roomId: roomStore.getRoomInfo()?.roomId,
-                            round: roomStore.getRound(),
-                            algoQuestionId: roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId,
-                            isHost: roomStore.getRoomInfo()?.host,
-                            isPair: roomStore.getPairProgramingMode(),
+                    if(roomStore.getPairProgramingMode()===false || roomStore.getPairProgramingRole() === 'Driver'){
+                        roomStore.getClient()?.publish({
+                            destination: '/app/switchCode',
+                            body: JSON.stringify({ 
+                                code: roomStore.getCode(),
+                                roomId: roomStore.getRoomInfo()?.roomId,
+                                round: roomStore.getRound(),
+                                algoQuestionId: roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId,
+                                isHost: roomStore.getRoomInfo()?.host,
+                                isPair: roomStore.getPairProgramingMode(),
+                            })
                         })
-                    })
-                    clearInterval(timer);
+                    }
+                        clearInterval(timer);
                 }
             }, 1000)
         }
@@ -117,13 +119,13 @@ export const useWebSocket = () => {
             client.subscribe('/user/' + userId + '/switchCode', (msg) => {
                 const data = JSON.parse(msg.body);
                 console.log('Received message: switchCode' + msg.body);
-                roomStore.getEditor()?.setValue(data.code);
+                roomStore.setCode(data.code);
                 roomStore.setRound(data.round);
 
                 const idx = roomStore.getQuestionIdx() === 0 ? 1 : 0;
                 roomStore.setQuestionIdx(idx);
                 setTimer(MAX_TIME);
-
+                navi('/trans/solveSwitch');
             });
             client.subscribe('/user/' + userId + '/switchRole', (msg) => {
                 console.log('Received message: switchRole' + msg.body);
@@ -132,12 +134,14 @@ export const useWebSocket = () => {
                 if(roomStore.getPairProgramingRole() === 'Driver'){
                     roomStore.setPairProgramingRole('Navigator');
                     console.log("역할: Navigator");
+                    
                 }
                 else if(roomStore.getPairProgramingRole() === 'Navigator'){
                     roomStore.setPairProgramingRole('Driver');
                     console.log("역할: Driver");
                 }
-
+                setTimer(MAX_TIME);
+                navi('/trans/pairSolveSwitch');
             })
             client.subscribe('/user/' + userId + '/submit/result', (msg) => {
                 console.log('Received message: submit/result' + msg.body);
@@ -162,6 +166,13 @@ export const useWebSocket = () => {
                     }
                     consoleMsg += '\n';
                 }
+                if(roomStore.getPairProgramingMode()===false || roomStore.getPairProgramingRole() === 'Driver'){
+                    rtcStore.getOpenVidu()?.session.signal({
+                        data: consoleMsg,
+                        to: [],
+                        type: 'console'
+                    })
+                }
                 roomStore.setConsole(consoleMsg);
             })
             client.subscribe('/user/' + userId + '/role', (msg) => {
@@ -170,10 +181,11 @@ export const useWebSocket = () => {
                 roomStore.setPairProgramingMode(true);
                 roomStore.setPairProgramingRole(role);
                 console.log('role: ' + role);
-
-                setTimeout(() => {
-                    navi('/trans/pairsolve');
-                }, 500)
+                if(role==='Navigator'){
+                    const idx = roomStore.getQuestionIdx() === 0 ? 1 : 0;
+                    roomStore.setQuestionIdx(idx);
+                }
+                navi('/trans/pairsolve');
             })
             client.subscribe('/user/' + userId + '/showRetroCode', (msg) => {
                 console.log('Received message: showRetroCode' + msg.body);

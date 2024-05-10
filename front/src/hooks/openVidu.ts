@@ -1,10 +1,12 @@
 import {OpenVidu} from 'openvidu-browser';
 import { useAxios } from '../utils/useAxios.ts';
 import { useRtcStore } from "../stores/rtc.ts";
+import { useRoomStore } from '../stores/room.ts';
 
 export function useOpenVidu() {
     const axios = useAxios();
     const rtcStore = useRtcStore();
+    const roomStore = useRoomStore();
 
     const masterCreate = () => {
         createSession().then(
@@ -78,8 +80,24 @@ export function useOpenVidu() {
         ov.session.on('exception', (exception) => {
             console.warn(exception);
         });
-        
 
+        ov.session.on('signal:code', (event) => {
+            if(roomStore.getPairProgramingRole() === 'Navigator'){
+                const editor = roomStore.getEditor();
+                if (editor && event.data) {
+                    editor.setValue(event.data);
+                }
+            }
+        })
+
+        ov.session.on('signal:console', (event) => {
+            if(roomStore.getPairProgramingRole() === 'Navigator'){
+                if (event.data) {
+                    roomStore.setConsole(event.data);
+                }
+            }
+        })
+        
         await ov.session.connect(token);
         const _publisher = await ov.initPublisherAsync(undefined, {
             publishAudio: true,
