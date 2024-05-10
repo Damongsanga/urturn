@@ -36,7 +36,7 @@ export default function CheckPage() {
 			<div>
 				<div style={{ display: 'flex', height: 'calc(100vh - 140px)', width: '100vw' }}>
 					{/* 문제 사이드바 */}
-					<div className='QuestionSideBar'>
+					<div className='QuestionSideBars'>
 						<Menu
 							secondary
 							icon
@@ -134,7 +134,7 @@ export default function CheckPage() {
 				</div>
 			</div>
 			{/* footer */}
-			<FooterBar $mode={0} $switch={false}/>
+			<FooterBar $mode={0}/>
 		</div>
     );
   }

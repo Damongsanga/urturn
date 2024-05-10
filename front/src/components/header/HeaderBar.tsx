@@ -154,6 +154,7 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review }: HeaderProp) => {
 				</Menu>
 			)}
 
+			{/* 리뷰 헤더 */}
 			{$review && (
 				<Menu className='HeaderBar Ide' borderless>
 					<MenuItem className='HeaderAlign'>

@@ -147,6 +147,17 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 										입장 코드 : {roomStore.roomInfo?.entryCode}
 									</Header>
 								</MenuItem>
+								{/* <MenuItem>
+									<Header className='EntryCode' as='h3' textAlign='center'>
+										선택 언어  :{' '}
+										<Dropdown
+											search
+											defaultValue={langOptions[langOptions.length - 1].value}
+											searchInput={{ type: 'string' }}
+											options={langOptions}
+										/>
+									</Header>
+								</MenuItem> */}
 								<MenuItem name='close' position='right' onClick={changeModal}>
 									<Icon className='Icon' name='close' size='large' />
 								</MenuItem>

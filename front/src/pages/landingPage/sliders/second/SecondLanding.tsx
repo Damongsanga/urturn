@@ -26,12 +26,12 @@ export const SecondLandingPage = ({ isActive }: LandingProp) => {
         });
       });
     } 
-    // else {
-    //   // 슬라이드가 비활성화되면 모든 요소의 투명도를 0으로 설정
-    //   refs.current.forEach((el) => {
-    //     gsap.to(el, { opacity: 0, duration: 0 });
-    //   });
-    // }
+    else {
+      // 슬라이드가 비활성화되면 모든 요소의 투명도를 0으로 설정
+      refs.current.forEach((el) => {
+        gsap.to(el, { opacity: 0, duration: 0 });
+      });
+    }
   }, [isActive]);
 
   return (

@@ -6,6 +6,7 @@ import { WaitingPage } from '../waitingPage/WaitingPage';
 import { EntryCodeModal } from '../../components/modal/EntryCodeModal.tsx';
 import { useAuthStore } from '../../stores/useAuthStore.ts';
 import { useWebSocket } from '../../hooks/webSocket.ts';
+import { useAxios } from '../../utils/useAxios.ts';
 
 import 'semantic-ui-css/semantic.min.css';
 import './MainPage.css';
@@ -20,6 +21,7 @@ const MainPage: React.FC = () => {
 	const webSocket = useWebSocket();
 
 	const authStore = useAuthStore();
+	const ax = useAxios();
 
 	useEffect(() => {
 		roomStore.clearRoom();
@@ -143,6 +145,12 @@ const MainPage: React.FC = () => {
 							</GridColumn>
 						</GridRow>
 					</Grid>
+
+					<Button onClick={
+						() => {
+							ax.get('/test/test').then(res => {console.log(res.data)})
+						}
+					}></Button>
 				</div>
 			</div>
 
