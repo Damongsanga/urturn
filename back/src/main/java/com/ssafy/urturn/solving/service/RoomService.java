@@ -226,7 +226,7 @@ public class RoomService {
             Long historyId = cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getHistoryId();
 
             historyRepository.findById(historyId).orElseThrow(() -> new RestApiException(NO_HISTORY))
-                .setCode(submitRequest.getProblemId(), submitRequest.getCode());
+                .setCode(submitRequest.getProblemId(), submitRequest.getCode(), submitRequest.getLanguage());
         }
 
         // 페어프로그래밍 모드 전환 메시지 전송

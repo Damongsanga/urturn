@@ -1,12 +1,11 @@
 package com.ssafy.urturn.github.service;
 
-import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.*;
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_MEMBER;
 
 import com.ssafy.urturn.github.GithubUploadClient;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
-import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
+import com.ssafy.urturn.history.dto.HistoryRetroDto;
 import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.history.repository.HistoryRepository;
 import com.ssafy.urturn.member.entity.Member;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 @Slf4j
@@ -32,10 +30,10 @@ public class GithubUploadService {
         Member member = memberRepository.findByGithubUniqueId(githubUniqueId).orElseThrow(() -> new RestApiException(
             NO_MEMBER));
 
-        History history = historyRepository.getMostRecentHistoryByMemberId(member.getId());
+        HistoryRetroDto historyDto = historyRepository.getMostRecentHistoryByMemberId(member.getId());
 
         try{
-            return githubUploadClient.uploadHistory(member, history);
+            return githubUploadClient.uploadRetro(member, historyDto);
         } catch (RestApiException e){
             throw e;
         } catch (Exception e){

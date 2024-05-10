@@ -3,14 +3,10 @@ package com.ssafy.urturn.github;
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.*;
 
 import com.ssafy.urturn.github.dto.GithubUploadRequestDto;
-import com.ssafy.urturn.global.auth.dto.GithubOAuthMemberInfoResponse;
 import com.ssafy.urturn.global.exception.RestApiException;
-import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
+import com.ssafy.urturn.history.dto.HistoryRetroDto;
 import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.member.entity.Member;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Base64;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -27,7 +23,7 @@ public class GithubUploadClient {
 
     private final GithubUploadUtil githubUtil;
 
-    public String uploadHistory(Member member, History history){
+    public String uploadRetro(Member member, HistoryRetroDto historyDto){
         if (member.getRepository() == null) throw new RestApiException(NO_REPOSITORY);
 
         log.info("url : {}", githubUtil.makeURl(member));
@@ -36,7 +32,7 @@ public class GithubUploadClient {
         headers.setBearerAuth(member.getGithubAccessToken());
 
         HttpEntity<GithubUploadRequestDto> entity = new HttpEntity<>(
-            new GithubUploadRequestDto(githubUtil.makeMessage(), member.getNickname(), member.getEmail(), githubUtil.makeContent(history)),
+            new GithubUploadRequestDto(githubUtil.makeMessage(historyDto, member.getNickname()), member.getNickname(), member.getEmail(), githubUtil.makeContent(historyDto)),
             headers
         );
 
