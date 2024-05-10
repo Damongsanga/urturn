@@ -1,8 +1,6 @@
 package com.ssafy.urturn.solving.controller;
 
-import com.ssafy.urturn.solving.cache.cacheDatas;
 import com.ssafy.urturn.solving.service.RoomService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

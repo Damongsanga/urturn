@@ -48,6 +48,8 @@ public class OAuthService {
     @Value("spring.security.oauth2.client.registration.password-salt")
     private String salt;
 
+    private String defaultEmail = "urturn@urturn.com";
+
 
     @Transactional
     public LoginResponse githubOAuthLogin(String code) {
@@ -125,7 +127,7 @@ public class OAuthService {
                     .githubAccessToken(res.getAccessToken())
                     .githubUniqueId(res.getOauthId())
                     .nickname(res.getName())
-                    .email(res.getEmail())
+                    .email(res.getEmail()== null ? defaultEmail : res.getEmail())
                     .roles(List.of(Role.USER))
                     .password(passwordEncoder.encode(res.getName() + salt))
                     .level(Level.LEVEL1)

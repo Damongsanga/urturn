@@ -29,11 +29,15 @@ public class GithubUploadUtil {
 
     // 매우 임시로 만든 URL
     public String makeURl(Member member){
-        return GITHUB_API_URL + member.getNickname() + "/" + member.getRepository() + "/contents/" + makeFileName();
+        return GITHUB_API_URL + member.getNickname() + "/" + member.getRepository() + "/contents/" + makeDirectoryName() + makeFileName();
     }
 
     private String makeFileName(){
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss")) + ".md";
+    }
+
+    private String makeDirectoryName(){
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM")) + "/";
     }
 
 }

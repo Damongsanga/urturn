@@ -39,7 +39,7 @@ public class GithubUploadService {
         } catch (RestApiException e){
             throw e;
         } catch (Exception e){
-            throw new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR, "github 업로드 과정에서 문제가 발생하였습니다.");
+            throw new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR, "github 업로드 과정에서 문제가 발생하였습니다." + e.getMessage());
         }
     }
 }

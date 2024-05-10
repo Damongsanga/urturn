@@ -1,13 +1,10 @@
 package com.ssafy.urturn.solving.service;
 
-import static com.ssafy.urturn.global.RequestLockType.*;
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.*;
 
 import com.ssafy.urturn.global.RequestLockService;
-import com.ssafy.urturn.global.RequestLockType;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
-import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.global.util.MemberUtil;
 import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.history.entity.History;
@@ -18,14 +15,14 @@ import com.ssafy.urturn.problem.dto.GradingResponse;
 import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.problem.service.GradingService;
 import com.ssafy.urturn.problem.service.ProblemService;
-import com.ssafy.urturn.solving.cache.cacheDatas;
 import com.ssafy.urturn.solving.dto.*;
-import com.ssafy.urturn.solving.temp.WebSocketSessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
+import com.ssafy.urturn.solving.cache.CacheDatas;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
@@ -39,7 +36,7 @@ public class RoomService {
     private final MemberService memberService;
     private final GradingService gradingService;
     private final ProblemService problemService;
-    private final cacheDatas cachedatas;
+    private final CacheDatas cachedatas;
     private final ReentrantLock lock;
     private final HistoryRepository historyRepository;
 
@@ -259,9 +256,8 @@ public class RoomService {
         History history = historyRepository.findById(roomInfoDto.getHistoryId())
                 .orElseThrow(()->new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND, "히스토리를 찾을 수 없습니다"));
 
-        System.out.println("roomId = "+roomId+" questionID = "+roomInfoDto.getProblem1Id().toString());
-        List<UserCodeDto> test1= cachedatas.cacheCodes(roomId,roomInfoDto.getProblem1Id().toString());
-        System.out.println("testSize : "+test1.size());
+        log.info("code 1 : {}", history.getCode1());
+        log.info("code 2 : {}", history.getCode2());
 
         RetroCodeResponse problem1CodeResponse=new RetroCodeResponse(cachedatas.cacheCodes(roomId, roomInfoDto.getProblem1Id().toString())
                 , history.getCode1());
