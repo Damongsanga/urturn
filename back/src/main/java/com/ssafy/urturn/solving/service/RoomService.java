@@ -23,13 +23,11 @@ import com.ssafy.urturn.solving.dto.*;
 import com.ssafy.urturn.solving.temp.WebSocketSessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -154,7 +152,7 @@ public class RoomService {
         // 준비 상태 업데이트
         updateReadyStatus(roomId, roomInfo, isHost);
 
-        cachedatas.updateCodeCache(roomId, readyInfoRequest.getProblemId().toString(), null);
+        updateCodeCache(roomId, readyInfoRequest.getProblemId().toString(), null);
 
         // 두 사용자가 모두 준비되었는지 확인
         if (areBothpairsReady(roomId, roomInfo)) {
@@ -261,8 +259,9 @@ public class RoomService {
         History history = historyRepository.findById(roomInfoDto.getHistoryId())
                 .orElseThrow(()->new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND, "히스토리를 찾을 수 없습니다"));
 
-        log.info("code 1 : {}", history.getCode1());
-        log.info("code 2 : {}", history.getCode2());
+        System.out.println("roomId = "+roomId+" questionID = "+roomInfoDto.getProblem1Id().toString());
+        List<UserCodeDto> test1= cachedatas.cacheCodes(roomId,roomInfoDto.getProblem1Id().toString());
+        System.out.println("testSize : "+test1.size());
 
         RetroCodeResponse problem1CodeResponse=new RetroCodeResponse(cachedatas.cacheCodes(roomId, roomInfoDto.getProblem1Id().toString())
                 , history.getCode1());
@@ -284,5 +283,23 @@ public class RoomService {
     public void updateRetro(RetroCreateRequest req, Long historyId) {
         historyRepository.findById(historyId).orElseThrow(() -> new RestApiException(NO_HISTORY))
                 .setRetro(req);
+    }
+
+    @CachePut(value = "responseCache", key = "#roomId + '_' + #questionId")
+    public List<UserCodeDto> updateCodeCache(String roomId, String questionId, UserCodeDto newCode) {
+//        System.out.println("[UpdateCodeCache]  roomId = "+roomId+" questionId = "+questionId+" round = "+newCode.getRound()+" code = "+newCode.getCode());
+        List<UserCodeDto> currentCodes = cachedatas.cacheCodes(roomId, questionId);
+        if (currentCodes == null) {
+            currentCodes = new ArrayList<>();
+        }
+        System.out.println("사이즈 = "+currentCodes.size());
+        if(newCode!=null){
+            currentCodes.add(newCode);
+        }
+
+        cachedatas.cacheCodes(roomId, questionId, currentCodes);
+
+        return currentCodes;
+
     }
 }

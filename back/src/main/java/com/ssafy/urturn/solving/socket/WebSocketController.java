@@ -114,7 +114,8 @@ public class WebSocketController {
     @MessageMapping("/switchCode")
     public synchronized void switchCode(@Payload SwitchCodeRequest switchCodeRequest){
         // 코드 스냅샷 저장.
-        cachedatas.updateCodeCache(switchCodeRequest.getRoomId(),switchCodeRequest.getProblemId().toString(),
+        System.out.println("round = "+switchCodeRequest.getRound()+ " code = "+switchCodeRequest.getCode());
+        roomService.updateCodeCache(switchCodeRequest.getRoomId(),switchCodeRequest.getProblemId().toString(),
                 new UserCodeDto(switchCodeRequest.getRound(),switchCodeRequest.getCode()));
 
         Long pairId=cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getPairId();

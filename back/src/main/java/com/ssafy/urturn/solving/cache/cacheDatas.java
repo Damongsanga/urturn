@@ -50,26 +50,16 @@ public class cacheDatas {
         return null;
     }
 
+    @CachePut(value = "responseCache", key = "#roomId + '_' + #questionId")
+    public List<UserCodeDto> cacheCodes(String roomId, String questionId, List<UserCodeDto> list){
+        return list;
+    }
+
     @Cacheable(value = "responseCache", key = "#roomId + '_' + #questionId")
     public List<UserCodeDto> cacheCodes(String roomId, String questionId) {
         // 실제 캐시 저장소에서 데이터를 가져오는 로직은 필요하지 않음. 캐시 미스 시 null 반환.
         return null;
     }
 
-    @CachePut(value = "responseCache", key = "#roomId + '_' + #questionId")
-    public List<UserCodeDto> updateCodeCache(String roomId, String questionId, UserCodeDto newCode) {
-        lock.lock();
-        try{
-            List<UserCodeDto> currentCodes = cacheCodes(roomId, questionId);
-            if (currentCodes == null) {
-                currentCodes = new ArrayList<>();
-            }
-            currentCodes.add(newCode);
-            return currentCodes;
-        }finally {
-            lock.unlock();
-        }
-
-    }
 
 }
