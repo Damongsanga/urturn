@@ -13,7 +13,7 @@ public class SwitchCodeRequest {
     @JsonProperty("isHost")
     private boolean isHost;
 
-    @JsonProperty("pair")
-    private boolean pair;
+    @JsonProperty("isPair")
+    private boolean isPair;
 
 }

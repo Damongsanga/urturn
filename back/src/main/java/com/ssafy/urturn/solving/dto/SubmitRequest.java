@@ -14,5 +14,6 @@ public class SubmitRequest {
     private int round;
     @JsonProperty("isHost")
     private boolean isHost;
-    private boolean pair;
+    @JsonProperty("isPair")
+    private boolean isPair;
 }
