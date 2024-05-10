@@ -35,6 +35,13 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review }: HeaderProp) => {
 		navigate('/main');
 	};
 
+	// uri
+	// const gitRepo = () => {
+	// 	location.href = `https://github.com/login/oauth/authorize?client_id=a82095fde8aa68bb396d&scope=repo&redirect_uri=http://localhost:5173/auth/github/upload`;
+	// };
+	//const gitRepo = () => {
+	//     location.href = `https://github.com/login/oauth/authorize?client_id=a82095fde8aa68bb396d&scope=repo&redirect_uri=http://localhost:5173/auth/github/upload`;
+	// };
 	return (
 		<>
 			{/* 메인 헤더 */}
@@ -70,6 +77,9 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review }: HeaderProp) => {
 								<Button size='large' className='ButtonColor' onClick={logout}>
 									로그아웃
 								</Button>
+								{/*<Button size='large' className='ButtonColor' onClick={gitRepo}>*/}
+								{/*	repo test*/}
+								{/*</Button>*/}
 							</MenuItem>
 						</MenuMenu>
 					</Menu>

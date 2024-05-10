@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 //import { persist } from 'zustand/middleware';
-import {OpenVidu, StreamManager, Subscriber} from 'openvidu-browser';
+import {OpenVidu, Publisher, StreamManager, Subscriber} from 'openvidu-browser';
 
 interface rtcState {
     sessionId: string | null;
@@ -9,6 +9,14 @@ interface rtcState {
     streamManager: StreamManager | null,
     //subscribers: Subscriber[],
     subscriber: Subscriber | null,
+    microphoneVolume: number;
+    speakerVolume: number;
+    publisher: Publisher | null,
+
+    setMicrophoneVolume: (volume: number) => void;
+    getMicrophoneVolume: () => number;
+    setSpeakerVolume: (volume: number) => void;
+    getSpeakerVolume: () => number;
 
     setSessionId: (sessionId: string) => void;
     getSessionId: () => string | null;
@@ -27,6 +35,9 @@ interface rtcState {
     // setSubscribers: (subscriber: Subscriber[] | null) => void;
     // getSubscribers: () => Subscriber[] | null;
 
+    setPublisher: (publisher: Publisher) => void;  // New method
+    getPublisher: () => Publisher | null;
+
     clearRtc: () => void;
 }
 
@@ -38,7 +49,16 @@ export const useRtcStore = create<rtcState>() (
         ov: null,
         streamManager: null,
         subscriber: null,
+        microphoneVolume: 50,
+        speakerVolume: 50,
         //subscribers: [],
+        publisher: null,
+
+        setMicrophoneVolume: (volume: number) => {set({microphoneVolume: volume})},
+        getMicrophoneVolume: () => {return get().microphoneVolume},
+
+        setSpeakerVolume: (volume: number) => {set({speakerVolume: volume})},
+        getSpeakerVolume: () => {return get().speakerVolume},
 
         setSessionId: (sessionId: string) => {set({ sessionId: sessionId })},
         getSessionId: () => {return get().sessionId},
@@ -56,6 +76,9 @@ export const useRtcStore = create<rtcState>() (
         getSubscriber: () => {return get().subscriber},
         // setSubscribers: (subscribers: Subscriber[]) => {set({subscribers: subscribers})},
         // getSubscribers: () => {return get().subscribers},
+
+        setPublisher: (publisher: Publisher) => set({ publisher }),
+        getPublisher: () => get().publisher,
 
         clearRtc: () => {
             set({ sessionId: null });
