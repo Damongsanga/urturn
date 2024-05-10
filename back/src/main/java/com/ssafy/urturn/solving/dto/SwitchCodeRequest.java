@@ -15,14 +15,5 @@ public class SwitchCodeRequest {
 
     @JsonProperty("pair")
     private boolean pair;
-    @Override
-    public String toString() {
-        return "switchCodeRequest{" +
-                "code='" + code + '\'' +
-                ", roomId='" + roomId + '\'' +
-                ", problemId=" + problemId +
-                ", round=" + round +
-                ", isHost=" + isHost +
-                '}';
-    }
+
 }
