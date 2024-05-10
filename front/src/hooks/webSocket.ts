@@ -10,7 +10,7 @@ import {useOpenVidu} from "./openVidu.ts";
 import {useRtcStore} from "../stores/rtc.ts";
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
-const MAX_TIME = 20
+const MAX_TIME = 60
 
 export const useWebSocket = () => {
     const navi = useNavigate();
@@ -45,7 +45,7 @@ export const useWebSocket = () => {
                             })
                         })
                     }
-                    clearInterval(timer);
+                        clearInterval(timer);
                 }
             }, 1000)
         }
@@ -174,9 +174,7 @@ export const useWebSocket = () => {
                 roomStore.setPairProgramingRole(role);
                 console.log('role: ' + role);
 
-                setTimeout(() => {
-                    navi('/trans/pairsolve');
-                }, 500)
+                navi('/trans/pairsolve');
             })
             client.subscribe('/user/' + userId + '/showRetroCode', (msg) => {
                 console.log('Received message: showRetroCode' + msg.body);

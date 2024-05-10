@@ -7,7 +7,7 @@ import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
 import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
 import { useRoomStore } from '../../stores/room';
-import { useEffect } from 'react';
+import { useRtcStore } from '../../stores/rtc';
 
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -33,6 +33,7 @@ loader.init().then(/* ... */);
 
 export default function CodeEditor( ) {
     const roomStore = useRoomStore();
+    const rtcStore = useRtcStore();
 
     function handleEditorDidMount(editor: monaco.editor.IStandaloneCodeEditor) {
       const code = roomStore.getCode();
@@ -41,7 +42,21 @@ export default function CodeEditor( ) {
       }
       editor.onDidChangeModelContent(_e => {
         roomStore.setCode(editor.getValue());
+        if(roomStore.getPairProgramingRole()==='Driver'){
+          const ov = rtcStore.getOpenVidu();
+          if (ov !== null) {
+            ov.session.signal({
+              data: editor.getValue(),
+              to: [],
+              type: 'code'
+            })
+          }
+        }
       });
+
+      if(roomStore.getPairProgramingRole()==='Navigator'){
+        editor.updateOptions({ readOnly: true });
+      }
 
       roomStore.setEditor(editor);
     }
