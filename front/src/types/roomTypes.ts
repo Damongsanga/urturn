@@ -38,6 +38,7 @@ export interface roomState {
     round: number
     questionIdx: number
     editor: monaco.editor.IStandaloneCodeEditor | null
+    code: string | null
     console: string
     lang: string
     sec: number
@@ -65,8 +66,11 @@ export interface roomState {
     setQuestionIdx: (idx: number) => void
     getQuestionIdx: () => number
 
-    setEditor: (editor: any) => void
+    setEditor: (editor: monaco.editor.IStandaloneCodeEditor) => void
     getEditor: () => monaco.editor.IStandaloneCodeEditor | null
+
+    setCode: (code: string) => void
+    getCode: () => string | null
     
     setConsole: (console: string) => void,
     getConsole: () => string,

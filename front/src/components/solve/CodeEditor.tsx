@@ -35,10 +35,13 @@ export default function CodeEditor( ) {
     const roomStore = useRoomStore();
 
     function handleEditorDidMount(editor: monaco.editor.IStandaloneCodeEditor) {
-      if(roomStore.editor !== null) {
-        console.log("왜 난 햄복할수가 엄서" + roomStore.editor.getValue());
-        editor.setValue(roomStore.editor.getValue());
+      const code = roomStore.getCode();
+      if (code !== null) {
+        editor.setValue(code);
       }
+      editor.onDidChangeModelContent(_e => {
+        roomStore.setCode(editor.getValue());
+      });
 
       roomStore.setEditor(editor);
     }

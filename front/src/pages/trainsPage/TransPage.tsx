@@ -27,8 +27,10 @@ export const TransPage = () => {
         const timer = setInterval(() => {
             sec.current -= 1;
             if (sec.current <= 0) {
-                
-                navigate("/" + next);
+                let n = next;
+                if(n === "solveSwitch") n = "solve";
+                if(n === "pairSolveSwitch") n = "pairsolve";
+                navigate("/" + n);
                 clearInterval(timer);
             }
         }, 1000)
