@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         // 해당 API에 대해서는 모든 요청을 허가
-                        .requestMatchers("/ws/**", "/app/**", "/auth/reissue", "/auth/oauth2/login/github", "/auth/test/login", "/actuator/**","/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs", "/check/").permitAll()
+                        .requestMatchers("/ws/**", "/app/**", "/auth/reissue", "/auth/oauth2/login/github", "/auth/test/login", "/actuator/**","/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs", "/check").permitAll()
                         // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정
                         .anyRequest().authenticated())
                 // 에러 핸들링
