@@ -127,6 +127,20 @@ export const useWebSocket = () => {
                 setTimer(MAX_TIME);
 
             });
+            client.subscribe('/user/' + userId + '/switchRole', (msg) => {
+                console.log('Received message: switchRole' + msg.body);
+                const round = Number(msg.body);
+                roomStore.setRound(round);
+                if(roomStore.getPairProgramingRole() === 'Driver'){
+                    roomStore.setPairProgramingRole('Navigator');
+                    console.log("역할: Navigator");
+                }
+                else if(roomStore.getPairProgramingRole() === 'Navigator'){
+                    roomStore.setPairProgramingRole('Driver');
+                    console.log("역할: Driver");
+                }
+
+            })
             client.subscribe('/user/' + userId + '/submit/result', (msg) => {
                 console.log('Received message: submit/result' + msg.body);
                 const data = JSON.parse(msg.body);
