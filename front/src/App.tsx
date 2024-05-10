@@ -7,7 +7,7 @@ import SolvePage from './pages/solvePage/SolvePage.tsx';
 import CheckPage from './pages/solvePage/CheckPage.tsx';
 import ReviewPage from './pages/solvePage/ReviewPage.tsx';
 import PairSolvePage from './pages/solvePage/PairSolvePage.tsx';
-
+import {GithubRepoCallback} from "./utils/GithubUpload.tsx";
 function App() {
 
 	return (
@@ -16,6 +16,7 @@ function App() {
 				<Routes>
 					<Route path='/' element={<LandingPage />} />
 					<Route path='/main' element={<MainPage />} />
+					<Route path='/auth/github/upload' element={<GithubRepoCallback/>}/>
 					<Route path='/auth/github' element={<GithubCallback/>}/>
 					<Route path='/myPage' element={<MyPage />} />
 					<Route path='/solve' element={<SolvePage />} />

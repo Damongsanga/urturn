@@ -9,6 +9,13 @@ interface rtcState {
     streamManager: StreamManager | null,
     //subscribers: Subscriber[],
     subscriber: Subscriber | null,
+    microphoneVolume: number;
+    speakerVolume: number;
+
+    setMicrophoneVolume: (volume: number) => void;
+    getMicrophoneVolume: () => number;
+    setSpeakerVolume: (volume: number) => void;
+    getSpeakerVolume: () => number;
 
     setSessionId: (sessionId: string) => void;
     getSessionId: () => string | null;
@@ -38,7 +45,15 @@ export const useRtcStore = create<rtcState>() (
         ov: null,
         streamManager: null,
         subscriber: null,
+        microphoneVolume: 50,
+        speakerVolume: 50,
         //subscribers: [],
+
+        setMicrophoneVolume: (volume: number) => {set({microphoneVolume: volume})},
+        getMicrophoneVolume: () => {return get().microphoneVolume},
+
+        setSpeakerVolume: (volume: number) => {set({speakerVolume: volume})},
+        getSpeakerVolume: () => {return get().speakerVolume},
 
         setSessionId: (sessionId: string) => {set({ sessionId: sessionId })},
         getSessionId: () => {return get().sessionId},
