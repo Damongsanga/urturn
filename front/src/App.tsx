@@ -7,6 +7,7 @@ import SolvePage from './pages/solvePage/SolvePage.tsx';
 import CheckPage from './pages/solvePage/CheckPage.tsx';
 import ReviewPage from './pages/solvePage/ReviewPage.tsx';
 import PairSolvePage from './pages/solvePage/PairSolvePage.tsx';
+import { TransPage } from './pages/trainsPage/TransPage.tsx';
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route path='/' element={<LandingPage />} />
+					<Route path='/trans/:next' element={<TransPage />} />
 					<Route path='/main' element={<MainPage />} />
 					<Route path='/auth/github' element={<GithubCallback/>}/>
 					<Route path='/myPage' element={<MyPage />} />

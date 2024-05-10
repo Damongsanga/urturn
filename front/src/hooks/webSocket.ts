@@ -40,7 +40,7 @@ export const useWebSocket = () => {
                             round: roomStore.getRound(),
                             algoQuestionId: roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId,
                             isHost: roomStore.getRoomInfo()?.host,
-                            pair: roomStore.getPairProgramingMode(),
+                            isPair: roomStore.getPairProgramingMode(),
                         })
                     })
                     clearInterval(timer);
@@ -105,16 +105,14 @@ export const useWebSocket = () => {
                     }
                 )
                 roomStore.setQuestionInfos(questionInfos);
-                setTimeout(() => {
-                    navi('/check');
-                }, 500)
+                navi('/trans/check');
             });
             client.subscribe('/user/' + userId + '/startToSolve', () => {
                 const idx = roomStore.getRoomInfo()?.host ? 0 : 1;
                 console.log('idx: ' + idx);
                 roomStore.setQuestionIdx(idx);
                 setTimer(MAX_TIME);
-                navi!('/solve');
+                navi('/trans/solve');
             });
             client.subscribe('/user/' + userId + '/switchCode', (msg) => {
                 const data = JSON.parse(msg.body);
@@ -174,7 +172,7 @@ export const useWebSocket = () => {
                 console.log('role: ' + role);
 
                 setTimeout(() => {
-                    navi('/pairsolve');
+                    navi('/trans/pairsolve');
                 }, 500)
             })
             client.subscribe('/user/' + userId + '/showRetroCode', (msg) => {
