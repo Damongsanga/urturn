@@ -7,9 +7,7 @@ import './FirstLanding.css';
 
 export const FirstLandingPage = () => {
 	const githubAuth = () => {
-		location.href = `https://github.com/login/oauth/authorize?client_id=${
-			import.meta.env.VITE_GITHUB_CLIENT_ID
-		}&redirect_uri=${import.meta.env.VITE_GITHUB_REDIRECT_URI}`;
+		location.href = `https://github.com/login/oauth/authorize?client_id=a82095fde8aa68bb396d&scope=user:email&redirect_uri=${import.meta.env.VITE_GITHUB_REDIRECT_URI}`;
 	};
 	//&response_type=code
 

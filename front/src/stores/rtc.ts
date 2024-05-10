@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 //import { persist } from 'zustand/middleware';
-import {OpenVidu, StreamManager, Subscriber} from 'openvidu-browser';
+import {OpenVidu, Publisher, StreamManager, Subscriber} from 'openvidu-browser';
 
 interface rtcState {
     sessionId: string | null;
@@ -11,6 +11,7 @@ interface rtcState {
     subscriber: Subscriber | null,
     microphoneVolume: number;
     speakerVolume: number;
+    publisher: Publisher | null,
 
     setMicrophoneVolume: (volume: number) => void;
     getMicrophoneVolume: () => number;
@@ -34,6 +35,9 @@ interface rtcState {
     // setSubscribers: (subscriber: Subscriber[] | null) => void;
     // getSubscribers: () => Subscriber[] | null;
 
+    setPublisher: (publisher: Publisher) => void;  // New method
+    getPublisher: () => Publisher | null;
+
     clearRtc: () => void;
 }
 
@@ -48,6 +52,7 @@ export const useRtcStore = create<rtcState>() (
         microphoneVolume: 50,
         speakerVolume: 50,
         //subscribers: [],
+        publisher: null,
 
         setMicrophoneVolume: (volume: number) => {set({microphoneVolume: volume})},
         getMicrophoneVolume: () => {return get().microphoneVolume},
@@ -71,6 +76,9 @@ export const useRtcStore = create<rtcState>() (
         getSubscriber: () => {return get().subscriber},
         // setSubscribers: (subscribers: Subscriber[]) => {set({subscribers: subscribers})},
         // getSubscribers: () => {return get().subscribers},
+
+        setPublisher: (publisher: Publisher) => set({ publisher }),
+        getPublisher: () => get().publisher,
 
         clearRtc: () => {
             set({ sessionId: null });
