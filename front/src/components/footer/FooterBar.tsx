@@ -51,7 +51,7 @@ export const FooterBar = ({ $mode }: FooterProp) => {
 				round: roomStore.getRound(),
 				algoQuestionId: roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId,
 				isHost: roomStore.getRoomInfo()?.host,
-				pair: roomStore.getPairProgramingMode(),
+				isPair: roomStore.getPairProgramingMode(),
 			}),
 		});
 	};

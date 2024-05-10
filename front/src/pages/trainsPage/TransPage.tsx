@@ -36,6 +36,7 @@ export const TransPage = () => {
     
     return (
         <div>
+            
             <h1>{next}</h1>
             <h1>여기에 애니메이션이 들어가야 합니다</h1>
             <h1>애니메이션은 다음 목적지에 따라서 달라져야 합니다.</h1>

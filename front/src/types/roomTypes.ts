@@ -67,7 +67,7 @@ export interface roomState {
 
     setEditor: (editor: any) => void
     getEditor: () => monaco.editor.IStandaloneCodeEditor | null
-
+    
     setConsole: (console: string) => void,
     getConsole: () => string,
 
