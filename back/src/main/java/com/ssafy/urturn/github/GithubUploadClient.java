@@ -26,7 +26,6 @@ public class GithubUploadClient {
     private static final RestTemplate restTemplate = new RestTemplate();
 
     private final GithubUploadUtil githubUtil;
-    static final String GITHUB_API_URL = "https://api.github.com/repos/";
 
     public String uploadHistory(Member member, History history){
         if (member.getRepository() == null) throw new RestApiException(NO_REPOSITORY);
@@ -47,7 +46,6 @@ public class GithubUploadClient {
             entity,
             String.class)
             .getBody();
-
     }
 
 }

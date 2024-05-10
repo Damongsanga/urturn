@@ -2,12 +2,10 @@ package com.ssafy.urturn.solving.socket;
 
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.history.HistoryResult;
-import com.ssafy.urturn.global.util.MemberUtil;
-import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.history.service.HistoryService;
 import com.ssafy.urturn.member.service.MemberService;
 import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
-import com.ssafy.urturn.solving.cache.cacheDatas;
+import com.ssafy.urturn.solving.cache.CacheDatas;
 import com.ssafy.urturn.solving.dto.*;
 import com.ssafy.urturn.solving.service.RoomService;
 import java.util.List;
@@ -17,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +25,7 @@ public class WebSocketController {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final RoomService roomService;
-    private final cacheDatas cachedatas;
+    private final CacheDatas cachedatas;
     private final HistoryService historyService;
     private final MemberService memberService;
     // 사용자가 데이터를 app/hello 경로로 데이터 날림.
@@ -205,7 +202,6 @@ public class WebSocketController {
             simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/role", "Driver");
         }
 
-
     }
 
     private void showRetroCode(String roomId, Long pairId, Long managerId) {
@@ -219,32 +215,20 @@ public class WebSocketController {
     @MessageMapping("/submitRetro")
     public void submitRetro(@Payload RetroCreateRequest req){
         RoomInfoDto roomInfo=cachedatas.cacheroomInfoDto(req.getRoomId());
-
         // history에 retro update
         roomService.updateRetro(req, roomInfo.getHistoryId());
 
-        // 각 멤버를 확인해서 github repository가 null이 아니면 클라이언트로 github access token refresh가 필요하다고 응답
-        // 이후 웹소켓 끊기
-
+        // 웹소켓 끊기 요청
+        // 추가로 각 멤버를 확인해서 github repository가 null이 아니면 github access token refresh 요청
         Long managerId=cachedatas.cacheroomInfoDto(req.getRoomId()).getManagerId();
-        if (memberService.hasGithubRepository(managerId)){
-            simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/githubUpload", true);
-        }
-        // 웹소켓 끊으라고 요청
-        simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/finishSocket", true);
+        simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/finishSocket/githubUpload", memberService.hasGithubRepository(managerId));
 
         Long pairId=cachedatas.cacheroomInfoDto(req.getRoomId()).getPairId();
-        if (memberService.hasGithubRepository(pairId)){
-            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/githubUpload", true);
-        }
-        // 웹소켓 끊으라고 요청
-        simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/finishSocket", true);
-
+        simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/finishSocket/githubUpload", memberService.hasGithubRepository(pairId));
 
         //  캐시 삭제.
-
-
     }
+
 }
 /*
 convertAndSendToUser(String user, String destination, Object payload)

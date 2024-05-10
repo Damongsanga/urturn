@@ -1,13 +1,10 @@
 package com.ssafy.urturn.solving.service;
 
-import static com.ssafy.urturn.global.RequestLockType.*;
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.*;
 
 import com.ssafy.urturn.global.RequestLockService;
-import com.ssafy.urturn.global.RequestLockType;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
-import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.global.util.MemberUtil;
 import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.history.entity.History;
@@ -18,13 +15,11 @@ import com.ssafy.urturn.problem.dto.GradingResponse;
 import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.problem.service.GradingService;
 import com.ssafy.urturn.problem.service.ProblemService;
-import com.ssafy.urturn.solving.cache.cacheDatas;
 import com.ssafy.urturn.solving.dto.*;
-import com.ssafy.urturn.solving.temp.WebSocketSessionManager;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
+import com.ssafy.urturn.solving.cache.CacheDatas;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +36,7 @@ public class RoomService {
     private final MemberService memberService;
     private final GradingService gradingService;
     private final ProblemService problemService;
-    private final cacheDatas cachedatas;
+    private final CacheDatas cachedatas;
     private final ReentrantLock lock;
     private final HistoryRepository historyRepository;
 

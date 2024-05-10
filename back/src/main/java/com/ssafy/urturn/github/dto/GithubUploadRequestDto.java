@@ -2,6 +2,7 @@ package com.ssafy.urturn.github.dto;
 
 
 import lombok.Getter;
+import org.springframework.security.core.parameters.P;
 
 @Getter
 public class GithubUploadRequestDto {
@@ -22,7 +23,12 @@ public class GithubUploadRequestDto {
 
         public Committer(String name, String email) {
             this.name = name;
-            this.email = email;
+            if (email == null){
+                this.email  = "urturn@urturn.com";
+            } else {
+                this.email = email;
+            }
+
         }
     }
 }
