@@ -89,6 +89,14 @@ export function useOpenVidu() {
                 }
             }
         })
+
+        ov.session.on('signal:console', (event) => {
+            if(roomStore.getPairProgramingRole() === 'Navigator'){
+                if (event.data) {
+                    roomStore.setConsole(event.data);
+                }
+            }
+        })
         
         await ov.session.connect(token);
         const _publisher = await ov.initPublisherAsync(undefined, {

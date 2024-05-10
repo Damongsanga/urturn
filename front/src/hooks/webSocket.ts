@@ -10,7 +10,7 @@ import {useOpenVidu} from "./openVidu.ts";
 import {useRtcStore} from "../stores/rtc.ts";
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
-const MAX_TIME = 60
+const MAX_TIME = 30
 
 export const useWebSocket = () => {
     const navi = useNavigate();
@@ -140,6 +140,7 @@ export const useWebSocket = () => {
                     roomStore.setPairProgramingRole('Driver');
                     console.log("역할: Driver");
                 }
+                setTimer(MAX_TIME);
                 navi('/trans/pairSolveSwitch');
             })
             client.subscribe('/user/' + userId + '/submit/result', (msg) => {
@@ -165,6 +166,13 @@ export const useWebSocket = () => {
                     }
                     consoleMsg += '\n';
                 }
+                if(roomStore.getPairProgramingMode()===false || roomStore.getPairProgramingRole() === 'Driver'){
+                    rtcStore.getOpenVidu()?.session.signal({
+                        data: consoleMsg,
+                        to: [],
+                        type: 'console'
+                    })
+                }
                 roomStore.setConsole(consoleMsg);
             })
             client.subscribe('/user/' + userId + '/role', (msg) => {
@@ -173,7 +181,10 @@ export const useWebSocket = () => {
                 roomStore.setPairProgramingMode(true);
                 roomStore.setPairProgramingRole(role);
                 console.log('role: ' + role);
-
+                if(role==='Navigator'){
+                    const idx = roomStore.getQuestionIdx() === 0 ? 1 : 0;
+                    roomStore.setQuestionIdx(idx);
+                }
                 navi('/trans/pairsolve');
             })
             client.subscribe('/user/' + userId + '/showRetroCode', (msg) => {
