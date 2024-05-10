@@ -16,7 +16,7 @@
 }
 
 .ButtonColor {
-  background-color: #453C41 !important;
+  background-color: #000034 !important;
   color: white !important;
 
   display: flex !important;
@@ -25,8 +25,8 @@
 
 .ButtonColor:hover,
 .ButtonColor:active  {
-  background-color: #1b1217 !important; 
-  border-color: #1b1217 !important;
+  background-color: #5c5c96 !important; 
+  border-color: #5c5c96 !important;
 
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
 }
