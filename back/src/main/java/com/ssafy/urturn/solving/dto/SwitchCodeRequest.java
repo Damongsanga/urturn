@@ -12,6 +12,7 @@ public class SwitchCodeRequest {
     private int round;
     @JsonProperty("isHost")
     private boolean isHost;
+
     @JsonProperty("pair")
     private boolean pair;
     @Override
