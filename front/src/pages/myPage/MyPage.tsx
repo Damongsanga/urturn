@@ -9,14 +9,23 @@ import {
 	Header,
 	Pagination,
 	Button,
+	Modal, Input,
 } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import { HeaderBar } from '../../components/header/HeaderBar';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import ProgressBar from '@ramonak/react-progress-bar';
 import './MyPage.css';
+import {MemberInfo} from "../../types/memberInfoTypes.ts";
+import {fetchMemberInfo, updateRepository} from "../../utils/api/memberAPI.ts";
+import {useAxios} from "../../utils/useAxios.ts";
 
 export const MyPage = () => {
+	const axios = useAxios(true);
+	const [memberInfo, setMemberInfo] = useState<MemberInfo | null>(null);
+	const [repository, setRepository] = useState<string>('');
+	const [modalOpen, setModalOpen] = useState(false);
+
 	const [pageState, setPageState] = useState({
 		activePage: 5,
 		boundaryRange: 1,
@@ -35,6 +44,42 @@ export const MyPage = () => {
 		}));
 	};
 
+	useEffect(() => {
+		const loadMemberInfo = async () => {
+			try {
+				const info = await fetchMemberInfo(axios);
+				setMemberInfo(info);
+			} catch (error) {
+				console.error('Failed to fetch member info:', error);
+			}
+		};
+
+		loadMemberInfo();
+	}, []);
+
+	const handleRepositoryUpdate = async () => {
+		try {
+			const updatedRepository = await updateRepository(axios, repository);
+			// set 고려할 점... store?
+			setMemberInfo(prevInfo => {
+				if (!prevInfo) {
+					return {
+						id: null,
+						nickname: null,
+						profileImage: null,
+						repository: updatedRepository,
+						exp: null,
+						level: null
+					};
+				}
+				return { ...prevInfo, repository: updatedRepository }; 
+			});
+			setModalOpen(false); 
+			console.log('Repository 업데이트 완료');
+		} catch (error) {
+			console.error('Failed to update repository:', error);
+		}
+	};
 	return (
 		<div className='MyPage'>
 			{/* 헤더 */}
@@ -95,10 +140,11 @@ export const MyPage = () => {
 							</CardContent>
 							{/* 깃허브 주소 */}
 							<CardContent className='ContentBorder'>
-								<CardDescription className='CardTextColor'>깃허브 주소 :</CardDescription>
+								<CardDescription className='CardTextColor'>깃허브 레포지토리 주소 : {memberInfo?.repository}</CardDescription>
 								<Button className='EditButton' floated='right'>
 									수정
 								</Button>
+								<Button onClick={() => setModalOpen(true)}>수정</Button>
 							</CardContent>
 						</Card>
 					</Card>
@@ -164,6 +210,22 @@ export const MyPage = () => {
 					/>
 				</div>
 			</div>
+			<Modal open={modalOpen} onClose={() => setModalOpen(false)} size='tiny'>
+				<Modal.Header>레포지토리 주소 수정</Modal.Header>
+				<Modal.Content>
+					<Input
+						fluid
+						label='Repository URL'
+						placeholder='Enter new repository URL'
+						value={repository}
+						onChange={(e) => setRepository(e.target.value)}
+					/>
+				</Modal.Content>
+				<Modal.Actions>
+					<Button onClick={() => setModalOpen(false)}>취소</Button>
+					<Button positive onClick={handleRepositoryUpdate}>저장</Button>
+				</Modal.Actions>
+			</Modal>
 		</div>
 	);
 };
