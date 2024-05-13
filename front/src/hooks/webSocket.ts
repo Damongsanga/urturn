@@ -219,7 +219,7 @@ export const useWebSocket = () => {
                     client.deactivate();
                     // uri
                     console.log("dddddd")
-                    location.href = `https://github.com/login/oauth/authorize?client_id=a82095fde8aa68bb396d&scope=repo&redirect_uri=http://urturn.site/auth/github/upload`;
+                    location.href = `https://github.com/login/oauth/authorize?client_id=a82095fde8aa68bb396d&scope=repo&redirect_uri=https://urturn.site/auth/github/upload`;
                 }
             })
             console.log('Connected: ' + frame);
