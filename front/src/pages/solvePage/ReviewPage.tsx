@@ -131,7 +131,7 @@ export default function ReviewPage() {
 									{roomStore.questionInfos && activeQuestion > 0 && roomStore.questionInfos[activeQuestion - 1].algoQuestionTitle}
 								</div>
 							</div>
-							<div style={{ height: '100%', overflowY: 'auto' }}>
+							<div style={{ height: '100%', overflowY: 'auto', padding:'12px' }}>
 							{
 								roomStore.questionInfos && activeQuestion > 0 &&
 								<Markdown>{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}</Markdown>
@@ -166,7 +166,7 @@ export default function ReviewPage() {
 								</div>
 							</div>
 							<Allotment vertical>
-								<Allotment.Pane minSize={325}>
+								<Allotment.Pane minSize={5}>
 									<div style={{ height: '100%', width: '100%' }}>
 										<CodeEditor/>
 									</div>
@@ -201,7 +201,7 @@ export default function ReviewPage() {
 											<Form>
 												<TextArea
 													placeholder='Keep'
-													style={{ width: '100%', height: '24.5vh', resize: 'none' }}
+													style={{ width: '100%', height: '65.2vh', resize: 'none' }}
 													value={inputValues.find(item => item.id === activeQuestion)?.keep}
 													onChange={(e) => handleInputChange(e, activeQuestion, 'keep')}
 												/>{' '}
@@ -211,7 +211,7 @@ export default function ReviewPage() {
 											<Form>
 												<TextArea
 													placeholder='try'
-													style={{ width: '100%', height: '24.5vh', resize: 'none' }}
+													style={{ width: '100%', height: '65.2vh', resize: 'none' }}
 													value={inputValues.find(item => item.id === activeQuestion)?.try}
 													onChange={(e) => handleInputChange(e, activeQuestion, 'try')}
 												/>{' '}

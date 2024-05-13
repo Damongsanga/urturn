@@ -5,12 +5,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
 
-.FooterBar {
   background-color: white !important;
   margin-top: 0px !important;
-  border-radius: 0 !important
+  border-radius: 0 !important;
+
+  position: relative;
+
+  border-left: 0px !important;
+}
+
+.FooterBar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: 66px;
+  height: calc(100% + 1px); /* 가상 요소의 높이를 조정 */
+  background-color: #000034 !important; /* 원하는 색상 코드로 변경 */ 
+  z-index: 256;
 }
 
 .ProfileSection {
