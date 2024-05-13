@@ -36,6 +36,8 @@ public class WebSocketController {
     @MessageMapping("/createRoom")
     public void createRoom(@Payload MemberIdDto memberIddto) {
 //        cachedatas.clearAllCache();
+
+        log.info("방 생성 로직 멤버ID Dto = {}",memberIddto);
         Long userId=memberIddto.getMemberId();
         RoomInfoResponse roomInfoResponse = roomService.createRoom(userId);
         UserInfoResponse userInfoResponse = roomService.getUserInfo(userId,null);
@@ -46,6 +48,7 @@ public class WebSocketController {
 
     @MessageMapping("/enterRoom")
     public void enterRoom(@Payload RoomIdDto roomIddto) {
+        log.info("방 입장 RoomID Dto = {}",roomIddto);
 
         String roomId=roomIddto.getRoomId();
         Long pairId=cachedatas.cacheroomInfoDto(roomId).getPairId();
@@ -70,7 +73,7 @@ public class WebSocketController {
 
     @MessageMapping("/selectLevel")
     public void readContext(@Payload SelectLevelRequest SelectLevelRequest){
-
+        log.info("난이도 선택 및 시작 로직 SelectLevel Dto = {}",SelectLevelRequest);
         // 두 유저ID 추출
         Long pairId=cachedatas.cacheroomInfoDto(SelectLevelRequest.getRoomId()).getPairId();
         Long managerId=cachedatas.cacheroomInfoDto(SelectLevelRequest.getRoomId()).getManagerId();
@@ -83,10 +86,9 @@ public class WebSocketController {
     }
 
     @MessageMapping("/readyToSolve")
-    public synchronized void readyToSolve(@Payload ReadyInfoRequest readyInfoRequest)
-        throws RestApiException {
+    public synchronized void readyToSolve(@Payload ReadyInfoRequest readyInfoRequest) {
+        log.info("문제 풀이 시작 로직 readyInfo Dto = {}",readyInfoRequest);
 
-        System.out.println("readyToSolve");
         Long pairId=cachedatas.cacheroomInfoDto(readyInfoRequest.getRoomId()).getPairId();
         Long managerId=cachedatas.cacheroomInfoDto(readyInfoRequest.getRoomId()).getManagerId();
 
@@ -110,8 +112,8 @@ public class WebSocketController {
 
     @MessageMapping("/switchCode")
     public synchronized void switchCode(@Payload SwitchCodeRequest switchCodeRequest){
+        log.info("코드 스위치 로직 SwitchCode Dto = {}",switchCodeRequest);
         // 코드 스냅샷 저장.
-        System.out.println("round = "+switchCodeRequest.getRound()+ " code = "+switchCodeRequest.getCode());
         roomService.updateCodeCache(switchCodeRequest.getRoomId(),switchCodeRequest.getProblemId().toString(),
                 new UserCodeDto(switchCodeRequest.getRound(),switchCodeRequest.getCode()));
 
@@ -153,10 +155,14 @@ public class WebSocketController {
 
     @MessageMapping("/submitCode")
     public void submitCode(@Payload SubmitRequest submitRequest){
+        log.info("채점 로직 Dto = {}",submitRequest);
+
         Long pairId=cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getPairId();
-        System.out.println("pairID = "+pairId);
+        log.info("pairId = {}",pairId);
+
         Long managerId=cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getManagerId();
-        System.out.println("managerID = "+managerId);
+        log.info("managerID = {}",managerId);
+
         SubmitResponse submitResponse = roomService.submitCode(submitRequest);
 
         // 오답인 경우

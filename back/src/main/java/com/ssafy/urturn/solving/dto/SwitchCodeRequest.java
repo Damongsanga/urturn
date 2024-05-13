@@ -2,9 +2,12 @@ package com.ssafy.urturn.solving.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Getter
 public class SwitchCodeRequest {
+    private static final Logger log= LoggerFactory.getLogger(SwitchCodeRequest.class);
     private String code;
     private String roomId;
     @JsonProperty("algoQuestionId")
@@ -16,4 +19,15 @@ public class SwitchCodeRequest {
     @JsonProperty("isPair")
     private boolean isPair;
 
+    @Override
+    public String toString() {
+        return "SwitchCodeRequest{" +
+                "code='" + code + '\'' +
+                ", roomId='" + roomId + '\'' +
+                ", problemId=" + problemId +
+                ", round=" + round +
+                ", isHost=" + isHost +
+                ", isPair=" + isPair +
+                '}';
+    }
 }
