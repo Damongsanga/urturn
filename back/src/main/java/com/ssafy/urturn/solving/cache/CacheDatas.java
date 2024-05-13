@@ -3,6 +3,7 @@ package com.ssafy.urturn.solving.cache;
 import com.ssafy.urturn.solving.dto.RoomInfoDto;
 import com.ssafy.urturn.solving.dto.UserCodeDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.cache.RedisCacheManager;
@@ -48,6 +49,12 @@ public class CacheDatas {
     public RoomInfoDto cacheroomInfoDto(String roomId){
         return null;
     }
+
+    @CacheEvict(value = "roomInfoDtoCache", key="#roomId")
+    public void evictRoomInfoDto(String roomId){
+
+    }
+
 
     @CachePut(value = "responseCache", key = "#roomId + '_' + #questionId")
     public List<UserCodeDto> cacheCodes(String roomId, String questionId, List<UserCodeDto> list){

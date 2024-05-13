@@ -281,6 +281,17 @@ public class RoomService {
                 .setRetro(req);
     }
 
+    public void leaveRoom(LeaveRoomDto leaveRoomDto){
+        // 방장 인 경우
+        if(leaveRoomDto.isHost()){
+            // 방 삭제.
+            cachedatas.evictRoomInfoDto(leaveRoomDto.getRoomId());
+        }else{
+            // 방 정보에서 pairId null로 수정
+            cachedatas.cacheroomInfoDto(leaveRoomDto.getRoomId()).setPairId(null);
+        }
+    }
+
     @CachePut(value = "responseCache", key = "#roomId + '_' + #questionId")
     public List<UserCodeDto> updateCodeCache(String roomId, String questionId, UserCodeDto newCode) {
 //        System.out.println("[UpdateCodeCache]  roomId = "+roomId+" questionId = "+questionId+" round = "+newCode.getRound()+" code = "+newCode.getCode());

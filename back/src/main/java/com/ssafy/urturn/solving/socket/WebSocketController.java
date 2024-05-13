@@ -64,6 +64,23 @@ public class WebSocketController {
         simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/userInfo",userInfoResponse2);
     }
 
+    @MessageMapping("/leaveRoom")
+    public void leaveRoom(@Payload LeaveRoomDto leaveRoomDto) {
+
+        Long pairId=cachedatas.cacheroomInfoDto(leaveRoomDto.getRoomId()).getPairId();
+        Long managerId=cachedatas.cacheroomInfoDto(leaveRoomDto.getRoomId()).getManagerId();
+
+        roomService.leaveRoom(leaveRoomDto);
+
+        if(leaveRoomDto.isHost()){
+            simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/disconnectWebSocket",true);
+            simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/disconnectWebSocket",true);
+            return;
+        }
+        simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/disconnectWebSocket",true);
+
+    }
+
     @MessageMapping("/sendOVSession")
     public void sendOVSSession(@Payload SessionIdDto sessionIdDto){
         System.out.println(sessionIdDto.toString());
