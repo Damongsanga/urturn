@@ -9,14 +9,23 @@ import {
 	Header,
 	Pagination,
 	Button,
+	Modal, Input,
 } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import { HeaderBar } from '../../components/header/HeaderBar';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import ProgressBar from '@ramonak/react-progress-bar';
 import './MyPage.css';
+import {MemberInfo} from "../../types/memberInfoTypes.ts";
+import {fetchMemberInfo, updateRepository} from "../../utils/api/memberAPI.ts";
+import {useAxios} from "../../utils/useAxios.ts";
 
 export const MyPage = () => {
+	const axios = useAxios(true);
+	const [memberInfo, setMemberInfo] = useState<MemberInfo | null>(null);
+	const [repository, setRepository] = useState<string>('');
+	const [modalOpen, setModalOpen] = useState(false);
+
 	const [pageState, setPageState] = useState({
 		activePage: 5,
 		boundaryRange: 1,
@@ -34,6 +43,50 @@ export const MyPage = () => {
 			activePage: activePage,
 		}));
 	};
+
+	useEffect(() => {
+		const loadMemberInfo = async () => {
+			try {
+				const info = await fetchMemberInfo(axios);
+				setMemberInfo(info);
+				console.log(info);
+			} catch (error) {
+				console.error('Failed to fetch member info:', error);
+			}
+		};
+
+		loadMemberInfo();
+	}, [modalOpen]);
+
+	const handleRepositoryUpdate = async () => {
+		console.log("repo ",repository);
+		if (!repository) {
+			alert("repository URL을 입력 해 주세요");  
+			return;
+		}
+		try {
+			const updatedRepository = await updateRepository(axios, repository);
+			// set 고려할 점... store?
+			setMemberInfo(prevInfo => {
+				if (!prevInfo) {
+					return {
+						id: null,
+						nickname: null,
+						profileImage: null,
+						repository: updatedRepository,
+						exp: null,
+						level: null
+					};
+				}
+				return { ...prevInfo, repository: updatedRepository };
+			});
+			setModalOpen(false);
+			console.log('Repository 업데이트 완료');
+		} catch (error) {
+			console.error('Fail 레포 업데이트:', error);
+		}
+	};
+
 
 	return (
 		<div className='MyPage'>
@@ -62,21 +115,21 @@ export const MyPage = () => {
 							>
 								<Image
 									size='tiny'
-									src='https://shiftpsh-blog.s3.amazonaws.com/uploads/2022/04/listing216.png'
+									src={memberInfo?.profileImage}
 								/>
 								<CardHeader className='CardTextColor' textAlign='center' style={{ marginTop: '3vh' }}>
-									한별이
+									{memberInfo?.nickname}
 								</CardHeader>
 							</CardContent>
 							{/* 프로필 영역 카드 하단 - 레벨 */}
 							<CardContent className='ExpBar'>
 								<CardHeader className='CardTextColor' textAlign='center'>
-									레벨 : 
+									레벨 : {memberInfo?.level}
 								</CardHeader>
 								{/* 레벨 바 */}
 								<div className='ExpBar'>
 									<ProgressBar
-										completed={80}
+										completed={memberInfo?.exp as number}
 										width='24vw'
 										height='2.5vh'
 										baseBgColor='#A67A6A'
@@ -95,10 +148,10 @@ export const MyPage = () => {
 							</CardContent>
 							{/* 깃허브 주소 */}
 							<CardContent className='ContentBorder'>
-								<CardDescription className='CardTextColor'>깃허브 주소 :</CardDescription>
-								<Button className='EditButton' floated='right'>
-									수정
-								</Button>
+								<CardHeader className='CardTextColor' textAlign='center'>등록된 레포지토리</CardHeader>
+								{/*null 일때 텍스트 중요 말풍선으로 빼는 식?*/}
+								<CardDescription className='CardTextColor'>{memberInfo?.repository ? memberInfo.repository : '레포지토리를 생성하고 레포지토리 이름을 등록해 주세요'}</CardDescription>
+								<Button className='EditButton' floated='right' onClick={() => setModalOpen(true)}>수정</Button>
 							</CardContent>
 						</Card>
 					</Card>
@@ -164,6 +217,22 @@ export const MyPage = () => {
 					/>
 				</div>
 			</div>
+			<Modal open={modalOpen} onClose={() => setModalOpen(false)} size='tiny'>
+				<Modal.Header>레포지토리 주소 수정</Modal.Header>
+				<Modal.Content>
+					<Input
+						fluid
+						label='Repository URL'
+						placeholder='Enter new repository URL'
+						value={repository}
+						onChange={(e) => setRepository(e.target.value)}
+					/>
+				</Modal.Content>
+				<Modal.Actions>
+					<Button onClick={() => setModalOpen(false)}>취소</Button>
+					<Button positive onClick={handleRepositoryUpdate}>수정</Button>
+				</Modal.Actions>
+			</Modal>
 		</div>
 	);
 };
