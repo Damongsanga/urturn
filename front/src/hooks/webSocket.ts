@@ -218,9 +218,12 @@ export const useWebSocket = () => {
                 if(data===true){
                     client.deactivate();
                     // uri
-                    console.log("dddddd")
                     location.href = `https://github.com/login/oauth/authorize?client_id=a82095fde8aa68bb396d&scope=repo&redirect_uri=https://urturn.site/auth/github/upload`;
                 }
+            })
+
+            client.subscribe('/user/' + userId + '/finishSocket', (msg) => {
+                
             })
             console.log('Connected: ' + frame);
 

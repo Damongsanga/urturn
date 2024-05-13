@@ -19,7 +19,7 @@ export const GithubRepoCallback = () =>{
                 console.log("accesstoken",authStore.accessToken);
                 const data = response.data;
                 console.log(data);
-                console.log("리뷰 제출 완료");
+                alert("리뷰 제출 완료");
                 navigate('/main');
             })
             .catch((e) => {

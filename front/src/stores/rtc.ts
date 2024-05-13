@@ -81,6 +81,8 @@ export const useRtcStore = create<rtcState>() (
         getPublisher: () => get().publisher,
 
         clearRtc: () => {
+            try{get().ov?.session.disconnect()}catch{};
+
             set({ sessionId: null });
             set({ connectionId: null});
             set({ ov: null});

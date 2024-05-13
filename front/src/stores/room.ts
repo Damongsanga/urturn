@@ -74,6 +74,8 @@ export const useRoomStore = create<roomState>() (
             getPairProgramingRole: () => {return get().pairProgramingRole},
 
             clearRoom: () => {
+                try{get().client?.deactivate()}catch{};
+
                 set({ client: null });
                 set({ userInfo: null });
                 set({ roomInfo: null });

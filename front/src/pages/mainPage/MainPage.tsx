@@ -23,12 +23,24 @@ const MainPage: React.FC = () => {
 	const webSocket = useWebSocket();
 
 	const authStore = useAuthStore();
-	const ax = useAxios();
+	const ax = useAxios(true);
+
+	const clearMainLogic = () => {
+		roomStore.clearRoom();
+		ax.delete('/sessions/'+rtcStore.getSessionId() + '/connection/' + rtcStore.getConnectionId());
+		ax.delete('/sessions/'+rtcStore.getSessionId());
+		rtcStore.clearRtc();
+	}
 
 	useEffect(() => {
-		roomStore.clearRoom();
-		rtcStore.clearRtc();
-	}, []);
+		clearMainLogic();
+	}, [])
+
+	useEffect(() => {
+		if(open==false){
+			clearMainLogic();
+		}
+	}, [open]);
 
 	const buttonStyle = {};
 
