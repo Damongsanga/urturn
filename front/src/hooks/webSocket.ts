@@ -208,8 +208,8 @@ export const useWebSocket = () => {
                     })
                     roomStore.getReviewInfos().push(tmp);
                 });
-
                 roomStore.setPairProgramingRole('Navigator');
+                roomStore.setSec(0);
 
                 navi('/trans/review');
             })
