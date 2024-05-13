@@ -100,7 +100,7 @@ public class History extends BaseEntity {
     }
 
     private String makeRetro(String retroKeep, String retroTry){
-        return "## 잘한 점 \n"+retroKeep+"\n## 아쉬운 점 \n"+retroTry;
+        return "### 잘한 점 \n"+retroKeep+"\n### 아쉬운 점 \n"+retroTry;
     }
 
     public void finalizeUpdateHistory(HistoryResult result, int totalRound){

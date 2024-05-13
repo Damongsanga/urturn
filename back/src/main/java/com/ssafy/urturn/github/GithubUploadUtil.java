@@ -18,15 +18,16 @@ public class GithubUploadUtil {
 
         // 요약 부분
         sb.append("# 요약\n")
-            .append("방장 : ").append(dto.getManagerNickname()).append("\n")
-            .append("페어 : ").append(dto.getPairNickname()).append("\n")
+            .append("방장 : ").append(dto.getManagerNickname()).append("\n\n")
+            .append("페어 : ").append(dto.getPairNickname()).append("\n\n")
+            .append("소요 라운드 : ").append(dto.getTotalRound()).append(" 라운드").append("\n\n")
             .append("결과 : ").append(dto.getResult().getValue()).append("\n\n");
 
         // 1번 문제 부분
         sb.append("# 1번 문제\n")
             .append("## 문제 : ").append(dto.getTitle1()).append("\n")
             .append(dto.getContent1()).append("\n\n")
-            .append("## 제출코드\n")
+            .append("### 제출 코드\n")
             .append("```").append(dto.getLanguage1().toString()).append("\n")
             .append(dto.getCode1()).append("\n")
             .append("```\n\n")
@@ -37,7 +38,7 @@ public class GithubUploadUtil {
         sb.append("# 2번 문제\n")
             .append("## 문제 : ").append(dto.getTitle2()).append("\n")
             .append(dto.getContent2()).append("\n\n")
-            .append("## 제출코드\n")
+            .append("### 제출 코드\n")
             .append("```").append(dto.getLanguage2().toString()).append("\n")
             .append(dto.getCode2()).append("\n")
             .append("```\n\n")
