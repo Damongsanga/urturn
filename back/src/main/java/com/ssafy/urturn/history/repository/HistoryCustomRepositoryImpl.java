@@ -60,6 +60,7 @@ public class HistoryCustomRepositoryImpl implements HistoryCustomRepository{
                     problem2.level),
                 history.code1,
                 history.code2,
+                history.result,
                 history.totalRound,
                 history.createdAt,
                 history.endTime
