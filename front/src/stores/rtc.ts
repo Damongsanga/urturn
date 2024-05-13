@@ -83,6 +83,12 @@ export const useRtcStore = create<rtcState>() (
         clearRtc: () => {
             set({ sessionId: null });
             set({ connectionId: null});
+            set({ ov: null});
+            set({ streamManager: null});
+            set({ subscriber: null});
+            set({ microphoneVolume: 50});
+            set({ speakerVolume: 50});
+            set({ publisher: null});
         }
     }),
 

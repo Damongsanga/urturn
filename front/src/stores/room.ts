@@ -70,6 +70,16 @@ export const useRoomStore = create<roomState>() (
                 set({ client: null });
                 set({ userInfo: null });
                 set({ roomInfo: null });
+                set({ questionInfos: [] });
+                set({ round: 1 });
+                set({ questionIdx: -1 });
+                set({ editor: null });
+                set({ code: null });
+                set({ console: '' });
+                set({ lang: 'JAVASCRIPT' });
+                set({ sec: 99999999 });
+                set({ pairProgramingMode: false });
+                set({ pairProgramingRole: null });
             },
         }),
 

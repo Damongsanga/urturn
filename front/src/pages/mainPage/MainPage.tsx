@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Grid, Image, GridRow, GridColumn, Modal, Header } from 'semantic-ui-react';
 import { useRoomStore } from '../../stores/room';
+import { useRtcStore } from "../../stores/rtc.ts";
 import { HeaderBar } from '../../components/header/HeaderBar.tsx';
 import { WaitingPage } from '../waitingPage/WaitingPage';
 import { EntryCodeModal } from '../../components/modal/EntryCodeModal.tsx';
@@ -16,6 +17,7 @@ import createTeam from '../../assets/images/create_team.png'
 
 const MainPage: React.FC = () => {
 	const roomStore = useRoomStore();
+	const rtcStore = useRtcStore();
 	const [open, setOpen] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
 	const webSocket = useWebSocket();
@@ -25,6 +27,7 @@ const MainPage: React.FC = () => {
 
 	useEffect(() => {
 		roomStore.clearRoom();
+		rtcStore.clearRtc();
 	}, []);
 
 	const buttonStyle = {};

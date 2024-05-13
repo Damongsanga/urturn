@@ -1,4 +1,4 @@
-import {OpenVidu} from 'openvidu-browser';
+import {OpenVidu, StreamEvent} from 'openvidu-browser';
 import { useAxios } from '../utils/useAxios.ts';
 import { useRtcStore } from "../stores/rtc.ts";
 import { useRoomStore } from '../stores/room.ts';
@@ -67,7 +67,7 @@ export function useOpenVidu() {
         // });
         // rtcStore.setSubscribers(subscribers);
 
-        ov.session.on('streamCreated', (event) => {
+        ov.session.on('streamCreated', (event:StreamEvent) => {
             ov.session.subscribe(event.stream, 'session-ui');
             const subscriber = ov.session.subscribe(event.stream, 'session-ui');
             rtcStore.setSubscriber(subscriber);
