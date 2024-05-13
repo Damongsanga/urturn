@@ -1,11 +1,12 @@
 import { useState, ChangeEvent } from "react";
 import { Menu, Popup, Header, Grid, GridRow, GridColumn, FormInput, Icon, MenuItem, Form } from "semantic-ui-react";
 import './QuestionSideBar.css'
+import {useRoomStore} from "../../stores/room.ts";
 
 export const QuestionSideBar = () => {
   const [volume, setVolume] = useState({ speaker: 50, microphone: 50 });
 	const { speaker, microphone } = volume;
-
+	const room = useRoomStore();
 	const handleVolume = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setVolume((prevState) => ({ ...prevState, [name]: value }));
@@ -84,12 +85,12 @@ export const QuestionSideBar = () => {
 					}
 				/>
 				<MenuItem name='Profile'>
-					<img alt='profile' src='https://avatars.githubusercontent.com/u/19562994?v=4' />
+					<img alt='profile' src={room.userInfo?.myUserProfileUrl} />
 				</MenuItem>
 				<MenuItem name='Profile'>
 					<img
 						alt='profile'
-						src='https://shiftpsh-blog.s3.amazonaws.com/uploads/2022/04/listing216.png'
+						src={room.userInfo?.myUserProfileUrl}
 						style={{ marginBottom: '5vh' }}
 					/>
 				</MenuItem>

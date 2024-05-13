@@ -129,7 +129,7 @@ export const MyPage = () => {
 								{/* 레벨 바 */}
 								<div className='ExpBar'>
 									<ProgressBar
-										completed={memberInfo?.exp as number}
+										completed={77}
 										width='24vw'
 										height='2.5vh'
 										baseBgColor='#A67A6A'
@@ -141,16 +141,16 @@ export const MyPage = () => {
 								</div>
 							</CardContent>
 							{/* 레벨 관련 문구 */}
-							<CardContent className='ContentBorder'>
-								<CardHeader className='CardTextColor' textAlign='center' style={{ marginTop: '2vh' }}>
-									다음 레벨까지
-								</CardHeader>
-							</CardContent>
+							{/*<CardContent className='ContentBorder'>*/}
+							{/*	<CardHeader className='CardTextColor' textAlign='center' style={{ marginTop: '2vh' }}>*/}
+							{/*		다음 레벨까지*/}
+							{/*	</CardHeader>*/}
+							{/*</CardContent>*/}
 							{/* 깃허브 주소 */}
 							<CardContent className='ContentBorder'>
 								<CardHeader className='CardTextColor' textAlign='center'>등록된 레포지토리</CardHeader>
 								{/*null 일때 텍스트 중요 말풍선으로 빼는 식?*/}
-								<CardDescription className='CardTextColor'>{memberInfo?.repository ? memberInfo.repository : '레포지토리를 생성하고 레포지토리 이름을 등록해 주세요'}</CardDescription>
+								<CardDescription className='CardTextColor' textAlign='center'>{memberInfo?.repository ? memberInfo.repository : '레포지토리를 생성하고 레포지토리 이름을 등록해 주세요'}</CardDescription>
 								<Button className='EditButton' floated='right' onClick={() => setModalOpen(true)}>수정</Button>
 							</CardContent>
 						</Card>
@@ -218,12 +218,12 @@ export const MyPage = () => {
 				</div>
 			</div>
 			<Modal open={modalOpen} onClose={() => setModalOpen(false)} size='tiny'>
-				<Modal.Header>레포지토리 주소 수정</Modal.Header>
+				<Modal.Header>레포지토리 수정</Modal.Header>
 				<Modal.Content>
 					<Input
 						fluid
-						label='Repository URL'
-						placeholder='Enter new repository URL'
+						label='Repository'
+						placeholder='레포지토리 이름을 입력하세요.'
 						value={repository}
 						onChange={(e) => setRepository(e.target.value)}
 					/>
