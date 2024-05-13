@@ -56,7 +56,7 @@ export default function SolvePage() {
                 }
 								</div>
 							</div>
-							<div style={{ height: '100%', overflowY: 'auto' }}>
+							<div style={{ height: '100%', overflowY: 'auto', padding:'12px' }}>
               {
                 roomStore.questionIdx == -1 ? <div></div> :
                 <Markdown>{roomStore.questionInfos![roomStore.questionIdx].algoQuestionContent}</Markdown>
@@ -79,7 +79,7 @@ export default function SolvePage() {
 										defaultValue={langOptions[0].value}
 										searchInput={{ type: 'string' }}
 										options={langOptions}
-                    onChange={(_e, { value }) => {roomStore.setLang(value as string);}}
+                   						onChange={(_e, { value }) => {roomStore.setLang(value as string);}}
 									/>
 								</div>
 							</div>
@@ -102,7 +102,7 @@ export default function SolvePage() {
 										>
 										</div>
 									</div>
-									<div>
+									<div style={{ padding:'12px' }}>
                         <p style={{ whiteSpace: 'pre-wrap' }}>
                         {roomStore.console}
                         </p>

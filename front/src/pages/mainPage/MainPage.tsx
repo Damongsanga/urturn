@@ -120,7 +120,7 @@ const MainPage: React.FC = () => {
 												color: 'black',
 											}}
 										>
-											만들어진 방에 참여해보세요
+											만들어진 방에 합류해보세요
 										</Card.Description>
 									</Card.Content>
 									<Card.Content

@@ -5,7 +5,7 @@ import { Client } from "@stomp/stompjs";
 import { useAuthStore } from "../stores/useAuthStore";
 import { useRoomStore } from "../stores/room";
 import { loadMarkdownFromCDN } from "../utils/solve/loadMarkdownFromCDN";
-import { questionInfo } from "../types/roomTypes";
+import { questionInfo, reviewInfo } from "../types/roomTypes";
 import {useOpenVidu} from "./openVidu.ts";
 import {useRtcStore} from "../stores/rtc.ts";
 
@@ -189,8 +189,29 @@ export const useWebSocket = () => {
             })
             client.subscribe('/user/' + userId + '/showRetroCode', (msg) => {
                 console.log('Received message: showRetroCode' + msg.body);
-                //const data = JSON.parse(msg.body);
-                
+
+                const data = JSON.parse(msg.body);
+       
+                roomStore?.getQuestionInfos()?.forEach((questionInfo: questionInfo) => {
+                    const idx = questionInfo.algoQuestionId;
+                    const tmp : reviewInfo[] = [];
+
+                    data[idx].codes.forEach((userCode: any) => {
+                        tmp.push({
+                            title: String(userCode.round) + " 라운드",
+                            content: userCode.code
+                        })
+                    })
+                    tmp.push({
+                        title: "정답",
+                        content: data[idx].code
+                    })
+                    roomStore.getReviewInfos().push(tmp);
+                });
+                roomStore.setPairProgramingRole('Navigator');
+                roomStore.setSec(0);
+
+                navi('/trans/review');
             })
             console.log('Connected: ' + frame);
 
