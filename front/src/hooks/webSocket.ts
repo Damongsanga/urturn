@@ -222,9 +222,9 @@ export const useWebSocket = () => {
                 }
             })
 
-            client.subscribe('/user/' + userId + '/finishSocket', (msg) => {
+            // client.subscribe('/user/' + userId + '/finishSocket', () => {
                 
-            })
+            // })
             console.log('Connected: ' + frame);
 
         };
