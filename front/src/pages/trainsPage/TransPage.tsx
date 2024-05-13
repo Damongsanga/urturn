@@ -56,7 +56,7 @@ export const TransPage = () => {
 		},
 		{
 			key: 'pairsolve',
-			message: '한 문제를 해결하였습니다.',
+			message: '문제 하나를 해결하였습니다.',
 			detailMessage: '잠시 후 페어 프로그래밍 모드로 변환합니다.',
 		},
 		{
