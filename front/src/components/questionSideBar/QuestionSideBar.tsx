@@ -85,12 +85,12 @@ export const QuestionSideBar = () => {
 					}
 				/>
 				<MenuItem name='Profile'>
-					<img alt='profile' src={room.userInfo?.relativeUserProfileUrl} />
+					<img alt='profile' src={room.userInfo?.myUserProfileUrl} />
 				</MenuItem>
 				<MenuItem name='Profile'>
 					<img
 						alt='profile'
-						src={room.userInfo?.myUserProfileUrl}
+						src={room.userInfo?.relativeUserProfileUrl}
 						style={{ marginBottom: '5vh' }}
 					/>
 				</MenuItem>
