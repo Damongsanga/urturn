@@ -213,6 +213,15 @@ export const useWebSocket = () => {
 
                 navi('/trans/review');
             })
+            client.subscribe('/user/' + userId + '/finishSocket/githubUpload', (msg) => {
+                const data: boolean = JSON.parse(msg.body);
+                if(data===true){
+                    client.deactivate();
+                    // uri
+
+                    location.href = `https://github.com/login/oauth/authorize?client_id=a82095fde8aa68bb396d&scope=repo&redirect_uri=http://localhost:5173/auth/github/upload`;
+                }
+            })
             console.log('Connected: ' + frame);
 
         };
@@ -241,7 +250,7 @@ export const useWebSocket = () => {
                     }),
                 });
             }
-        }, 500);
+        }, 1000);
         
         roomStore.setClient(client);
     }

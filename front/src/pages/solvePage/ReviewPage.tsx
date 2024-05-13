@@ -80,10 +80,9 @@ export default function ReviewPage() {
 				item.id === questionId ? { ...item, [fieldName]: event.target.value } : item
 			)
 		);
-		console.log(inputValues)
+		//console.log(inputValues)
 	};
 	
-
 	return (
 		<div className='Page'>
 			<HeaderBar $review={true} $mode={1} />
@@ -225,7 +224,7 @@ export default function ReviewPage() {
 				</div>
 			</div>
 			{/* footer */}
-			<FooterBar $mode={2}/>
+			<FooterBar $mode={2} $reviewValues={inputValues}/>
 		</div>
 	);
 }

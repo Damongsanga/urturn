@@ -6,9 +6,11 @@ import {
 import './FooterBar.css';
 import { useRoomStore } from '../../stores/room';
 import { convertLangToUpper } from '../../utils/solve/convertProgramLang';
+import { inputValue } from '../../types/roomTypes';
 
 interface FooterProp {
 	$mode?: number;
+	$reviewValues?: inputValue[];
 	$onClickFunc?: () => void;
 }
 /* 
@@ -16,7 +18,7 @@ interface FooterProp {
 mode : 0이면 문제확인 / 1이면 ide / 2이면 회고
 $switch : 스위칭 모드이면 true, 아니면 false
 */
-export const FooterBar = ({ $mode }: FooterProp) => {
+export const FooterBar = ({ $mode, $reviewValues }: FooterProp) => {
 	const roomStore = useRoomStore();
 
 	const readyToSolve = () => {
@@ -56,6 +58,19 @@ export const FooterBar = ({ $mode }: FooterProp) => {
 		});
 	};
 
+	function submitReview(): void {
+		roomStore.client?.publish({
+			destination: '/app/submitRetro',
+			body: JSON.stringify({
+				roomId: roomStore.getRoomInfo()?.roomId,
+				retroKeep1: $reviewValues?.[0].keep,
+				retroTry1: $reviewValues?.[0].try,
+				retroKeep2: $reviewValues?.[1].keep,
+				retroTry2: $reviewValues?.[1].try,
+			}),
+		});
+	}
+
 	return (
 		<>
 			<Menu className='FooterBar' borderless>
@@ -84,7 +99,7 @@ export const FooterBar = ({ $mode }: FooterProp) => {
 				{/* 회고에 사용할 자리 */}
 				{$mode === 2 && (
 					<MenuItem name='RunButton' className='RunButton' position='right'>
-						<Button size='large' className='ReviewButtonColor'>
+						<Button onClick={submitReview} size='large' className='ReviewButtonColor'>
 							회고 저장하기
 						</Button>
 					</MenuItem>

@@ -1,7 +1,7 @@
 import { Client } from '@stomp/stompjs';
 import { create } from "zustand";
 //import { persist } from 'zustand/middleware';
-import { roomInfo, userInfo, questionInfo, roomState, reviewInfo } from '../types/roomTypes';
+import { roomInfo, userInfo, questionInfo, roomState, reviewInfo, inputValue } from '../types/roomTypes';
 import * as monaco from "monaco-editor";
 
 export const useRoomStore = create<roomState>() (
@@ -12,6 +12,10 @@ export const useRoomStore = create<roomState>() (
             roomInfo: null,
             questionInfos: [],
             reviewInfos: [],
+            inputValues: [
+                { id: 1, keep: '', try: '' },
+                { id: 2, keep: '', try: '' }
+            ],
 
             round: 1,
             questionIdx: -1,
@@ -37,6 +41,9 @@ export const useRoomStore = create<roomState>() (
 
             setReviewInfos: (reviewInfos: reviewInfo[][]) => {set({ reviewInfos: reviewInfos })},
             getReviewInfos: () => {return get().reviewInfos},
+
+            setInputValues: (inputValues: inputValue[]) => {set({ inputValues: inputValues })},
+            getInputValues: () => {return get().inputValues},
 
             setRound: (round: number) => {set({ round: round })},
             getRound: () => {return get().round},
@@ -71,6 +78,11 @@ export const useRoomStore = create<roomState>() (
                 set({ userInfo: null });
                 set({ roomInfo: null });
                 set({ questionInfos: [] });
+                set({ reviewInfos: [] });
+                set({ inputValues: [
+                    { id: 1, keep: '', try: '' },
+                    { id: 2, keep: '', try: '' }
+                    ] });
                 set({ round: 1 });
                 set({ questionIdx: -1 });
                 set({ editor: null });

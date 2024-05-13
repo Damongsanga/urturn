@@ -33,12 +33,19 @@ export interface reviewInfo {
     content: string
 }
 
+export interface inputValue {
+    id: number
+    keep: string
+    try: string
+}
+
 export interface roomState {
     client: Client | null,
     userInfo: userInfo | null,
     roomInfo: roomInfo | null,
     questionInfos: questionInfo[] | null
     reviewInfos: reviewInfo[][]
+    inputValues: inputValue[]
 
     round: number
     questionIdx: number
@@ -64,6 +71,9 @@ export interface roomState {
 
     setReviewInfos: (reviewInfos: reviewInfo[][]) => void
     getReviewInfos: () => reviewInfo[][]
+
+    setInputValues: (inputValues: inputValue[]) => void
+    getInputValues: () => inputValue[]
 
     setRound: (round: number) => void
     getRound: () => number
