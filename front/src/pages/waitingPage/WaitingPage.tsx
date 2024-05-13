@@ -50,11 +50,11 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 	// 난이도
 	//const rtcStore = useRtcStore();
 	const difficulties = [
-		{ label: '100m 달리기', value: 'LEVEL1', color: '#AAD79F'},
-		{ label: '1km 달리기', value: 'LEVEL2', color: '#A9D9DC' },
-		{ label: '10km 달리기', value: 'LEVEL3', color: '#E5ACAC' },
-		{ label: '하프 마라톤', value: 'LEVEL4', color: '#C1ABE4' },
-		{ label: '풀 마라톤', value: 'LEVEL5', color: '#9B9B9B' },
+		{ label: 'LEVEL1', value: 'LEVEL1', color: '#AAD79F'},
+		{ label: 'LEVEL2', value: 'LEVEL2', color: '#A9D9DC' },
+		{ label: 'LEVEL3', value: 'LEVEL3', color: '#E5ACAC' },
+		{ label: 'LEVEL4', value: 'LEVEL4', color: '#C1ABE4' },
+		{ label: 'LEVEL5', value: 'LEVEL5', color: '#9B9B9B' },
 	];
 	// 난이도 목록
 	const [isMuted, setIsMuted] = useState(false);
