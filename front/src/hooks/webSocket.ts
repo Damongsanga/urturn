@@ -213,6 +213,10 @@ export const useWebSocket = () => {
 
                 navi('/trans/review');
             })
+            client.subscribe('/user/' + userId + '/finishSocket/githubUpload', (msg) => {
+                const data: boolean = JSON.parse(msg.body);
+                alert(data);
+            })
             console.log('Connected: ' + frame);
 
         };
@@ -241,7 +245,7 @@ export const useWebSocket = () => {
                     }),
                 });
             }
-        }, 500);
+        }, 1000);
         
         roomStore.setClient(client);
     }
