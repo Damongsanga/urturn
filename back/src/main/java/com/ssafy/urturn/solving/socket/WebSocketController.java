@@ -35,7 +35,7 @@ public class WebSocketController {
 
     @MessageMapping("/createRoom")
     public void createRoom(@Payload MemberIdDto memberIddto) {
-        cachedatas.clearAllCache();
+//        cachedatas.clearAllCache();
         Long userId=memberIddto.getMemberId();
         RoomInfoResponse roomInfoResponse = roomService.createRoom(userId);
         UserInfoResponse userInfoResponse = roomService.getUserInfo(userId,null);
@@ -154,8 +154,9 @@ public class WebSocketController {
     @MessageMapping("/submitCode")
     public void submitCode(@Payload SubmitRequest submitRequest){
         Long pairId=cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getPairId();
+        System.out.println("pairID = "+pairId);
         Long managerId=cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getManagerId();
-
+        System.out.println("managerID = "+managerId);
         SubmitResponse submitResponse = roomService.submitCode(submitRequest);
 
         // 오답인 경우
@@ -216,6 +217,7 @@ public class WebSocketController {
     @MessageMapping("/submitRetro")
     public void submitRetro(@Payload RetroCreateRequest req){
         RoomInfoDto roomInfo=cachedatas.cacheroomInfoDto(req.getRoomId());
+
         // history에 retro update
         roomService.updateRetro(req, roomInfo.getHistoryId());
 

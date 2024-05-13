@@ -22,8 +22,8 @@ public class CacheConfig {
     @Bean
     public RedisCacheManager cacheManager() {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-                // 캐시의 기본 만료 시간 설정, 예: 30분
-                .entryTtl(Duration.ofMinutes(30))
+                // 캐시의 기본 만료 시간 설정, 1시간.
+                .entryTtl(Duration.ofHours(24))
                 // 키와 값의 직렬화 방식 설정
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
