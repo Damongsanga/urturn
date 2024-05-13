@@ -1,6 +1,7 @@
 package com.ssafy.urturn.solving.socket;
 
 import com.ssafy.urturn.global.exception.RestApiException;
+import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.history.service.HistoryService;
 import com.ssafy.urturn.member.service.MemberService;
@@ -30,7 +31,7 @@ public class WebSocketController {
     private final MemberService memberService;
     // 사용자가 데이터를 app/hello 경로로 데이터 날림.
     // 클라이언트는 /topic/greetings 주제를 구독하고 서버에서 이 주제로 메시지가 발행되면 이를 수신.
-
+    private final int ROUND_LIMIT = 20;
 
 
     @MessageMapping("/createRoom")
@@ -120,10 +121,10 @@ public class WebSocketController {
         Long pairId=cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getPairId();
         Long managerId=cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getManagerId();
 
-        // 라운드가 20라운드인 경우
-        if(switchCodeRequest.getRound()==20){
+        // 라운드가 최대라운드인 경우
+        if(switchCodeRequest.getRound()==ROUND_LIMIT){
             // DB에 기록 저장
-            roomService.updateHistory(switchCodeRequest.getRoomId(), HistoryResult.FAILURE, 20);
+            roomService.updateHistory(switchCodeRequest.getRoomId(), HistoryResult.FAILURE, ROUND_LIMIT);
             // 회고창으로 전환
             showRetroCode(switchCodeRequest.getRoomId(),pairId,managerId);
         }
@@ -154,63 +155,96 @@ public class WebSocketController {
     }
 
     @MessageMapping("/submitCode")
-    public void submitCode(@Payload SubmitRequest submitRequest){
-        log.info("채점 로직 Dto = {}",submitRequest);
+    public void submitCode(@Payload SubmitRequest submitRequest) {
+        RoomInfoDto roomInfoDto = cachedatas.cacheroomInfoDto(submitRequest.getRoomId());
+        log.info("채점 로직 Dto = {}", submitRequest);
 
-        Long pairId=cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getPairId();
-        log.info("pairId = {}",pairId);
+        Long pairId = roomInfoDto.getPairId();
+        log.info("pairId = {}", pairId);
 
-        Long managerId=cachedatas.cacheroomInfoDto(submitRequest.getRoomId()).getManagerId();
-        log.info("managerID = {}",managerId);
+        Long managerId = roomInfoDto.getManagerId();
+        log.info("managerID = {}", managerId);
 
-        SubmitResponse submitResponse = roomService.submitCode(submitRequest);
+        duplicateSubmissionValidation(submitRequest, roomInfoDto);
 
-        // 오답인 경우
-        if(!submitResponse.isResult()) {
-            if(submitRequest.isHost()){
+        try {
+            SubmitResponse submitResponse = roomService.submitCode(submitRequest);
+
+            // 오답인 경우
+            if (!submitResponse.isResult()) {
+                if (submitRequest.isHost()) {
+                    simpMessagingTemplate.convertAndSendToUser(managerId.toString(),
+                        "/submit/result", submitResponse);
+                } else {
+                    simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/submit/result",
+                        submitResponse);
+                }
+                return;
+            }
+
+            // 정답인 경우.
+            // 호스트 인 경우.
+            if (submitRequest.isHost()) {
+                // 사용자에게 정답 응답 및 메시지 전송.
                 simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/submit/result", submitResponse);
-            }else{
-                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/submit/result", submitResponse);
+
+                // 페어프로그래밍 모드 인 경우.
+                if (submitRequest.isPair()) {
+                    // DB 저장 로직.
+                    roomService.updateHistory(submitRequest.getRoomId(), HistoryResult.SUCCESS,
+                        submitRequest.getRound());
+
+                    showRetroCode(submitRequest.getRoomId(), pairId, managerId);
+                    return;
+                }
+
+                // 일단은 역할을 data를 String(""Navigator")으로 넘기지만, Enum, dto형태든 원하는 형태로 수정 가능.
+                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/role",
+                    "Navigator");
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/role", "Driver");
+
+            } else {
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/submit/result",
+                    submitResponse);
+
+                if (submitRequest.isPair()) {
+                    // DB 저장 로직.
+                    roomService.updateHistory(submitRequest.getRoomId(), HistoryResult.SUCCESS,
+                        submitRequest.getRound());
+                    showRetroCode(submitRequest.getRoomId(), pairId, managerId);
+                    return;
+                }
+
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/role", "Navigator");
+                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/role", "Driver");
             }
-            return;
+        } finally {
+            resetValidation(submitRequest, roomInfoDto);
         }
-
-        // 정답인 경우.
-        // 호스트 인 경우.
-        if (submitRequest.isHost()) {
-
-            // 사용자에게 정답 응답 및 메시지 전송.
-            simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/submit/result", submitResponse);
-
-            // 페어프로그래밍 모드 인 경우.
-            if(submitRequest.isPair()){
-                // DB 저장 로직.
-                roomService.updateHistory(submitRequest.getRoomId(), HistoryResult.SUCCESS, submitRequest.getRound());
-
-                showRetroCode(submitRequest.getRoomId(),pairId,managerId);
-                return;
-            }
-
-            // 일단은 역할을 data를 String(""Navigator")으로 넘기지만, Enum, dto형태든 원하는 형태로 수정 가능.
-            simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/role", "Navigator");
-            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/role", "Driver");
-
-        } else {
-            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/submit/result", submitResponse);
-
-            if(submitRequest.isPair()){
-                // DB 저장 로직.
-                roomService.updateHistory(submitRequest.getRoomId(), HistoryResult.SUCCESS, submitRequest.getRound());
-
-                showRetroCode(submitRequest.getRoomId(),pairId,managerId);
-                return;
-            }
-
-            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/role", "Navigator");
-            simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/role", "Driver");
-        }
-
     }
+
+    private void duplicateSubmissionValidation(SubmitRequest submitRequest, RoomInfoDto roomInfoDto) {
+        if (submitRequest.isHost()) {
+            if (roomInfoDto.isManagerIsSubmitting())
+                throw new RestApiException(CustomErrorCode.REQUEST_LOCKED);
+            roomInfoDto.setManagerIsReady(true);
+        } else {
+            if (roomInfoDto.isPairIsSubmitting())
+                throw new RestApiException(CustomErrorCode.REQUEST_LOCKED);
+            roomInfoDto.setPairIsReady(true);
+        }
+        cachedatas.cacheroomInfoDto(submitRequest.getRoomId(), roomInfoDto);
+    }
+
+    private void resetValidation(SubmitRequest submitRequest, RoomInfoDto roomInfoDto) {
+        if (submitRequest.isHost()) {
+            roomInfoDto.setManagerIsReady(false);
+        } else {
+            roomInfoDto.setPairIsReady(false);
+        }
+        cachedatas.cacheroomInfoDto(submitRequest.getRoomId(), roomInfoDto);
+    }
+
 
     private void showRetroCode(String roomId, Long pairId, Long managerId) {
         // 회고창에서 보여줄 데이터

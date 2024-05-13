@@ -22,4 +22,7 @@ public class RoomInfoDto {
 //    private LocalDateTime endTime;
     private Long historyId; // 추가해야함
 
+    private boolean managerIsSubmitting;
+    private boolean pairIsSubmitting;
+
 }
