@@ -56,6 +56,7 @@ public class Member extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     private int exp;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Level level;
 
     @ElementCollection(fetch = FetchType.EAGER)
