@@ -78,10 +78,10 @@ export default function CheckPage() {
 								</div>
 							</div>
 							<div style={{ height: '100%', overflowY: 'auto', padding:'12px' }}>
-              {
-                roomStore.questionInfos && activeQuestion > 0 &&
-                <Markdown>{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}</Markdown>
-              }
+							{
+								roomStore.questionInfos && activeQuestion > 0 &&
+								<Markdown>{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}</Markdown>
+							}
 							</div>
 						</Allotment.Pane>
 						<Allotment.Pane minSize={350}>

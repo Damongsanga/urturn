@@ -79,7 +79,7 @@ export default function SolvePage() {
 										defaultValue={langOptions[0].value}
 										searchInput={{ type: 'string' }}
 										options={langOptions}
-                    onChange={(_e, { value }) => {roomStore.setLang(value as string);}}
+                   						onChange={(_e, { value }) => {roomStore.setLang(value as string);}}
 									/>
 								</div>
 							</div>

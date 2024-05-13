@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Allotment } from 'allotment';
 import {
 	Dropdown,
@@ -14,23 +14,25 @@ import CodeEditor from '../../components/solve/CodeEditor';
 
 import 'allotment/dist/style.css';
 import './SolvePage.css';
-
+import { useRoomStore } from '../../stores/room';
+import Markdown from 'markdown-to-jsx';
 
 const langOptions = [
-	{ key: '1', text: '1라운드', value: 'C++' },
-	{ key: '2', text: '2라운드', value: 'Java' },
-	{ key: '3', text: '3라운드', value: 'Python' },
-	{ key: '4', text: '4라운드', value: 'JavaScript' },
+	{ key: 'C++', text: 'C++', value: 'C++' },
+	{ key: 'Java', text: 'Java', value: 'Java' },
+	{ key: 'Python', text: 'Python', value: 'Python' },
+	{ key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
+  ]
+let roundOptions = [
+	{ key: '', text: '', value: 0 }
 ];
 
 export default function ReviewPage() {
-
-	//const [fileContent, setFileContent] = useState('');
-
-	//const nowIdxRef = useRef(-1);
+	const roomStore = useRoomStore();
 
 	const [activeItem, setActiveItem] = useState('keep');
 	const [activeQuestion, setActiveQuestion] = useState(1);
+	const [activeRound, setActiveRound] = useState(0);
 	const [review, setReview] = useState({ keep: true, try: false });
 	const [inputValues, setInputValues] = useState([
 		{ id: 1, keep: '', try: '' },
@@ -38,6 +40,27 @@ export default function ReviewPage() {
 	]);
 	// 문제 별 회고 저장
 
+	useEffect(() => {
+		roundOptions = [];
+		const oneReviewInfos = roomStore.getReviewInfos()[activeQuestion-1] 
+		for(let i = 0; i < oneReviewInfos.length; i++){
+			roundOptions.push({
+				key: oneReviewInfos[i].title,
+				text: oneReviewInfos[i].title,
+				value: i
+			});
+		}
+	}, [activeQuestion])
+
+	useEffect(() => {
+		try{
+			roomStore.getEditor()?.setValue(roomStore.getReviewInfos()[activeQuestion-1][activeRound].content);
+		}
+		catch(e){
+			roomStore.getEditor()?.setValue('');
+		}
+		
+	}, [activeQuestion, activeRound])
 
 	// keep try 전환 함수
 	const toggleReview = (type: 'keep' | 'try'): void => {
@@ -59,7 +82,7 @@ export default function ReviewPage() {
 		);
 		console.log(inputValues)
 	};
-
+	
 
 	return (
 		<div className='Page'>
@@ -105,10 +128,14 @@ export default function ReviewPage() {
 										color: 'white',
 									}}
 								>
-									양과 늑대
+									{roomStore.questionInfos && activeQuestion > 0 && roomStore.questionInfos[activeQuestion - 1].algoQuestionTitle}
 								</div>
 							</div>
 							<div style={{ height: '100%', overflowY: 'auto', padding:'12px' }}>
+							{
+								roomStore.questionInfos && activeQuestion > 0 &&
+								<Markdown>{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}</Markdown>
+							}
 							</div>
 						</Allotment.Pane>
 						<Allotment.Pane minSize={350}>
@@ -124,9 +151,17 @@ export default function ReviewPage() {
 								>
 									<Dropdown
 										search
-										defaultValue={langOptions[langOptions.length - 1].value}
+										defaultValue={langOptions[0].value}
 										searchInput={{ type: 'string' }}
 										options={langOptions}
+                   						onChange={(_e, { value }) => {roomStore.setLang(value as string);}}
+									/>
+									<Dropdown
+										search
+										defaultValue={roundOptions[0].value}
+										searchInput={{ type: 'string' }}
+										options={roundOptions}
+										onChange={(_e, { value }) => {setActiveRound(value as number);}}
 									/>
 								</div>
 							</div>
