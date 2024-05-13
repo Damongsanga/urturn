@@ -19,14 +19,14 @@ export const GithubRepoCallback = () =>{
                 console.log("accesstoken",authStore.accessToken);
                 const data = response.data;
                 console.log(data);
-                console.log("jechul");
+                console.log("리뷰 제출 완료");
                 navigate('/main');
             })
             .catch((e) => {
                 console.error(e);
                 console.log("accesstoken",authStore.accessToken);
                 console.log("code: ",code);
-                console.log("업로드 실패");
+                console.log("리뷰 제출 실패");
                 navigate('/main');
             });
     } else {
