@@ -6,6 +6,8 @@ import lombok.Getter;
 public class RetroCreateRequest {
 
     private String roomId;
-    private String retro1;
-    private String retro2;
+    private String retroKeep1;
+    private String retroTry1;
+    private String retroKeep2;
+    private String retroTry2;
 }

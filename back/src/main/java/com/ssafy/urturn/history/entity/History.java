@@ -90,8 +90,12 @@ public class History extends BaseEntity {
     }
 
     public void setRetro(RetroCreateRequest req){
-        this.retro1 = req.getRetro1();
-        this.retro2 = req.getRetro2();
+        this.retro1 = makeRetro(req.getRetroKeep1(), req.getRetroTry1());
+        this.retro2 = makeRetro(req.getRetroKeep2(), req.getRetroTry2());
+    }
+
+    private String makeRetro(String retroKeep, String retroTry){
+        return "## 잘한 점 \n"+retroKeep+"\n## 아쉬운 점 \n"+retroTry;
     }
 
     public void finalizeUpdateHistory(HistoryResult result, int totalRound){
