@@ -6,6 +6,7 @@ import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.history.service.HistoryService;
 import com.ssafy.urturn.member.service.MemberService;
 import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
+import com.ssafy.urturn.problem.service.ProblemService;
 import com.ssafy.urturn.solving.cache.CacheDatas;
 import com.ssafy.urturn.solving.dto.*;
 import com.ssafy.urturn.solving.service.RoomService;
@@ -29,6 +30,7 @@ public class WebSocketController {
     private final CacheDatas cachedatas;
     private final HistoryService historyService;
     private final MemberService memberService;
+    private final ProblemService problemService;
     // 사용자가 데이터를 app/hello 경로로 데이터 날림.
     // 클라이언트는 /topic/greetings 주제를 구독하고 서버에서 이 주제로 메시지가 발행되면 이를 수신.
     private final int ROUND_LIMIT = 20;
@@ -199,9 +201,13 @@ public class WebSocketController {
                 return;
             }
 
+
             // 정답인 경우.
+            // 멤버당 푼 문제에 대한 기록 저장
+            problemService.saveMemberProblem(managerId, pairId, submitRequest.getProblemId());
             // 호스트 인 경우.
             if (submitRequest.isHost()) {
+
                 // 사용자에게 정답 응답 및 메시지 전송.
                 simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/submit/result", submitResponse);
 
