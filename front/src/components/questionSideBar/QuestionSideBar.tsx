@@ -1,16 +1,33 @@
 import { useState, ChangeEvent } from "react";
 import { Menu, Popup, Header, Grid, GridRow, GridColumn, FormInput, Icon, MenuItem, Form } from "semantic-ui-react";
 import './QuestionSideBar.css'
-import {useRoomStore} from "../../stores/room.ts";
+import { useRoomStore } from "../../stores/room";
+//import { useRtcStore } from "../../stores/rtc";
+
+// const options = [
+// 	{ key: 1, text: 'Option 1', value: 1 },
+// 	{ key: 2, text: 'Option 2', value: 2 },
+// 	// 추가 옵션...
+//   ];
 
 export const QuestionSideBar = () => {
-  const [volume, setVolume] = useState({ speaker: 50, microphone: 50 });
+	const roomStore = useRoomStore();
+	//const rtcStore = useRtcStore();
+
+    const [volume, setVolume] = useState({ speaker: 50, microphone: 50 });
 	const { speaker, microphone } = volume;
-	const room = useRoomStore();
+
 	const handleVolume = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setVolume((prevState) => ({ ...prevState, [name]: value }));
 	};
+
+	// const sendEmoji = (emoji: number) => {
+	// 	rtcStore.getOpenVidu()?.session.signal({
+	// 		type: 'emoji',
+	// 		data: String(emoji),
+	// 	})
+	// }
   
 	return (
 		<>
@@ -85,12 +102,12 @@ export const QuestionSideBar = () => {
 					}
 				/>
 				<MenuItem name='Profile'>
-					<img alt='profile' src={room.userInfo?.myUserProfileUrl} />
+					<img alt='profile' src={roomStore.getUserInfo()?.myUserProfileUrl} />
 				</MenuItem>
 				<MenuItem name='Profile'>
 					<img
 						alt='profile'
-						src={room.userInfo?.relativeUserProfileUrl}
+						src={roomStore.getUserInfo()?.relativeUserProfileUrl}
 						style={{ marginBottom: '5vh' }}
 					/>
 				</MenuItem>

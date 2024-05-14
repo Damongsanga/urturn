@@ -30,7 +30,7 @@ export default function PairSolvePage() {
 
     return (
       <div className='Page'>
-			<HeaderBar $ide={true} $mode={1} />
+			<HeaderBar $ide={true} $mode={2} />
 			<div>
 				<div style={{ display: 'flex', height: 'calc(100vh - 140px)', width: '100vw' }}>
 					{/* 문제 사이드바 */}
