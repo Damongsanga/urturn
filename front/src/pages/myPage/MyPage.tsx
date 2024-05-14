@@ -222,6 +222,7 @@ export const MyPage = () => {
 				<Modal.Header>Github Repository</Modal.Header>
 				<Modal.Content>
 					{/*label*/}
+
 					<Input
 						fluid
 						label={`https://github.com/${memberInfo?.nickname}/`}
