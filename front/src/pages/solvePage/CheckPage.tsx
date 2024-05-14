@@ -32,7 +32,7 @@ export default function CheckPage() {
 
     return (
       <div className='Page'>
-			<HeaderBar $ide={true} $mode={1} />
+			<HeaderBar $ide={true} $mode={0} />
 			<div>
 				<div style={{ display: 'flex', height: 'calc(100vh - 140px)', width: '100vw' }}>
 					{/* 문제 사이드바 */}
@@ -77,11 +77,11 @@ export default function CheckPage() {
 									{roomStore.questionInfos && activeQuestion > 0 && roomStore.questionInfos[activeQuestion - 1].algoQuestionTitle}
 								</div>
 							</div>
-							<div style={{ height: '100%', overflowY: 'auto', padding:'12px' }}>
-							{
-								roomStore.questionInfos && activeQuestion > 0 &&
-								<Markdown>{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}</Markdown>
-							}
+							<div style={{ height: '100%', overflowY: 'auto' }}>
+              {
+                roomStore.questionInfos && activeQuestion > 0 &&
+                <Markdown>{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}</Markdown>
+              }
 							</div>
 						</Allotment.Pane>
 						<Allotment.Pane minSize={350}>
@@ -122,7 +122,7 @@ export default function CheckPage() {
 										>
 										</div>
 									</div>
-									<div style={{ padding:'12px'}}>
+									<div>
                         <p>
                           두 문제를 모두 확인했으면, 시작하기 버튼을 눌러주세요.
                         </p>

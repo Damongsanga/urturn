@@ -67,7 +67,7 @@ export function useOpenVidu() {
         // });
         // rtcStore.setSubscribers(subscribers);
 
-        ov.session.on('streamCreated', (event:StreamEvent) => {
+        ov.session.on('streamCreated', (event) => {
             ov.session.subscribe(event.stream, 'session-ui');
             const subscriber = ov.session.subscribe(event.stream, 'session-ui');
             rtcStore.setSubscriber(subscriber);
