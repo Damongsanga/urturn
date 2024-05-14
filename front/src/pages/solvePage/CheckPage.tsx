@@ -1,37 +1,37 @@
-import { Allotment } from "allotment";
+import { Allotment } from 'allotment';
 //import CodeEditor from '../../components/solve/CodeEditor';
-import Markdown from 'markdown-to-jsx'
-import { Dropdown, Menu, MenuItem } from 'semantic-ui-react'
+import Markdown from 'markdown-to-jsx';
+import { Dropdown, Menu, MenuItem, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from 'semantic-ui-react';
 
-import "allotment/dist/style.css";
+import 'allotment/dist/style.css';
 
 import { HeaderBar } from '../../components/header/HeaderBar';
 
 import { useRoomStore } from '../../stores/room';
 
-import './SolvePage.css'
-import { FooterBar } from "../../components/footer/FooterBar";
-import { useEffect, useState } from "react";
-import { QuestionSideBar } from "../../components/questionSideBar/QuestionSideBar";
+import './SolvePage.css';
+import { FooterBar } from '../../components/footer/FooterBar';
+import { useEffect, useState } from 'react';
+import { QuestionSideBar } from '../../components/questionSideBar/QuestionSideBar';
 
 const langOptions = [
-  { key: 'C++', text: 'C++', value: 'C++' },
-  { key: 'Java', text: 'Java', value: 'Java' },
-  { key: 'Python', text: 'Python', value: 'Python' },
-  { key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
-]
+	{ key: 'C++', text: 'C++', value: 'C++' },
+	{ key: 'Java', text: 'Java', value: 'Java' },
+	{ key: 'Python', text: 'Python', value: 'Python' },
+	{ key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
+];
 
 export default function CheckPage() {
-    const roomStore = useRoomStore();
+	const roomStore = useRoomStore();
 
-    const [activeQuestion, setActiveQuestion] = useState(1);
+	const [activeQuestion, setActiveQuestion] = useState(1);
 
 	useEffect(() => {
 		setActiveQuestion(1);
-	}, [])
+	}, []);
 
-    return (
-      <div className='Page'>
+	return (
+		<div className='Page'>
 			<HeaderBar $ide={true} $mode={0} />
 			<div>
 				<div style={{ display: 'flex', height: 'calc(100vh - 140px)', width: '100vw' }}>
@@ -48,14 +48,18 @@ export default function CheckPage() {
 								className='QuestionButton'
 								name='1'
 								active={activeQuestion === 1}
-								onClick={() => {setActiveQuestion(1); }}
+								onClick={() => {
+									setActiveQuestion(1);
+								}}
 								style={{ marginBottom: '5vh' }}
 							></MenuItem>
 
 							<MenuItem
 								className='QuestionButton'
 								name='2'
-								onClick={() => {setActiveQuestion(2);}}
+								onClick={() => {
+									setActiveQuestion(2);
+								}}
 								active={activeQuestion === 2}
 							></MenuItem>
 						</Menu>
@@ -74,14 +78,39 @@ export default function CheckPage() {
 										color: 'white',
 									}}
 								>
-									{roomStore.questionInfos && activeQuestion > 0 && roomStore.questionInfos[activeQuestion - 1].algoQuestionTitle}
+									{roomStore.questionInfos &&
+										activeQuestion > 0 &&
+										roomStore.questionInfos[activeQuestion - 1].algoQuestionTitle}
 								</div>
 							</div>
-							<div style={{ height: '100%', overflowY: 'auto' }}>
-              {
-                roomStore.questionInfos && activeQuestion > 0 &&
-                <Markdown>{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}</Markdown>
-              }
+							<div style={{ height: '100%', overflowY: 'auto', padding: '12px' }}>
+								{roomStore.questionInfos && activeQuestion > 0 && (
+									<Markdown>
+										{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}
+									</Markdown>
+								)}
+								<Table definition>
+									<TableHeader>
+										<TableRow>
+											<TableHeaderCell />
+											<TableHeaderCell>입력값</TableHeaderCell>
+											<TableHeaderCell>출력값</TableHeaderCell>
+										</TableRow>
+									</TableHeader>
+
+									<TableBody>
+										<TableRow>
+											<TableCell width={4}>테스트 케이스 1</TableCell>
+											<TableCell>입격값1</TableCell>
+											<TableCell>출력값1</TableCell>
+										</TableRow>
+										<TableRow>
+											<TableCell width={4}>테스트 케이스 2</TableCell>
+											<TableCell>입력값2</TableCell>
+											<TableCell>출력값2</TableCell>
+										</TableRow>
+									</TableBody>
+								</Table>
 							</div>
 						</Allotment.Pane>
 						<Allotment.Pane minSize={350}>
@@ -105,9 +134,7 @@ export default function CheckPage() {
 							</div>
 							<Allotment vertical>
 								<Allotment.Pane minSize={325}>
-									<div style={{ height: '100%', width: '100%' }}>
-										{/* <CodeEditor/> */}
-									</div>
+									<div style={{ height: '100%', width: '100%' }}>{/* <CodeEditor/> */}</div>
 								</Allotment.Pane>
 								<Allotment.Pane minSize={125}>
 									<div className='ReviewBar' style={{ height: '50px', backgroundColor: '#000034' }}>
@@ -119,13 +146,10 @@ export default function CheckPage() {
 												fontWeight: 'bold',
 												color: 'white',
 											}}
-										>
-										</div>
+										></div>
 									</div>
-									<div>
-                        <p>
-                          두 문제를 모두 확인했으면, 시작하기 버튼을 눌러주세요.
-                        </p>
+									<div style={{ padding: '12px' }}>
+										<p>두 문제를 모두 확인했으면, 시작하기 버튼을 눌러주세요.</p>
 									</div>
 								</Allotment.Pane>
 							</Allotment>
@@ -134,8 +158,7 @@ export default function CheckPage() {
 				</div>
 			</div>
 			{/* footer */}
-			<FooterBar $mode={0}/>
+			<FooterBar $mode={0} />
 		</div>
-    );
-  }
-
+	);
+}

@@ -125,7 +125,7 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 					<div className='WaitingContent'>
 						<div className='Header HeaderSection'>
 							{/* 상위 정보 메뉴 */}
-							<Menu secondary size='large'>
+							<Menu pointing secondary size='large' style={{ marginBottom: '2vh' }}>
 								<MenuItem className='Header'>
 									<img alt='URTurn' src={logo} style={{ width: '100px' }} />
 								</MenuItem>
@@ -175,7 +175,7 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 														? roomStore.userInfo!.myUserProfileUrl
 														: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
 												}
-												size='small'
+												style={{ width: '10vw', height: 'auto', minWidth: '150px'}}
 												rounded
 											/>
 											<Divider hidden />
@@ -202,7 +202,7 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 														? roomStore.userInfo.relativeUserProfileUrl
 														: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
 												}
-												size='small'
+												style={{ width: '10vw', height: 'auto', minWidth: '150px'}}
 												rounded
 											/>
 											<Divider hidden />
