@@ -127,7 +127,6 @@ public class WebSocketController {
             simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/startToSolve",true);
             simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/startToSolve",true);
         }
-
     }
 
     @MessageMapping("/switchCode")
