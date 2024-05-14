@@ -265,6 +265,8 @@ public class RoomService {
                 , history.getCode2(), history.getLanguage2());
         map.put(roomInfoDto.getProblem1Id(), problem1CodeResponse);
         map.put(roomInfoDto.getProblem2Id(), problem2CodeResponse);
+        log.info("problem1CodeResponse : {}", problem1CodeResponse);
+        log.info("problem2CodeResponse : {}", problem2CodeResponse);
 
         return map;
     }

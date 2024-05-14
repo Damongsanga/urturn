@@ -39,15 +39,17 @@ public class WebSocketController {
     @MessageMapping("/createRoom")
     public void createRoom(@Payload MemberIdDto memberIddto) {
 //        cachedatas.clearAllCache();
-
         log.info("방 생성 로직 멤버ID Dto = {}",memberIddto);
         Long userId=memberIddto.getMemberId();
         RoomInfoResponse roomInfoResponse = roomService.createRoom(userId);
         UserInfoResponse userInfoResponse = roomService.getUserInfo(userId,null);
 //        // response에 포함된 방 정보를 이용하여 방을 생성한 사용자에게만 응답을 보냄
+        log.info("roomInfoResponse : {}", roomInfoResponse);
+        log.info("userInfoResponse : {}", userInfoResponse);
         simpMessagingTemplate.convertAndSendToUser(userId.toString(), "/roomInfo", roomInfoResponse);
         simpMessagingTemplate.convertAndSendToUser(userId.toString(),"/userInfo",userInfoResponse);
     }
+
 
     @MessageMapping("/enterRoom")
     public void enterRoom(@Payload RoomIdDto roomIddto) {
@@ -64,6 +66,10 @@ public class WebSocketController {
         simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/userInfo",userInfoResponse);
         UserInfoResponse userInfoResponse2=roomService.getUserInfo(managerId,pairId);
         simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/userInfo",userInfoResponse2);
+
+        log.info("roomInfoResponse : {}", roomInfoResponse);
+        log.info("userInfoResponse : {}", userInfoResponse);
+        log.info("userInfoResponse : {}", userInfoResponse2);
     }
 
     @MessageMapping("/leaveRoom")
@@ -87,8 +93,8 @@ public class WebSocketController {
     public void sendOVSSession(@Payload SessionIdDto sessionIdDto){
         System.out.println(sessionIdDto.toString());
         Long pairId=cachedatas.cacheroomInfoDto(sessionIdDto.getRoomId()).getPairId();
+        log.info("receiveOVSession : {}", sessionIdDto.getSessionId());
         simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/receiveOVSession",sessionIdDto.getSessionId());
-
     }
 
     @MessageMapping("/selectLevel")
@@ -99,6 +105,8 @@ public class WebSocketController {
         Long managerId=cachedatas.cacheroomInfoDto(SelectLevelRequest.getRoomId()).getManagerId();
 
         List<ProblemTestcaseDto> problemTestcases =roomService.getproblem(SelectLevelRequest.getRoomId(), SelectLevelRequest.getLevel());
+
+        log.info("problemTestcases : {}", problemTestcases);
 
         simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/questionInfo",problemTestcases);
         simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/questionInfo",problemTestcases);
@@ -150,6 +158,7 @@ public class WebSocketController {
         // 페어프로그래밍 모드, 드라이버에게만 메시지 받음.
         if(switchCodeRequest.isPair()){
             // 역할 전환 메시지.
+            log.info("switch code request NEXT round : {}", switchCodeRequest.getRound()+1);
             simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/switchRole",switchCodeRequest.getRound()+1);
             simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/switchRole",switchCodeRequest.getRound()+1);
             return;
@@ -197,9 +206,9 @@ public class WebSocketController {
                     simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/submit/result",
                         submitResponse);
                 }
+                log.info("submitResponse : {}", submitResponse);
                 return;
             }
-
 
             // 정답인 경우.
             // 멤버당 푼 문제에 대한 기록 저장
@@ -221,13 +230,11 @@ public class WebSocketController {
                 }
 
                 // 일단은 역할을 data를 String(""Navigator")으로 넘기지만, Enum, dto형태든 원하는 형태로 수정 가능.
-                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/role",
-                    "Navigator");
+                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/role", "Navigator");
                 simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/role", "Driver");
 
             } else {
-                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/submit/result",
-                    submitResponse);
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/submit/result", submitResponse);
 
                 if (submitRequest.isPair()) {
                     // DB 저장 로직.
@@ -271,27 +278,27 @@ public class WebSocketController {
     private void showRetroCode(String roomId, Long pairId, Long managerId) {
         // 회고창에서 보여줄 데이터
         Map<Long, RetroCodeResponse> map = roomService.makeRetroCodeResponse(roomId);
-
         simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/showRetroCode", map);
         simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/showRetroCode", map);
     }
 
     @MessageMapping("/submitRetro")
     public void submitRetro(@Payload RetroCreateRequest req){
-        RoomInfoDto roomInfo=cachedatas.cacheroomInfoDto(req.getRoomId());
+            RoomInfoDto roomInfo=cachedatas.cacheroomInfoDto(req.getRoomId());
 
-        // history에 retro update
-        roomService.updateRetro(req, roomInfo.getHistoryId());
+            // history에 retro update
+            roomService.updateRetro(req, roomInfo.getHistoryId());
 
-        // 웹소켓 끊기 요청
-        // 추가로 각 멤버를 확인해서 github repository가 null이 아니면 github access token refresh 요청
-        Long managerId=cachedatas.cacheroomInfoDto(req.getRoomId()).getManagerId();
-        simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/finishSocket/githubUpload", memberService.hasGithubRepository(managerId));
+            // 웹소켓 끊기 요청
+            // 추가로 각 멤버를 확인해서 github repository가 null이 아니면 github access token refresh 요청
+            Long managerId=cachedatas.cacheroomInfoDto(req.getRoomId()).getManagerId();
+            simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/finishSocket/githubUpload", memberService.hasGithubRepository(managerId));
 
-        Long pairId=cachedatas.cacheroomInfoDto(req.getRoomId()).getPairId();
-        simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/finishSocket/githubUpload", memberService.hasGithubRepository(pairId));
+            Long pairId=cachedatas.cacheroomInfoDto(req.getRoomId()).getPairId();
+            simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/finishSocket/githubUpload", memberService.hasGithubRepository(pairId));
 
         //  캐시 삭제.
+
     }
 
 }
