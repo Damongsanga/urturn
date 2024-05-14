@@ -55,8 +55,8 @@
 }
 
 .EditButton {
-  background-color: white !important;
-  color: black !important;
+  background-color: #000034 !important;
+  color: white !important;
 
   border: 3px solid white !important;
   box-shadow: none !important;
@@ -64,9 +64,8 @@
 
 .EditButton:hover,
 .EditButton:active {
-  background-color: lightgray !important;
-  border-color: lightgray !important;
-  color: black !important;
+  background-color: #5c5c96 !important;
+  border-color: #5c5c96 !important;
 
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }

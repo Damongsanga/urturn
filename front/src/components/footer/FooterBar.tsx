@@ -22,6 +22,14 @@ export const FooterBar = ({ $mode, $reviewValues }: FooterProp) => {
 	const roomStore = useRoomStore();
 
 	const readyToSolve = () => {
+		const button = document.getElementById('runButton') as HTMLButtonElement;
+		if(button){
+			button.disabled = true;
+			button.textContent = '준비완료';
+			button.style.color = 'white';
+			button.style.cursor = 'not-allowed';
+		}
+
 		const idx = roomStore.roomInfo?.host ? 0 : 1;
 		console.log(roomStore.roomInfo?.roomId);
 		console.log(roomStore.questionInfos?.[idx]?.algoQuestionId);
@@ -77,9 +85,9 @@ export const FooterBar = ({ $mode, $reviewValues }: FooterProp) => {
 
 				{/* 문제 확인에 사용할 버튼 */}
 				{$mode === 0 && (
-					<MenuItem name='RunButton' className='RunButton' position='right'>
-						<Button onClick={readyToSolve} size='large' className='RunButtonColor'>
-							시작하기
+					<MenuItem name='RunButton' className='RunButton'  position='right'>
+						<Button id='runButton' onClick={readyToSolve} size='large' className='RunButtonColor'>
+							준비하기
 						</Button>
 					</MenuItem>
 				)}

@@ -148,17 +148,18 @@ export const MyPage = () => {
 							{/*</CardContent>*/}
 							{/* 깃허브 주소 */}
 							<CardContent className='ContentBorder'>
-								<CardHeader className='CardTextColor' textAlign='center'>등록된 레포지토리</CardHeader>
+								<CardHeader className='CardTextColor' textAlign='center'>Github Repository</CardHeader>
 								{/*null 일때 텍스트 중요 말풍선으로 빼는 식?*/}
-								<CardDescription className='CardTextColor' textAlign='center'>{memberInfo?.repository ? memberInfo.repository : '레포지토리를 생성하고 레포지토리 이름을 등록해 주세요'}</CardDescription>
+								<CardDescription className='CardTextColor' textAlign='center'>{memberInfo?.repository ? memberInfo.repository : '회고를 업로드할 레포지토리를 생성 후에 등록해주세요.'}</CardDescription>
 								<Button className='EditButton' floated='right' onClick={() => setModalOpen(true)}>수정</Button>
 							</CardContent>
 						</Card>
 					</Card>
 				</div>
-				{/* 오른쪽 문제 풀이 기록 리스트 */}
+				{/* 오른쪽 문제 풀이 hystory 리스트 */}
 				<div className='History'>
 					<Header as='h2' style={{ marginBottom: '0px' }}>
+						히스토리
 						히스토리
 					</Header>
 					{/* 문제 기록 */}
@@ -218,19 +219,19 @@ export const MyPage = () => {
 				</div>
 			</div>
 			<Modal open={modalOpen} onClose={() => setModalOpen(false)} size='tiny'>
-				<Modal.Header>레포지토리 수정</Modal.Header>
+				<Modal.Header>Github Repository</Modal.Header>
 				<Modal.Content>
 					<Input
 						fluid
-						label='Repository'
-						placeholder='레포지토리 이름을 입력하세요.'
+						label='https://github.com/{나의닉네임}/'
+						placeholder='Repository_name'
 						value={repository}
 						onChange={(e) => setRepository(e.target.value)}
 					/>
 				</Modal.Content>
 				<Modal.Actions>
 					<Button onClick={() => setModalOpen(false)}>취소</Button>
-					<Button positive onClick={handleRepositoryUpdate}>수정</Button>
+					<Button className='EditButton' onClick={handleRepositoryUpdate}>수정</Button>
 				</Modal.Actions>
 			</Modal>
 		</div>
