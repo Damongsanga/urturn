@@ -173,7 +173,7 @@ const MainPage: React.FC = () => {
 				</div>
 			</div>
 
-			<Modal open={open}>
+			<Modal open={open} size='tiny'>
 				<Header icon='archive' content='준비 중' />
 				<Modal.Content>
 					<WaitingPage
