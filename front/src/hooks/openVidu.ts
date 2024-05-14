@@ -1,4 +1,4 @@
-import {OpenVidu, StreamEvent} from 'openvidu-browser';
+import {OpenVidu} from 'openvidu-browser';
 import { useAxios } from '../utils/useAxios.ts';
 import { useRtcStore } from "../stores/rtc.ts";
 import { useRoomStore } from '../stores/room.ts';
