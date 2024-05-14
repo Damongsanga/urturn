@@ -260,9 +260,9 @@ public class RoomService {
         log.info("code 2 : {}", history.getCode2());
 
         RetroCodeResponse problem1CodeResponse=new RetroCodeResponse(cachedatas.cacheCodes(roomId, roomInfoDto.getProblem1Id().toString())
-                , history.getCode1());
+                , history.getCode1(), history.getLanguage1());
         RetroCodeResponse problem2CodeResponse=new RetroCodeResponse(cachedatas.cacheCodes(roomId, roomInfoDto.getProblem2Id().toString())
-                , history.getCode2());
+                , history.getCode2(), history.getLanguage2());
         map.put(roomInfoDto.getProblem1Id(), problem1CodeResponse);
         map.put(roomInfoDto.getProblem2Id(), problem2CodeResponse);
 
