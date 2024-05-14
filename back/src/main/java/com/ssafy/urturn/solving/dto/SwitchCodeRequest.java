@@ -1,6 +1,7 @@
 package com.ssafy.urturn.solving.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ssafy.urturn.problem.Language;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,8 @@ public class SwitchCodeRequest {
 
     @JsonProperty("isPair")
     private boolean isPair;
+
+    private Language language;
 
     @Override
     public String toString() {

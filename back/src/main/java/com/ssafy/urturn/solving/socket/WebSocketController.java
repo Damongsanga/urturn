@@ -135,7 +135,7 @@ public class WebSocketController {
         log.info("코드 스위치 로직 SwitchCode Dto = {}",switchCodeRequest);
         // 코드 스냅샷 저장.
         roomService.updateCodeCache(switchCodeRequest.getRoomId(),switchCodeRequest.getProblemId().toString(),
-                new UserCodeDto(switchCodeRequest.getRound(),switchCodeRequest.getCode()));
+                new UserCodeDto(switchCodeRequest.getRound(),switchCodeRequest.getCode(), switchCodeRequest.getLanguage()));
 
         Long pairId=cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getPairId();
         Long managerId=cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()).getManagerId();
@@ -164,10 +164,10 @@ public class WebSocketController {
         if(roomService.areBothpairsReady(switchCodeRequest.getRoomId(), cachedatas.cacheroomInfoDto(switchCodeRequest.getRoomId()))){
             if(switchCodeRequest.isHost()){
                 simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/switchCode",roomService.getPairsCode(switchCodeRequest));
-                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/switchCode",new SwitchCodeResponse(switchCodeRequest.getCode(),switchCodeRequest.getRound()+1));
+                simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/switchCode",new SwitchCodeResponse(switchCodeRequest.getCode(),switchCodeRequest.getRound()+1, switchCodeRequest.getLanguage()));
             }else{
                 simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/switchCode",roomService.getPairsCode(switchCodeRequest));
-                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/switchCode",new SwitchCodeResponse(switchCodeRequest.getCode(),switchCodeRequest.getRound()+1));
+                simpMessagingTemplate.convertAndSendToUser(managerId.toString(), "/switchCode",new SwitchCodeResponse(switchCodeRequest.getCode(),switchCodeRequest.getRound()+1, switchCodeRequest.getLanguage()));
             }
         }
 
