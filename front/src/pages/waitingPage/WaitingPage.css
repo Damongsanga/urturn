@@ -14,7 +14,7 @@
 }
 
 .WaitingRoom {
-	width: 70vw;
+	width: 55vw;
 	height: 80vh;
 
 	display: flex;
@@ -27,7 +27,7 @@
 	box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.25);
 }
 
-.Content {
+.WaitingContent {
 	display: flex;
 	flex-direction: column;
 	margin-left: 5vw;
@@ -38,7 +38,7 @@
 }
 
 .HeaderSection {
-	width: 60vw;
+	width: 45vw;
 
 	margin-bottom: 1vh;
 }
@@ -57,7 +57,7 @@
 }
 
 .RightSection {
-	width: 47vw;
+	width: 33vw;
 }
 
 .Card-without-border {
@@ -109,3 +109,4 @@
 .ui.checkbox.RadioChecked input.hidden + label {
 	color: white;
 }
+

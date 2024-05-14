@@ -28,6 +28,7 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review, $mode }: HeaderProp) 
 	const navigate = useNavigate();
 	const auth = useAuthStore();
 	const roomStore = useRoomStore();
+
 	const goToMyPage = () => {
 		navigate('/myPage');
 	};
@@ -58,8 +59,8 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review, $mode }: HeaderProp) 
 	// };
 	return (
 		<>
-			{/* 메인 헤더 */}
-			{$main && (
+			{/* 메인, 마이 	페이지 헤더 */}
+			{($main || $myPage) && (
 				<div className='HeaderBar Main'>
 					<Menu className='HeaderBar Main'>
 						<MenuItem
@@ -79,7 +80,7 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review, $mode }: HeaderProp) 
 									goToMyPage();
 								}}
 							>
-								<img alt='profile' src={auth.profileImage} />
+								<img alt='profile' src={auth.profileImage} style ={{ width: 'auto', height: '55px'}}/>
 							</MenuItem>
 							<MenuItem name='Welcome'>
 								<Header as='h3' textAlign='center' className='FontColor'>
@@ -94,45 +95,6 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review, $mode }: HeaderProp) 
 								{/*<Button size='large' className='ButtonColor' onClick={gitRepo}>*/}
 								{/*	repo test*/}
 								{/*</Button>*/}
-							</MenuItem>
-						</MenuMenu>
-					</Menu>
-				</div>
-			)}
-
-			{/* 마이페이지 헤더 */}
-			{$myPage && (
-				<div className='HeaderBar Main'>
-					<Menu className='HeaderBar Main'>
-						<MenuItem
-							style={{ marginLeft: '6vw' }}
-							onClick={() => {
-								goToMain();
-							}}
-						>
-							<Header as='h2' textAlign='center' className='FontColor'>
-								URTurn
-							</Header>
-						</MenuItem>
-						<MenuMenu position='right' style={{ marginRight: '6vw' }}>
-							<MenuItem
-								name='Profile'
-								onClick={() => {
-									goToMyPage();
-								}}
-							>
-								<img alt='profile' src={auth.profileImage} />
-							</MenuItem>
-							<MenuItem name='Welcome'>
-								<Header as='h3' textAlign='center' className='FontColor'>
-									{auth.nickname}
-									{'님 환영합니다.'}
-								</Header>
-							</MenuItem>
-							<MenuItem name='QuitButton' className='QuitButton'>
-								<Button size='large' className='ButtonColor' onClick={logout}>
-									로그아웃
-								</Button>
 							</MenuItem>
 						</MenuMenu>
 					</Menu>

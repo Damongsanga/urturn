@@ -2,11 +2,14 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Mousewheel, Pagination } from 'swiper/modules';
 import { FirstLandingPage } from './sliders/first/FirstLanding';
 import { SecondLandingPage } from './sliders/second/SecondLanding';
+import { ThirdLandingPage } from './sliders/third/ThirdLanding';
+import { FourthLandingPage } from './sliders/fourth/FourthLandingPage';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
 import './LandingPage.css';
 import { useState } from 'react';
+
 
 export const LandingPage = () => {
 
@@ -31,9 +34,8 @@ export const LandingPage = () => {
 				<SwiperSlide>
 					<SecondLandingPage isActive={activeSlide === 1} />
 				</SwiperSlide>
-				<SwiperSlide>Slide 3</SwiperSlide>
-				<SwiperSlide>Slide 4</SwiperSlide>
-				<SwiperSlide>Slide 5</SwiperSlide>
+				<SwiperSlide><ThirdLandingPage isActive={activeSlide === 2} /></SwiperSlide>
+				<SwiperSlide><FourthLandingPage isActive={activeSlide === 3} /></SwiperSlide>
 			</Swiper>
 		</>
 	);

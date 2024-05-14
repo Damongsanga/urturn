@@ -183,12 +183,12 @@ export default function ReviewPage() {
 										>
 											<Menu tabular style={{ marginLeft: '1vw', paddingTop: '1vh'}}>
 												<MenuItem
-													name='keep'
+													name='좋았던 점'
 													active={activeItem === 'keep'}
 													onClick={() => toggleReview('keep')}
 												/>
 												<MenuItem
-													name='try'
+													name='아쉬운 점'
 													active={activeItem === 'try'}
 													onClick={() => toggleReview('try')}
 												/>
@@ -199,7 +199,7 @@ export default function ReviewPage() {
 										{review.keep && (
 											<Form>
 												<TextArea
-													placeholder='Keep'
+													placeholder='좋았던 점을 적어주세요.'
 													style={{ width: '100%', height: '65.2vh', resize: 'none' }}
 													value={inputValues.find(item => item.id === activeQuestion)?.keep}
 													onChange={(e) => handleInputChange(e, activeQuestion, 'keep')}
@@ -209,7 +209,7 @@ export default function ReviewPage() {
 										{review.try && (
 											<Form>
 												<TextArea
-													placeholder='try'
+													placeholder='아쉬웠던 점을 적어주세요.'
 													style={{ width: '100%', height: '65.2vh', resize: 'none' }}
 													value={inputValues.find(item => item.id === activeQuestion)?.try}
 													onChange={(e) => handleInputChange(e, activeQuestion, 'try')}
