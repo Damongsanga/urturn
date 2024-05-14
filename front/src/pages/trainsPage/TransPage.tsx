@@ -86,7 +86,7 @@ export const TransPage = () => {
 						.filter((item) => item.key === next)
 						.map((item, index) => (
 							// 상단 메시지
-							<div key={index}>
+							<div key={index} className='TransAlign'>
 								<div className='TransPageTitle' style={{ marginBottom: '5vh' }}>
 									<Header as='h3' textAlign='center'>
 										{item.message}
@@ -94,7 +94,7 @@ export const TransPage = () => {
 								</div>
 								{/* 이미지 */}
 								{item.image && (
-									<div>
+									<div style={{ width: '20vw', height: 'auto' }}>
 										<Image src={item.image} style={{ width: '20vw', height: 'auto' }}></Image>
 									</div>
 								)}

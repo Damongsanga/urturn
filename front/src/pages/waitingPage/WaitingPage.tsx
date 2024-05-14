@@ -9,7 +9,6 @@ import {
 	Image,
 	Divider,
 	Form,
-	FormInput,
 	Icon,
 	GridColumn,
 	Grid,
@@ -21,9 +20,9 @@ import {
 } from 'semantic-ui-react';
 import logo from '../../assets/images/logo.svg';
 import './WaitingPage.css';
-import {ChangeEvent, FormEvent, useEffect, useRef, useState} from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useRoomStore } from '../../stores/room';
-import {useRtcStore} from "../../stores/rtc.ts";
+import { useRtcStore } from '../../stores/rtc.ts';
 //import { useRtcStore } from "../../stores/rtc.ts";
 
 interface ModalProps {
@@ -43,18 +42,17 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 	const rtcStore = useRtcStore();
 	const myVideoRef = useRef<HTMLVideoElement | null>(null);
 	const otherVideoRef = useRef<HTMLVideoElement | null>(null);
-	const [volume, setVolume] = useState({ speaker: 50, microphone: 50 });
-	const { speaker, microphone } = volume;
+
 	// 스피커 볼륨, 마이크 볼륨
 	const [difficulty, setDifficulty] = useState('LEVEL1');
 	// 난이도
 	//const rtcStore = useRtcStore();
 	const difficulties = [
-		{ label: 'LEVEL1', value: 'LEVEL1', color: '#AAD79F'},
-		{ label: 'LEVEL2', value: 'LEVEL2', color: '#A9D9DC' },
-		{ label: 'LEVEL3', value: 'LEVEL3', color: '#E5ACAC' },
-		{ label: 'LEVEL4', value: 'LEVEL4', color: '#C1ABE4' },
-		{ label: 'LEVEL5', value: 'LEVEL5', color: '#9B9B9B' },
+		{ label: 'LEVEL 1', value: 'LEVEL1', color: '#A9D9DC' },
+		{ label: 'LEVEL 2', value: 'LEVEL2', color: '#AAD79F' },
+		{ label: 'LEVEL 3', value: 'LEVEL3', color: '#dce46e' },
+		{ label: 'LEVEL 4', value: 'LEVEL4', color: '#E5ACAC' },
+		{ label: 'LEVEL 5', value: 'LEVEL5', color: '#9B9B9B' },
 	];
 	// 난이도 목록
 	const [isMuted, setIsMuted] = useState(false);
@@ -66,16 +64,10 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 	}, [rtcStore.streamManager]);
 
 	useEffect(() => {
-		if(rtcStore.subscriber && otherVideoRef.current) {
+		if (rtcStore.subscriber && otherVideoRef.current) {
 			rtcStore.subscriber.addVideoElement(otherVideoRef.current);
 		}
 	}, [rtcStore.subscriber]);
-
-	const handleVolume = (e: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
-		setVolume((prevState) => ({ ...prevState, [name]: value }));
-	};
-	// 슬라이더 수치 조정 함수
 
 	const handleDifficulty = (_e: FormEvent<HTMLInputElement>, data: any) => {
 		setDifficulty(data.value);
@@ -113,7 +105,7 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 			myVideoRef.current.muted = newMuteStatus;
 			otherVideoRef.current.muted = newMuteStatus; // Assuming you want to mute both videos together
 			setIsMuted(newMuteStatus); // This will trigger a re-render
-			console.log("Mute toggled:", newMuteStatus);
+			console.log('Mute toggled:', newMuteStatus);
 		}
 	};
 
@@ -123,14 +115,14 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 			const newMicStatus = !isMicMuted;
 			publisher.publishAudio(!newMicStatus); // Enable or disable audio based on new mute status
 			setIsMicMuted(newMicStatus);
-			console.log("Microphone toggled:", newMicStatus);
+			console.log('Microphone toggled:', newMicStatus);
 		}
 	};
 	return (
 		<>
 			<div className='WaitingRoomBackground'>
 				<div className='WaitingRoom'>
-					<div className='Content'>
+					<div className='WaitingContent'>
 						<div className='Header HeaderSection'>
 							{/* 상위 정보 메뉴 */}
 							<Menu secondary size='large'>
@@ -223,55 +215,25 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 									</Card>
 								</CardGroup>
 								{/* 볼륨 조정 영역 */}
-								<Header as='h2' textAlign='left' className='FitContent'>
-									볼륨
-								</Header>
-								<Grid columns={2}>
-									<GridRow>
-										<GridColumn as={Form} width={9} verticalAlign={'middle'}>
-											{/* 스피커 볼륨 */}
-											<Form className='Volume'>
-												<FormInput
-													label={`스피커 볼륨: ${speaker}`}
-													min={0}
-													max={100}
-													name='speaker'
-													onChange={handleVolume}
-													step={1}
-													type='range'
-												/>
-											</Form>
-										</GridColumn>
-										<GridColumn width={2} verticalAlign={'middle'}>
-											{/* 스피커 아이콘 */}
-											<Icon     onClick={toggleMute}
-													  className='Icon'
-													  name={isMuted ? 'volume off' : 'volume up'}
-													  size='big' />
-										</GridColumn>
-									</GridRow>
-									<GridRow>
-										<GridColumn as={Form} width={9} verticalAlign={'middle'}>
-											{/* 마이크 볼륨 */}
-											<Form className='Volume'>
-												<FormInput
-													label={`마이크 볼륨: ${microphone}`}
-													min={0}
-													max={100}
-													name='microphone'
-													onChange={handleVolume}
-													step={1}
-													type='range'
-													value={microphone}
-												/>
-											</Form>
-										</GridColumn>
+								<Grid columns={2}  style={{ marginLeft : '0em', marginRight: '3em' }}>
+									<GridRow></GridRow>
+									<GridRow></GridRow>
+									<GridRow className='Row'>
 										<GridColumn width={2} verticalAlign={'middle'}>
 											{/* 마이크 아이콘 */}
 											<Icon
 												onClick={toggleMicrophone}
 												className='Icon'
 												name={isMicMuted ? 'microphone slash' : 'microphone'}
+												size='big'
+											/>
+										</GridColumn>
+										<GridColumn width={2} verticalAlign={'middle'}>
+											{/* 스피커 아이콘 */}
+											<Icon
+												onClick={toggleMute}
+												className='Icon'
+												name={isMuted ? 'volume off' : 'volume up'}
 												size='big'
 											/>
 										</GridColumn>
@@ -324,8 +286,8 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 						</div>
 					</div>
 				</div>
-				<video autoPlay={true} controls={true}  ref={myVideoRef} style={{display: 'none'}}/>
-				<video autoPlay={true} controls={true}  ref={otherVideoRef} style={{display: 'none'}}/>
+				<video autoPlay={true} controls={true} ref={myVideoRef} style={{ display: 'none' }} />
+				<video autoPlay={true} controls={true} ref={otherVideoRef} style={{ display: 'none' }} />
 			</div>
 		</>
 	);
