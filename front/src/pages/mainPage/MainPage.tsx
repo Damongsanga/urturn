@@ -12,8 +12,8 @@ import { useAxios } from '../../utils/useAxios.ts';
 import 'semantic-ui-css/semantic.min.css';
 import './MainPage.css';
 
-import joinTeam from '../../assets/images/join_team.png'
-import createTeam from '../../assets/images/create_team.png'
+import joinRoomImg from '../../assets/images/join_room.png'
+import createRoomImg from '../../assets/images/create_room.png'
 
 const MainPage: React.FC = () => {
 	const roomStore = useRoomStore();
@@ -72,9 +72,9 @@ const MainPage: React.FC = () => {
 						<GridRow>
 							<GridColumn className='MainGridColumn'>
 								<Card className='EntryCard'>
-									<Card.Content style={{ paddingBottom: '0px', paddingLeft: '0px', paddingRight: '0px'}}>
+								<Card.Content style={{ paddingBottom: '0px', paddingLeft: '0px', paddingRight: '0px'}}>
 										<Image
-											src={createTeam}
+											src={createRoomImg}
 											size='medium'
 											style={{ width: '21vw', height: 'auto' }}
 										/>
@@ -119,7 +119,7 @@ const MainPage: React.FC = () => {
 								<Card className='EntryCard'>
 									<Card.Content style={{ paddingBottom: '0px', paddingLeft: '0px', paddingRight: '0px'}}>
 										<Image
-											src={joinTeam}
+											src={joinRoomImg}
 											size='medium'
 											style={{ width: '21vw', height: 'auto' }}
 										/>
@@ -164,12 +164,6 @@ const MainPage: React.FC = () => {
 							</GridColumn>
 						</GridRow>
 					</Grid>
-
-					<Button onClick={
-						() => {
-							ax.get('/test/test').then(res => {console.log(res.data)})
-						}
-					}></Button>
 				</div>
 			</div>
 
