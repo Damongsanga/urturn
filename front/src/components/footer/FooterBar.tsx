@@ -26,7 +26,7 @@ export const FooterBar = ({ $mode, $reviewValues }: FooterProp) => {
 		if(button){
 			button.disabled = true;
 			button.textContent = '준비완료';
-			button.style.color = 'white';
+			button.style.color = '#D3D3D3';
 			button.style.cursor = 'not-allowed';
 		}
 
