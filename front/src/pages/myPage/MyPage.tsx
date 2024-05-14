@@ -223,7 +223,7 @@ export const MyPage = () => {
 				<Modal.Content>
 					<Input
 						fluid
-						label='https://github.com/{나의닉네임}/'
+						label={`https://github.com/${memberInfo?.nickname}/`}
 						placeholder='Repository_name'
 						value={repository}
 						onChange={(e) => setRepository(e.target.value)}
