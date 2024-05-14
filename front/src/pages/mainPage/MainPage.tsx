@@ -26,10 +26,14 @@ const MainPage: React.FC = () => {
 	const ax = useAxios(true);
 
 	const clearMainLogic = () => {
-		roomStore.clearRoom();
-		ax.delete('/sessions/'+rtcStore.getSessionId() + '/connection/' + rtcStore.getConnectionId());
-		ax.delete('/sessions/'+rtcStore.getSessionId());
-		rtcStore.clearRtc();
+		if(roomStore.client || roomStore.userInfo?.myUserNickName || roomStore.roomInfo?.roomId){
+			roomStore.clearRoom();
+		}
+		if(rtcStore.getOpenVidu() || rtcStore.getSessionId() || rtcStore.getConnectionId()){
+			ax.delete('/sessions/'+rtcStore.getSessionId() + '/connection/' + rtcStore.getConnectionId());
+			ax.delete('/sessions/'+rtcStore.getSessionId());
+			rtcStore.clearRtc();
+		}
 	}
 
 	useEffect(() => {

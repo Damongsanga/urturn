@@ -4,6 +4,7 @@ import { useLogout } from '../../utils/logout.ts';
 import './HeaderBar.css';
 import { useAuthStore } from "../../stores/useAuthStore.ts";
 import { useRoomStore } from '../../stores/room.ts';
+import { useEffect, useState } from 'react';
 
 interface HeaderProp {
 	$main?: boolean;
@@ -34,6 +35,19 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review, $mode }: HeaderProp) 
 	const goToMain = () => {
 		navigate('/main');
 	};
+
+	const [min, setMin] = useState('00');
+	const [sec, setSec] = useState('00');
+	useEffect(() => {
+		if(roomStore.sec < 60){
+			setMin('00');
+			setSec(roomStore.sec.toString().padStart(2, '0'));
+		}
+		else{
+			setMin(Math.floor(roomStore.sec / 60).toString().padStart(2, '0'));
+			setSec((roomStore.sec % 60).toString().padStart(2, '0'));
+		}
+	}, [roomStore.sec])
 
 	// uri
 	// const gitRepo = () => {
@@ -151,7 +165,7 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review, $mode }: HeaderProp) 
 						<MenuMenu position='right'>
 							<MenuItem name='Rounds'>
 								<Header as='h3' textAlign='center' className='FontColor'>
-									{roomStore.sec}
+									{min} : {sec}
 								</Header>
 							</MenuItem>
 							<MenuItem name='Rounds'>
