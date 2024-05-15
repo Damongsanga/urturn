@@ -1,7 +1,7 @@
 import { Allotment } from 'allotment';
 import CodeEditor from '../../components/solve/CodeEditor';
 import Markdown from 'markdown-to-jsx';
-import { Dropdown, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from 'semantic-ui-react';
+import { Dropdown, Table, TableBody, TableHeader, TableHeaderCell, TableRow } from 'semantic-ui-react';
 
 import 'allotment/dist/style.css';
 
