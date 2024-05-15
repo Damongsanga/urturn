@@ -130,6 +130,11 @@ export const MyPage = () => {
 				return '';
 		}
 	};
+
+	const formatLevel = (level: string | null | undefined) => {
+		if (!level) return "";
+		return level.replace(/(level)(\d+)/i, '$1 $2');
+	};
 	return (
 		<div className='MyPage'>
 			{/* 헤더 */}
@@ -166,7 +171,7 @@ export const MyPage = () => {
 							{/* 프로필 영역 카드 하단 - 레벨 */}
 							<CardContent className='ExpBar'>
 								<CardHeader className='CardTextColor' textAlign='center'>
-									레벨 : {memberInfo?.level}
+									레벨 : {formatLevel(memberInfo?.level)}
 								</CardHeader>
 								{/* 레벨 바 */}
 								<div className='ExpBar'>
