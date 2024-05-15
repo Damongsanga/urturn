@@ -10,15 +10,16 @@ import { inputValue } from '../../types/roomTypes';
 
 interface FooterProp {
 	$mode?: number;
+	$pairMode?: boolean;
 	$reviewValues?: inputValue[];
 	$onClickFunc?: () => void;
 }
 /* 
 헤더 규칙 prop
 mode : 0이면 문제확인 / 1이면 ide / 2이면 회고
-$switch : 스위칭 모드이면 true, 아니면 false
+$pairMode : 페어프로그래밍 모드이면 true, 아니면 false
 */
-export const FooterBar = ({ $mode, $reviewValues }: FooterProp) => {
+export const FooterBar = ({ $mode, $pairMode=false, $reviewValues }: FooterProp) => {
 	const roomStore = useRoomStore();
 
 	const readyToSolve = () => {
@@ -98,9 +99,16 @@ export const FooterBar = ({ $mode, $reviewValues }: FooterProp) => {
 						<Button size='large' className='RunButtonColor'>
 							코드 실행
 						</Button>
-						<Button onClick={submitCode} size='large' className='RunButtonColor'>
-							코드 제출하기
-						</Button>
+						{
+							!$pairMode ?
+							<Button onClick={submitCode} size='large' className='RunButtonColor'>
+								코드 제출하기
+							</Button>
+							:
+							<Button disabled={true} size='large' className='RunButtonColor'>
+								상대방 코드 작성중
+							</Button>
+						}
 					</MenuItem>
 				)}
 

@@ -1,7 +1,7 @@
 import { Allotment } from 'allotment';
 //import CodeEditor from '../../components/solve/CodeEditor';
 import Markdown from 'markdown-to-jsx';
-import { Dropdown, Menu, MenuItem, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from 'semantic-ui-react';
+import { Menu, MenuItem, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from 'semantic-ui-react';
 
 import 'allotment/dist/style.css';
 
@@ -13,13 +13,6 @@ import './SolvePage.css';
 import { FooterBar } from '../../components/footer/FooterBar';
 import { useEffect, useState } from 'react';
 import { QuestionSideBar } from '../../components/questionSideBar/QuestionSideBar';
-
-const langOptions = [
-	{ key: 'C++', text: 'C++', value: 'C++' },
-	{ key: 'Java', text: 'Java', value: 'Java' },
-	{ key: 'Python', text: 'Python', value: 'Python' },
-	{ key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
-];
 
 export default function CheckPage() {
 	const roomStore = useRoomStore();
@@ -99,23 +92,23 @@ export default function CheckPage() {
 									</TableHeader>
 
 									<TableBody>
-										<TableRow>
-											<TableCell width={4}>테스트 케이스 1</TableCell>
-											<TableCell>입격값1</TableCell>
-											<TableCell>출력값1</TableCell>
-										</TableRow>
-										<TableRow>
-											<TableCell width={4}>테스트 케이스 2</TableCell>
-											<TableCell>입력값2</TableCell>
-											<TableCell>출력값2</TableCell>
-										</TableRow>
+										{
+											roomStore.questionInfos && activeQuestion > 0 &&
+												roomStore.questionInfos[activeQuestion - 1].testcases.map((testcase, i) => (
+													<TableRow key={i}>
+														<TableCell>{i + 1} 번 테스트 케이스</TableCell>
+														<TableCell>{testcase.stdin}</TableCell>
+														<TableCell>{testcase.expectedOutput}</TableCell>
+													</TableRow>
+												))
+										}
 									</TableBody>
 								</Table>
 							</div>
 						</Allotment.Pane>
 						<Allotment.Pane minSize={350}>
 							<div className='HeaderBar' style={{ height: '70px' }}>
-								<div
+								{/* <div
 									style={{
 										width: '98%',
 										textAlign: 'left',
@@ -124,13 +117,7 @@ export default function CheckPage() {
 										color: 'white',
 									}}
 								>
-									<Dropdown
-										search
-										defaultValue={langOptions[0].value}
-										searchInput={{ type: 'string' }}
-										options={langOptions}
-									/>
-								</div>
+								</div> */}
 							</div>
 							<Allotment vertical>
 								<Allotment.Pane minSize={325}>
