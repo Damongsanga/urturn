@@ -139,19 +139,24 @@ public class InitData {
             + "1 7\n"
             + "2 3\n"
             + "3 5\n"
-            + "4 5", "1\n"
+            + "4 5\n"
+            + "5 6\n"
+            + "5 7\n"
+            + "6 2\n"
+            + "6 4\n"
+            + "7 5", "1\n"
             + "5\n"
             + "7", false);
 
         createProblem("술래잡기", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/1697%EB%B2%88+%EC%88%A0%EB%9E%98%EC%9E%A1%EA%B8%B0.md", LEVEL1);
 
         createTestcase("술래잡기", "5 17", "4", true);
-        createTestcase("술래잡기", "0 1", "", false);
-        createTestcase("술래잡기", "1 15", "", false);
-        createTestcase("술래잡기", "1 100000", "", false);
-        createTestcase("술래잡기", "3482 45592", "", false);
-        createTestcase("술래잡기", "5 35", "", false);
-        createTestcase("술래잡기", "10007 98767", "", false);
+        createTestcase("술래잡기", "0 1", "1", false);
+        createTestcase("술래잡기", "1 15", "5", false);
+        createTestcase("술래잡기", "1 100000", "21", false);
+        createTestcase("술래잡기", "3482 45592", "637", false);
+        createTestcase("술래잡기", "5 35", "5", false);
+        createTestcase("술래잡기", "10007 98767", "2343", false);
 
         createProblem("빙하", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/2573%EB%B2%88+%EB%B9%99%ED%95%98.md", LEVEL2);
 
