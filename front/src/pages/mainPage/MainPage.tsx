@@ -79,19 +79,7 @@ const MainPage: React.FC = () => {
 											style={{ width: '21vw', height: 'auto' }}
 										/>
 									</Card.Content>
-									<Card.Content textAlign='center' style={{ borderTop: 'none' }}>
-										<Card.Description
-											style={{
-												display: 'flex',
-												alignItems: 'center',
-												justifyContent: 'center',
-												marginTop: '2vh',
-												color: 'black',
-											}}
-										>
-											직접 방을 만들어보세요
-										</Card.Description>
-									</Card.Content>
+
 									<Card.Content
 										style={{
 											display: 'flex',
@@ -124,21 +112,7 @@ const MainPage: React.FC = () => {
 											style={{ width: '21vw', height: 'auto' }}
 										/>
 									</Card.Content>
-									<Card.Content textAlign='center' style={{ borderTop: 'none' }}>
-										<Card.Description
-											style={{
-												display: 'flex',
-												alignItems: 'center',
-												justifyContent: 'center',
-												textAlign: 'center',
-												borderTop: 'none',
-												marginTop: '2vh',
-												color: 'black',
-											}}
-										>
-											만들어진 방에 합류해보세요
-										</Card.Description>
-									</Card.Content>
+	
 									<Card.Content
 										style={{
 											display: 'flex',

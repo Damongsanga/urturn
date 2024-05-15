@@ -175,7 +175,7 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 														? roomStore.userInfo!.myUserProfileUrl
 														: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
 												}
-												style={{ width: '10vw', height: 'auto', minWidth: '150px'}}
+												style={{ width: '10vw', height: 'auto', minWidth: '150px' }}
 												rounded
 											/>
 											<Divider hidden />
@@ -202,7 +202,7 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 														? roomStore.userInfo.relativeUserProfileUrl
 														: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
 												}
-												style={{ width: '10vw', height: 'auto', minWidth: '150px'}}
+												style={{ width: '10vw', height: 'auto', minWidth: '150px' }}
 												rounded
 											/>
 											<Divider hidden />
@@ -215,30 +215,26 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 									</Card>
 								</CardGroup>
 								{/* 볼륨 조정 영역 */}
-								<Grid columns={2}  style={{ marginLeft : '0em', marginRight: '3em' }}>
-									<GridRow></GridRow>
-									<GridRow></GridRow>
-									<GridRow className='Row'>
-										<GridColumn width={2} verticalAlign={'middle'}>
-											{/* 마이크 아이콘 */}
-											<Icon
-												onClick={toggleMicrophone}
-												className='Icon'
-												name={isMicMuted ? 'microphone slash' : 'microphone'}
-												size='big'
-											/>
-										</GridColumn>
-										<GridColumn width={2} verticalAlign={'middle'}>
-											{/* 스피커 아이콘 */}
-											<Icon
-												onClick={toggleMute}
-												className='Icon'
-												name={isMuted ? 'volume off' : 'volume up'}
-												size='big'
-											/>
-										</GridColumn>
-									</GridRow>
-								</Grid>
+								<div style = {{width: '32vw', display: 'flex', alignItems: 'center', justifyContent: 'space-around'}}>
+									<div>
+										{/* 마이크 아이콘 */}
+										<Icon
+											onClick={toggleMicrophone}
+											className='Icon'
+											name={isMicMuted ? 'microphone slash' : 'microphone'}
+											size='big'
+										/>
+									</div>
+									<div >
+										{/* 스피커 아이콘 */}
+										<Icon
+											onClick={toggleMute}
+											className='Icon'
+											name={isMuted ? 'volume off' : 'volume up'}
+											size='big'
+										/>
+									</div>
+								</div>
 							</div>
 							<div className='LeftSection'>
 								<div>

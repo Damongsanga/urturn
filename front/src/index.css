@@ -11,6 +11,20 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  font-family: 'LINESeedKR-Bd' !important;
+}
+
+.ui {
+  font-family: 'LINESeedKR-Bd' !important;
+}
+
+p {
+  font-family: 'LINESeedKR-Bd' !important;
+}
+
+small {
+  font-family: 'LINESeedKR-Bd' !important;
 }
 
 a {
@@ -28,6 +42,8 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+
+  font-family: 'Cafe24Ssurround' !important;
 }
 
 h1 {
