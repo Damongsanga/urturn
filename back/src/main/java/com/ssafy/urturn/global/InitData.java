@@ -918,7 +918,7 @@ public class InitData {
                 .roles(List.of(Role.USER)).build();
             return memberRepository.save(member).getId();
         }
-        return null;
+        return memberRepository.findByNickname(nickname).get().getId();
     }
 
     // language가 null이면 못푼 것으로 간주
