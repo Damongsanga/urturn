@@ -20,6 +20,8 @@ import {MemberInfo} from "../../types/memberInfoTypes.ts";
 import {fetchMemberInfo, updateRepository} from "../../utils/api/memberAPI.ts";
 import {useAxios} from "../../utils/useAxios.ts";
 import {Popup} from "semantic-ui-react";
+import {HistoryEntry} from "../../types/historyTypes.ts";
+import {fetchHistory} from "../../utils/api/historyAPI.ts";
 
 export const MyPage = () => {
 	const axios = useAxios(true);
@@ -28,14 +30,12 @@ export const MyPage = () => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [showPopup, setShowPopup] = useState(false);
 	const [pageState, setPageState] = useState({
-		activePage: 5,
-		boundaryRange: 1,
-		siblingRange: 1,
-		showEllipsis: true,
-		showFirstAndLastNav: true,
-		showPreviousAndNextNav: true,
-		totalPages: 50,
+		activePage: 1,
+		totalPages: 0
 	});
+	const [historyData, setHistoryData] = useState<HistoryEntry[]>([]);
+	// const [page, setPage] = useState(0);
+	// const [totalPages, setTotalPages] = useState(0);
 
 	// 페이지 변경 핸들러 함수
 	const handlePaginationChange = (_e: React.MouseEvent, { activePage }: any) => {
@@ -44,6 +44,22 @@ export const MyPage = () => {
 			activePage: activePage,
 		}));
 	};
+	useEffect(() => {
+		const loadHistoryData = async () => {
+			try {
+				const result = await fetchHistory(pageState.activePage - 1, 3, axios);
+				setHistoryData(result.content);
+				setPageState(prev => ({
+					...prev,
+					totalPages: result.totalPages
+				}));
+			} catch (error) {
+				console.error('Failed to fetch history:', error);
+			}
+		};
+
+		loadHistoryData();
+	}, [pageState.activePage]);
 
 	useEffect(() => {
 		const loadMemberInfo = async () => {
@@ -102,6 +118,18 @@ export const MyPage = () => {
 		}
 	}, [modalOpen, repository, memberInfo?.repository]);
 
+	const getSegmentClassName = (result: string) => {
+		switch (result) {
+			case 'SUCCESS':
+				return 'Success';
+			case 'FAILURE':
+				return 'Fail';
+			case 'SURRENDER':
+				return 'surrender';
+			default:
+				return '';
+		}
+	};
 	return (
 		<div className='MyPage'>
 			{/* 헤더 */}
@@ -180,58 +208,86 @@ export const MyPage = () => {
 					</Header>
 					{/* 문제 기록 */}
 					{/* 성공 */}
-					<Segment className='Questions Success' size='small'>
-						<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>
-							성공
-						</Header>
-						<Image
-							size='tiny'
-							src='https://item.kakaocdn.net/do/592728ea7408bcf69f797c0446b584a6d0bbab1214a29e381afae56101ded106'
-							style={{ marginLeft: '2vw' }}
-						/>
-						<SegmentGroup className='QuestionName'>
-							<Segment textAlign='right' className='CardTextColor Success'>
-								문제1
-							</Segment>
-							<Segment textAlign='right' className='CardTextColor ContentBorder Success '>
-								문제2
-							</Segment>
-						</SegmentGroup>
-					</Segment>
+					{/*<Segment className='Questions Success' size='small'>*/}
+					{/*	<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>*/}
+					{/*		성공*/}
+					{/*	</Header>*/}
+					{/*	<Image*/}
+					{/*		size='tiny'*/}
+					{/*		src='https://item.kakaocdn.net/do/592728ea7408bcf69f797c0446b584a6d0bbab1214a29e381afae56101ded106'*/}
+					{/*		style={{ marginLeft: '2vw' }}*/}
+					{/*	/>*/}
+					{/*	<SegmentGroup className='QuestionName'>*/}
+					{/*		<Segment textAlign='right' className='CardTextColor Success'>*/}
+					{/*			문제1*/}
+					{/*		</Segment>*/}
+					{/*		<Segment textAlign='right' className='CardTextColor ContentBorder Success '>*/}
+					{/*			문제2*/}
+					{/*		</Segment>*/}
+					{/*	</SegmentGroup>*/}
+					{/*</Segment>*/}
 
-					{/* 실패 */}
-					<Segment className='Questions Fail' size='small'>
-						<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>
-							실패
-						</Header>
-						<Image
-							size='tiny'
-							src='https://item.kakaocdn.net/do/592728ea7408bcf69f797c0446b584a6f604e7b0e6900f9ac53a43965300eb9a'
-							style={{ marginLeft: '2vw' }}
-						/>
-						<SegmentGroup className='QuestionName'>
-							<Segment textAlign='right' className='CardTextColor Fail'>
-								문제1
-							</Segment>
-							<Segment textAlign='right' className='CardTextColor ContentBorder Fail'>
-								문제2
-							</Segment>
-						</SegmentGroup>
-					</Segment>
+					{/*/!* 실패 *!/*/}
+					{/*<Segment className='Questions Fail' size='small'>*/}
+					{/*	<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>*/}
+					{/*		실패*/}
+					{/*	</Header>*/}
+					{/*	<Image*/}
+					{/*		size='tiny'*/}
+					{/*		src='https://item.kakaocdn.net/do/592728ea7408bcf69f797c0446b584a6f604e7b0e6900f9ac53a43965300eb9a'*/}
+					{/*		style={{ marginLeft: '2vw' }}*/}
+					{/*	/>*/}
+					{/*	<SegmentGroup className='QuestionName'>*/}
+					{/*		<Segment textAlign='right' className='CardTextColor Fail'>*/}
+					{/*			문제1*/}
+					{/*		</Segment>*/}
+					{/*		<Segment textAlign='right' className='CardTextColor ContentBorder Fail'>*/}
+					{/*			문제2*/}
+					{/*		</Segment>*/}
+					{/*	</SegmentGroup>*/}
+					{/*</Segment>*/}
+					{historyData.map((entry, index) => (
+						<Segment key={index} className={`Questions ${getSegmentClassName(entry.result)}`} size='small'>
+							<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>
+								{entry.result}
+							</Header>
+							<Image
+								size='tiny'
+								src={entry.pair.profileImage}
+								style={{ marginLeft: '2vw' }}
+							/>
+							<SegmentGroup className='QuestionName'>
+								<Segment textAlign='right' className={`CardTextColor ${getSegmentClassName(entry.result)}`}>
+									{entry.problem1.title}
+								</Segment>
+								<Segment textAlign='right' className={`CardTextColor ContentBorder ${getSegmentClassName(entry.result)}`}>
+									{entry.problem2.title}
+								</Segment>
+							</SegmentGroup>
+						</Segment>
+					))}
+					{/*<Pagination*/}
+					{/*	activePage={pageState.activePage}*/}
+					{/*	boundaryRange={pageState.boundaryRange}*/}
+					{/*	onPageChange={handlePaginationChange}*/}
+					{/*	size='mini'*/}
+					{/*	siblingRange={pageState.siblingRange}*/}
+					{/*	totalPages={pageState.totalPages}*/}
+					{/*	// Heads up! All items are powered by shorthands, if you want to hide one of them, just pass `null` as value*/}
+					{/*	ellipsisItem={pageState.showEllipsis ? undefined : null}*/}
+					{/*	firstItem={null}*/}
+					{/*	prevItem={pageState.showPreviousAndNextNav ? undefined : null}*/}
+					{/*	nextItem={pageState.showPreviousAndNextNav ? undefined : null}*/}
+					{/*	style={{ marginTop: '3vh' }}*/}
+					{/*/>*/}
 					<Pagination
 						activePage={pageState.activePage}
-						boundaryRange={pageState.boundaryRange}
+						totalPages={pageState.totalPages}
 						onPageChange={handlePaginationChange}
 						size='mini'
-						siblingRange={pageState.siblingRange}
-						totalPages={pageState.totalPages}
-						// Heads up! All items are powered by shorthands, if you want to hide one of them, just pass `null` as value
-						ellipsisItem={pageState.showEllipsis ? undefined : null}
-						firstItem={null}
-						prevItem={pageState.showPreviousAndNextNav ? undefined : null}
-						nextItem={pageState.showPreviousAndNextNav ? undefined : null}
 						style={{ marginTop: '3vh' }}
 					/>
+
 				</div>
 			</div>
 			<Modal open={modalOpen} onClose={() => setModalOpen(false)} size='tiny'>

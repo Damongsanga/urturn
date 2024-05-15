@@ -5,3 +5,7 @@ export const fetchHistory = async (page: number, size: number = 6, axiosInstance
     const response = await axiosInstance.get<PageableResponse>(`/history?page=${page}&size=${size}`);
     return response.data;
 };
+// export const fetchHistory = async (page: number, size: number = 6): Promise<PageableResponse> => {
+//     const response = await axios.get<PageableResponse>(`/history?page=${page}&size=${size}`);
+//     return response.data;
+// };
