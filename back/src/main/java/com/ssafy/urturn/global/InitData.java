@@ -1,15 +1,36 @@
 package com.ssafy.urturn.global;
 
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_MEMBER;
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_PROBLEM;
+import static com.ssafy.urturn.history.HistoryResult.*;
 import static com.ssafy.urturn.member.Level.*;
+import static com.ssafy.urturn.problem.Language.CPP;
+import static com.ssafy.urturn.problem.Language.JAVA;
+import static com.ssafy.urturn.problem.Language.PYTHON;
 
+import com.ssafy.urturn.global.auth.Role;
+import com.ssafy.urturn.global.exception.RestApiException;
+import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
+import com.ssafy.urturn.history.HistoryResult;
+import com.ssafy.urturn.history.entity.History;
+import com.ssafy.urturn.history.repository.HistoryRepository;
 import com.ssafy.urturn.member.Level;
+import com.ssafy.urturn.member.entity.Member;
+import com.ssafy.urturn.member.repository.MemberRepository;
+import com.ssafy.urturn.problem.Language;
+import com.ssafy.urturn.problem.entity.MemberProblem;
 import com.ssafy.urturn.problem.entity.Problem;
 import com.ssafy.urturn.problem.entity.Testcase;
+import com.ssafy.urturn.problem.repository.MemberProblemRepository;
 import com.ssafy.urturn.problem.repository.ProblemRepository;
 import com.ssafy.urturn.problem.repository.TestcaseRepository;
 import jakarta.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +41,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class InitData {
 
+    private final MemberRepository memberRepository;
+    private final HistoryRepository historyRepository;
+    private final MemberProblemRepository memberProblemRepository;
     private final ProblemRepository problemRepository;
     private final TestcaseRepository testcaseRepository;
+
+    private final PasswordEncoder passwordEncoder;
+    @Value("spring.security.oauth2.client.registration.password-salt")
+    private String salt;
 
     // test를 위해 LEVEL1 문제 2개는 주석처리하여 LEVEL1을 선택하면 테스트문제만 반환되도록 하였습니다.
     @PostConstruct
     public void initData(){
+
+        Long testMemberId1 = createTestMember("test1", "test1");
+        Long testMemberId2 = createTestMember("test2", "test2");
 
         createProblem("두배로 늘려요", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/0000%EB%B2%88+%ED%85%8C%EC%8A%A4%ED%8A%B8+%EB%AC%B8%EC%A0%9C.md", LEVEL1);
 
@@ -810,6 +841,66 @@ public class InitData {
             + "75\n"
             + "73\n"
             + "67", false);
+
+        // 10개 기록
+        createHistory(testMemberId1, testMemberId2, 1L, 2L, JAVA, JAVA, 5, SUCCESS);
+        createHistory(testMemberId1, testMemberId2, 3L, 4L, JAVA, JAVA, 6, SUCCESS);
+        createHistory(testMemberId1, testMemberId2, 5L, 6L, JAVA, JAVA, 7, SUCCESS);
+        createHistory(testMemberId2, testMemberId1, 7L, 8L, null, JAVA, 20, FAILURE);
+        createHistory(testMemberId1, testMemberId2, 9L, 10L, CPP, PYTHON, 20, FAILURE);
+        createHistory(testMemberId1, testMemberId2, 1L, 2L, null, null, 5, SURRENDER);
+        createHistory(testMemberId2, testMemberId1, 7L, 8L, JAVA, JAVA, 5, SUCCESS);
+        createHistory(testMemberId1, testMemberId2, 9L, 10L, JAVA, JAVA, 10, SUCCESS);
+        createHistory(testMemberId1, testMemberId2, 1L, 2L, PYTHON, PYTHON, 2, SUCCESS);
+        createHistory(testMemberId1, testMemberId2, 3L, 4L, PYTHON, JAVA, 6, SUCCESS);
+
+
+    }
+
+    private Long createTestMember(String nickname, String password){
+        if (!memberRepository.existsByNickname(nickname)){
+            Member member = Member.builder()
+                .nickname(nickname)
+                .password(passwordEncoder.encode(password + salt))
+                .profileImage("https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/UserProfileImage/baseImage.jpg")
+                .githubAccessToken("githubAccessToken")
+                .email("damongsanga@email.com")
+                .level(Level.LEVEL1)
+                .roles(List.of(Role.USER)).build();
+            return memberRepository.save(member).getId();
+        }
+        return null;
+    }
+
+    // language가 null이면 못푼 것으로 간주
+    private void createHistory(Long managerId, Long pairId, Long problemId1, Long problemId2, Language language1, Language language2, int totalRound, HistoryResult result){
+
+        Member manager = memberRepository.findById(managerId).orElseThrow(() -> new RestApiException(NO_MEMBER));
+        Member pair = memberRepository.findById(pairId).orElseThrow(() -> new RestApiException(NO_MEMBER));
+        Problem problem1 = problemRepository.findById(problemId1).orElseThrow(() -> new RestApiException(NO_PROBLEM));
+        Problem problem2 = problemRepository.findById(problemId2).orElseThrow(() -> new RestApiException(NO_PROBLEM));
+
+        History history = History.builder()
+            .manager(manager).pair(pair)
+            .problem1(problem1).problem2(problem2)
+            .code1(language1 == null? null : "첫 번째 정답 코드입니다")
+            .code2(language2 == null? null :"두 번째 정답 코드입니다")
+            .language1(language1).language2(language2)
+            .endTime(LocalDateTime.now().plusMinutes(1))
+            .totalRound(totalRound)
+            .retro1("첫 번째 문제 회고입니다.").retro2("두 번째 문제 회고입니다.")
+            .result(result).build();
+        historyRepository.save(history);
+
+        // 문제 풀이 기록
+        if (language1 != null){
+        memberProblemRepository.save(MemberProblem.builder().member(manager).problem(problem1).build());
+        memberProblemRepository.save(MemberProblem.builder().member(manager).problem(problem2).build());
+        }
+        if (language2 != null ){
+        memberProblemRepository.save(MemberProblem.builder().member(pair).problem(problem2).build());
+        memberProblemRepository.save(MemberProblem.builder().member(pair).problem(problem1).build());
+        }
     }
 
 
