@@ -8,6 +8,7 @@ import { loadMarkdownFromCDN } from "../utils/solve/loadMarkdownFromCDN";
 import { questionInfo, reviewInfo } from "../types/roomTypes";
 import {useOpenVidu} from "./openVidu.ts";
 import {useRtcStore} from "../stores/rtc.ts";
+import { convertLangToUpper, convertUppserToLang } from "../utils/solve/convertProgramLang.ts";
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
 const MAX_TIME = 30
@@ -33,6 +34,14 @@ export const useWebSocket = () => {
                 }
                 else if (roomStore.getSec() <= 0) {
                     if(roomStore.getPairProgramingMode()===false || roomStore.getPairProgramingRole() === 'Driver'){
+                        console.log("switchCode")
+                        console.log("code: " + roomStore.getCode())
+                        console.log("roomId: " + roomStore.getRoomInfo()?.roomId)
+                        console.log("round: " + roomStore.getRound())
+                        console.log("algoQuestionId: " + roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId)
+                        console.log("isHost: " + roomStore.getRoomInfo()?.host)
+                        console.log("isPair: " + roomStore.getPairProgramingMode())
+                        console.log("language: " + convertLangToUpper(roomStore.getLang()))
                         roomStore.getClient()?.publish({
                             destination: '/app/switchCode',
                             body: JSON.stringify({ 
@@ -42,6 +51,7 @@ export const useWebSocket = () => {
                                 algoQuestionId: roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId,
                                 isHost: roomStore.getRoomInfo()?.host,
                                 isPair: roomStore.getPairProgramingMode(),
+                                language: convertLangToUpper(roomStore.getLang()),
                             })
                         })
                     }
@@ -121,6 +131,7 @@ export const useWebSocket = () => {
                 console.log('Received message: switchCode' + msg.body);
                 roomStore.setCode(data.code);
                 roomStore.setRound(data.round);
+                roomStore.setLang(convertUppserToLang(data.language));
 
                 const idx = roomStore.getQuestionIdx() === 0 ? 1 : 0;
                 roomStore.setQuestionIdx(idx);

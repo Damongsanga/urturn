@@ -4,6 +4,18 @@ import { create } from "zustand";
 import { roomInfo, userInfo, questionInfo, roomState, reviewInfo, inputValue } from '../types/roomTypes';
 import * as monaco from "monaco-editor";
 
+const basicCode = 
+`import java.util.*;
+import java.io.*;
+
+public class Main {
+  public static void main(String[] args) throws IOException {
+
+        
+    }
+}
+`
+
 export const useRoomStore = create<roomState>() (
     //persist(
         (set, get) => ({
@@ -19,10 +31,10 @@ export const useRoomStore = create<roomState>() (
 
             round: 1,
             questionIdx: -1,
-            code: null,
+            code: basicCode,
             editor: null,
             console: '',
-            lang: 'JAVASCRIPT',
+            lang: 'java',
             sec: 99999999,
             pairProgramingMode: false,
             pairProgramingRole: null,
@@ -88,9 +100,9 @@ export const useRoomStore = create<roomState>() (
                 set({ round: 1 });
                 set({ questionIdx: -1 });
                 set({ editor: null });
-                set({ code: null });
+                set({ code: basicCode });
                 set({ console: '' });
-                set({ lang: 'JAVASCRIPT' });
+                set({ lang: 'java' });
                 set({ sec: 99999999 });
                 set({ pairProgramingMode: false });
                 set({ pairProgramingRole: null });

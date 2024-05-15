@@ -1,6 +1,6 @@
-export const convertLangToUpper = (lang: string) => {
+export const convertLangToUpper = (lang: string) : string | Error => {
     switch (lang) {
-        case 'c++':
+        case 'cpp':
             return 'CPP';
         case 'java':
             return 'JAVA';
@@ -9,4 +9,19 @@ export const convertLangToUpper = (lang: string) => {
         case 'javascript':
             return 'JAVASCRIPT';
     }
+    return '';
+}
+
+export const convertUppserToLang = (lang: string) => {
+    switch (lang) {
+        case 'CPP':
+            return 'cpp';
+        case 'JAVA':
+            return 'java';
+        case 'PYTHON':
+            return 'python';
+        case 'JAVASCRIPT':
+            return 'javascript';
+    }
+    return '';
 }

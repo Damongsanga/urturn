@@ -14,7 +14,7 @@ export interface userInfo {
     relativeUserNickName: string
 }
 
-export interface testCase{
+export interface testcase{
     id: number,
     stdin: string,
     expectedOutput: string
@@ -25,7 +25,7 @@ export interface questionInfo {
     algoQuestionUrl: string,
     algoQuestionTitle: string,
     algoQuestionContent: string,
-    testCases: testCase[]
+    testcases: testcase[]
 }
 
 export interface reviewInfo {

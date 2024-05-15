@@ -12,21 +12,10 @@ import { useRoomStore } from '../../stores/room';
 import './SolvePage.css';
 import { QuestionSideBar } from '../../components/questionSideBar/QuestionSideBar';
 import { FooterBar } from '../../components/footer/FooterBar';
-import { useEffect } from 'react';
-
-const langOptions = [
-	{ key: 'C++', text: 'C++', value: 'c++' },
-	{ key: 'Java', text: 'Java', value: 'java' },
-	{ key: 'Python', text: 'Python', value: 'python' },
-	{ key: 'JavaScript', text: 'JavaScript', value: 'javascript' },
-];
+import { langOptions } from '../../types/lagnOptions';
 
 export default function SolvePage() {
 	const roomStore = useRoomStore();
-
-	useEffect(() => {
-		roomStore.setLang('c++');
-	}, []);
 
 	return (
 		<div className='Page'>
@@ -77,16 +66,16 @@ export default function SolvePage() {
 									</TableHeader>
 
 									<TableBody>
-										<TableRow>
-											<TableCell width={4}>테스트 케이스 1</TableCell>
-											<TableCell>입격값1</TableCell>
-											<TableCell>출력값1</TableCell>
-										</TableRow>
-										<TableRow>
-											<TableCell width={4}>테스트 케이스 2</TableCell>
-											<TableCell>입력값2</TableCell>
-											<TableCell>출력값2</TableCell>
-										</TableRow>
+										{
+											roomStore.questionInfos &&
+												roomStore.questionInfos[roomStore.questionIdx].testcases.map((testcase, i) => (
+													<TableRow key={i}>
+														<TableCell>{i + 1} 번 테스트 케이스</TableCell>
+														<TableCell>{testcase.stdin}</TableCell>
+														<TableCell>{testcase.expectedOutput}</TableCell>
+													</TableRow>
+												))
+										}
 									</TableBody>
 								</Table>
 							</div>
@@ -104,7 +93,7 @@ export default function SolvePage() {
 								>
 									<Dropdown
 										search
-										defaultValue={langOptions[0].value}
+										value={roomStore.lang}
 										searchInput={{ type: 'string' }}
 										options={langOptions}
 										onChange={(_e, { value }) => {
@@ -141,7 +130,7 @@ export default function SolvePage() {
 				</div>
 			</div>
 			{/* footer */}
-			<FooterBar $mode={1} />
+			<FooterBar $mode={1} $pairMode={false} />
 		</div>
 	);
 }
