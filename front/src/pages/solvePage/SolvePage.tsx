@@ -48,7 +48,7 @@ export default function SolvePage() {
 									)}
 								</div>
 							</div>
-							<div style={{ height: '100%', overflowY: 'auto', padding: '12px' }}>
+							<div style={{ height: '100%', overflowY: 'auto', padding: '12px', fontSize:'1.3rem' }}>
 								{roomStore.questionIdx == -1 ? (
 									<div></div>
 								) : (
@@ -66,7 +66,7 @@ export default function SolvePage() {
 									</TableHeader>
 
 									<TableBody>
-										{
+										{/* {
 											roomStore.questionInfos &&
 												roomStore.questionInfos[roomStore.questionIdx].testcases.map((testcase, i) => (
 													<TableRow key={i}>
@@ -75,7 +75,7 @@ export default function SolvePage() {
 														<TableCell>{testcase.expectedOutput}</TableCell>
 													</TableRow>
 												))
-										}
+										} */}
 									</TableBody>
 								</Table>
 							</div>

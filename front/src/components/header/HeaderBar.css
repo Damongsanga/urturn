@@ -48,6 +48,8 @@
 .Main .ButtonColor {
   background-color: #b7b7b7 !important;
   color: white !important;
+
+  font-size: 1.2rem !important;
 }
 
 .Main .ButtonColor:hover,
@@ -63,6 +65,8 @@
 .Ide .ButtonColor {
   background-color: #b7b7b7 !important;
   color: white !important;
+
+  font-size: 1.2rem !important;
 }
 
 .Ide .ButtonColor:hover,

@@ -76,7 +76,7 @@ export default function CheckPage() {
 										roomStore.questionInfos[activeQuestion - 1].algoQuestionTitle}
 								</div>
 							</div>
-							<div style={{ height: '100%', overflowY: 'auto', padding: '12px' }}>
+							<div style={{ height: '100%', overflowY: 'auto', padding: '12px', fontSize:'1.3rem' }}>
 								{roomStore.questionInfos && activeQuestion > 0 && (
 									<Markdown>
 										{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}
@@ -135,7 +135,7 @@ export default function CheckPage() {
 											}}
 										></div>
 									</div>
-									<div style={{ padding: '12px' }}>
+									<div style={{ padding: '12px', fontSize:'1.1rem' }}>
 										<p>두 문제를 모두 확인했으면, 시작하기 버튼을 눌러주세요.</p>
 									</div>
 								</Allotment.Pane>

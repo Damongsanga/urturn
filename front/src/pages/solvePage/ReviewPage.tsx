@@ -80,7 +80,7 @@ export default function ReviewPage() {
 				item.id === questionId ? { ...item, [fieldName]: event.target.value } : item
 			)
 		);
-		//console.log(inputValues)
+		console.log(inputValues)
 	};
 	
 	return (
@@ -130,7 +130,7 @@ export default function ReviewPage() {
 									{roomStore.questionInfos && activeQuestion > 0 && roomStore.questionInfos[activeQuestion - 1].algoQuestionTitle}
 								</div>
 							</div>
-							<div style={{ height: '100%', overflowY: 'auto', padding:'12px' }}>
+							<div style={{ height: '100%', overflowY: 'auto', padding:'12px', fontSize:'1.3rem' }}>
 							{
 								roomStore.questionInfos && activeQuestion > 0 &&
 								<Markdown>{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}</Markdown>
@@ -200,7 +200,7 @@ export default function ReviewPage() {
 											<Form>
 												<TextArea
 													placeholder='좋았던 점을 적어주세요.'
-													style={{ width: '100%', height: '65.2vh', resize: 'none' }}
+													style={{ width: '100%', height: '65.2vh', resize: 'none', fontSize:'1.1rem' }}
 													value={inputValues.find(item => item.id === activeQuestion)?.keep}
 													onChange={(e) => handleInputChange(e, activeQuestion, 'keep')}
 												/>{' '}
@@ -210,7 +210,7 @@ export default function ReviewPage() {
 											<Form>
 												<TextArea
 													placeholder='아쉬웠던 점을 적어주세요.'
-													style={{ width: '100%', height: '65.2vh', resize: 'none' }}
+													style={{ width: '100%', height: '65.2vh', resize: 'none', fontSize:'1.1rem' }}
 													value={inputValues.find(item => item.id === activeQuestion)?.try}
 													onChange={(e) => handleInputChange(e, activeQuestion, 'try')}
 												/>{' '}
