@@ -58,56 +58,100 @@ public class InitData {
         Long testMemberId1 = createTestMember("test1", "test1");
         Long testMemberId2 = createTestMember("test2", "test2");
 
-        createProblem("두배로 늘려요", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/0000%EB%B2%88+%ED%85%8C%EC%8A%A4%ED%8A%B8+%EB%AC%B8%EC%A0%9C.md", LEVEL1);
+//        createProblem("두배로 늘려요", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/0000%EB%B2%88+%ED%85%8C%EC%8A%A4%ED%8A%B8+%EB%AC%B8%EC%A0%9C.md", LEVEL1);
+//
+//        createTestcase("두배로 늘려요", "2", "4", true);
+//        createTestcase("두배로 늘려요", "0", "0", false);
+//        createTestcase("두배로 늘려요", "-2", "-4", false);
+//
+//        createProblem("안녕하세요 감사해요 잘있어요 다시 만나요", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/0000%EB%B2%88+%ED%85%8C%EC%8A%A4%ED%8A%B8+%EB%AC%B8%EC%A0%9C2.md", LEVEL1);
+//
+//        createTestcase("안녕하세요 감사해요 잘있어요 다시 만나요", "SSAFY", "SSAFYHELLO", true);
+//        createTestcase("안녕하세요 감사해요 잘있어요 다시 만나요", "010", "010HELLO", false);
+//        createTestcase("안녕하세요 감사해요 잘있어요 다시 만나요", "재길", "재길HELLO", false);
 
-        createTestcase("두배로 늘려요", "2", "4", true);
-        createTestcase("두배로 늘려요", "0", "0", false);
-        createTestcase("두배로 늘려요", "-2", "-4", false);
+        createProblem("유기농 양상추", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/1012%EB%B2%88+%EC%9C%A0%EA%B8%B0%EB%86%8D+%EC%96%91%EC%83%81%EC%B6%94.md", LEVEL1);
 
-        createProblem("안녕하세요 감사해요 잘있어요 다시 만나요", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/0000%EB%B2%88+%ED%85%8C%EC%8A%A4%ED%8A%B8+%EB%AC%B8%EC%A0%9C2.md", LEVEL1);
+        createTestcase("유기농 양상추", "2\n"
+            + "10 8 17\n"
+            + "0 0\n"
+            + "1 0\n"
+            + "1 1\n"
+            + "4 2\n"
+            + "4 3\n"
+            + "4 5\n"
+            + "2 4\n"
+            + "3 4\n"
+            + "7 4\n"
+            + "8 4\n"
+            + "9 4\n"
+            + "7 5\n"
+            + "8 5\n"
+            + "9 5\n"
+            + "7 6\n"
+            + "8 6\n"
+            + "9 6\n"
+            + "10 10 1\n"
+            + "5 5 ", "5\n"
+            + "1", true);
 
-        createTestcase("안녕하세요 감사해요 잘있어요 다시 만나요", "SSAFY", "SSAFYHELLO", true);
-        createTestcase("안녕하세요 감사해요 잘있어요 다시 만나요", "010", "010HELLO", false);
-        createTestcase("안녕하세요 감사해요 잘있어요 다시 만나요", "재길", "재길HELLO", false);
+        createTestcase("유기농 양상추", "1\n"
+            + "5 3 6\n"
+            + "0 2\n"
+            + "1 2\n"
+            + "2 2\n"
+            + "3 2\n"
+            + "4 2\n"
+            + "4 0", "2", true);
 
-//        createProblem("유기농 양상추", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/1012%EB%B2%88+%EC%9C%A0%EA%B8%B0%EB%86%8D+%EC%96%91%EC%83%81%EC%B6%94.md", LEVEL1);
-//
-//        createTestcase("유기농 양상추", "2\n"
-//            + "10 8 17\n"
-//            + "0 0\n"
-//            + "1 0\n"
-//            + "1 1\n"
-//            + "4 2\n"
-//            + "4 3\n"
-//            + "4 5\n"
-//            + "2 4\n"
-//            + "3 4\n"
-//            + "7 4\n"
-//            + "8 4\n"
-//            + "9 4\n"
-//            + "7 5\n"
-//            + "8 5\n"
-//            + "9 5\n"
-//            + "7 6\n"
-//            + "8 6\n"
-//            + "9 6\n"
-//            + "10 10 1\n"
-//            + "5 5 ", "5\n"
-//            + "1", true);
-//
-//        createTestcase("유기농 양상추", "1\n"
-//            + "5 3 6\n"
-//            + "0 2\n"
-//            + "1 2\n"
-//            + "2 2\n"
-//            + "3 2\n"
-//            + "4 2\n"
-//            + "4 0", "2", true);
-//
-//
-//        createProblem("술래잡기", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/1697%EB%B2%88+%EC%88%A0%EB%9E%98%EC%9E%A1%EA%B8%B0.md", LEVEL1);
-//
-//        createTestcase("술래잡기", "5 17", "4", true);
+        createTestcase("유기농 양상추", "1\n"
+            + "5 5 5\n"
+            + "0 1\n"
+            + "1 0\n"
+            + "1 2\n"
+            + "2 1\n"
+            + "1 1", "1", false);
+        createTestcase("유기농 양상추", "1\n"
+            + "3 3 6\n"
+            + "0 0\n"
+            + "1 1\n"
+            + "2 2\n"
+            + "0 2\n"
+            + "2 0\n"
+            + "1 2", "3", false);
+        createTestcase("유기농 양상추", "3\n"
+            + "1 1 1\n"
+            + "0 0\n"
+            + "5 5 6\n"
+            + "0 0\n"
+            + "0 3\n"
+            + "1 4\n"
+            + "2 3\n"
+            + "3 3\n"
+            + "4 4\n"
+            + "8 8 15\n"
+            + "0 0\n"
+            + "0 1\n"
+            + "0 2\n"
+            + "1 2\n"
+            + "1 3\n"
+            + "1 6\n"
+            + "1 7\n"
+            + "2 3\n"
+            + "3 5\n"
+            + "4 5", "1\n"
+            + "5\n"
+            + "7", false);
+
+        createProblem("술래잡기", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/1697%EB%B2%88+%EC%88%A0%EB%9E%98%EC%9E%A1%EA%B8%B0.md", LEVEL1);
+
+        createTestcase("술래잡기", "5 17", "4", true);
+        createTestcase("술래잡기", "0 1", "", false);
+        createTestcase("술래잡기", "1 15", "", false);
+        createTestcase("술래잡기", "1 100000", "", false);
+        createTestcase("술래잡기", "3482 45592", "", false);
+        createTestcase("술래잡기", "5 35", "", false);
+        createTestcase("술래잡기", "10007 98767", "", false);
 
         createProblem("빙하", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/2573%EB%B2%88+%EB%B9%99%ED%95%98.md", LEVEL2);
 
