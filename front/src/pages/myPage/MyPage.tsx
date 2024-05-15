@@ -89,13 +89,18 @@ export const MyPage = () => {
 	};
 
 	useEffect(() => {
-		if (repository === '' && memberInfo?.repository===null) {
-			setShowPopup(true);
-		} else {
-			// 그렇지 않으면 팝업 숨기기
+		if (modalOpen) {
+			// 모달이 열리면 팝업 감추기
 			setShowPopup(false);
+		} else {
+			// 모달이 닫히면 팝업 상태를 원래 로직에 따라 설정
+			if (repository === '' && memberInfo?.repository === null) {
+				setShowPopup(true);
+			} else {
+				setShowPopup(false);
+			}
 		}
-	}, [memberInfo]);
+	}, [modalOpen, repository, memberInfo?.repository]);
 
 	return (
 		<div className='MyPage'>
@@ -157,14 +162,13 @@ export const MyPage = () => {
 							{/*</CardContent>*/}
 							{/* 깃허브 주소 */}
 							<CardContent className='ContentBorder'>
-								{/*<CardHeader className='CardTextColor' textAlign='center'>Github Repository</CardHeader>*/}
+								<CardHeader className='CardTextColor' textAlign='center'>Github Repository</CardHeader>
 								{/*null 일때 텍스트 중요 말풍선으로 빼는 식?*/}
-								<Popup content='회고를 업로드할 레포지토리를 생성 후에 등록해 주세요'
+								<CardDescription className='CardTextColor' textAlign='center'>{memberInfo?.repository ? memberInfo.repository : '레포지토리를 등록해 주세요'}</CardDescription>
+								<Popup content='회고를 업로드할 레포지토리를 생성 후 등록해 주세요'
 									   open={showPopup}
 									   position='top center'
-									   trigger={<CardHeader className='CardTextColor' textAlign='center'>Github Repository</CardHeader>}/>
-								<CardDescription className='CardTextColor' textAlign='center'>{memberInfo?.repository ? memberInfo.repository : '레포지토리를 등록해 주세요'}</CardDescription>
-								<Button className='EditButton' floated='right' onClick={() => setModalOpen(true)}>수정</Button>
+									   trigger={<Button className='EditButton' floated='right' onClick={() => setModalOpen(true)}>등록</Button>}/>
 							</CardContent>
 						</Card>
 					</Card>
@@ -172,7 +176,6 @@ export const MyPage = () => {
 				{/* 오른쪽 문제 풀이 hystory 리스트 */}
 				<div className='History'>
 					<Header as='h2' style={{ marginBottom: '0px' }}>
-						히스토리
 						히스토리
 					</Header>
 					{/* 문제 기록 */}
