@@ -19,5 +19,9 @@
   align-items: center;
 }
 
+.SecondText {
+  display: flex;
+  flex-direction: column;
+}
 
 

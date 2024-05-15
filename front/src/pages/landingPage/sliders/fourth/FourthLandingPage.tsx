@@ -11,8 +11,7 @@ interface LandingProp {
 }
 
 export const FourthLandingPage = ({ isActive }: LandingProp) => {
-
-  const githubAuth = () => {
+	const githubAuth = () => {
 		location.href = `https://github.com/login/oauth/authorize?client_id=a82095fde8aa68bb396d&scope=user:email&redirect_uri=${
 			import.meta.env.VITE_GITHUB_REDIRECT_URI
 		}`;
@@ -48,21 +47,35 @@ export const FourthLandingPage = ({ isActive }: LandingProp) => {
 		<>
 			<div className='Entire'>
 				<div className='FourthPage'>
-					<div className='FourthContent' ref={addToRefs} style={{ opacity: 0 }}>
-						<Header as='h3' textAlign='center'>
-							테스트 문구3
-						</Header>
-						<Image src={pair} size='large'></Image>
-						<div className='CTABox'>
+					<div className='FourthContent'>
+						<div ref={addToRefs} style={{ opacity: 0 }}>
+							<Header as='h1' textAlign='center' style={{ marginTop: '5vh' }}>
+								코드로 말하는 회고, GIT에 당신의 성장을 기록하세요. <br />
+							</Header>
+							<p style={{ textAlign: 'center' }}>
+								문제풀이 후, 회고 페이지에서 라운드 별 성과를 확인하고
+								<br />
+								GIT 저장소에 영구적으로 남겨 놀라운 발전을 자랑하세요.
+							</p>
+						</div>
+						<div ref={addToRefs} style={{ opacity: 0 }}>
+							<Image src={pair} size='large'></Image>
+						</div>
+						<div className='CTABox' ref={addToRefs} style={{ opacity: 0 }}>
 							<div className='CTAText'>
 								<Header as='h3' textAlign='left' style={{ color: 'white' }}>
 									준비 되셨나요?
 								</Header>
 								<Header as='h4' textAlign='left' style={{ color: 'white' }}>
-                  다음은 여러분의  차례입니다.
+									다음은 여러분의 차례입니다.
 								</Header>
 							</div>
-							<Button circular className='BottomCTAButton' onClick={githubAuth} style={{ marginRight:'2vw' }}>
+							<Button
+								circular
+								className='BottomCTAButton'
+								onClick={githubAuth}
+								style={{ marginRight: '2vw' }}
+							>
 								<Icon name='github' size='huge' /> <span className='FontSize'>Github로 시작하기</span>
 							</Button>
 						</div>
@@ -81,7 +94,7 @@ export const FourthLandingPage = ({ isActive }: LandingProp) => {
 								<small>서울 강남구 테헤란로 212 역삼 멀티캠퍼스 8층 802</small>
 								<small>Copyright © URTurn 2024. All Rights Reserved.</small>
 							</div>
-              <div className='CopyrightText'>
+							<div className='CopyrightText'>
 								<p style={{ marginBottom: '0vh' }}>Contact Us</p>
 								<small>SSAFY A206 코코</small>
 							</div>

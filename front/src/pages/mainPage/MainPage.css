@@ -42,12 +42,14 @@
 
 .EntryButtons {
   width: 21vw;
-  height: 8vh;
+  height: 10vh;
 
   background-color: #000034 !important;
   color: white !important;
 
   border-radius: 10px !important;
+
+  font-size: 1.5rem !important;
 }
 
 .EntryButtons:hover,
