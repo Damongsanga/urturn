@@ -19,13 +19,14 @@ import './MyPage.css';
 import {MemberInfo} from "../../types/memberInfoTypes.ts";
 import {fetchMemberInfo, updateRepository} from "../../utils/api/memberAPI.ts";
 import {useAxios} from "../../utils/useAxios.ts";
+import {Popup} from "semantic-ui-react";
 
 export const MyPage = () => {
 	const axios = useAxios(true);
 	const [memberInfo, setMemberInfo] = useState<MemberInfo | null>(null);
-	const [repository, setRepository] = useState<string>('');
+	const [repository, setRepository] = useState<string>( '');
 	const [modalOpen, setModalOpen] = useState(false);
-
+	const [showPopup, setShowPopup] = useState(false);
 	const [pageState, setPageState] = useState({
 		activePage: 5,
 		boundaryRange: 1,
@@ -61,7 +62,7 @@ export const MyPage = () => {
 	const handleRepositoryUpdate = async () => {
 		console.log("repo ",repository);
 		if (!repository) {
-			alert("repository URL을 입력 해 주세요");  
+			alert("repository 명을 입력 해 주세요");
 			return;
 		}
 		try {
@@ -87,6 +88,14 @@ export const MyPage = () => {
 		}
 	};
 
+	useEffect(() => {
+		if (repository === '' && memberInfo?.repository===null) {
+			setShowPopup(true);
+		} else {
+			// 그렇지 않으면 팝업 숨기기
+			setShowPopup(false);
+		}
+	}, [memberInfo]);
 
 	return (
 		<div className='MyPage'>
@@ -148,9 +157,13 @@ export const MyPage = () => {
 							{/*</CardContent>*/}
 							{/* 깃허브 주소 */}
 							<CardContent className='ContentBorder'>
-								<CardHeader className='CardTextColor' textAlign='center'>Github Repository</CardHeader>
+								{/*<CardHeader className='CardTextColor' textAlign='center'>Github Repository</CardHeader>*/}
 								{/*null 일때 텍스트 중요 말풍선으로 빼는 식?*/}
-								<CardDescription className='CardTextColor' textAlign='center'>{memberInfo?.repository ? memberInfo.repository : '회고를 업로드할 레포지토리를 생성 후에 등록해주세요.'}</CardDescription>
+								<Popup content='회고를 업로드할 레포지토리를 생성 후에 등록해 주세요'
+									   open={showPopup}
+									   position='top center'
+									   trigger={<CardHeader className='CardTextColor' textAlign='center'>Github Repository</CardHeader>}/>
+								<CardDescription className='CardTextColor' textAlign='center'>{memberInfo?.repository ? memberInfo.repository : '레포지토리를 등록해 주세요'}</CardDescription>
 								<Button className='EditButton' floated='right' onClick={() => setModalOpen(true)}>수정</Button>
 							</CardContent>
 						</Card>

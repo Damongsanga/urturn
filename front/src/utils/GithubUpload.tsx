@@ -19,14 +19,14 @@ export const GithubRepoCallback = () =>{
                 console.log("accesstoken",authStore.accessToken);
                 const data = response.data;
                 console.log(data);
-                alert("리뷰 제출 완료");
+                alert("성공적으로 깃허브에 업로드되었습니다. \n마이페이지에서 확인해 주세요.");
                 navigate('/main');
             })
             .catch((e) => {
                 console.error(e);
                 console.log("accesstoken",authStore.accessToken);
                 console.log("code: ",code);
-                console.log("리뷰 제출 실패");
+                alert("리뷰 제출은 성공했으나 깃허브 업로드에 실패했습니다. \n등록하신 레포지토리 명을 확인해 주세요.");
                 navigate('/main');
             });
     } else {
@@ -34,5 +34,5 @@ export const GithubRepoCallback = () =>{
         navigate('/');
     }
 }, []);
-    return <><div>payloadpayloadpayloadpayload</div></>;
+    return <><div>깃허브 레포지토리에 회고 등록 중...</div></>;
 };
