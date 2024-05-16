@@ -27,6 +27,15 @@ const MainPage: React.FC = () => {
 
 	const clearMainLogic = () => {
 		if(roomStore.client || roomStore.userInfo?.myUserNickName || roomStore.roomInfo?.roomId){
+			if(roomStore.roomInfo?.roomId){
+				roomStore.client?.publish({
+					destination: '/app/leaveRoom',
+					body: JSON.stringify({
+						roomId: roomStore.roomInfo.roomId,
+						isHost: roomStore.roomInfo.host
+					}),
+				})
+			}
 			roomStore.clearRoom();
 		}
 		if(rtcStore.getOpenVidu() || rtcStore.getSessionId() || rtcStore.getConnectionId()){

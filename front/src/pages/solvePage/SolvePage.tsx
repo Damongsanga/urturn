@@ -1,7 +1,7 @@
 import { Allotment } from 'allotment';
 import CodeEditor from '../../components/solve/CodeEditor';
 import Markdown from 'markdown-to-jsx';
-import { Dropdown, Table, TableBody, TableHeader, TableHeaderCell, TableRow } from 'semantic-ui-react';
+import { Dropdown, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from 'semantic-ui-react';
 
 import 'allotment/dist/style.css';
 
@@ -56,28 +56,32 @@ export default function SolvePage() {
 										{roomStore.questionInfos![roomStore.questionIdx].algoQuestionContent}
 									</Markdown>
 								)}
-								<Table definition>
-									<TableHeader>
-										<TableRow>
-											<TableHeaderCell />
-											<TableHeaderCell>입력값</TableHeaderCell>
-											<TableHeaderCell>출력값</TableHeaderCell>
-										</TableRow>
-									</TableHeader>
+								<hr/>
+								<div className='testcase'>
+									<Table>
+										<TableHeader>
+											<TableRow>
+												{/* W */}
+												<TableHeaderCell>입력값</TableHeaderCell>
+												<TableHeaderCell>출력값</TableHeaderCell>
+											</TableRow>
+										</TableHeader>
 
-									<TableBody>
-										{/* {
-											roomStore.questionInfos &&
-												roomStore.questionInfos[roomStore.questionIdx].testcases.map((testcase, i) => (
-													<TableRow key={i}>
-														<TableCell>{i + 1} 번 테스트 케이스</TableCell>
-														<TableCell>{testcase.stdin}</TableCell>
-														<TableCell>{testcase.expectedOutput}</TableCell>
-													</TableRow>
-												))
-										} */}
-									</TableBody>
-								</Table>
+										<TableBody>
+											{
+												roomStore.questionInfos &&
+													roomStore.questionInfos[roomStore.questionIdx].testcases.map((testcase, i) => (
+														<TableRow key={i}>
+															{/* <TableCell>{i + 1} 번 테스트 케이스</TableCell> */}
+															<TableCell>{testcase.stdin}</TableCell>
+															<TableCell>{testcase.expectedOutput}</TableCell>
+														</TableRow>
+													))
+											}
+										</TableBody>
+									</Table>
+								</div>
+								<br/><br/><br/><br/>
 							</div>
 						</Allotment.Pane>
 						<Allotment.Pane minSize={350}>
@@ -130,7 +134,7 @@ export default function SolvePage() {
 				</div>
 			</div>
 			{/* footer */}
-			<FooterBar $mode={1} $pairMode={false} />
+			<FooterBar $mode={1} />
 		</div>
 	);
 }
