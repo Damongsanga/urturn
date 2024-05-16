@@ -122,9 +122,9 @@ export default function SolvePage() {
 												fontWeight: 'bold',
 												color: 'white',
 											}}
-										></div>
+										>Console</div>
 									</div>
-									<div style={{ padding: '12px' }}>
+									<div style={{ padding: '12px', fontSize:'1.1rem', overflowY: 'auto' }}>
 										<p style={{ whiteSpace: 'pre-wrap' }}>{roomStore.console}</p>
 									</div>
 								</Allotment.Pane>

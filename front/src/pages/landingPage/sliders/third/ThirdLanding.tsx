@@ -12,12 +12,12 @@ interface LandingProp {
 export const ThirdLandingPage = ({ isActive }: LandingProp) => {
 	const refs = useRef<HTMLDivElement[]>([]);
 
-	// 요소를 refs 배열에 추가하는 함수
-	const addToRefs = (el: HTMLDivElement) => {
-		if (el && !refs.current.includes(el)) {
-			refs.current.push(el);
-		}
-	};
+		// 요소를 refs 배열에 추가하는 함수 -> 역순
+		const addToRefs = (el: HTMLDivElement) => {
+			if (el && !refs.current.includes(el)) {
+				refs.current.unshift(el);
+			}
+		};
 
 	useEffect(() => {
 		if (isActive) {

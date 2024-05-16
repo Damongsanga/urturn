@@ -23,6 +23,7 @@
 
   display: flex !important;
   align-items: center;
+  justify-content: center;
 }
 
 .ButtonColor:hover,
@@ -31,6 +32,10 @@
   border-color: #5c5c96 !important;
 
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
+}
+
+.GitButton {
+  padding: 9px 21px 9px 17px !important;
 }
 
 .Navigation {
@@ -53,6 +58,7 @@
 
 .FontSize {
   font-size: 1.25rem;
+  margin-left: 10px;
 }
 
 .ScrollDown {

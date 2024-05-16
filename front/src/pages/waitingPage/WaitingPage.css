@@ -76,6 +76,14 @@
 	width: 100vw;
 }
 
+.VolumeButton {
+	background: none !important;
+}
+
+.VolumeButton:hover {
+	background: #e0e1e2 !important;
+}
+
 .Icon {
 	margin: 0 !important;
 	color: #000034;
