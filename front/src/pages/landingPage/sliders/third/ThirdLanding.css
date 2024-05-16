@@ -3,27 +3,23 @@
   height: 100vh;
 }
 
-.SecondPage {
+.ThirdPage {
   width: 100vw;
   height: 100vh;
 
   display: flex;
   align-items: center;
   justify-content: center;
-
-  background-color: #F8F8F8;
 }
 
-.SecondContent {
+.ThirdContent {
   width: 90vw;
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
 
-.SecondText {
+.ThirdText {
   display: flex;
   flex-direction: column;
 }
-
-

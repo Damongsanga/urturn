@@ -3,7 +3,7 @@
   height: 100vh;
 }
 
-.ThirdPage {
+.FourthPage {
   width: 100vw;
   height: 100vh;
 
@@ -14,14 +14,16 @@
   background-color: #F8F8F8;
 }
 
-.ThirdContent {
+.FourthContent {
   width: 90vw;
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
 
-.ThirdText {
+.FourthText {
   display: flex;
   flex-direction: column;
 }
+
+

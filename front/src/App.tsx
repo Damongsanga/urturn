@@ -7,7 +7,7 @@ import SolvePage from './pages/solvePage/SolvePage.tsx';
 import CheckPage from './pages/solvePage/CheckPage.tsx';
 import ReviewPage from './pages/solvePage/ReviewPage.tsx';
 import PairSolvePage from './pages/solvePage/PairSolvePage.tsx';
-import { TransPage } from './pages/trainsPage/TransPage.tsx';
+import { TransPage } from './pages/transPage/TransPage.tsx';
 
 import {GithubRepoCallback} from "./utils/GithubUpload.tsx";
 function App() {

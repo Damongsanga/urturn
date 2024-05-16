@@ -222,9 +222,8 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 								>
 									<div>
 										{/* 마이크 아이콘 */}
-										<Button className='VolumeButton'>
-											<Icon
-												onClick={toggleMicrophone}
+										<Button className='VolumeButton' onClick={toggleMicrophone}>
+											<Icon							
 												className='Icon'
 												name={isMicMuted ? 'microphone slash' : 'microphone'}
 												size='huge'
@@ -233,9 +232,8 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 									</div>
 									<div >
 										{/* 스피커 아이콘 */}
-										<Button className='VolumeButton'>
+										<Button className='VolumeButton' onClick={toggleMute}>
 											<Icon
-												onClick={toggleMute}
 												className='Icon'
 												name={isMuted ? 'volume off' : 'volume up'}
 												size='huge'

@@ -48,7 +48,7 @@ export default function SolvePage() {
 									)}
 								</div>
 							</div>
-							<div style={{ height: '100%', overflowY: 'auto', padding: '12px', fontSize:'1.3rem' }}>
+							<div style={{ height: '100%', overflowY: 'auto', padding: '12px', fontSize: '1.3rem' }}>
 								{roomStore.questionIdx == -1 ? (
 									<div></div>
 								) : (
@@ -56,7 +56,7 @@ export default function SolvePage() {
 										{roomStore.questionInfos![roomStore.questionIdx].algoQuestionContent}
 									</Markdown>
 								)}
-								<hr/>
+								<hr />
 								<div className='testcase'>
 									<Table>
 										<TableHeader>
@@ -68,20 +68,23 @@ export default function SolvePage() {
 										</TableHeader>
 
 										<TableBody>
-											{
-												roomStore.questionInfos &&
-													roomStore.questionInfos[roomStore.questionIdx].testcases.map((testcase, i) => (
+											{roomStore.questionInfos &&
+												roomStore.questionInfos[roomStore.questionIdx].testcases.map(
+													(testcase, i) => (
 														<TableRow key={i}>
 															{/* <TableCell>{i + 1} 번 테스트 케이스</TableCell> */}
 															<TableCell>{testcase.stdin}</TableCell>
 															<TableCell>{testcase.expectedOutput}</TableCell>
 														</TableRow>
-													))
-											}
+													),
+												)}
 										</TableBody>
 									</Table>
 								</div>
-								<br/><br/><br/><br/>
+								<br />
+								<br />
+								<br />
+								<br />
 							</div>
 						</Allotment.Pane>
 						<Allotment.Pane minSize={350}>
@@ -107,7 +110,7 @@ export default function SolvePage() {
 								</div>
 							</div>
 							<Allotment vertical>
-								<Allotment.Pane minSize={325}>
+								<Allotment.Pane minSize={5}>
 									<div style={{ height: '100%', width: '100%' }}>
 										<CodeEditor />
 									</div>
@@ -121,11 +124,27 @@ export default function SolvePage() {
 												fontSize: '20px',
 												fontWeight: 'bold',
 												color: 'white',
+												padding: '12px',
 											}}
-										>Console</div>
+										>
+											Console
+										</div>
 									</div>
-									<div style={{ padding: '12px', fontSize:'1.1rem', overflowY: 'auto' }}>
-										<p style={{ whiteSpace: 'pre-wrap' }}>{roomStore.console}</p>
+									<div
+										style={{
+											padding: '12px',
+											fontSize: '1.1rem',
+											overflowY: 'scroll',
+											height: '100%',
+										}}
+									>
+										<p style={{ whiteSpace: 'pre-wrap', overflowY: 'scroll' }}>
+											{roomStore.console}
+											<br />
+											<br />
+											<br />
+											<br />
+										</p>
 									</div>
 								</Allotment.Pane>
 							</Allotment>
