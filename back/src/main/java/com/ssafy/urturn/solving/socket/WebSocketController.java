@@ -51,7 +51,6 @@ public class WebSocketController {
         try {
             Thread.sleep(100);
         } catch (InterruptedException ignored){
-
         }
 
         simpMessagingTemplate.convertAndSendToUser(userId.toString(),"/userInfo",userInfoResponse);
@@ -70,6 +69,12 @@ public class WebSocketController {
         RoomInfoResponse roomInfoResponse=new RoomInfoResponse(roomId,null, false);
 
         simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/roomInfo", roomInfoResponse);
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ignored){
+        }
+
         simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/userInfo",userInfoResponse);
         UserInfoResponse userInfoResponse2=roomService.getUserInfo(managerId,pairId);
         simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/userInfo",userInfoResponse2);
