@@ -148,7 +148,7 @@ export const MyPage = () => {
 					<Header as='h2' style={{ marginBottom: '0px' }}>
 						내 정보
 					</Header>
-					<Card className='ProfileCard'>
+					<Card className='ProfileCard' style={{ marginBottom: '8vh' }}>
 						<Card className='MyProfile'>
 							{/* 프로필 사진과 닉네임 */}
 							<CardContent
