@@ -59,6 +59,7 @@ export const MyPage = () => {
 		};
 
 		loadHistoryData();
+		console.log(historyData);
 	}, [pageState.activePage]);
 
 	useEffect(() => {
@@ -77,10 +78,6 @@ export const MyPage = () => {
 
 	const handleRepositoryUpdate = async () => {
 		console.log("repo ",repository);
-		if (!repository) {
-			alert("repository 명을 입력 해 주세요");
-			return;
-		}
 		try {
 			const updatedRepository = await updateRepository(axios, repository);
 			// set 고려할 점... store?
@@ -110,7 +107,7 @@ export const MyPage = () => {
 			setShowPopup(false);
 		} else {
 			// 모달이 닫히면 팝업 상태를 원래 로직에 따라 설정
-			if (repository === '' && memberInfo?.repository === null) {
+			if (memberInfo?.repository === '' || memberInfo?.repository === null) {
 				setShowPopup(true);
 			} else {
 				setShowPopup(false);
@@ -195,12 +192,16 @@ export const MyPage = () => {
 							{/*</CardContent>*/}
 							{/* 깃허브 주소 */}
 							<CardContent className='ContentBorder'>
-								<CardHeader className='CardTextColor' textAlign='center'>Github Repository</CardHeader>
+								<a href={`https://github.com/${memberInfo?.repository}/`} target='_blank' rel='noopener noreferrer'>
+									<CardHeader className='CardTextColor' textAlign='center'>Github
+										Repository</CardHeader>
+								</a>
 								{/*null 일때 텍스트 중요 말풍선으로 빼는 식?*/}
-								<CardDescription className='CardTextColor' textAlign='center'>{memberInfo?.repository ? memberInfo.repository : '레포지토리를 등록해 주세요'}</CardDescription>
+								<CardDescription className='CardTextColor'
+												 textAlign='center'>{memberInfo?.repository ? memberInfo.repository : '레포지토리를 등록해 주세요'}</CardDescription>
 								<Popup content='회고를 업로드할 레포지토리를 생성 후 등록해 주세요'
 									   open={showPopup}
-									   position='top center'
+									   position='top left'
 									   trigger={<Button className='EditButton' floated='right' onClick={() => setModalOpen(true)}>등록</Button>}/>
 							</CardContent>
 						</Card>
@@ -311,7 +312,7 @@ export const MyPage = () => {
 
 					<Input
 						fluid
-						label={`https://github.com/${memberInfo?.nickname}/`}
+						label={`https://github.com/${memberInfo?.repository}/`}
 						placeholder='Repository_name'
 						value={repository}
 						onChange={(e) => setRepository(e.target.value)}
