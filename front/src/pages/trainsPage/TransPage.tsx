@@ -7,6 +7,7 @@ import running from '../../assets/images/running.gif';
 import pairRunning from '../../assets/images/pair_running.gif';
 
 import './TransPage.css';
+import { useRoomStore } from '../../stores/room';
 /*
 
 Transition Page
@@ -23,6 +24,8 @@ solveSwitch, pairSolveSwitch -> 전환 화면 후 solve, pairsolve로 이동 (�
 */
 
 export const TransPage = () => {
+	const roomStore = useRoomStore();
+
 	const { next } = useParams();
 	const sec = useRef(0);
 	const navigate = useNavigate();
@@ -31,6 +34,7 @@ export const TransPage = () => {
 
 	useEffect(() => {
         sec.current = START_TIME;
+		roomStore.setConsole("");
         const timer = setInterval(() => {
             sec.current -= 1;
             if (sec.current <= 0) {
