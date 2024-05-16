@@ -62,7 +62,7 @@ export const FifthLandingPage = ({ isActive }: LandingProp) => {
 						<div ref={addToRefs} style={{ opacity: 0, marginTop: '-5vh' }}>
 							<Image src={hiFive} style= {{width: '23vw', height: 'auto'}}></Image>
 						</div>
-						<div className='CTABox' ref={addToRefs} style={{ opacity: 0, marginTop: '-6vh' }}>
+						<div className='CTABox' ref={addToRefs} style={{ opacity: 0, marginTop: '-3vh' }}>
 							<div className='CTAText'>
 								<Header as='h3' textAlign='left' style={{ color: 'white' }}>
 									준비 되셨나요? 다음은 여러분의 차례입니다.
