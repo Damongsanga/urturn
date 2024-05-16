@@ -10,7 +10,6 @@ import { inputValue } from '../../types/roomTypes';
 
 interface FooterProp {
 	$mode?: number;
-	$pairMode?: boolean;
 	$reviewValues?: inputValue[];
 	$onClickFunc?: () => void;
 }
@@ -19,7 +18,7 @@ interface FooterProp {
 mode : 0이면 문제확인 / 1이면 ide / 2이면 회고
 $pairMode : 페어프로그래밍 모드이면 true, 아니면 false
 */
-export const FooterBar = ({ $mode, $pairMode=false, $reviewValues }: FooterProp) => {
+export const FooterBar = ({ $mode, $reviewValues }: FooterProp) => {
 	const roomStore = useRoomStore();
 
 	const readyToSolve = () => {
@@ -100,7 +99,7 @@ export const FooterBar = ({ $mode, $pairMode=false, $reviewValues }: FooterProp)
 							코드 실행
 						</Button>
 						{
-							!$pairMode ?
+							roomStore.getPairProgramingRole() !== 'Navigator' ?
 							<Button onClick={submitCode} size='large' className='RunButtonColor'>
 								코드 제출하기
 							</Button>

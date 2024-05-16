@@ -59,7 +59,7 @@ export default function PairSolvePage() {
 								<Table definition>
 									<TableHeader>
 										<TableRow>
-											<TableHeaderCell />
+											{/* <TableHeaderCell /> */}
 											<TableHeaderCell>입력값</TableHeaderCell>
 											<TableHeaderCell>출력값</TableHeaderCell>
 										</TableRow>
@@ -70,7 +70,7 @@ export default function PairSolvePage() {
 											roomStore.questionInfos &&
 												roomStore.questionInfos[roomStore.questionIdx].testcases.map((testcase, i) => (
 													<TableRow key={i}>
-														<TableCell>{i + 1} 번 테스트 케이스</TableCell>
+														{/* <TableCell>{i + 1} 번 테스트 케이스</TableCell> */}
 														<TableCell>{testcase.stdin}</TableCell>
 														<TableCell>{testcase.expectedOutput}</TableCell>
 													</TableRow>
@@ -130,7 +130,7 @@ export default function PairSolvePage() {
 				</div>
 			</div>
 			{/* footer */}
-			<FooterBar $mode={1} $pairMode={true} />
+			<FooterBar $mode={1} />
 		</div>
 	);
 }
