@@ -52,6 +52,7 @@ export const FooterBar = ({ $mode, $reviewValues }: FooterProp) => {
 		console.log('round: ' + roomStore.getRound());
 		console.log('questionId: ' + roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId);
 		console.log('host:' + roomStore.getRoomInfo()?.host);
+		roomStore.setCurrentlySubmitting(true);
 		roomStore.client?.publish({
 			destination: '/app/submitCode',
 			body: JSON.stringify({
@@ -100,13 +101,23 @@ export const FooterBar = ({ $mode, $reviewValues }: FooterProp) => {
 						</Button>
 						{
 							roomStore.getPairProgramingRole() !== 'Navigator' ?
-							<Button onClick={submitCode} size='large' className='RunButtonColor'>
-								코드 제출하기
-							</Button>
+								roomStore.getSec() <=10 ?
+									<Button disabled={true} size='large' className='RunButtonColor'>
+										교체직전 제출불가
+									</Button>
+								:roomStore.getCurrentlySubmitting() ?
+									<Button disabled={true} size='large' className='RunButtonColor'>
+										<i className="loading spinner icon"></i>
+										코드 채점중
+									</Button>
+								:
+									<Button onClick={submitCode} size='large' className='RunButtonColor'>
+										코드 제출하기
+									</Button>
 							:
-							<Button disabled={true} size='large' className='RunButtonColor'>
-								상대방 코드 작성중
-							</Button>
+								<Button disabled={true} size='large' className='RunButtonColor'>
+									상대방 코드 작성중
+								</Button>
 						}
 					</MenuItem>
 				)}

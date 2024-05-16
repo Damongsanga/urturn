@@ -56,6 +56,7 @@ export interface roomState {
     sec: number
     pairProgramingMode: boolean
     pairProgramingRole: string | null
+    CurrentlySubmitting: boolean
 
     setClient: (client: Client) => void
     getClient: () => Client | null
@@ -101,6 +102,9 @@ export interface roomState {
 
     setPairProgramingRole: (role: string) => void
     getPairProgramingRole: () => string | null
+
+    setCurrentlySubmitting: (submitting: boolean) => void
+    getCurrentlySubmitting: () => boolean
 
     clearRoom: () => void
 }
