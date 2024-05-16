@@ -50,13 +50,14 @@ export const FourthLandingPage = ({ isActive }: LandingProp) => {
 					<div className='FourthContent'>
 						<div ref={addToRefs} style={{ opacity: 0 }}>
 							<Header as='h1' textAlign='center' style={{ marginTop: '5vh' }}>
-								코드로 말하는 회고, GIT에 당신의 성장을 기록하세요. <br />
+								코드로 말하는 회고, GITHUB에 당신의 성장을 기록하세요. <br />
 							</Header>
 							<p style={{ textAlign: 'center' }}>
-								문제풀이 후, 회고 페이지에서 라운드 별 성과를 확인하고
+								문제 풀이 후, 회고 페이지에서 라운드 별 성과를 확인하고 GITHUB에 자동으로 업로드 됩니다.
 								<br />
-								GIT 저장소에 영구적으로 남겨 놀라운 발전을 자랑하세요.
+								당신의 놀라운 발전을 쉽게 기록해봐요!
 							</p>
+							<small>* git 저장소를 등록해야만 저장할 수 있습니다. </small>
 						</div>
 						<div ref={addToRefs} style={{ opacity: 0 }}>
 							<Image src={pair} size='large'></Image>
@@ -64,19 +65,20 @@ export const FourthLandingPage = ({ isActive }: LandingProp) => {
 						<div className='CTABox' ref={addToRefs} style={{ opacity: 0 }}>
 							<div className='CTAText'>
 								<Header as='h3' textAlign='left' style={{ color: 'white' }}>
-									준비 되셨나요?
-								</Header>
-								<Header as='h4' textAlign='left' style={{ color: 'white' }}>
-									다음은 여러분의 차례입니다.
+									준비 되셨나요? 다음은 여러분의 차례입니다.
 								</Header>
 							</div>
+
 							<Button
 								circular
 								className='BottomCTAButton'
 								onClick={githubAuth}
 								style={{ marginRight: '2vw' }}
 							>
-								<Icon name='github' size='huge' /> <span className='FontSize'>Github로 시작하기</span>
+								<div className='InnerButton'>
+									<Icon name='github' size='huge' />
+									<span className='FontSize'>Github로 시작하기</span>
+								</div>
 							</Button>
 						</div>
 					</div>

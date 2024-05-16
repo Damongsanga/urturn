@@ -5,6 +5,12 @@ import {
 	Form,
 	Menu,
 	MenuItem,
+	Table,
+	TableBody,
+	TableCell,
+	TableHeader,
+	TableHeaderCell,
+	TableRow,
 	TextArea,
 } from 'semantic-ui-react';
 import { HeaderBar } from '../../components/header/HeaderBar';
@@ -17,12 +23,6 @@ import './SolvePage.css';
 import { useRoomStore } from '../../stores/room';
 import Markdown from 'markdown-to-jsx';
 
-const langOptions = [
-	{ key: 'C++', text: 'C++', value: 'C++' },
-	{ key: 'Java', text: 'Java', value: 'Java' },
-	{ key: 'Python', text: 'Python', value: 'Python' },
-	{ key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
-  ]
 let roundOptions = [
 	{ key: '', text: '', value: 0 }
 ];
@@ -54,6 +54,7 @@ export default function ReviewPage() {
 
 	useEffect(() => {
 		try{
+			roomStore.setLang(roomStore.getReviewInfos()[activeQuestion-1][activeRound].language);
 			roomStore.getEditor()?.setValue(roomStore.getReviewInfos()[activeQuestion-1][activeRound].content);
 		}
 		catch(e){
@@ -135,6 +136,31 @@ export default function ReviewPage() {
 								roomStore.questionInfos && activeQuestion > 0 &&
 								<Markdown>{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}</Markdown>
 							}
+							<div className='testcase'>
+									<Table>
+										<TableHeader>
+											<TableRow>
+												{/* W */}
+												<TableHeaderCell>입력값</TableHeaderCell>
+												<TableHeaderCell>출력값</TableHeaderCell>
+											</TableRow>
+										</TableHeader>
+
+										<TableBody>
+											{
+												roomStore.questionInfos &&
+													roomStore.questionInfos[activeQuestion - 1].testcases.map((testcase, i) => (
+														<TableRow key={i}>
+															{/* <TableCell>{i + 1} 번 테스트 케이스</TableCell> */}
+															<TableCell>{testcase.stdin}</TableCell>
+															<TableCell>{testcase.expectedOutput}</TableCell>
+														</TableRow>
+													))
+											}
+										</TableBody>
+									</Table>
+								</div>
+								<br/><br/><br/><br/>
 							</div>
 						</Allotment.Pane>
 						<Allotment.Pane minSize={350}>
@@ -148,13 +174,7 @@ export default function ReviewPage() {
 										color: 'white',
 									}}
 								>
-									<Dropdown
-										search
-										defaultValue={langOptions[0].value}
-										searchInput={{ type: 'string' }}
-										options={langOptions}
-                   	onChange={(_e, { value }) => {roomStore.setLang(value as string);}}
-									/>
+									{roomStore.getLang()} &nbsp;&nbsp;&nbsp; 
 									<Dropdown
 										search
 										defaultValue={roundOptions[0].value}
@@ -200,7 +220,7 @@ export default function ReviewPage() {
 											<Form>
 												<TextArea
 													placeholder='좋았던 점을 적어주세요.'
-													style={{ width: '100%', height: '65.2vh', resize: 'none', fontSize:'1.1rem' }}
+													style={{ width: '100%', height: '25.2vh', resize: 'none', fontSize:'1.1rem' }}
 													value={inputValues.find(item => item.id === activeQuestion)?.keep}
 													onChange={(e) => handleInputChange(e, activeQuestion, 'keep')}
 												/>{' '}
@@ -210,7 +230,7 @@ export default function ReviewPage() {
 											<Form>
 												<TextArea
 													placeholder='아쉬웠던 점을 적어주세요.'
-													style={{ width: '100%', height: '65.2vh', resize: 'none', fontSize:'1.1rem' }}
+													style={{ width: '100%', height: '25.2vh', resize: 'none', fontSize:'1.1rem' }}
 													value={inputValues.find(item => item.id === activeQuestion)?.try}
 													onChange={(e) => handleInputChange(e, activeQuestion, 'try')}
 												/>{' '}
