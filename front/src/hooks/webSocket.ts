@@ -11,7 +11,7 @@ import {useRtcStore} from "../stores/rtc.ts";
 import { convertLangToUpper, convertUppserToLang } from "../utils/solve/convertProgramLang.ts";
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
-const MAX_TIME = 30
+const MAX_TIME = 40
 
 export const useWebSocket = () => {
     const navi = useNavigate();
@@ -78,12 +78,12 @@ export const useWebSocket = () => {
         });
 
         client.onConnect = function (frame) {
-            client.subscribe('/user/' + userId + '/roomInfo', (msg) => {
+            const subscribeUserId = client.subscribe('/user/' + userId + '/roomInfo', (msg) => {
                 console.log('Received message: roomInfo' + msg.body);
                 const roomInfo = JSON.parse(msg.body);
                 roomStore.setRoomInfo(roomInfo);
             });
-            client.subscribe('/user/' + userId + '/userInfo', (msg) => {
+            const subscribeUserInfo = client.subscribe('/user/' + userId + '/userInfo', (msg) => {
                 console.log('Received message: userInfo' + msg.body);
                 const userInfo = JSON.parse(msg.body);
                 if(roomStore.getRoomInfo()?.host && userInfo.relativeUserNickName===null){
@@ -101,6 +101,28 @@ export const useWebSocket = () => {
                 }
                 roomStore.setUserInfo(userInfo);
             });
+            const publishTimer = setInterval(() => {
+                if(subscribeUserId !== null && subscribeUserInfo !== null){
+                    clearInterval(publishTimer);
+                    if(roomId===null){
+                        client.publish({
+                            destination: '/app/createRoom',
+                            body: JSON.stringify({
+                            memberId : userId,
+                            }),
+                        });
+                    }
+                    else{
+                        client.publish({
+                            destination: '/app/enterRoom',
+                            body: JSON.stringify({
+                                roomId : roomId,
+                            }),
+                        });
+                    }
+                }
+            }, 1000)
+
             client.subscribe('/user/' + userId + '/receiveOVSession', (msg) => {
                 console.log('Received message: receiveOVSession' + msg.body);
                 const sessionId = msg.body;
@@ -254,26 +276,26 @@ export const useWebSocket = () => {
             console.log('Additional details: ' + frame.body);
         };
 
-        client.activate();
+        client.activate()
 
-        setTimeout(() => {
-            if(roomId===null){
-                client.publish({
-                    destination: '/app/createRoom',
-                    body: JSON.stringify({
-                    memberId : userId,
-                    }),
-                });
-            }
-            else{
-                client.publish({
-                    destination: '/app/enterRoom',
-                    body: JSON.stringify({
-                        roomId : roomId,
-                    }),
-                });
-            }
-        }, 1000);
+        // setTimeout(() => {
+        //     if(roomId===null){
+        //         client.publish({
+        //             destination: '/app/createRoom',
+        //             body: JSON.stringify({
+        //             memberId : userId,
+        //             }),
+        //         });
+        //     }
+        //     else{
+        //         client.publish({
+        //             destination: '/app/enterRoom',
+        //             body: JSON.stringify({
+        //                 roomId : roomId,
+        //             }),
+        //         });
+        //     }
+        // }, 1000);
         
         roomStore.setClient(client);
     }
