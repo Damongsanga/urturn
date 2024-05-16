@@ -907,6 +907,15 @@ public class InitData {
         createHistory(testMemberId1, testMemberId2, 1L, 2L, PYTHON, PYTHON, 2, SUCCESS);
         createHistory(testMemberId1, testMemberId2, 3L, 4L, PYTHON, JAVA, 6, SUCCESS);
 
+        Long giljaeId = memberRepository.findByNickname("747Socker").orElseThrow().getId();
+        Long taehiId = memberRepository.findByNickname("nyanpasu-life").orElseThrow().getId();
+
+        createHistory(giljaeId, taehiId, 1L, 2L, JAVA, JAVA, 5, SUCCESS);
+        createHistory(giljaeId, taehiId, 3L, 4L, JAVA, JAVA, 6, SUCCESS);
+        createHistory(taehiId, giljaeId, 9L, 10L, CPP, null, 20, FAILURE);
+        createHistory(taehiId, giljaeId, 5L, 6L, JAVA, JAVA, 7, SUCCESS);
+        createHistory(taehiId, giljaeId, 7L, 8L, null, JAVA, 20, FAILURE);
+        createHistory(taehiId, giljaeId, 11L, 12L, null, null, 20, FAILURE);
 
     }
 
