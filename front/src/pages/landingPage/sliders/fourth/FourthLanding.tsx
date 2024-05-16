@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Header, Image } from 'semantic-ui-react';
-import './SecondLanding.css';
+import './FourthLanding.css';
 
 import pair from '../../../../assets/images/pair.png';
 
@@ -9,9 +9,9 @@ interface LandingProp {
 	isActive?: boolean;
 }
 
-export const SecondLandingPage = ({ isActive }: LandingProp) => {
+export const FourthLandingPage = ({ isActive }: LandingProp) => {
 	const refs = useRef<HTMLDivElement[]>([]);
-	
+
 	// 요소를 refs 배열에 추가하는 함수
 	const addToRefs = (el: HTMLDivElement) => {
 		if (el && !refs.current.includes(el)) {
@@ -39,18 +39,16 @@ export const SecondLandingPage = ({ isActive }: LandingProp) => {
 	return (
 		<>
 			<div className='Entire'>
-				<div className='SecondPage'>
-					<div className='SecondContent'>
-						<div className='SecondText' ref={addToRefs} style={{ opacity: 0 }}>
+				<div className='FourthPage'>
+					<div className='FourthContent'>
+						<div className='FourthText' ref={addToRefs} style={{ opacity: 0 }}>
 							<Header as='h1' textAlign='left' style={{ marginTop: '5vh' }}>
-								페어와 함께 번갈아가며 알고리즘 문제를 해결해보세요!
+								답답하신가요? 이모티콘을 사용해봐요!
 							</Header>
 							<p style={{ textAlign: 'left' }}>
-								선택한 난이도의 문제가 2개 주어집니다. <br />
-								당신은 10분마다 페어가 작성한 코드만을 이어받아서 문제를 해결해야 합니다. <br />
-								페어가 쉽게 이해할 수 있도록 가독성 좋은 코드를 작성해서 문제를 해결해보세요!
+								페어의 코드가 깔끔하고 기발한가요? 아니면 코드에서 냄새가 나나요? <br />
+								이모티콘을 사용하여 감정을 표현해보세요. <br />
 							</p>
-
 						</div>
 						<div ref={addToRefs} style={{ opacity: 0 }}>
 							<Image src={pair} size='large'></Image>

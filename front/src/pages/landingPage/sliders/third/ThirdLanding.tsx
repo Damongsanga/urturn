@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Header, Image } from 'semantic-ui-react';
-import './ThirdLandingPage.css';
+import './ThirdLanding.css';
 
 import pair from '../../../../assets/images/pair.png';
 
@@ -25,7 +25,7 @@ export const ThirdLandingPage = ({ isActive }: LandingProp) => {
 				gsap.to(el, {
 					opacity: 1,
 					duration: 0.5, // 애니메이션 지속 시간
-					delay: index * 0.5, // 각 요소가 순차적으로 나타나도록 지연 시간 설정
+					delay: 0.2 + index * 0.5, // 각 요소가 순차적으로 나타나도록 지연 시간 설정
 				});
 			});
 		} else {
