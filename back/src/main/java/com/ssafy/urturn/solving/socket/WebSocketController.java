@@ -47,6 +47,13 @@ public class WebSocketController {
         log.info("roomInfoResponse : {}", roomInfoResponse);
         log.info("userInfoResponse : {}", userInfoResponse);
         simpMessagingTemplate.convertAndSendToUser(userId.toString(), "/roomInfo", roomInfoResponse);
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ignored){
+
+        }
+
         simpMessagingTemplate.convertAndSendToUser(userId.toString(),"/userInfo",userInfoResponse);
     }
 
