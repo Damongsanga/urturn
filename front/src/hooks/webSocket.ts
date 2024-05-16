@@ -11,7 +11,7 @@ import {useRtcStore} from "../stores/rtc.ts";
 import { convertLangToUpper, convertUppserToLang } from "../utils/solve/convertProgramLang.ts";
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
-const MAX_TIME = 30
+const MAX_TIME = 40
 
 export const useWebSocket = () => {
     const navi = useNavigate();
