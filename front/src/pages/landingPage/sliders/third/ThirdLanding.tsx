@@ -45,12 +45,13 @@ export const ThirdLandingPage = ({ isActive }: LandingProp) => {
 							<Image src={pair} size='large'></Image>
 						</div>
 						<div className='ThirdText' ref={addToRefs} style={{ opacity: 0 }}>
-							<Header as='h1' textAlign='center' style={{ marginTop: '5vh' }}>
-								혼자가 아닌 우리, 코딩의 새로운 도전을 시작하세요.
+							<Header as='h1' textAlign='left' style={{ marginTop: '5vh' }}>
+								페어 프로그래밍을 적용한 서비스를 경험해보세요.
 							</Header>
 							<p style={{ textAlign: 'left' }}>
-								방을 만들거나 참여해 문제를 해결하는 <br />
-								스위칭과 페어 프로그래밍으로 실력을 한 단계 업그레이드할 수 있습니다.
+								한 문제를 해결하셨나요? 축하드립니다! <br />
+								이제는 한 명은 드라이버, 한 명은 네비게이터가 되어 남은 문제를 함께 해결하게 됩니다. <br />
+								음성 채팅을 통해 소통하며 숨겨진 잠재력을 발휘해봐요.
 							</p>
 						</div>
 					</div>
