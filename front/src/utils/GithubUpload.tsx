@@ -19,8 +19,8 @@ export const GithubRepoCallback = () =>{
                 console.log("accesstoken",authStore.accessToken);
                 const data = response.data;
                 console.log(data);
-                alert("성공적으로 깃허브에 업로드되었습니다. \n마이페이지에서 확인해 주세요.");
-                navigate('/myPage');
+                // alert("성공적으로 깃허브에 업로드되었습니다. \n마이페이지에서 확인해 주세요.");
+                navigate('/trans/myPage');
             })
             .catch((e) => {
                 console.error(e);
@@ -34,5 +34,5 @@ export const GithubRepoCallback = () =>{
         navigate('/');
     }
 }, []);
-    return <><div>깃허브 레포지토리에 회고 등록 중...</div></>;
+    return <></>;
 };

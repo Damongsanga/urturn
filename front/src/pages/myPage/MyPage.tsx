@@ -14,7 +14,7 @@ import {
 import 'semantic-ui-css/semantic.min.css';
 import { HeaderBar } from '../../components/header/HeaderBar';
 import {useEffect, useState} from 'react';
-import ProgressBar from '@ramonak/react-progress-bar';
+// import ProgressBar from '@ramonak/react-progress-bar';
 import './MyPage.css';
 import {MemberInfo} from "../../types/memberInfoTypes.ts";
 import {fetchMemberInfo, updateRepository} from "../../utils/api/memberAPI.ts";
@@ -131,10 +131,10 @@ export const MyPage = () => {
 		}
 	};
 
-	const formatLevel = (level: string | null | undefined) => {
-		if (!level) return "";
-		return level.replace(/(level)(\d+)/i, '$1 $2');
-	};
+	// const formatLevel = (level: string | null | undefined) => {
+	// 	if (!level) return "";
+	// 	return level.replace(/(level)(\d+)/i, '$1 $2');
+	// };
 	return (
 		<div className='MyPage'>
 			{/* 헤더 */}
@@ -169,24 +169,24 @@ export const MyPage = () => {
 								</CardHeader>
 							</CardContent>
 							{/* 프로필 영역 카드 하단 - 레벨 */}
-							<CardContent className='ExpBar'>
-								<CardHeader className='CardTextColor' textAlign='center'>
-									레벨 : {formatLevel(memberInfo?.level)}
-								</CardHeader>
-								{/* 레벨 바 */}
-								<div className='ExpBar'>
-									<ProgressBar
-										completed={77}
-										width='24vw'
-										height='2.5vh'
-										baseBgColor='#A67A6A'
-										bgColor='#5297FF'
-										labelAlignment='center'
-										labelSize='1.1rem'
-										animateOnRender={true}
-									/>
-								</div>
-							</CardContent>
+							{/*<CardContent className='ExpBar'>*/}
+							{/*	<CardHeader className='CardTextColor' textAlign='center'>*/}
+							{/*		레벨 : {formatLevel(memberInfo?.level)}*/}
+							{/*	</CardHeader>*/}
+							{/*	/!* 레벨 바 *!/*/}
+							{/*	<div className='ExpBar'>*/}
+							{/*		<ProgressBar*/}
+							{/*			completed={77}*/}
+							{/*			width='24vw'*/}
+							{/*			height='2.5vh'*/}
+							{/*			baseBgColor='#A67A6A'*/}
+							{/*			bgColor='#5297FF'*/}
+							{/*			labelAlignment='center'*/}
+							{/*			labelSize='1.1rem'*/}
+							{/*			animateOnRender={true}*/}
+							{/*		/>*/}
+							{/*	</div>*/}
+							{/*</CardContent>*/}
 							{/* 레벨 관련 문구 */}
 							{/*<CardContent className='ContentBorder'>*/}
 							{/*	<CardHeader className='CardTextColor' textAlign='center' style={{ marginTop: '2vh' }}>*/}
@@ -251,26 +251,33 @@ export const MyPage = () => {
 					{/*		</Segment>*/}
 					{/*	</SegmentGroup>*/}
 					{/*</Segment>*/}
-					{historyData.map((entry, index) => (
-						<Segment key={index} className={`Questions ${getSegmentClassName(entry.result)}`} size='small'>
-							<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>
-								{entry.result}
-							</Header>
-							<Image
-								size='tiny'
-								src={entry.pair.profileImage}
-								style={{ marginLeft: '2vw' }}
-							/>
-							<SegmentGroup className='QuestionName'>
-								<Segment textAlign='right' className={`CardTextColor ${getSegmentClassName(entry.result)}`}>
-									{entry.problem1.title}
-								</Segment>
-								<Segment textAlign='right' className={`CardTextColor ContentBorder ${getSegmentClassName(entry.result)}`}>
-									{entry.problem2.title}
-								</Segment>
-							</SegmentGroup>
-						</Segment>
-					))}
+					{historyData.length > 0 ? (
+						historyData.map((entry, index) => (
+							<Segment key={index} className={`Questions ${getSegmentClassName(entry.result)}`} size='small'>
+								<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>
+									{entry.result}
+								</Header>
+								<Image
+									size='tiny'
+									src={entry.pair.profileImage}
+									style={{ marginLeft: '2vw' }}
+								/>
+								<SegmentGroup className='QuestionName'>
+									<Segment textAlign='right' className={`CardTextColor ${getSegmentClassName(entry.result)}`}>
+										{entry.problem1.title}
+									</Segment>
+									<Segment textAlign='right' className={`CardTextColor ContentBorder ${getSegmentClassName(entry.result)}`}>
+										{entry.problem2.title}
+									</Segment>
+								</SegmentGroup>
+							</Segment>
+						))
+					) : (
+						<div style={{ textAlign: 'center', marginTop: '20px' }}>
+							<p>서비스 이용 기록이 없습니다.</p>
+							<p>어서 이용해 보세요!</p>
+						</div>
+					)}
 					{/*<Pagination*/}
 					{/*	activePage={pageState.activePage}*/}
 					{/*	boundaryRange={pageState.boundaryRange}*/}
@@ -285,13 +292,15 @@ export const MyPage = () => {
 					{/*	nextItem={pageState.showPreviousAndNextNav ? undefined : null}*/}
 					{/*	style={{ marginTop: '3vh' }}*/}
 					{/*/>*/}
-					<Pagination
-						activePage={pageState.activePage}
-						totalPages={pageState.totalPages}
-						onPageChange={handlePaginationChange}
-						size='mini'
-						style={{ marginTop: '3vh' }}
-					/>
+					{pageState.totalPages > 0 && (
+						<Pagination
+							activePage={pageState.activePage}
+							totalPages={pageState.totalPages}
+							onPageChange={handlePaginationChange}
+							size='mini'
+							style={{ marginTop: '3vh' }}
+						/>
+					)}
 
 				</div>
 			</div>
