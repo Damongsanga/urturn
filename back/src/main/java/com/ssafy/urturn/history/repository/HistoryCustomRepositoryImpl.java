@@ -69,7 +69,7 @@ public class HistoryCustomRepositoryImpl implements HistoryCustomRepository{
             .leftJoin(history.pair, member)
             .leftJoin(history.problem1, problem1)
             .leftJoin(history.problem2, problem2)
-            .where(history.manager.id.eq(memberId), history.result.isNotNull())
+            .where(history.manager.id.eq(memberId).or(history.pair.id.eq(memberId)), history.result.isNotNull())
             .orderBy(history.createdAt.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
