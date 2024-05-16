@@ -153,6 +153,7 @@ public class WebSocketController {
             roomService.updateHistory(switchCodeRequest.getRoomId(), HistoryResult.FAILURE, ROUND_LIMIT);
             // 회고창으로 전환
             showRetroCode(switchCodeRequest.getRoomId(),pairId,managerId);
+            return;
         }
 
         // 페어프로그래밍 모드, 드라이버에게만 메시지 받음.

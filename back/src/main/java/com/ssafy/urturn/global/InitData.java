@@ -140,13 +140,13 @@ public class InitData {
             + "2 3\n"
             + "3 5\n"
             + "4 5\n"
-            + "5 6\n"
             + "5 7\n"
             + "6 2\n"
             + "6 4\n"
-            + "7 5", "1\n"
+            + "7 5\n"
+            + "7 7", "1\n"
             + "5\n"
-            + "7", false);
+            + "8", false);
 
         createProblem("술래잡기", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/1697%EB%B2%88+%EC%88%A0%EB%9E%98%EC%9E%A1%EA%B8%B0.md", LEVEL1);
 

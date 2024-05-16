@@ -24,7 +24,7 @@ public class HistoryController {
 
 
     @GetMapping("")
-    public ResponseEntity<Slice<HistoryResponse>> get(@PageableDefault(size = 6) Pageable pagable){
+    public ResponseEntity<Slice<HistoryResponse>> get(@PageableDefault(size = 3) Pageable pagable){
         return ResponseEntity.ok(historyService.getHistories(pagable));
     }
 
