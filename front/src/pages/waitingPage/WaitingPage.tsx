@@ -179,7 +179,7 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 											<CardHeader textAlign='center'>
 												{roomStore.userInfo?.myUserNickName
 													? roomStore.userInfo.myUserNickName
-													: '내 정보 로딩 에러'}
+													: '내 정보 로딩 중'}
 											</CardHeader>
 										</CardContent>
 									</Card>
