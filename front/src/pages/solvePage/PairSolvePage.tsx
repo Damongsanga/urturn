@@ -130,7 +130,7 @@ export default function PairSolvePage() {
 				</div>
 			</div>
 			{/* footer */}
-			<FooterBar $mode={1} $pairMode={true} />
+			<FooterBar $mode={1} />
 		</div>
 	);
 }

@@ -134,7 +134,7 @@ export default function SolvePage() {
 				</div>
 			</div>
 			{/* footer */}
-			<FooterBar $mode={1} $pairMode={false} />
+			<FooterBar $mode={1} />
 		</div>
 	);
 }
