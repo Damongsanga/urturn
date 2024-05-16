@@ -23,12 +23,6 @@ import './SolvePage.css';
 import { useRoomStore } from '../../stores/room';
 import Markdown from 'markdown-to-jsx';
 
-const langOptions = [
-	{ key: 'C++', text: 'C++', value: 'C++' },
-	{ key: 'Java', text: 'Java', value: 'Java' },
-	{ key: 'Python', text: 'Python', value: 'Python' },
-	{ key: 'JavaScript', text: 'JavaScript', value: 'JavaScript' },
-  ]
 let roundOptions = [
 	{ key: '', text: '', value: 0 }
 ];
