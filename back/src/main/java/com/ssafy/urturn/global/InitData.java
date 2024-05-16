@@ -24,6 +24,7 @@ import com.ssafy.urturn.problem.entity.Testcase;
 import com.ssafy.urturn.problem.repository.MemberProblemRepository;
 import com.ssafy.urturn.problem.repository.ProblemRepository;
 import com.ssafy.urturn.problem.repository.TestcaseRepository;
+import com.ssafy.urturn.solving.cache.CacheDatas;
 import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,6 +47,7 @@ public class InitData {
     private final MemberProblemRepository memberProblemRepository;
     private final ProblemRepository problemRepository;
     private final TestcaseRepository testcaseRepository;
+    private final CacheDatas cacheDatas;
 
     private final PasswordEncoder passwordEncoder;
     @Value("spring.security.oauth2.client.registration.password-salt")
@@ -54,6 +56,8 @@ public class InitData {
     // test를 위해 LEVEL1 문제 2개는 주석처리하여 LEVEL1을 선택하면 테스트문제만 반환되도록 하였습니다.
     @PostConstruct
     public void initData(){
+
+        cacheDatas.clearAllCache();
 
         Long testMemberId1 = createTestMember("test1", "test1");
         Long testMemberId2 = createTestMember("test2", "test2");
