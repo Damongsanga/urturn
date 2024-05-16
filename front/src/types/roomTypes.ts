@@ -31,6 +31,7 @@ export interface questionInfo {
 export interface reviewInfo {
     title: string
     content: string
+    language: string
 }
 
 export interface inputValue {

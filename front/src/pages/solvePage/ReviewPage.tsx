@@ -5,6 +5,12 @@ import {
 	Form,
 	Menu,
 	MenuItem,
+	Table,
+	TableBody,
+	TableCell,
+	TableHeader,
+	TableHeaderCell,
+	TableRow,
 	TextArea,
 } from 'semantic-ui-react';
 import { HeaderBar } from '../../components/header/HeaderBar';
@@ -40,20 +46,21 @@ export default function ReviewPage() {
 	]);
 	// 문제 별 회고 저장
 
-	// useEffect(() => {
-	// 	roundOptions = [];
-	// 	const oneReviewInfos = roomStore.getReviewInfos()[activeQuestion-1] 
-	// 	for(let i = 0; i < oneReviewInfos.length; i++){
-	// 		roundOptions.push({
-	// 			key: oneReviewInfos[i].title,
-	// 			text: oneReviewInfos[i].title,
-	// 			value: i
-	// 		});
-	// 	}
-	// }, [activeQuestion])
+	useEffect(() => {
+		roundOptions = [];
+		const oneReviewInfos = roomStore.getReviewInfos()[activeQuestion-1] 
+		for(let i = 0; i < oneReviewInfos.length; i++){
+			roundOptions.push({
+				key: oneReviewInfos[i].title,
+				text: oneReviewInfos[i].title,
+				value: i
+			});
+		}
+	}, [activeQuestion])
 
 	useEffect(() => {
 		try{
+			roomStore.setLang(roomStore.getReviewInfos()[activeQuestion-1][activeRound].language);
 			roomStore.getEditor()?.setValue(roomStore.getReviewInfos()[activeQuestion-1][activeRound].content);
 		}
 		catch(e){
@@ -135,6 +142,31 @@ export default function ReviewPage() {
 								roomStore.questionInfos && activeQuestion > 0 &&
 								<Markdown>{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}</Markdown>
 							}
+							<div className='testcase'>
+									<Table>
+										<TableHeader>
+											<TableRow>
+												{/* W */}
+												<TableHeaderCell>입력값</TableHeaderCell>
+												<TableHeaderCell>출력값</TableHeaderCell>
+											</TableRow>
+										</TableHeader>
+
+										<TableBody>
+											{
+												roomStore.questionInfos &&
+													roomStore.questionInfos[activeQuestion - 1].testcases.map((testcase, i) => (
+														<TableRow key={i}>
+															{/* <TableCell>{i + 1} 번 테스트 케이스</TableCell> */}
+															<TableCell>{testcase.stdin}</TableCell>
+															<TableCell>{testcase.expectedOutput}</TableCell>
+														</TableRow>
+													))
+											}
+										</TableBody>
+									</Table>
+								</div>
+								<br/><br/><br/><br/>
 							</div>
 						</Allotment.Pane>
 						<Allotment.Pane minSize={350}>
@@ -148,13 +180,7 @@ export default function ReviewPage() {
 										color: 'white',
 									}}
 								>
-									<Dropdown
-										search
-										defaultValue={langOptions[0].value}
-										searchInput={{ type: 'string' }}
-										options={langOptions}
-                   	onChange={(_e, { value }) => {roomStore.setLang(value as string);}}
-									/>
+									{roomStore.getLang()} &nbsp;&nbsp;&nbsp; 
 									<Dropdown
 										search
 										defaultValue={roundOptions[0].value}

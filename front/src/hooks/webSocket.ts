@@ -239,14 +239,19 @@ export const useWebSocket = () => {
                     data[idx].codes.forEach((userCode: any) => {
                         tmp.push({
                             title: String(userCode.round) + " 라운드",
-                            content: userCode.code
+                            content: userCode.code,
+                            language: convertUppserToLang(userCode.language)
                         })
                     })
-                    tmp.push({
-                        title: "정답",
-                        content: data[idx].code
-                    })
+                    if(data[idx].code){
+                        tmp.push({
+                            title: "정답",
+                            content: data[idx].code,
+                            language: convertUppserToLang(data[idx].language)
+                        })
+                    }
                     roomStore.getReviewInfos().push(tmp);
+                    console.log("reviewTmp: ", tmp)
                 });
                 roomStore.setPairProgramingRole('Navigator');
                 roomStore.setSec(0);
