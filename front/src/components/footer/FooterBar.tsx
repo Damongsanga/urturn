@@ -100,7 +100,7 @@ export const FooterBar = ({ $mode, $pairMode=false, $reviewValues }: FooterProp)
 							코드 실행
 						</Button>
 						{
-							!$pairMode ?
+							roomStore.getPairProgramingRole() !== 'Navigator' ?
 							<Button onClick={submitCode} size='large' className='RunButtonColor'>
 								코드 제출하기
 							</Button>

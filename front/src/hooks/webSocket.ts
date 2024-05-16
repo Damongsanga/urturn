@@ -196,7 +196,12 @@ export const useWebSocket = () => {
                     const idx = roomStore.getQuestionIdx() === 0 ? 1 : 0;
                     roomStore.setQuestionIdx(idx);
                 }
-                navi('/trans/pairsolve');
+                if(role==='Driver'){
+                    roomStore.setConsole('상대가 문제를 풀었습니다! 잠시 후 페어 프로그래밍으로 전환됩니다.');
+                }
+                setTimeout(() => {
+                    navi('/trans/pairsolve');
+                }, 2000)
             })
             client.subscribe('/user/' + userId + '/showRetroCode', (msg) => {
                 console.log('Received message: showRetroCode' + msg.body);

@@ -62,3 +62,8 @@
     color: black;
 }
 
+.testcase {
+    white-space: pre-wrap;
+    font-size: small;
+}
+
