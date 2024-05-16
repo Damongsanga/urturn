@@ -11,7 +11,7 @@ interface LandingProp {
 
 export const SecondLandingPage = ({ isActive }: LandingProp) => {
 	const refs = useRef<HTMLDivElement[]>([]);
-
+	
 	// 요소를 refs 배열에 추가하는 함수
 	const addToRefs = (el: HTMLDivElement) => {
 		if (el && !refs.current.includes(el)) {
@@ -49,6 +49,7 @@ export const SecondLandingPage = ({ isActive }: LandingProp) => {
 								바로 본인만의 GIT 저장소를 설정하고, 새로운 코딩 과제를 시작하세요. <br />
                 단 한 번의 클릭으로 개발 경험의 새 장을 엽니다.
 							</p>
+
 						</div>
 						<div ref={addToRefs} style={{ opacity: 0 }}>
 							<Image src={pair} size='large'></Image>

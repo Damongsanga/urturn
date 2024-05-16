@@ -65,5 +65,7 @@
 .testcase {
     white-space: pre-wrap;
     font-size: small;
+
+    overflow-y: auto;
 }
 

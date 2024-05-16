@@ -23,7 +23,7 @@
 }
 
 .CTABox {
-  width: 75vw;
+  width: 65vw;
   height: 10vh;
 
   display: flex;
@@ -42,9 +42,13 @@
   background-color: white !important;
   color: black !important;
 
-  display: flex !important;
-  align-items: center;
+  height: 6vh !important;
 
+  display: flex !important;
+  align-items: center !important; 
+  justify-content: center !important; 
+
+  padding: 11px 21px 9px 17px !important;
 }
 
 .BottomCTAButton:hover,
@@ -53,6 +57,12 @@
   border-color: #b7b7b7 !important;
 
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
+}
+
+.InnerButton {
+  display: flex !important;
+  align-items: center !important; 
+  justify-content: center !important;
 }
 
 .Copyright {

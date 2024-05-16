@@ -57,6 +57,7 @@ export const FourthLandingPage = ({ isActive }: LandingProp) => {
 								<br />
 								GIT 저장소에 영구적으로 남겨 놀라운 발전을 자랑하세요.
 							</p>
+							<small>* git 저장소를 등록해야만 저장할 수 있습니다. </small>
 						</div>
 						<div ref={addToRefs} style={{ opacity: 0 }}>
 							<Image src={pair} size='large'></Image>
@@ -64,19 +65,20 @@ export const FourthLandingPage = ({ isActive }: LandingProp) => {
 						<div className='CTABox' ref={addToRefs} style={{ opacity: 0 }}>
 							<div className='CTAText'>
 								<Header as='h3' textAlign='left' style={{ color: 'white' }}>
-									준비 되셨나요?
-								</Header>
-								<Header as='h4' textAlign='left' style={{ color: 'white' }}>
-									다음은 여러분의 차례입니다.
+									준비 되셨나요? 다음은 여러분의 차례입니다.
 								</Header>
 							</div>
+
 							<Button
 								circular
 								className='BottomCTAButton'
 								onClick={githubAuth}
 								style={{ marginRight: '2vw' }}
 							>
-								<Icon name='github' size='huge' /> <span className='FontSize'>Github로 시작하기</span>
+								<div className='InnerButton'>
+									<Icon name='github' size='huge' />
+									<span className='FontSize'>Github로 시작하기</span>
+								</div>
 							</Button>
 						</div>
 					</div>

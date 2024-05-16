@@ -40,17 +40,17 @@ export default function ReviewPage() {
 	]);
 	// 문제 별 회고 저장
 
-	useEffect(() => {
-		roundOptions = [];
-		const oneReviewInfos = roomStore.getReviewInfos()[activeQuestion-1] 
-		for(let i = 0; i < oneReviewInfos.length; i++){
-			roundOptions.push({
-				key: oneReviewInfos[i].title,
-				text: oneReviewInfos[i].title,
-				value: i
-			});
-		}
-	}, [activeQuestion])
+	// useEffect(() => {
+	// 	roundOptions = [];
+	// 	const oneReviewInfos = roomStore.getReviewInfos()[activeQuestion-1] 
+	// 	for(let i = 0; i < oneReviewInfos.length; i++){
+	// 		roundOptions.push({
+	// 			key: oneReviewInfos[i].title,
+	// 			text: oneReviewInfos[i].title,
+	// 			value: i
+	// 		});
+	// 	}
+	// }, [activeQuestion])
 
 	useEffect(() => {
 		try{
@@ -200,7 +200,7 @@ export default function ReviewPage() {
 											<Form>
 												<TextArea
 													placeholder='좋았던 점을 적어주세요.'
-													style={{ width: '100%', height: '65.2vh', resize: 'none', fontSize:'1.1rem' }}
+													style={{ width: '100%', height: '25.2vh', resize: 'none', fontSize:'1.1rem' }}
 													value={inputValues.find(item => item.id === activeQuestion)?.keep}
 													onChange={(e) => handleInputChange(e, activeQuestion, 'keep')}
 												/>{' '}
@@ -210,7 +210,7 @@ export default function ReviewPage() {
 											<Form>
 												<TextArea
 													placeholder='아쉬웠던 점을 적어주세요.'
-													style={{ width: '100%', height: '65.2vh', resize: 'none', fontSize:'1.1rem' }}
+													style={{ width: '100%', height: '25.2vh', resize: 'none', fontSize:'1.1rem' }}
 													value={inputValues.find(item => item.id === activeQuestion)?.try}
 													onChange={(e) => handleInputChange(e, activeQuestion, 'try')}
 												/>{' '}

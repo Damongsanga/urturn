@@ -5,6 +5,10 @@ import { Header, Image } from 'semantic-ui-react';
 
 import running from '../../assets/images/running.gif';
 import pairRunning from '../../assets/images/pair_running.gif';
+import review from '../../assets/images/review.gif'
+import solved from '../../assets/images/solved.gif'
+import ready from '../../assets/images/ready.gif'
+import start from '../../assets/images/start.gif'
 
 import './TransPage.css';
 import { useRoomStore } from '../../stores/room';
@@ -34,7 +38,11 @@ export const TransPage = () => {
 
 	useEffect(() => {
         sec.current = START_TIME;
-		roomStore.setConsole("");
+
+				if(next === 'solve') {
+					sec.current = 4;
+				}
+
         const timer = setInterval(() => {
             sec.current -= 1;
             if (sec.current <= 0) {
@@ -52,21 +60,25 @@ export const TransPage = () => {
 			key: 'check',
 			message: '문제 풀이를 시작합니다.',
 			detailMessage: '잠시 후 문제 확인 페이지로 이동합니다.',
+			image: start,
 		},
 		{
 			key: 'solve',
 			message: '준비가 완료되었습니다.',
 			detailMessage: '잠시 후 문제 풀이 화면으로 이동합니다.',
+			image: ready,
 		},
 		{
 			key: 'pairsolve',
 			message: '문제 하나를 해결하였습니다.',
 			detailMessage: '잠시 후 페어 프로그래밍 모드로 변환합니다.',
+			image: solved,
 		},
 		{
 			key: 'review',
 			message: '문제 풀이가 종료되었습니다.',
 			detailMessage: '잠시 후 회고 페이지로 이동합니다.',
+			image: review,
 		},
 		{
 			key: 'solveSwitch',

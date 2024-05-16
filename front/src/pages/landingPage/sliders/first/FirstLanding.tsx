@@ -2,7 +2,7 @@ import { MenuItem, Menu, Header, Icon, Button, Image } from 'semantic-ui-react';
 import { TestLogin } from '../../TestLogin';
 import logo from '../../../../assets/images/logo.svg';
 import scroll from '../../../../assets/images/scrolldown.png';
-import pair from '../../../../assets/images/pair.png'
+import pair from '../../../../assets/images/pair.png';
 
 import './FirstLanding.css';
 
@@ -26,8 +26,11 @@ export const FirstLandingPage = () => {
 									<img alt='URTurn' src={logo} style={{ width: '125px' }} />
 								</MenuItem>
 								<MenuItem name='Waiting Room' position='right'>
-									<Button circular className='ButtonColor' onClick={githubAuth}>
-										<Icon name='github' size='big' /> 로그인
+									<Button circular className='ButtonColor GitButton' onClick={githubAuth}>
+										<div className='InnerButton'>
+											<Icon name='github' size='big' />
+											<span className='FontSize'>로그인</span>
+										</div>
 									</Button>
 								</MenuItem>
 							</Menu>
@@ -41,12 +44,14 @@ export const FirstLandingPage = () => {
 									Now is Your Turn
 								</Header>
 								<p style={{ marginBottom: '5vh', textAlign: 'left' }}>
-
+									URTurn이
 									당신의 개발 역량을 업그레이드 할 수 있도록 도와드립니다.
 								</p>
-								<Button circular className='ButtonColor' onClick={githubAuth}>
-									<Icon name='github' size='huge' />{' '}
-									<span className='FontSize'>Github로 시작하기</span>
+								<Button circular className='ButtonColor GitButton' onClick={githubAuth}>
+									<div className='InnerButton'>
+										<Icon name='github' size='huge' />
+										<span className='FontSize'>Github로 시작하기</span>
+									</div>
 								</Button>
 							</div>
 							<div>

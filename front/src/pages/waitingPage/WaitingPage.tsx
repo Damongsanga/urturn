@@ -212,24 +212,35 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 									</Card>
 								</CardGroup>
 								{/* 볼륨 조정 영역 */}
-								<div style = {{width: '32vw', display: 'flex', alignItems: 'center', justifyContent: 'space-around'}}>
+								<div
+									style={{
+										width: '32vw',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'space-around',
+									}}
+								>
 									<div>
 										{/* 마이크 아이콘 */}
-										<Icon
-											onClick={toggleMicrophone}
-											className='Icon'
-											name={isMicMuted ? 'microphone slash' : 'microphone'}
-											size='big'
-										/>
+										<Button className='VolumeButton'>
+											<Icon
+												onClick={toggleMicrophone}
+												className='Icon'
+												name={isMicMuted ? 'microphone slash' : 'microphone'}
+												size='huge'
+											/>
+										</Button>
 									</div>
 									<div >
 										{/* 스피커 아이콘 */}
-										<Icon
-											onClick={toggleMute}
-											className='Icon'
-											name={isMuted ? 'volume off' : 'volume up'}
-											size='big'
-										/>
+										<Button className='VolumeButton'>
+											<Icon
+												onClick={toggleMute}
+												className='Icon'
+												name={isMuted ? 'volume off' : 'volume up'}
+												size='huge'
+											/>
+										</Button>
 									</div>
 								</div>
 							</div>
@@ -270,7 +281,7 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 									<Button
 										onClick={selectDifficulty}
 										className='StartButtonStyle'
-										style={{ width: '11.5vw', height: '8vh', fontSize: '1.1rem' }}
+										style={{ width: '11.5vw', height: '8vh', fontSize: '1.3rem' }}
 									>
 										시작하기
 									</Button>

@@ -139,7 +139,7 @@ export default function CheckPage() {
 											}}
 										></div>
 									</div>
-									<div style={{ padding: '12px', fontSize:'1.1rem' }}>
+									<div style={{ padding: '12px', fontSize:'1.1rem', overflowY: 'auto' }}>
 										<p>두 문제를 모두 확인했으면, 시작하기 버튼을 눌러주세요.</p>
 									</div>
 								</Allotment.Pane>
