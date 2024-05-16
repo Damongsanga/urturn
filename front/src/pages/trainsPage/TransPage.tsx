@@ -34,7 +34,6 @@ export const TransPage = () => {
 	const { next } = useParams();
 	const sec = useRef(0);
 	const navigate = useNavigate();
-	const roomStore = useRoomStore();
 
 	const START_TIME = 3;
 
