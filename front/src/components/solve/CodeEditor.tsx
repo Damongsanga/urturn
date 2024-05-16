@@ -39,7 +39,7 @@ export default function CodeEditor( ) {
     useEffect(() => {
         monaco.editor.defineTheme('myCustomTheme', {
           base: 'vs',
-          inherit: true,
+          inherit: false,
           rules: [],
           colors: {
             //'editor.foreground': '#C8C8C8',
