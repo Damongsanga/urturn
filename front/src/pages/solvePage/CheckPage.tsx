@@ -76,13 +76,13 @@ export default function CheckPage() {
 										roomStore.questionInfos[activeQuestion - 1].algoQuestionTitle}
 								</div>
 							</div>
-							<div style={{ height: '100%', overflowY: 'auto', padding: '12px', fontSize:'1.3rem' }}>
+							<div style={{ height: '100%', overflowY: 'auto', padding: '12px', fontSize: '1.3rem' }}>
 								{roomStore.questionInfos && activeQuestion > 0 && (
 									<Markdown>
 										{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}
 									</Markdown>
 								)}
-								<hr/>
+								<hr />
 								<div className='testcase'>
 									<Table>
 										<TableHeader>
@@ -92,22 +92,26 @@ export default function CheckPage() {
 												<TableHeaderCell>출력값</TableHeaderCell>
 											</TableRow>
 										</TableHeader>
-										
+
 										<TableBody>
-											{
-												roomStore.questionInfos && activeQuestion > 0 &&
-													roomStore.questionInfos[activeQuestion - 1].testcases.map((testcase, i) => (
+											{roomStore.questionInfos &&
+												activeQuestion > 0 &&
+												roomStore.questionInfos[activeQuestion - 1].testcases.map(
+													(testcase, i) => (
 														<TableRow key={i}>
 															{/* <TableCell>{i + 1} 번 테스트 케이스</TableCell> */}
 															<TableCell>{testcase.stdin}</TableCell>
 															<TableCell>{testcase.expectedOutput}</TableCell>
 														</TableRow>
-													))
-											}
+													),
+												)}
 										</TableBody>
 									</Table>
 								</div>
-								<br/><br/><br/><br/>
+								<br />
+								<br />
+								<br />
+								<br />
 							</div>
 						</Allotment.Pane>
 						<Allotment.Pane minSize={350}>
@@ -139,7 +143,14 @@ export default function CheckPage() {
 											}}
 										></div>
 									</div>
-									<div style={{ padding: '12px', fontSize:'1.1rem', overflowY: 'auto' }}>
+									<div
+										style={{
+											padding: '12px',
+											fontSize: '1.1rem',
+											overflowY: 'scroll',
+											height: '100%',
+										}}
+									>
 										<p>두 문제를 모두 확인했으면, 시작하기 버튼을 눌러주세요.</p>
 									</div>
 								</Allotment.Pane>

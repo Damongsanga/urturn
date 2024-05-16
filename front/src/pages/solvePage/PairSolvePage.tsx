@@ -48,7 +48,7 @@ export default function PairSolvePage() {
 									)}
 								</div>
 							</div>
-							<div style={{ height: '100%', overflowY: 'auto', padding: '12px', fontSize:'1.3rem' }}>
+							<div style={{ height: '100%', overflowY: 'auto', padding: '12px', fontSize: '1.3rem' }}>
 								{roomStore.questionIdx == -1 ? (
 									<div></div>
 								) : (
@@ -106,7 +106,7 @@ export default function PairSolvePage() {
 								</div>
 							</div>
 							<Allotment vertical>
-								<Allotment.Pane minSize={325}>
+								<Allotment.Pane minSize={5}>
 									<div style={{ height: '100%', width: '100%' }}>
 										<CodeEditor />
 									</div>
@@ -121,10 +121,25 @@ export default function PairSolvePage() {
 												fontWeight: 'bold',
 												color: 'white',
 											}}
-										>Console</div>
+										>
+											Console
+										</div>
 									</div>
-									<div style={{ padding: '12px', fontSize:'1.1rem', overflowY: 'auto' }}>
-										<p style={{ whiteSpace: 'pre-wrap' }}>{roomStore.console}</p>
+									<div
+										style={{
+											padding: '12px',
+											fontSize: '1.1rem',
+											overflowY: 'scroll',
+											height: '100%',
+										}}
+									>
+										<p style={{ whiteSpace: 'pre-wrap', overflowY: 'scroll' }}>
+											{roomStore.console}
+											<br />
+											<br />
+											<br />
+											<br />
+										</p>
 									</div>
 								</Allotment.Pane>
 							</Allotment>

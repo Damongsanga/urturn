@@ -2,15 +2,15 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Button, Header, Icon, Image } from 'semantic-ui-react';
 import logo from '../../../../assets/images/logo.svg';
-import './FourthLandingPage.css';
+import './FifthLanding.css';
 
-import pair from '../../../../assets/images/pair.png';
+import hiFive from '../../../../assets/images/hi_five.jpg'
 
 interface LandingProp {
 	isActive?: boolean;
 }
 
-export const FourthLandingPage = ({ isActive }: LandingProp) => {
+export const FifthLandingPage = ({ isActive }: LandingProp) => {
 	const githubAuth = () => {
 		location.href = `https://github.com/login/oauth/authorize?client_id=a82095fde8aa68bb396d&scope=user:email&redirect_uri=${
 			import.meta.env.VITE_GITHUB_REDIRECT_URI
@@ -32,7 +32,7 @@ export const FourthLandingPage = ({ isActive }: LandingProp) => {
 				gsap.to(el, {
 					opacity: 1,
 					duration: 0.5, // 애니메이션 지속 시간
-					delay: index * 0.5, // 각 요소가 순차적으로 나타나도록 지연 시간 설정
+					delay: 0.2 + index * 0.5, // 각 요소가 순차적으로 나타나도록 지연 시간 설정
 				});
 			});
 		} else {
@@ -46,8 +46,8 @@ export const FourthLandingPage = ({ isActive }: LandingProp) => {
 	return (
 		<>
 			<div className='Entire'>
-				<div className='FourthPage'>
-					<div className='FourthContent'>
+				<div className='FifthPage'>
+					<div className='FifthContent'>
 						<div ref={addToRefs} style={{ opacity: 0 }}>
 							<Header as='h1' textAlign='center' style={{ marginTop: '5vh' }}>
 								코드로 말하는 회고, GITHUB에 당신의 성장을 기록하세요. <br />
@@ -57,12 +57,12 @@ export const FourthLandingPage = ({ isActive }: LandingProp) => {
 								<br />
 								당신의 놀라운 발전을 쉽게 기록해봐요!
 							</p>
-							<small>* git 저장소를 등록해야만 저장할 수 있습니다. </small>
+							<small>* git 저장소를 등록해야만 저장할 수 있어요. </small>
 						</div>
-						<div ref={addToRefs} style={{ opacity: 0 }}>
-							<Image src={pair} size='large'></Image>
+						<div ref={addToRefs} style={{ opacity: 0, marginTop: '-5vh' }}>
+							<Image src={hiFive} style= {{width: '23vw', height: 'auto'}}></Image>
 						</div>
-						<div className='CTABox' ref={addToRefs} style={{ opacity: 0 }}>
+						<div className='CTABox' ref={addToRefs} style={{ opacity: 0, marginTop: '-6vh' }}>
 							<div className='CTAText'>
 								<Header as='h3' textAlign='left' style={{ color: 'white' }}>
 									준비 되셨나요? 다음은 여러분의 차례입니다.
