@@ -110,7 +110,7 @@ public class ProblemCustomRepositoryImpl implements ProblemCustomRepository{
             .where(memberProblem.member.id.ne(memberId)
                 .and(memberProblem.member.id.ne(pairId))
                 .and(problem.level.eq(level)))
-            .groupBy(problem).fetchOne();
+            .fetchOne();
 
         JPAQuery<Long> query = jpaQueryFactory
             .select(problem.id)
