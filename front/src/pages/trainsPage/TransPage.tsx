@@ -12,6 +12,7 @@ import start from '../../assets/images/start.gif'
 
 import './TransPage.css';
 import { useRoomStore } from '../../stores/room';
+
 /*
 
 Transition Page
@@ -33,11 +34,14 @@ export const TransPage = () => {
 	const { next } = useParams();
 	const sec = useRef(0);
 	const navigate = useNavigate();
+	const roomStore = useRoomStore();
 
 	const START_TIME = 3;
 
 	useEffect(() => {
         sec.current = START_TIME;
+
+				roomStore.setConsole("");
 
 				if(next === 'solve') {
 					sec.current = 4;

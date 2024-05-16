@@ -43,11 +43,12 @@ export const SecondLandingPage = ({ isActive }: LandingProp) => {
 					<div className='SecondContent'>
 						<div className='SecondText' ref={addToRefs} style={{ opacity: 0 }}>
 							<Header as='h1' textAlign='left' style={{ marginTop: '5vh' }}>
-								GIT으로 시작하는 당신의 코딩 여정!
+								페어와 함께 번갈아가며 알고리즘 문제를 해결해보세요!
 							</Header>
 							<p style={{ textAlign: 'left' }}>
-								바로 본인만의 GIT 저장소를 설정하고, 새로운 코딩 과제를 시작하세요. <br />
-                단 한 번의 클릭으로 개발 경험의 새 장을 엽니다.
+								선택한 난이도의 문제가 2개 주어집니다. <br />
+								당신은 10분마다 페어가 작성한 코드만을 이어받아서 문제를 해결해야 합니다. <br />
+								페어가 쉽게 이해할 수 있도록 가독성 좋은 코드를 작성해서 문제를 해결해보세요!
 							</p>
 
 						</div>

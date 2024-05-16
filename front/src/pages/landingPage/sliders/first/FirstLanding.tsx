@@ -40,12 +40,11 @@ export const FirstLandingPage = () => {
 							{/* CTA 문구 & 버튼 영역 */}
 							<div className='CTA'>
 								<Header as='h1' textAlign='left' style={{ marginBottom: '5vh' }}>
-									Unlock Potential, Code Awaits <br />
+									Get your keyboard,  <br/>
 									Now is Your Turn
 								</Header>
 								<p style={{ marginBottom: '5vh', textAlign: 'left' }}>
-									URTurn이
-									당신의 개발 역량을 업그레이드 할 수 있도록 도와드립니다.
+									당신의 개발 & 협업 역량을 쉽고 재밌게 업그레이드 해드립니다.
 								</p>
 								<Button circular className='ButtonColor GitButton' onClick={githubAuth}>
 									<div className='InnerButton'>
