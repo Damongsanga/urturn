@@ -251,26 +251,33 @@ export const MyPage = () => {
 					{/*		</Segment>*/}
 					{/*	</SegmentGroup>*/}
 					{/*</Segment>*/}
-					{historyData.map((entry, index) => (
-						<Segment key={index} className={`Questions ${getSegmentClassName(entry.result)}`} size='small'>
-							<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>
-								{entry.result}
-							</Header>
-							<Image
-								size='tiny'
-								src={entry.pair.profileImage}
-								style={{ marginLeft: '2vw' }}
-							/>
-							<SegmentGroup className='QuestionName'>
-								<Segment textAlign='right' className={`CardTextColor ${getSegmentClassName(entry.result)}`}>
-									{entry.problem1.title}
-								</Segment>
-								<Segment textAlign='right' className={`CardTextColor ContentBorder ${getSegmentClassName(entry.result)}`}>
-									{entry.problem2.title}
-								</Segment>
-							</SegmentGroup>
-						</Segment>
-					))}
+					{historyData.length > 0 ? (
+						historyData.map((entry, index) => (
+							<Segment key={index} className={`Questions ${getSegmentClassName(entry.result)}`} size='small'>
+								<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>
+									{entry.result}
+								</Header>
+								<Image
+									size='tiny'
+									src={entry.pair.profileImage}
+									style={{ marginLeft: '2vw' }}
+								/>
+								<SegmentGroup className='QuestionName'>
+									<Segment textAlign='right' className={`CardTextColor ${getSegmentClassName(entry.result)}`}>
+										{entry.problem1.title}
+									</Segment>
+									<Segment textAlign='right' className={`CardTextColor ContentBorder ${getSegmentClassName(entry.result)}`}>
+										{entry.problem2.title}
+									</Segment>
+								</SegmentGroup>
+							</Segment>
+						))
+					) : (
+						<div style={{ textAlign: 'center', marginTop: '20px' }}>
+							<p>서비스 이용 기록이 없습니다.</p>
+							<p>어서 이용해 보세요!</p>
+						</div>
+					)}
 					{/*<Pagination*/}
 					{/*	activePage={pageState.activePage}*/}
 					{/*	boundaryRange={pageState.boundaryRange}*/}
@@ -285,13 +292,15 @@ export const MyPage = () => {
 					{/*	nextItem={pageState.showPreviousAndNextNav ? undefined : null}*/}
 					{/*	style={{ marginTop: '3vh' }}*/}
 					{/*/>*/}
-					<Pagination
-						activePage={pageState.activePage}
-						totalPages={pageState.totalPages}
-						onPageChange={handlePaginationChange}
-						size='mini'
-						style={{ marginTop: '3vh' }}
-					/>
+					{pageState.totalPages > 0 && (
+						<Pagination
+							activePage={pageState.activePage}
+							totalPages={pageState.totalPages}
+							onPageChange={handlePaginationChange}
+							size='mini'
+							style={{ marginTop: '3vh' }}
+						/>
+					)}
 
 				</div>
 			</div>
