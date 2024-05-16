@@ -82,28 +82,32 @@ export default function CheckPage() {
 										{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}
 									</Markdown>
 								)}
-								<Table definition>
-									<TableHeader>
-										<TableRow>
-											<TableHeaderCell />
-											<TableHeaderCell>입력값</TableHeaderCell>
-											<TableHeaderCell>출력값</TableHeaderCell>
-										</TableRow>
-									</TableHeader>
-
-									<TableBody>
-										{
-											roomStore.questionInfos && activeQuestion > 0 &&
-												roomStore.questionInfos[activeQuestion - 1].testcases.map((testcase, i) => (
-													<TableRow key={i}>
-														<TableCell>{i + 1} 번 테스트 케이스</TableCell>
-														<TableCell>{testcase.stdin}</TableCell>
-														<TableCell>{testcase.expectedOutput}</TableCell>
-													</TableRow>
-												))
-										}
-									</TableBody>
-								</Table>
+								<hr/>
+								<div className='testcase'>
+									<Table>
+										<TableHeader>
+											<TableRow>
+												{/* <TableHeaderCell /> */}
+												<TableHeaderCell>입력값</TableHeaderCell>
+												<TableHeaderCell>출력값</TableHeaderCell>
+											</TableRow>
+										</TableHeader>
+										
+										<TableBody>
+											{
+												roomStore.questionInfos && activeQuestion > 0 &&
+													roomStore.questionInfos[activeQuestion - 1].testcases.map((testcase, i) => (
+														<TableRow key={i}>
+															{/* <TableCell>{i + 1} 번 테스트 케이스</TableCell> */}
+															<TableCell>{testcase.stdin}</TableCell>
+															<TableCell>{testcase.expectedOutput}</TableCell>
+														</TableRow>
+													))
+											}
+										</TableBody>
+									</Table>
+								</div>
+								<br/><br/><br/><br/>
 							</div>
 						</Allotment.Pane>
 						<Allotment.Pane minSize={350}>
