@@ -11,8 +11,7 @@ import {useRtcStore} from "../stores/rtc.ts";
 import { convertLangToUpper, convertUppserToLang } from "../utils/solve/convertProgramLang.ts";
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
-const MAX_TIME = 40
-
+const MAX_TIME = 43;
 export const useWebSocket = () => {
     const navi = useNavigate();
     const authStore = useAuthStore();
@@ -78,7 +77,7 @@ export const useWebSocket = () => {
         });
 
         client.onConnect = function (frame) {
-            const subscribeUserId = client.subscribe('/user/' + userId + '/roomInfo', (msg) => {
+            const subscribeRoomInfo = client.subscribe('/user/' + userId + '/roomInfo', (msg) => {
                 console.log('Received message: roomInfo' + msg.body);
                 const roomInfo = JSON.parse(msg.body);
                 roomStore.setRoomInfo(roomInfo);
@@ -102,7 +101,8 @@ export const useWebSocket = () => {
                 roomStore.setUserInfo(userInfo);
             });
             const publishTimer = setInterval(() => {
-                if(subscribeUserId !== null && subscribeUserInfo !== null){
+                console.log("으아",subscribeRoomInfo, subscribeUserInfo);
+                if(subscribeRoomInfo.id && subscribeUserInfo.id){
                     clearInterval(publishTimer);
                     if(roomId===null){
                         client.publish({
@@ -177,6 +177,7 @@ export const useWebSocket = () => {
                 navi('/trans/pairSolveSwitch');
             })
             client.subscribe('/user/' + userId + '/submit/result', (msg) => {
+                roomStore.setCurrentlySubmitting(false);
                 console.log('Received message: submit/result' + msg.body);
                 const data = JSON.parse(msg.body);
                 const result = data.result;
@@ -209,6 +210,7 @@ export const useWebSocket = () => {
                 roomStore.setConsole(consoleMsg);
             })
             client.subscribe('/user/' + userId + '/role', (msg) => {
+                roomStore.setCurrentlySubmitting(false);
                 console.log('Received message: submit/role' + msg.body);
                 const role = msg.body;
                 roomStore.setPairProgramingMode(true);
@@ -252,21 +254,23 @@ export const useWebSocket = () => {
                 navi('/trans/review');
             })
             client.subscribe('/user/' + userId + '/finishSocket/githubUpload', (msg) => {
-                const data: boolean = JSON.parse(msg.body);
-                if(data===true){
-                    client.deactivate();
-                    // uri
+                roomStore.client?.publish({
+					destination: '/app/leaveRoom',
+					body: JSON.stringify({
+						roomId: roomStore.roomInfo?.roomId,
+						isHost: roomStore.roomInfo?.host
+					}),
+				})
+                client.deactivate();
+                const githubPush: boolean = JSON.parse(msg.body);
+                if(githubPush===true){
                     location.href = `https://github.com/login/oauth/authorize?client_id=a82095fde8aa68bb396d&scope=repo&redirect_uri=https://urturn.site/auth/github/upload`;
-                }else{
-                    client.deactivate();
-                    alert("회고 제출 에러 발생");
-                    navi('/main');
+                }
+                else{
+                    navi('/myPage');
                 }
             })
 
-            // client.subscribe('/user/' + userId + '/finishSocket', () => {
-                
-            // })
             console.log('Connected: ' + frame);
 
         };
@@ -277,25 +281,6 @@ export const useWebSocket = () => {
         };
 
         client.activate()
-
-        // setTimeout(() => {
-        //     if(roomId===null){
-        //         client.publish({
-        //             destination: '/app/createRoom',
-        //             body: JSON.stringify({
-        //             memberId : userId,
-        //             }),
-        //         });
-        //     }
-        //     else{
-        //         client.publish({
-        //             destination: '/app/enterRoom',
-        //             body: JSON.stringify({
-        //                 roomId : roomId,
-        //             }),
-        //         });
-        //     }
-        // }, 1000);
         
         roomStore.setClient(client);
     }

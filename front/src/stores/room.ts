@@ -38,6 +38,7 @@ export const useRoomStore = create<roomState>() (
             sec: 99999999,
             pairProgramingMode: false,
             pairProgramingRole: null,
+            CurrentlySubmitting: false,
 
             setClient: (client: Client) => {set({ client: client })},
             getClient: () => {return get().client},
@@ -85,6 +86,9 @@ export const useRoomStore = create<roomState>() (
             setPairProgramingRole: (role: string | null) => {set({ pairProgramingRole: role })},
             getPairProgramingRole: () => {return get().pairProgramingRole},
 
+            setCurrentlySubmitting: (submitting: boolean) => {set({ CurrentlySubmitting: submitting })},
+            getCurrentlySubmitting: () => {return get().CurrentlySubmitting},
+
             clearRoom: () => {
                 try{get().client?.deactivate()}catch{};
 
@@ -106,6 +110,7 @@ export const useRoomStore = create<roomState>() (
                 set({ sec: 99999999 });
                 set({ pairProgramingMode: false });
                 set({ pairProgramingRole: null });
+                set({ CurrentlySubmitting: false });
             },
         }),
 
