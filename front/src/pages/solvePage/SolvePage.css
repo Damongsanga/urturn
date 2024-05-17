@@ -69,3 +69,11 @@
     overflow-y: auto;
 }
 
+.regularText { 
+    font-family: 'LINESeedKR-Rg' !important;
+    line-height: 1.2;
+}
+
+.CheckText {
+    margin-bottom: 0.8vh;
+}
