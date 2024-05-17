@@ -13,7 +13,7 @@ import {
 	FormField,
 	Segment,
 	Button,
-	Radio,
+	Radio, Popup,
 } from 'semantic-ui-react';
 import logo from '../../assets/images/logo.svg';
 import './WaitingPage.css';
@@ -115,6 +115,7 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 			console.log('Microphone toggled:', newMicStatus);
 		}
 	};
+
 	return (
 		<>
 			<div className='WaitingRoomBackground'>
@@ -276,20 +277,37 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 								</div>
 								{/* 시작 버튼 */}
 								<div className='StartButton'>
-									<Button
-										onClick={selectDifficulty}
-										className='StartButtonStyle'
-										style={{ width: '11.5vw', height: '8vh', fontSize: '1.3rem' }}
-									>
-										시작하기
-									</Button>
+									{roomStore.roomInfo?.host ? (
+										<Button
+											onClick={selectDifficulty}
+											className='StartButtonStyle'
+											style={{width: '11.5vw', height: '8vh', fontSize: '1.3rem'}}
+										>
+											시작하기
+										</Button>
+									) : (
+										<Popup
+											content='방장만 시작할 수 있습니다'
+											trigger={
+												<div>
+													<Button
+														disabled
+														className='StartButtonStyle'
+														style={{width: '11.5vw', height: '8vh', fontSize: '1.3rem'}}
+													>
+														시작하기
+													</Button>
+												</div>
+											}
+										/>
+									)}
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<video autoPlay={true} controls={true} ref={myVideoRef} style={{ display: 'none' }} />
-				<video autoPlay={true} controls={true} ref={otherVideoRef} style={{ display: 'none' }} />
+				<video autoPlay={true} controls={true} ref={myVideoRef} style={{display: 'none'}}/>
+				<video autoPlay={true} controls={true} ref={otherVideoRef} style={{display: 'none'}}/>
 			</div>
 		</>
 	);

@@ -52,12 +52,12 @@ export const FifthLandingPage = ({ isActive }: LandingProp) => {
 							<Header as='h1' textAlign='center' style={{ marginTop: '5vh' }}>
 								코드로 말하는 회고, GITHUB에 당신의 성장을 기록하세요. <br />
 							</Header>
-							<p style={{ textAlign: 'center' }}>
+							<p style={{ textAlign: 'center', lineHeight: '1.8'}}>
 								문제 풀이 후, 회고 페이지에서 라운드 별 성과를 확인하고 GITHUB에 자동으로 업로드 됩니다.
 								<br />
 								당신의 놀라운 발전을 쉽게 기록해봐요!
 							</p>
-							<small>* git 저장소를 등록해야만 저장할 수 있어요. </small>
+							<small>* GITHUB에 저장소를 등록해야만 저장할 수 있어요. </small>
 						</div>
 						<div ref={addToRefs} style={{ opacity: 0, marginTop: '-5vh' }}>
 							<Image src={hiFive} style= {{width: '23vw', height: 'auto'}}></Image>

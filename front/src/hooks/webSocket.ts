@@ -188,7 +188,7 @@ export const useWebSocket = () => {
                     consoleMsg += '정답입니다!\n\n\n';
                 }
                 else{
-                    consoleMsg += '오답입니다...\n\n\n';
+                    consoleMsg += '오답입니다\n\n\n';
                 }
 
                 const testcaseResults = data.testcaseResults;

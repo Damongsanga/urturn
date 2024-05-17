@@ -92,7 +92,7 @@ export default function SolvePage() {
 														<TableRow key={i}>
 															{/* <TableCell>{i + 1} 번 테스트 케이스</TableCell> */}
 															<TableCell>{testcase.stdin}</TableCell>
-															<TableCell>{testcase.expectedOutput}</TableCell>
+															<TableCell style={{ verticalAlign: 'top' }}>{testcase.expectedOutput}</TableCell>
 														</TableRow>
 													),
 												)}
@@ -151,12 +151,12 @@ export default function SolvePage() {
 									<div
 										style={{
 											padding: '12px',
-											fontSize: '1.1rem',
+											fontSize: '1.3rem',
 											overflowY: 'scroll',
 											height: '100%',
 										}}
 									>
-										<p style={{ whiteSpace: 'pre-wrap', overflowY: 'scroll' }}>
+										<p style={{ whiteSpace: 'pre-wrap' }}>
 											{roomStore.console}
 											<br />
 											<br />

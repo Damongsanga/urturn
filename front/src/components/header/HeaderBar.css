@@ -42,39 +42,41 @@
 }
 
 .FontColor {
-  color: white !important;
+  color: white; !important;
+}
+.FontColor2 {
+  color: white; !important;
 }
 
 .Main .ButtonColor {
-  background-color: #b7b7b7 !important;
-  color: white !important;
+  background-color: white !important;
+  border-color: white  !important;
 
+  color: black !important;
   font-size: 1.2rem !important;
 }
 
 .Main .ButtonColor:hover,
 .Main .ButtonColor:active  {
-  background-color: white !important; 
-  border-color: white  !important;
-
-  color: black !important;
+  background-color: #b7b7b7 !important;
+  color: white !important;
 
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
 }
 
 .Ide .ButtonColor {
-  background-color: #b7b7b7 !important;
-  color: white !important;
+  background-color: white !important;
+  border-color: white  !important;
+  color: black !important;
 
   font-size: 1.2rem !important;
 }
 
 .Ide .ButtonColor:hover,
 .Ide .ButtonColor:active  {
-  background-color: white !important; 
-  border-color: white  !important;
 
-  color: black !important;
+  background-color: #b7b7b7 !important;
+  color: white !important;
 
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
 }
