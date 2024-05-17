@@ -13,9 +13,26 @@ import './SolvePage.css';
 import { QuestionSideBar } from '../../components/questionSideBar/QuestionSideBar';
 import { FooterBar } from '../../components/footer/FooterBar';
 import { langOptions } from '../../types/lagnOptions';
+import { useEmojiStore } from '../../stores/emoji';
+import { useEffect } from 'react';
 
 export default function PairSolvePage() {
 	const roomStore = useRoomStore();
+	const emojiStore = useEmojiStore();
+
+	useEffect(() => {
+		handleResize();
+		window.addEventListener("resize", handleResize, false);
+	}, []);
+	const handleResize = () => {
+		const top = document.getElementById('mdSection')?.getBoundingClientRect().top;
+		const left = document.getElementById('mdSection')?.getBoundingClientRect().left;
+		const width = document.getElementById('mdSection')?.getBoundingClientRect().width;
+		const height = document.getElementById('mdSection')?.getBoundingClientRect().height;
+		if(top && left && width && height)
+			emojiStore.setMdInContainerInfo({ top, left, width, height });
+		console.log(top, left, width, height);
+	}
 
 	return (
 		<div className='Page'>
@@ -48,7 +65,7 @@ export default function PairSolvePage() {
 									)}
 								</div>
 							</div>
-							<div style={{ height: '100%', overflowY: 'auto', padding: '12px', fontSize: '1.3rem' }}>
+							<div id='mdSection' style={{ height: '100%', overflowY: 'auto', padding: '12px', fontSize: '1.3rem' }}>
 								{roomStore.questionIdx == -1 ? (
 									<div></div>
 								) : (

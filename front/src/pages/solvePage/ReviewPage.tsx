@@ -22,6 +22,7 @@ import 'allotment/dist/style.css';
 import './SolvePage.css';
 import { useRoomStore } from '../../stores/room';
 import Markdown from 'markdown-to-jsx';
+import { useEmojiStore } from '../../stores/emoji';
 
 let roundOptions = [
 	{ key: '', text: '', value: 0 }
@@ -29,6 +30,7 @@ let roundOptions = [
 
 export default function ReviewPage() {
 	const roomStore = useRoomStore();
+	const emojiStore = useEmojiStore();
 
 	const [activeItem, setActiveItem] = useState('keep');
 	const [activeQuestion, setActiveQuestion] = useState(1);
@@ -39,6 +41,21 @@ export default function ReviewPage() {
 		{ id: 2, keep: '', try: '' }
 	]);
 	// 문제 별 회고 저장
+
+	useEffect(() => {
+		setActiveQuestion(1);
+		handleResize();
+		window.addEventListener("resize", handleResize, false);
+	}, []);
+	const handleResize = () => {
+		const top = document.getElementById('mdSection')?.getBoundingClientRect().top;
+		const left = document.getElementById('mdSection')?.getBoundingClientRect().left;
+		const width = document.getElementById('mdSection')?.getBoundingClientRect().width;
+		const height = document.getElementById('mdSection')?.getBoundingClientRect().height;
+		if(top && left && width && height)
+			emojiStore.setMdInContainerInfo({ top, left, width, height });
+		console.log(top, left, width, height);
+	}
 
 	useEffect(() => {
 		roundOptions = [];
@@ -131,7 +148,7 @@ export default function ReviewPage() {
 									{roomStore.questionInfos && activeQuestion > 0 && roomStore.questionInfos[activeQuestion - 1].algoQuestionTitle}
 								</div>
 							</div>
-							<div style={{ height: '100%', overflowY: 'auto', padding:'12px', fontSize:'1.3rem' }}>
+							<div id='mdSection' style={{ height: '100%', overflowY: 'auto', padding:'12px', fontSize:'1.3rem' }}>
 							{
 								roomStore.questionInfos && activeQuestion > 0 &&
 								<Markdown>{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}</Markdown>
