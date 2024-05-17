@@ -97,9 +97,9 @@ export const FooterBar = ({ $mode, $reviewValues }: FooterProp) => {
 				{/* ide에 사용할 버튼 */}
 				{$mode === 1 && (
 					<MenuItem name='RunButton' className='RunButton' position='right'>
-						<Button size='large' className='RunButtonColor'>
-							코드 실행
-						</Button>
+						{/*<Button size='large' className='RunButtonColor'>*/}
+						{/*	코드 실행*/}
+						{/*</Button>*/}
 						{
 							roomStore.getPairProgramingRole() !== 'Navigator' ?
 								roomStore.getSec() <=10 ?
