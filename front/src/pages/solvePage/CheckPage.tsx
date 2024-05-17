@@ -129,10 +129,26 @@ export default function CheckPage() {
 							</div>
 							<Allotment vertical>
 								<Allotment.Pane minSize={325}>
-									<div style={{ height: '100%', width: '100%' }}>{/* <CodeEditor/> */}</div>
+									<div style={{ height: '100%', width: '100%' }}>
+										<div
+											style={{
+												padding: '12px',
+												fontSize: '1.3rem',
+												overflowY: 'scroll',
+												height: '100%',
+											}}
+										>
+											<p>두 알고리즘 문제를 어떻게 풀지 고민해보세요!</p>
+											<p>릴레이 모드에서 페어와 함께 두 문제를 풀어보세요.</p>
+											<p>한 문제를 완료한다면 페어 프로그래밍 모드로 전환됩니다.</p>
+											<p>페어 프로그래밍 모드에서 남은 문제를 완수하세요.</p>
+											<p>음성 채팅과 이모티콘을 통해 소통하여 효과적으로 문제에 접근할 수 있습니다.</p>
+											<p>마지막으로 회고를 진행한 후 깃허브 레포지토리에 편하게 업로드하세요!</p>
+										</div>
+										{/* <CodeEditor/> */}</div>
 								</Allotment.Pane>
 								<Allotment.Pane minSize={125}>
-									<div className='ReviewBar' style={{ height: '50px', backgroundColor: '#000034' }}>
+									<div className='ReviewBar' style={{height: '50px', backgroundColor: '#000034' }}>
 										<div
 											style={{
 												width: '98%',
@@ -151,7 +167,7 @@ export default function CheckPage() {
 											height: '100%',
 										}}
 									>
-										<p>두 문제를 모두 확인했으면, 시작하기 버튼을 눌러주세요.</p>
+										<p>두 문제를 모두 확인했으면, 준비하기 버튼을 눌러주세요.</p>
 									</div>
 								</Allotment.Pane>
 							</Allotment>
