@@ -243,13 +243,11 @@ export const useWebSocket = () => {
                             language: convertUppserToLang(userCode.language)
                         })
                     })
-                    if(data[idx].code){
-                        tmp.push({
-                            title: "정답",
-                            content: data[idx].code,
-                            language: convertUppserToLang(data[idx].language)
-                        })
-                    }
+                    tmp.push({
+                        title: "정답",
+                        content: data[idx].code,
+                        language: convertUppserToLang(data[idx].language)
+                    })
                     roomStore.getReviewInfos().push(tmp);
                     console.log("reviewTmp: ", tmp)
                 });

@@ -13,6 +13,8 @@ interface rtcState {
     speakerVolume: number;
     publisher: Publisher | null,
 
+    
+
     setMicrophoneVolume: (volume: number) => void;
     getMicrophoneVolume: () => number;
     setSpeakerVolume: (volume: number) => void;

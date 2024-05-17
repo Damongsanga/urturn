@@ -13,15 +13,28 @@ import './SolvePage.css';
 import { FooterBar } from '../../components/footer/FooterBar';
 import { useEffect, useState } from 'react';
 import { QuestionSideBar } from '../../components/questionSideBar/QuestionSideBar';
+import { useEmojiStore } from '../../stores/emoji';
 
 export default function CheckPage() {
 	const roomStore = useRoomStore();
+	const emojiStore = useEmojiStore();
 
 	const [activeQuestion, setActiveQuestion] = useState(1);
 
 	useEffect(() => {
 		setActiveQuestion(1);
+		handleResize();
+		window.addEventListener("resize", handleResize, false);
 	}, []);
+	const handleResize = () => {
+		const top = document.getElementById('mdSection')?.getBoundingClientRect().top;
+		const left = document.getElementById('mdSection')?.getBoundingClientRect().left;
+		const width = document.getElementById('mdSection')?.getBoundingClientRect().width;
+		const height = document.getElementById('mdSection')?.getBoundingClientRect().height;
+		if(top && left && width && height)
+			emojiStore.setMdInContainerInfo({ top, left, width, height });
+		console.log(top, left, width, height);
+	}
 
 	return (
 		<div className='Page'>
@@ -76,7 +89,7 @@ export default function CheckPage() {
 										roomStore.questionInfos[activeQuestion - 1].algoQuestionTitle}
 								</div>
 							</div>
-							<div style={{ height: '100%', overflowY: 'auto', padding: '12px', fontSize: '1.3rem' }}>
+							<div id='mdSection' style={{ height: '100%', overflowY: 'auto', padding: '12px', fontSize: '1.3rem' }}>
 								{roomStore.questionInfos && activeQuestion > 0 && (
 									<Markdown>
 										{roomStore.questionInfos[activeQuestion - 1].algoQuestionContent}
