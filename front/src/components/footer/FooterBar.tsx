@@ -2,6 +2,7 @@ import {
 	Button,
 	Menu,
 	MenuItem,
+	Popup,
 } from 'semantic-ui-react';
 import './FooterBar.css';
 import { useRoomStore } from '../../stores/room';
@@ -125,9 +126,25 @@ export const FooterBar = ({ $mode, $reviewValues }: FooterProp) => {
 				{/* 회고에 사용할 자리 */}
 				{$mode === 2 && (
 					<MenuItem name='RunButton' className='RunButton' position='right'>
-						<Button onClick={submitReview} size='large' className='ReviewButtonColor'>
-							회고 저장하기
-						</Button>
+						{roomStore.roomInfo?.host ? (
+							<Button onClick={submitReview} size='large' className='ReviewButtonColor'>
+								회고 저장하기
+							</Button>
+						) : (
+							<Popup
+								content='방장만 제출할 수 있습니다'
+								trigger={
+									<div>
+										<Button
+											disabled
+											className='ReviewButtonColor'
+										>
+											회고 저장하기
+										</Button>
+									</div>
+								}
+							/>
+						)}
 					</MenuItem>
 				)}
 			</Menu>
