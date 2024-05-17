@@ -49,7 +49,9 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review, $mode }: HeaderProp) 
 			setSec((roomStore.sec % 60).toString().padStart(2, '0'));
 		}
 	}, [roomStore.sec])
-
+	const timeStyle = {
+		color: roomStore.sec <= 30 ? 'red' : 'white'
+	};
 	// uri
 	// const gitRepo = () => {
 	// 	location.href = `https://github.com/login/oauth/authorize?client_id=a82095fde8aa68bb396d&scope=repo&redirect_uri=http://localhost:5173/auth/github/upload`;
@@ -126,7 +128,7 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review, $mode }: HeaderProp) 
 						$mode !== 0 &&
 						<MenuMenu position='right'>
 							<MenuItem name='Rounds'>
-								<Header as='h3' textAlign='center' className='FontColor'>
+								<Header as='h3' textAlign='center' className='FontColor2' style={timeStyle}>
 									{min} : {sec}
 								</Header>
 							</MenuItem>

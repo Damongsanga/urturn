@@ -42,7 +42,10 @@
 }
 
 .FontColor {
-  color: white !important;
+  color: white; !important;
+}
+.FontColor2 {
+  color: white; !important;
 }
 
 .Main .ButtonColor {
