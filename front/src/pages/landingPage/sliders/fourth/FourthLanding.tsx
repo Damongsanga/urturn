@@ -45,7 +45,7 @@ export const FourthLandingPage = ({ isActive }: LandingProp) => {
 							<Header as='h1' textAlign='left' style={{ marginTop: '5vh' }}>
 								답답하신가요? 이모티콘을 사용해봐요!
 							</Header>
-							<p style={{ textAlign: 'left' }}>
+							<p style={{ textAlign: 'left', lineHeight: '1.8' }}>
 								페어의 코드가 깔끔하고 기발한가요? 아니면 코드에서 냄새가 나나요? <br />
 								이모티콘을 사용하여 감정을 표현해보세요. <br />
 							</p>

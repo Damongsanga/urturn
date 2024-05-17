@@ -120,6 +120,7 @@ export default function PairSolvePage() {
 												fontSize: '20px',
 												fontWeight: 'bold',
 												color: 'white',
+												padding: '12px',
 											}}
 										>
 											Console
@@ -128,12 +129,12 @@ export default function PairSolvePage() {
 									<div
 										style={{
 											padding: '12px',
-											fontSize: '1.1rem',
+											fontSize: '1.3rem',
 											overflowY: 'scroll',
 											height: '100%',
 										}}
 									>
-										<p style={{ whiteSpace: 'pre-wrap', overflowY: 'scroll' }}>
+										<p style={{ whiteSpace: 'pre-wrap' }}>
 											{roomStore.console}
 											<br />
 											<br />

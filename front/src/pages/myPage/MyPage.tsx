@@ -9,29 +9,30 @@ import {
 	Header,
 	Pagination,
 	Button,
-	Modal, Input,
+	Modal,
+	Input,
 } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import { HeaderBar } from '../../components/header/HeaderBar';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 // import ProgressBar from '@ramonak/react-progress-bar';
 import './MyPage.css';
-import {MemberInfo} from "../../types/memberInfoTypes.ts";
-import {fetchMemberInfo, updateRepository} from "../../utils/api/memberAPI.ts";
-import {useAxios} from "../../utils/useAxios.ts";
-import {Popup} from "semantic-ui-react";
-import {HistoryEntry} from "../../types/historyTypes.ts";
-import {fetchHistory} from "../../utils/api/historyAPI.ts";
+import { MemberInfo } from '../../types/memberInfoTypes.ts';
+import { fetchMemberInfo, updateRepository } from '../../utils/api/memberAPI.ts';
+import { useAxios } from '../../utils/useAxios.ts';
+import { Popup } from 'semantic-ui-react';
+import { HistoryEntry } from '../../types/historyTypes.ts';
+import { fetchHistory } from '../../utils/api/historyAPI.ts';
 
 export const MyPage = () => {
 	const axios = useAxios(true);
 	const [memberInfo, setMemberInfo] = useState<MemberInfo | null>(null);
-	const [repository, setRepository] = useState<string>( '');
+	const [repository, setRepository] = useState<string>('');
 	const [modalOpen, setModalOpen] = useState(false);
 	const [showPopup, setShowPopup] = useState(false);
 	const [pageState, setPageState] = useState({
 		activePage: 1,
-		totalPages: 0
+		totalPages: 0,
 	});
 	const [historyData, setHistoryData] = useState<HistoryEntry[]>([]);
 	// const [page, setPage] = useState(0);
@@ -49,9 +50,9 @@ export const MyPage = () => {
 			try {
 				const result = await fetchHistory(pageState.activePage - 1, 3, axios);
 				setHistoryData(result.content);
-				setPageState(prev => ({
+				setPageState((prev) => ({
 					...prev,
-					totalPages: result.totalPages
+					totalPages: result.totalPages,
 				}));
 			} catch (error) {
 				console.error('Failed to fetch history:', error);
@@ -77,11 +78,15 @@ export const MyPage = () => {
 	}, [modalOpen]);
 
 	const handleRepositoryUpdate = async () => {
-		console.log("repo ",repository);
+		console.log('repo ', repository);
+		if (!repository) {
+			alert('repository 명을 입력 해 주세요');
+			return;
+		}
 		try {
 			const updatedRepository = await updateRepository(axios, repository);
 			// set 고려할 점... store?
-			setMemberInfo(prevInfo => {
+			setMemberInfo((prevInfo) => {
 				if (!prevInfo) {
 					return {
 						id: null,
@@ -89,7 +94,7 @@ export const MyPage = () => {
 						profileImage: null,
 						repository: updatedRepository,
 						exp: null,
-						level: null
+						level: null,
 					};
 				}
 				return { ...prevInfo, repository: updatedRepository };
@@ -157,10 +162,7 @@ export const MyPage = () => {
 									alignItems: 'center',
 								}}
 							>
-								<Image
-									size='tiny'
-									src={memberInfo?.profileImage}
-								/>
+								<Image size='tiny' src={memberInfo?.profileImage} />
 								<CardHeader className='CardTextColor' textAlign='center' style={{ marginTop: '3vh' }}>
 									{memberInfo?.nickname}
 								</CardHeader>
@@ -192,17 +194,27 @@ export const MyPage = () => {
 							{/*</CardContent>*/}
 							{/* 깃허브 주소 */}
 							<CardContent className='ContentBorder'>
-								<a href={`https://github.com/${memberInfo?.repository}/`} target='_blank' rel='noopener noreferrer'>
-									<CardHeader className='CardTextColor' textAlign='center'>Github
-										Repository</CardHeader>
-								</a>
+								<CardHeader className='CardTextColor' textAlign='center'>
+									Github Repository
+								</CardHeader>
 								{/*null 일때 텍스트 중요 말풍선으로 빼는 식?*/}
-								<CardDescription className='CardTextColor'
-												 textAlign='center'>{memberInfo?.repository ? memberInfo.repository : '레포지토리를 등록해 주세요'}</CardDescription>
-								<Popup content='회고를 업로드할 레포지토리를 생성 후 등록해 주세요'
-									   open={showPopup}
-									   position='top left'
-									   trigger={<Button className='EditButton' floated='right' onClick={() => setModalOpen(true)}>등록</Button>}/>
+								<CardDescription className='CardTextColor' textAlign='center'>
+									{memberInfo?.repository ? memberInfo.repository : '레포지토리를 등록해 주세요'}
+								</CardDescription>
+								<Popup
+									content='회고를 업로드할 레포지토리를 생성 후 등록해 주세요'
+									open={showPopup}
+									position='top center'
+									trigger={
+										<Button
+											className='EditButton'
+											floated='right'
+											onClick={() => setModalOpen(true)}
+										>
+											등록
+										</Button>
+									}
+								/>
 							</CardContent>
 						</Card>
 					</Card>
@@ -254,21 +266,35 @@ export const MyPage = () => {
 					{/*</Segment>*/}
 					{historyData.length > 0 ? (
 						historyData.map((entry, index) => (
-							<Segment key={index} className={`Questions ${getSegmentClassName(entry.result)}`} size='small'>
-								<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>
-									{entry.result}
-								</Header>
-								<Image
-									size='tiny'
-									src={entry.pair.profileImage}
-									style={{ marginLeft: '2vw' }}
-								/>
+							<Segment
+								key={index}
+								className={`Questions ${getSegmentClassName(entry.result)}`}
+								size='small'
+							>
+								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+									<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>
+										{entry.result}
+									</Header>
+									<Header as='h4' className='CardTextColor' style={{ marginTop: '5px' }}>
+										{'with '}
+										{entry.pair.nickname}
+									</Header>
+								</div>
+								<Image size='tiny' src={entry.pair.profileImage} style={{ marginLeft: '2vw' }} />
 								<SegmentGroup className='QuestionName'>
-									<Segment textAlign='right' className={`CardTextColor ${getSegmentClassName(entry.result)}`}>
-										{entry.problem1.title}
+									<Segment
+										className={`CardTextColor ${getSegmentClassName(entry.result)} QuestionAlign`}
+									>
+										<span>{entry.problem1.title}</span>
+										<span>{entry.problem1.level}</span>
 									</Segment>
-									<Segment textAlign='right' className={`CardTextColor ContentBorder ${getSegmentClassName(entry.result)}`}>
-										{entry.problem2.title}
+									<Segment
+										className={`CardTextColor ContentBorder ${getSegmentClassName(
+											entry.result,
+										)} QuestionAlign`}
+									>
+										<span>{entry.problem2.title}</span>
+										<span>{entry.problem2.level}</span>
 									</Segment>
 								</SegmentGroup>
 							</Segment>
@@ -302,7 +328,6 @@ export const MyPage = () => {
 							style={{ marginTop: '3vh' }}
 						/>
 					)}
-
 				</div>
 			</div>
 			<Modal open={modalOpen} onClose={() => setModalOpen(false)} size='tiny'>
@@ -320,7 +345,9 @@ export const MyPage = () => {
 				</Modal.Content>
 				<Modal.Actions>
 					<Button onClick={() => setModalOpen(false)}>취소</Button>
-					<Button className='EditButton' onClick={handleRepositoryUpdate}>수정</Button>
+					<Button className='EditButton' onClick={handleRepositoryUpdate}>
+						수정
+					</Button>
 				</Modal.Actions>
 			</Modal>
 		</div>
