@@ -267,16 +267,29 @@ export const MyPage = () => {
 								className={`Questions ${getSegmentClassName(entry.result)}`}
 								size='small'
 							>
-								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-									<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px' }}>
-										{entry.result}
-									</Header>
-									<Header as='h4' className='CardTextColor' style={{ marginTop: '5px' }}>
+								<div
+									style={{
+										display: 'flex',
+										flexDirection: 'column',
+										alignItems: 'center',
+										justifyContent: 'center',
+									}}
+								>
+									<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+										<Header as='h2' className='CardTextColor' style={{ marginBottom: '0px', marginTop :'8px' }} >
+											{entry.result}
+										</Header>
+										<Image
+											size='tiny'
+											src={entry.pair.profileImage}
+											style={{ marginLeft: '2vw' }}
+										/>
+									</div>
+									<Header as='h4' className='CardTextColor' style={{ marginTop: '1vh' }}>
 										{'with '}
 										{entry.pair.nickname}
 									</Header>
 								</div>
-								<Image size='tiny' src={entry.pair.profileImage} style={{ marginLeft: '2vw' }} />
 								<SegmentGroup className='QuestionName'>
 									<Segment
 										className={`CardTextColor ${getSegmentClassName(entry.result)} QuestionAlign`}
