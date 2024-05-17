@@ -101,6 +101,11 @@
   border: 3px solid white !important;
 }
 
+.QuestionAlign {
+  display: flex;
+  justify-content: space-between;
+}
+
 .Success {
   background-color: #5EC09A !important;
 }
