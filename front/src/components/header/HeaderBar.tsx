@@ -50,7 +50,7 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review, $mode }: HeaderProp) 
 		}
 	}, [roomStore.sec])
 	const timeStyle = {
-		color: roomStore.sec <= 30 ? 'red' : 'white'
+		color: roomStore.sec <= 10 ? 'red' : 'white'
 	};
 	// uri
 	// const gitRepo = () => {
