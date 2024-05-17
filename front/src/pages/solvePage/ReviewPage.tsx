@@ -153,7 +153,7 @@ export default function ReviewPage() {
 														<TableRow key={i}>
 															{/* <TableCell>{i + 1} 번 테스트 케이스</TableCell> */}
 															<TableCell>{testcase.stdin}</TableCell>
-															<TableCell>{testcase.expectedOutput}</TableCell>
+															<TableCell style={{ verticalAlign: 'top' }}>{testcase.expectedOutput}</TableCell>
 														</TableRow>
 													))
 											}
