@@ -132,7 +132,7 @@ export const HeaderBar = ({ $main, $myPage, $ide, $review, $mode }: HeaderProp) 
 							</MenuItem>
 							<MenuItem name='Rounds'>
 								<Header as='h3' textAlign='center' className='FontColor'>
-									{'라운드'}
+									{'라운드 '}
 									{roomStore.round}
 								</Header>
 							</MenuItem>
