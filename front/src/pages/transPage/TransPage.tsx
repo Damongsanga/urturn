@@ -50,7 +50,7 @@ export const TransPage = () => {
 		}
 
 		if (next === 'myPage') {
-			sec.current = 5;
+			sec.current = 6;
 		}
 
 		const timer = setInterval(() => {

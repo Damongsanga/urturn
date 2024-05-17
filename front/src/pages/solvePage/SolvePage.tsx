@@ -138,7 +138,7 @@ export default function SolvePage() {
 											height: '100%',
 										}}
 									>
-										<p style={{ whiteSpace: 'pre-wrap', overflowY: 'scroll' }}>
+										<p style={{ whiteSpace: 'pre-wrap' }}>
 											{roomStore.console}
 											<br />
 											<br />
