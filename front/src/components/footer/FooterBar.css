@@ -49,16 +49,16 @@
 
 .RunButtonColor:hover,
 .RunButtonColor:active  {
-  background-color: white !important; 
-  border: solid 1px #b7b7b7  !important;
+  background-color: #5c5c96 !important;
+  border-color: #5c5c96 !important;
 
-  color: black !important;
+  color: white !important;
 
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
 }
 
 .ReviewButtonColor {
-  background-color: #b7b7b7 !important;
+  background-color: #000034 !important;
   color: white !important;
 
   margin-left: 2vw !important;
@@ -66,9 +66,10 @@
 
 .ReviewButtonColor:hover,
 .ReviewButtonColor:active  {
-  background-color: white !important; 
-  border: solid 1px #b7b7b7 !important;
-  color: black !important;
+  background-color: #5c5c96 !important;
+  border-color: #5c5c96 !important;
+
+  color: white !important;
 
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
 }
