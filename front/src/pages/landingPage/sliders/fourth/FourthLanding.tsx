@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { Header, Image } from 'semantic-ui-react';
 import './FourthLanding.css';
 
-import pair from '../../../../assets/images/pair.png';
+import emoticon from '../../../../assets/images/emoticon.gif';
 
 interface LandingProp {
 	isActive?: boolean;
@@ -51,7 +51,7 @@ export const FourthLandingPage = ({ isActive }: LandingProp) => {
 							</p>
 						</div>
 						<div ref={addToRefs} style={{ opacity: 0 }}>
-							<Image src={pair} size='large'></Image>
+							<Image src={emoticon} size='large'></Image>
 						</div>
 					</div>
 				</div>
