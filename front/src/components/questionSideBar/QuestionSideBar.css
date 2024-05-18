@@ -11,8 +11,10 @@
   width: 30vw !important;
 }
 
-.Mic:hover {
-  background-color: #b7b7b7 !important
+
+.Mic {
+  /*background-color: #b7b7b7 !important*/
+  color: white !important
 }
 
 .ui.right.center.popup {

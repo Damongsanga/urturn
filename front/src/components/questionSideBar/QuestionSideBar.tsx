@@ -170,7 +170,7 @@ export const QuestionSideBar = () => {
 								className='Mic'
 								name='microphone'
 								size='big'
-								color='blue'
+								color='white'
 							/>
 						</MenuItem>
 					}
