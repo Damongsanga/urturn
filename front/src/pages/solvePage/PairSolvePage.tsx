@@ -31,7 +31,6 @@ export default function PairSolvePage() {
 		const height = document.getElementById('mdSection')?.getBoundingClientRect().height;
 		if(top && left && width && height)
 			emojiStore.setMdInContainerInfo({ top, left, width, height });
-		console.log(top, left, width, height);
 	}
 
 	return (

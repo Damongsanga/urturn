@@ -70,7 +70,6 @@ export const QuestionSideBar = () => {
 				  </div>
 				);
 			};
-			console.log("???")
 			addReaction({ ReactionObj, animationDuration: 5 });
 		}
 		else if(key==='dislike'){

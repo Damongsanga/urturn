@@ -55,7 +55,6 @@ export default function ReviewPage() {
 		const height = document.getElementById('mdSection')?.getBoundingClientRect().height;
 		if(top && left && width && height)
 			emojiStore.setMdInContainerInfo({ top, left, width, height });
-		console.log(top, left, width, height);
 	}
 
 	useEffect(() => {
@@ -69,7 +68,6 @@ export default function ReviewPage() {
 			});
 		}
 		const initActiveRound = roomStore.getReviewInfos()[activeQuestion-1].length - 1;
-		console.log(initActiveRound);
 		setActiveRound(initActiveRound);
 	}, [activeQuestion])
 
@@ -102,7 +100,6 @@ export default function ReviewPage() {
 				item.id === questionId ? { ...item, [fieldName]: event.target.value } : item
 			)
 		);
-		console.log(inputValues)
 	};
 	
 	return (

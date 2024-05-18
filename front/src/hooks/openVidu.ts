@@ -35,7 +35,6 @@ export function useOpenVidu() {
             const response = await axios.post('/sessions');
             const sessionId = response.data;
             rtcStore.setSessionId(sessionId);
-            console.log("sessionId: ", sessionId);
             return sessionId;
         } catch (error) {
             console.error('세션 열기 실패:', error);

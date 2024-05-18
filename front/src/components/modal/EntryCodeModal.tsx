@@ -17,10 +17,6 @@ export const EntryCodeModal = ({ changeModal, successConnect }: ModalProps) => {
 	const webSocket = useWebSocket();
 
 	const checkCode = () => {
-		console.log("참가자 checkCode 디버그");
-		console.log(authStore.accessToken);
-		console.log(authStore.memberId);
-		console.log(entryCode);
 		axios.get(`/room/enter/${entryCode}`)
 		.then((res: { data: string }) => {
 			const roomId = res.data;

@@ -33,14 +33,6 @@ export const useWebSocket = () => {
                 }
                 else if (roomStore.getSec() <= 0) {
                     if(roomStore.getPairProgramingMode()===false || roomStore.getPairProgramingRole() === 'Driver'){
-                        console.log("switchCode")
-                        console.log("code: " + roomStore.getCode())
-                        console.log("roomId: " + roomStore.getRoomInfo()?.roomId)
-                        console.log("round: " + roomStore.getRound())
-                        console.log("algoQuestionId: " + roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId)
-                        console.log("isHost: " + roomStore.getRoomInfo()?.host)
-                        console.log("isPair: " + roomStore.getPairProgramingMode())
-                        console.log("language: " + convertLangToUpper(roomStore.getLang()))
                         roomStore.getClient()?.publish({
                             destination: '/app/switchCode',
                             body: JSON.stringify({ 
@@ -59,8 +51,6 @@ export const useWebSocket = () => {
             }, 1000)
         }
         
-
-        console.log("웹소켓 요청: " + url + '/ws');
         const client = new Client({
             brokerURL: url + '/ws',
             
@@ -69,7 +59,6 @@ export const useWebSocket = () => {
             },
             
             debug: function (str: string) {
-            console.log("debug:" + str);
             },
             reconnectDelay: 5000000, //자동 재 연결
             heartbeatIncoming: 4000,
@@ -78,18 +67,15 @@ export const useWebSocket = () => {
 
         client.onConnect = function (frame) {
             const subscribeRoomInfo = client.subscribe('/user/' + userId + '/roomInfo', (msg) => {
-                console.log('Received message: roomInfo' + msg.body);
                 const roomInfo = JSON.parse(msg.body);
                 roomStore.setRoomInfo(roomInfo);
             });
             const subscribeUserInfo = client.subscribe('/user/' + userId + '/userInfo', (msg) => {
-                console.log('Received message: userInfo' + msg.body);
                 const userInfo = JSON.parse(msg.body);
                 if(roomStore.getRoomInfo()?.host && userInfo.relativeUserNickName===null){
                     openVidu.masterCreate();
                 }
                 if(roomStore.getRoomInfo()?.host && userInfo.relativeUserNickName){
-                    console.log("sendOVSession : " + JSON.stringify({ roomId: roomStore.getRoomInfo()?.roomId, sessionId: rtcStore.getSessionId() }));
                     client.publish({
                         destination: '/app/sendOVSession',
                         body: JSON.stringify({
@@ -101,7 +87,6 @@ export const useWebSocket = () => {
                 roomStore.setUserInfo(userInfo);
             });
             const publishTimer = setInterval(() => {
-                console.log("으아",subscribeRoomInfo, subscribeUserInfo);
                 if(subscribeRoomInfo.id && subscribeUserInfo.id){
                     clearInterval(publishTimer);
                     if(roomId===null){
@@ -124,14 +109,12 @@ export const useWebSocket = () => {
             }, 1000)
 
             client.subscribe('/user/' + userId + '/receiveOVSession', (msg) => {
-                console.log('Received message: receiveOVSession' + msg.body);
                 const sessionId = msg.body;
                 rtcStore.setSessionId(sessionId);
                 openVidu.partnerJoin(sessionId);
             })
             client.subscribe('/user/' + userId + '/questionInfo', (msg) => {
                 const questionInfos: questionInfo[] = JSON.parse(msg.body);
-                console.log('Received message: questionInfo' + msg.body);
                 questionInfos.forEach(
                     async (questionInfo: questionInfo) => {
                         const content = await loadMarkdownFromCDN(questionInfo.algoQuestionUrl);
@@ -143,14 +126,12 @@ export const useWebSocket = () => {
             });
             client.subscribe('/user/' + userId + '/startToSolve', () => {
                 const idx = roomStore.getRoomInfo()?.host ? 0 : 1;
-                console.log('idx: ' + idx);
                 roomStore.setQuestionIdx(idx);
                 setTimer(MAX_TIME);
                 navi('/trans/solve');
             });
             client.subscribe('/user/' + userId + '/switchCode', (msg) => {
                 const data = JSON.parse(msg.body);
-                console.log('Received message: switchCode' + msg.body);
                 roomStore.setCode(data.code);
                 roomStore.setRound(data.round);
                 roomStore.setLang(convertUppserToLang(data.language));
@@ -161,24 +142,19 @@ export const useWebSocket = () => {
                 navi('/trans/solveSwitch');
             });
             client.subscribe('/user/' + userId + '/switchRole', (msg) => {
-                console.log('Received message: switchRole' + msg.body);
                 const round = Number(msg.body);
                 roomStore.setRound(round);
                 if(roomStore.getPairProgramingRole() === 'Driver'){
                     roomStore.setPairProgramingRole('Navigator');
-                    console.log("역할: Navigator");
-                    
                 }
                 else if(roomStore.getPairProgramingRole() === 'Navigator'){
                     roomStore.setPairProgramingRole('Driver');
-                    console.log("역할: Driver");
                 }
                 setTimer(MAX_TIME);
                 navi('/trans/pairSolveSwitch');
             })
             client.subscribe('/user/' + userId + '/submit/result', (msg) => {
                 roomStore.setCurrentlySubmitting(false);
-                console.log('Received message: submit/result' + msg.body);
                 const data = JSON.parse(msg.body);
                 const result = data.result;
 
@@ -211,11 +187,9 @@ export const useWebSocket = () => {
             })
             client.subscribe('/user/' + userId + '/role', (msg) => {
                 roomStore.setCurrentlySubmitting(false);
-                console.log('Received message: submit/role' + msg.body);
                 const role = msg.body;
                 roomStore.setPairProgramingMode(true);
                 roomStore.setPairProgramingRole(role);
-                console.log('role: ' + role);
                 if(role==='Navigator'){
                     const idx = roomStore.getQuestionIdx() === 0 ? 1 : 0;
                     roomStore.setQuestionIdx(idx);
@@ -228,7 +202,6 @@ export const useWebSocket = () => {
                 }, 2000)
             })
             client.subscribe('/user/' + userId + '/showRetroCode', (msg) => {
-                console.log('Received message: showRetroCode' + msg.body);
 
                 const data = JSON.parse(msg.body);
        
@@ -249,7 +222,6 @@ export const useWebSocket = () => {
                         language: convertUppserToLang(data[idx].language)
                     })
                     roomStore.getReviewInfos().push(tmp);
-                    console.log("reviewTmp: ", tmp)
                 });
                 roomStore.setPairProgramingRole('Navigator');
                 roomStore.setSec(0);
@@ -274,14 +246,11 @@ export const useWebSocket = () => {
                 }
             })
 
-            console.log('Connected: ' + frame);
 
         };
         
-        client.onStompError = function (frame) {
-            console.log('Broker reported error: ' + frame.headers['message']);
-            console.log('Additional details: ' + frame.body);
-        };
+        // client.onStompError = function (frame) {
+        // };
 
         client.activate()
         
