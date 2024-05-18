@@ -8,9 +8,11 @@ import { useEffect, useState} from "react";
 import { AnimationContainer, useReactionAnimation } from "reaction-animation";
 //import { AngryReactionObj, DislikeReactionObj, HahaReactionObj, LikeReactionObj, SadReactionObj, WowReactionObj } from "../emoji/emojiElement";
 
+const emojiSize = '2.5rem';
+
 let ReactionObj = () => {
 	return (
-	  <div>
+	  <div style={{ fontSize: emojiSize }}>
 		👍
 	  </div>
 	);
@@ -63,7 +65,7 @@ export const QuestionSideBar = () => {
 		if(key==='like'){
 			ReactionObj = () => {
 				return (
-				  <div>
+				  <div style={{ fontSize: emojiSize }}>
 					👍
 				  </div>
 				);
@@ -74,8 +76,8 @@ export const QuestionSideBar = () => {
 		else if(key==='dislike'){
 			ReactionObj = () => {
 				return (
-				  <div>
-					👎
+				  <div style={{ fontSize: emojiSize }}>
+					💩
 				  </div>
 				);
 			};
@@ -84,8 +86,8 @@ export const QuestionSideBar = () => {
 		else if(key==='angry'){
 			ReactionObj = () => {
 				return (
-				  <div>
-					😠
+				  <div style={{ fontSize: emojiSize }}>
+					😵
 				  </div>
 				);
 			};
@@ -94,7 +96,7 @@ export const QuestionSideBar = () => {
 		else if(key==='haha'){
 			ReactionObj = () => {
 				return (
-				  <div>
+				  <div style={{ fontSize: emojiSize }}>
 					😂
 				  </div>
 				);
@@ -104,8 +106,8 @@ export const QuestionSideBar = () => {
 		else if(key==='wow'){
 			ReactionObj = () => {
 				return (
-				  <div>
-					😮
+				  <div style={{ fontSize: emojiSize }}>
+					🍝
 				  </div>
 				);
 			};
@@ -114,8 +116,8 @@ export const QuestionSideBar = () => {
 		else if(key==='sad'){
 			ReactionObj = () => {
 				return (
-				  <div>
-					😭
+				  <div style={{ fontSize: emojiSize }}>
+					😈
 				  </div>
 				);
 			};
@@ -124,7 +126,7 @@ export const QuestionSideBar = () => {
 		else if(key==='heart'){
 			ReactionObj = () => {
 				return (
-				  <div>
+				  <div style={{ fontSize: emojiSize }}>
 					❤️
 				  </div>
 				);
@@ -182,7 +184,9 @@ export const QuestionSideBar = () => {
 								{
 									Object.keys(emojis).map((key) => (
 										<MenuItem key={key} onClick={() => sendEmoji(key)}>
+											<div style={{ fontSize: '2.5rem' }}>
 											{emojis[key as keyof typeof emojis]}
+											</div>
 										</MenuItem>
 									))
 								}

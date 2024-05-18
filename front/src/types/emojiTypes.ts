@@ -5,12 +5,12 @@ type Emojis = {
 
 export const emojis: Emojis = {
     like: '👍',
-    dislike: '👎',
-    angry: '😠',
+    angry: '😵',
     haha: '😂',
-    wow: '😮',
-    sad: '😭',
-    heart: '❤️'
+    wow: '🍝',
+    heart: '❤️',
+    sad: '😈',
+    dislike: '💩',
 }
 
 export interface MarkDownContainerInfo{
