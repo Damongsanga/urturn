@@ -18,8 +18,11 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "typeRoots": [ "./types", "./node_modules/@types"]
   },
   "include": ["src"],
+  "exclude": ["node_modules", "typings"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

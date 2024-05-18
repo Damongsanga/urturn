@@ -1,24 +1,139 @@
 import { Menu, Popup, Header, Grid, GridRow, GridColumn,  Icon, MenuItem  } from "semantic-ui-react";
 import './QuestionSideBar.css'
 import { useRoomStore } from "../../stores/room";
-//import { useRtcStore } from "../../stores/rtc";
+import { useRtcStore } from "../../stores/rtc";
+import { emojis } from "../../types/emojiTypes";
+import { useEmojiStore } from "../../stores/emoji";
+import { useEffect, useState} from "react";
+import { AnimationContainer, useReactionAnimation } from "reaction-animation";
+//import { AngryReactionObj, DislikeReactionObj, HahaReactionObj, LikeReactionObj, SadReactionObj, WowReactionObj } from "../emoji/emojiElement";
 
-// const options = [
-// 	{ key: 1, text: 'Option 1', value: 1 },
-// 	{ key: 2, text: 'Option 2', value: 2 },
-// 	// 추가 옵션...
-//   ];
+const emojiSize = '2.5rem';
+
+let ReactionObj = () => {
+	return (
+	  <div style={{ fontSize: emojiSize }}>
+		👍
+	  </div>
+	);
+};
 
 export const QuestionSideBar = () => {
 	const roomStore = useRoomStore();
-	//const rtcStore = useRtcStore();
+	const rtcStore = useRtcStore();
+	const emojiStore = useEmojiStore();
 
-	// const sendEmoji = (emoji: number) => {
-	// 	rtcStore.getOpenVidu()?.session.signal({
-	// 		type: 'emoji',
-	// 		data: String(emoji),
-	// 	})
-	// }
+	const { reactionDetails, addReaction } = useReactionAnimation();
+
+	const [emojiFlux, setEmojiFlux] = useState<string>('');
+
+	useEffect(() => {
+		if(rtcStore.getOpenVidu()?.session.off('signal:emoji'))
+		rtcStore.getOpenVidu()?.session.on('signal:emoji', (event) => {
+			if(event.data)
+				setEmojiFlux(event.data);
+		})
+	}, [])
+
+	useEffect(() => {
+		const key = emojiFlux;
+		setEmojiFlux('');
+
+		printEmoji(key);
+	}, [emojiFlux])
+
+	const sendEmoji = (key: string) => {
+		sendEmojiOV(key);
+		//printEmoji(key);
+	}
+
+	const sendEmojiOV = async (key: string) => {
+		rtcStore.getOpenVidu()?.session.signal({
+			data: key,
+			to: [],
+			type: 'emoji'
+		})
+	}
+
+
+	const printEmoji = (key: string) => {
+
+		//addReaction({ ReactionObj, animationDuration: 5 });
+
+		// //let ReactionObj = undefined;
+		
+		if(key==='like'){
+			ReactionObj = () => {
+				return (
+				  <div style={{ fontSize: emojiSize }}>
+					👍
+				  </div>
+				);
+			};
+			console.log("???")
+			addReaction({ ReactionObj, animationDuration: 5 });
+		}
+		else if(key==='dislike'){
+			ReactionObj = () => {
+				return (
+				  <div style={{ fontSize: emojiSize }}>
+					💩
+				  </div>
+				);
+			};
+			addReaction({ ReactionObj, animationDuration: 5 });
+		}
+		else if(key==='angry'){
+			ReactionObj = () => {
+				return (
+				  <div style={{ fontSize: emojiSize }}>
+					😵
+				  </div>
+				);
+			};
+			addReaction({ ReactionObj, animationDuration: 5 });
+		}
+		else if(key==='haha'){
+			ReactionObj = () => {
+				return (
+				  <div style={{ fontSize: emojiSize }}>
+					😂
+				  </div>
+				);
+			};
+			addReaction({ ReactionObj, animationDuration: 5 });
+		}
+		else if(key==='wow'){
+			ReactionObj = () => {
+				return (
+				  <div style={{ fontSize: emojiSize }}>
+					🍝
+				  </div>
+				);
+			};
+			addReaction({ ReactionObj, animationDuration: 5 });
+		}
+		else if(key==='sad'){
+			ReactionObj = () => {
+				return (
+				  <div style={{ fontSize: emojiSize }}>
+					😈
+				  </div>
+				);
+			};
+			addReaction({ ReactionObj, animationDuration: 5 });
+		}
+		else if(key==='heart'){
+			ReactionObj = () => {
+				return (
+				  <div style={{ fontSize: emojiSize }}>
+					❤️
+				  </div>
+				);
+			};
+			addReaction({ ReactionObj, animationDuration: 5 });
+		}
+	}
   
 	return (
 		<>
@@ -60,10 +175,33 @@ export const QuestionSideBar = () => {
 						</MenuItem>
 					}
 				/>
-				<MenuItem name='Profile'>
-					<img alt='profile' src={roomStore.getUserInfo()?.myUserProfileUrl} />
-				</MenuItem>
-				<MenuItem name='Profile'>
+				<Popup
+					className="PopUp"
+					position='right center'
+					content={
+						<>
+							<Menu>
+								{
+									Object.keys(emojis).map((key) => (
+										<MenuItem key={key} onClick={() => sendEmoji(key)}>
+											<div style={{ fontSize: '2.5rem' }}>
+											{emojis[key as keyof typeof emojis]}
+											</div>
+										</MenuItem>
+									))
+								}
+							</Menu>
+						</>
+					}
+					on={'click'}
+					pinned
+					trigger={
+						<MenuItem id='questionSideBarMyProfileImg' name='Profile'>
+							<img alt='profile' src={roomStore.getUserInfo()?.myUserProfileUrl} />
+						</MenuItem>
+					}
+				/>
+				<MenuItem id='questionSideBarOtherProfileImg' name='Profile'>
 					<img
 						alt='profile'
 						src={roomStore.getUserInfo()?.relativeUserProfileUrl}
@@ -71,6 +209,16 @@ export const QuestionSideBar = () => {
 					/>
 				</MenuItem>
 			</Menu>
+
+			{
+				emojiStore.getMdInContainerInfo().top?
+				<AnimationContainer
+				reactionDetails={reactionDetails}
+				style={{ position: 'absolute', top: emojiStore.getMdInContainerInfo().top, left: emojiStore.getMdInContainerInfo().left, width: 200, height: emojiStore.getMdInContainerInfo().height }}
+				/>
+				:
+				<></>
+			}
 		</>
 	);
 };
