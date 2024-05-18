@@ -11,8 +11,6 @@ export const GithubCallback = () =>{
     useEffect(() => {
         const code =  new URL(document.location.toString()).searchParams.get('code');
         if (authStore.accessToken) {
-            console.log("GithubCallback 이미 로그인");
-            console.log(authStore.accessToken);
             navigate('/main');
             return;
         }
@@ -20,15 +18,11 @@ export const GithubCallback = () =>{
         axios
             .get('/auth/oauth2/login/github', {params: {"code" : code}})
             .then((response) => {
-                console.log(code);
                 authStore.setAuth(response.data);
-                console.log("로그인 완료");
                 navigate('/main');
             })
             .catch((e) => {
                 console.error(e);
-                console.log(code);
-                console.log("실패");
                 navigate('/');
             });
     } else {

@@ -92,8 +92,6 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 	// 	if (myVideoRef.current && otherVideoRef.current) {
 	// 		myVideoRef.current.muted = !myVideoRef.current.muted;
 	// 		otherVideoRef.current.muted = !otherVideoRef.current.muted;
-	// 		console.log("mute on");
-	// 		console.log(myVideoRef.current.muted);
 	// 	}
 	// };
 	const toggleMute = () => {
@@ -102,7 +100,6 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 			myVideoRef.current.muted = newMuteStatus;
 			otherVideoRef.current.muted = newMuteStatus; // Assuming you want to mute both videos together
 			setIsMuted(newMuteStatus); // This will trigger a re-render
-			console.log('Mute toggled:', newMuteStatus);
 		}
 	};
 
@@ -112,7 +109,6 @@ export const WaitingPage = ({ changeModal }: ModalProps) => {
 			const newMicStatus = !isMicMuted;
 			publisher.publishAudio(!newMicStatus); // Enable or disable audio based on new mute status
 			setIsMicMuted(newMicStatus);
-			console.log('Microphone toggled:', newMicStatus);
 		}
 	};
 

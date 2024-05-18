@@ -15,7 +15,6 @@ export const TestLogin = () => {
         .then(res => {
             auth.setAuth(res.data);
         })
-        console.log(auth)
         
         navi('/main');
     }

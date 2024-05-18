@@ -25,3 +25,17 @@ export const convertUppserToLang = (lang: string) => {
     }
     return '';
 }
+
+export const convertLangToPrint = (lang: string) => {
+    switch (lang) {
+        case 'cpp':
+            return 'C++';
+        case 'java':
+            return 'Java';
+        case 'python':
+            return 'Python';
+        case 'javascript':
+            return 'JavaScript';
+    }
+    return '';
+}

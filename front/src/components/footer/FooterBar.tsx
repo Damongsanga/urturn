@@ -32,9 +32,6 @@ export const FooterBar = ({ $mode, $reviewValues }: FooterProp) => {
 		}
 
 		const idx = roomStore.roomInfo?.host ? 0 : 1;
-		console.log(roomStore.roomInfo?.roomId);
-		console.log(roomStore.questionInfos?.[idx]?.algoQuestionId);
-		console.log(roomStore.roomInfo?.host);
 
 		roomStore.client?.publish({
 			destination: '/app/readyToSolve',
@@ -47,12 +44,6 @@ export const FooterBar = ({ $mode, $reviewValues }: FooterProp) => {
 	};
 
 	const submitCode = () => {
-		console.log('code: ' + roomStore.getEditor()?.getValue());
-		console.log('roomId: ' + roomStore.getRoomInfo()?.roomId);
-		console.log('language: ' + convertLangToUpper(roomStore.getLang()));
-		console.log('round: ' + roomStore.getRound());
-		console.log('questionId: ' + roomStore.getQuestionInfos()?.[roomStore.getQuestionIdx()]?.algoQuestionId);
-		console.log('host:' + roomStore.getRoomInfo()?.host);
 		roomStore.setCurrentlySubmitting(true);
 		roomStore.client?.publish({
 			destination: '/app/submitCode',
