@@ -23,6 +23,7 @@ import './SolvePage.css';
 import { useRoomStore } from '../../stores/room';
 import Markdown from 'markdown-to-jsx';
 import { useEmojiStore } from '../../stores/emoji';
+import { convertLangToPrint } from '../../utils/solve/convertProgramLang';
 
 let roundOptions = [
 	{ key: '', text: '', value: 0 }
@@ -67,6 +68,9 @@ export default function ReviewPage() {
 				value: i
 			});
 		}
+		const initActiveRound = roomStore.getReviewInfos()[activeQuestion-1].length - 1;
+		console.log(initActiveRound);
+		setActiveRound(initActiveRound);
 	}, [activeQuestion])
 
 	useEffect(() => {
@@ -191,10 +195,10 @@ export default function ReviewPage() {
 										color: 'white',
 									}}
 								>
-									{roomStore.getLang()} &nbsp;&nbsp;&nbsp; 
+									{convertLangToPrint(roomStore.getLang())} &nbsp;&nbsp;&nbsp; 
 									<Dropdown
 										search
-										defaultValue={roundOptions[0].value}
+										value={roundOptions[activeRound].value? roundOptions[activeRound].value : roundOptions[0].value}
 										searchInput={{ type: 'string' }}
 										options={roundOptions}
 										onChange={(_e, { value }) => {setActiveRound(value as number);}}
