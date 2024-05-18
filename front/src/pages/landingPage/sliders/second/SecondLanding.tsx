@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { Header, Image } from 'semantic-ui-react';
 import './SecondLanding.css';
 
-import pair from '../../../../assets/images/pair.png';
+import relay from '../../../../assets/images/relay.gif'
 
 interface LandingProp {
 	isActive?: boolean;
@@ -53,7 +53,7 @@ export const SecondLandingPage = ({ isActive }: LandingProp) => {
 
 						</div>
 						<div ref={addToRefs} style={{ opacity: 0 }}>
-							<Image src={pair} size='large'></Image>
+							<Image src={relay} size='large'></Image>
 						</div>
 					</div>
 				</div>
