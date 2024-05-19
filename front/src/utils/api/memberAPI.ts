@@ -5,7 +5,7 @@ export const fetchMemberInfo = async (axiosInstance: AxiosInstance) => {
         const response = await axiosInstance.get('/member');
         return response.data;
     } catch (error) {
-        console.error('Fail member info:', error);
+        //console.error('Fail member info:', error);
         throw error;
     }
 };
@@ -15,7 +15,7 @@ export const updateRepository = async (axiosInstance: AxiosInstance, repository:
         const response = await axiosInstance.patch(`/member?repository=${repository}`);
         return response.data;
     } catch (error) {
-        console.error('Fail:', error);
+        //console.error('Fail:', error);
         throw error;
     }
 };

@@ -21,12 +21,12 @@ export const GithubCallback = () =>{
                 authStore.setAuth(response.data);
                 navigate('/main');
             })
-            .catch((e) => {
-                console.error(e);
+            .catch((_e) => {
+                //console.error(e);
                 navigate('/');
             });
     } else {
-        console.error("권한 없음");
+        //console.error("권한 없음");
         navigate('/');
     }
 }, []);

@@ -6,8 +6,8 @@ export async function loadMarkdownFromCDN(url: string): Promise<string> {
       }
       const markdown = await response.text();
       return markdown;
-    } catch (error) {
-      console.error(error);
+    } catch (_error) {
+      //console.error(error);
       return '';
     }
   }

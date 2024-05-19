@@ -55,12 +55,12 @@ export const MyPage = () => {
 					totalPages: result.totalPages,
 				}));
 			} catch (error) {
-				console.error('Failed to fetch history:', error);
+				//console.error('Failed to fetch history:', error);
 			}
 		};
 
 		loadHistoryData();
-		console.log(historyData);
+		//console.log(historyData);
 	}, [pageState.activePage]);
 
 	useEffect(() => {
@@ -68,9 +68,9 @@ export const MyPage = () => {
 			try {
 				const info = await fetchMemberInfo(axios);
 				setMemberInfo(info);
-				console.log(info);
+				//console.log(info);
 			} catch (error) {
-				console.error('Failed to fetch member info:', error);
+				//console.error('Failed to fetch member info:', error);
 			}
 		};
 
@@ -95,9 +95,9 @@ export const MyPage = () => {
 				return { ...prevInfo, repository: updatedRepository };
 			});
 			setModalOpen(false);
-			console.log('Repository 업데이트 완료');
+			//console.log('Repository 업데이트 완료');
 		} catch (error) {
-			console.error('Fail 레포 업데이트:', error);
+			//console.error('Fail 레포 업데이트:', error);
 		}
 	};
 

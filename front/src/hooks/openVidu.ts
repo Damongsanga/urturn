@@ -36,8 +36,8 @@ export function useOpenVidu() {
             const sessionId = response.data;
             rtcStore.setSessionId(sessionId);
             return sessionId;
-        } catch (error) {
-            console.error('세션 열기 실패:', error);
+        } catch (_error) {
+            //console.error('세션 열기 실패:', error);
         }
     };
 
@@ -46,8 +46,8 @@ export function useOpenVidu() {
             const response = await axios.post('sessions/'+ sessionId+ '/connection');
             rtcStore.setConnectionId(response.data.connectionId);
             return response.data.token;
-        } catch (error) {
-            console.error('토큰 생성 실패:', error);
+        } catch (_error) {
+            //console.error('토큰 생성 실패:', error);
         }
     };
 
@@ -76,8 +76,8 @@ export function useOpenVidu() {
             //deleteSubscriber(event.stream.streamManager);
         });
 
-        ov.session.on('exception', (exception) => {
-            console.warn(exception);
+        ov.session.on('exception', (_exception) => {
+            //console.warn(exception);
         });
 
         ov.session.on('signal:code', (event) => {
