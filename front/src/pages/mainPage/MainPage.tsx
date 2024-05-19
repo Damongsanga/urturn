@@ -26,23 +26,46 @@ const MainPage: React.FC = () => {
 	const ax = useAxios(true);
 
 	const clearMainLogic = () => {
-		if(roomStore.client || roomStore.userInfo?.myUserNickName || roomStore.roomInfo?.roomId){
-			if(roomStore.roomInfo?.roomId){
-				roomStore.client?.publish({
-					destination: '/app/leaveRoom',
-					body: JSON.stringify({
-						roomId: roomStore.roomInfo.roomId,
-						isHost: roomStore.roomInfo.host
-					}),
-				})
-			}
+		try{
+			roomStore.client?.publish({
+				destination: '/app/leaveRoom',
+				body: JSON.stringify({
+					roomId: roomStore.roomInfo?.roomId,
+					isHost: roomStore.roomInfo?.host
+				}),
+			})
+
 			roomStore.clearRoom();
 		}
-		if(rtcStore.getOpenVidu() || rtcStore.getSessionId() || rtcStore.getConnectionId()){
+		catch(_e){
+			
+		}
+
+		try{
 			ax.delete('/sessions/'+rtcStore.getSessionId() + '/connection/' + rtcStore.getConnectionId());
 			ax.delete('/sessions/'+rtcStore.getSessionId());
 			rtcStore.clearRtc();
 		}
+		catch(_e){
+			
+		}
+		//if(roomStore.client || roomStore.userInfo?.myUserNickName || roomStore.roomInfo?.roomId){
+		//	if(roomStore.roomInfo?.roomId){
+				// roomStore.client?.publish({
+				// 	destination: '/app/leaveRoom',
+				// 	body: JSON.stringify({
+				// 		roomId: roomStore.roomInfo.roomId,
+				// 		isHost: roomStore.roomInfo.host
+				// 	}),
+				// })
+		//	}
+		// 	roomStore.clearRoom();
+		// }
+		// if(rtcStore.getOpenVidu() || rtcStore.getSessionId() || rtcStore.getConnectionId()){
+		// 	ax.delete('/sessions/'+rtcStore.getSessionId() + '/connection/' + rtcStore.getConnectionId());
+		// 	ax.delete('/sessions/'+rtcStore.getSessionId());
+		// 	rtcStore.clearRtc();
+		// }
 	}
 
 	useEffect(() => {
@@ -61,11 +84,13 @@ const MainPage: React.FC = () => {
 		if (authStore.accessToken === undefined || authStore.accessToken === null || authStore.memberId === undefined) {
 			return;
 		}
+		clearMainLogic();
 		webSocket.connect();
 		setOpen(true);
 	};
 
 	const enterEntryCode = () => {
+		clearMainLogic();
 		setOpenModal(true);
 	};
 
