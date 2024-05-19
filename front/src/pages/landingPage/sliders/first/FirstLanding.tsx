@@ -1,5 +1,5 @@
 import { MenuItem, Menu, Header, Icon, Button, Image } from 'semantic-ui-react';
-import { TestLogin } from '../../TestLogin';
+// import { TestLogin } from '../../TestLogin';
 import logo from '../../../../assets/images/logo.svg';
 import scroll from '../../../../assets/images/scrolldown.png';
 import pair from '../../../../assets/images/pair.png';
@@ -59,7 +59,7 @@ export const FirstLandingPage = () => {
 						</div>
 						<div className='ScrollDown'>
 							<img alt='scroll' src={scroll} style={{ width: '80px' }} />
-							<TestLogin />
+							{/* <TestLogin /> */}
 						</div>
 					</div>
 				</div>
