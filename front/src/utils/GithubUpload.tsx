@@ -1,11 +1,9 @@
 import {useNavigate} from "react-router-dom";
-import {useAuthStore} from "../stores/useAuthStore.ts";
 import {useAxios} from "./useAxios.ts";
 import {useEffect} from "react";
 
 export const GithubRepoCallback = () =>{
     const navigate = useNavigate();
-    const authStore = useAuthStore();
     const axios = useAxios(true);
 
     useEffect(() => {
@@ -14,8 +12,7 @@ export const GithubRepoCallback = () =>{
         if (code) {
         axios
             .get('/github/upload', {params: {"code" : code}})
-            .then((response) => {
-                const data = response.data;
+            .then(() => {
                 // alert("성공적으로 깃허브에 업로드되었습니다. \n마이페이지에서 확인해 주세요.");
                 navigate('/trans/myPage');
             })

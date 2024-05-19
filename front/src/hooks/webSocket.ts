@@ -58,14 +58,14 @@ export const useWebSocket = () => {
                 Authorization: 'Bearer ' + token,
             },
             
-            debug: function (str: string) {
+            debug: function () {
             },
             reconnectDelay: 5000000, //자동 재 연결
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000,
         });
 
-        client.onConnect = function (frame) {
+        client.onConnect = function () {
             const subscribeRoomInfo = client.subscribe('/user/' + userId + '/roomInfo', (msg) => {
                 const roomInfo = JSON.parse(msg.body);
                 roomStore.setRoomInfo(roomInfo);

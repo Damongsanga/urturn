@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Menu, MenuItem, Header, Icon, Input, Button } from 'semantic-ui-react';
 import { useAxios } from '../../utils/useAxios';
-import { useAuthStore } from '../../stores/useAuthStore';
 import './EntryCodeModal.css';
 import { useWebSocket } from '../../hooks/webSocket';
 
@@ -13,7 +12,6 @@ interface ModalProps {
 export const EntryCodeModal = ({ changeModal, successConnect }: ModalProps) => {
 	const [entryCode, setEntryCode] = useState('');
 	const axios = useAxios();
-	const authStore = useAuthStore();
 	const webSocket = useWebSocket();
 
 	const checkCode = () => {
