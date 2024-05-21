@@ -8,7 +8,7 @@ import CheckPage from './pages/solvePage/CheckPage.tsx';
 import ReviewPage from './pages/solvePage/ReviewPage.tsx';
 import PairSolvePage from './pages/solvePage/PairSolvePage.tsx';
 import { TransPage } from './pages/transPage/TransPage.tsx';
-
+import { TestLogin } from "./pages/landingPage/TestLogin.tsx";
 import {GithubRepoCallback} from "./utils/GithubUpload.tsx";
 function App() {
 
@@ -26,6 +26,7 @@ function App() {
 					<Route path='/pairsolve' element={<PairSolvePage />} />
 					<Route path='/check' element={<CheckPage />} />
 					<Route path='/review' element={<ReviewPage />} />
+					<Route path='/test' element={<TestLogin />} />
 				</Routes>
 			</BrowserRouter>
 		</>
