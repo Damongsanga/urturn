@@ -11,7 +11,7 @@ import {useRtcStore} from "../stores/rtc.ts";
 import { convertLangToUpper, convertUppserToLang } from "../utils/solve/convertProgramLang.ts";
 
 const url = import.meta.env.VITE_API_WEBSOCKET_URL
-const MAX_TIME = 600;
+const MAX_TIME = 40;
 export const useWebSocket = () => {
     const navi = useNavigate();
     const authStore = useAuthStore();
@@ -60,7 +60,7 @@ export const useWebSocket = () => {
             
             debug: function () {
             },
-            reconnectDelay: 5000000, //자동 재 연결
+            reconnectDelay: 5000, //자동 재 연결
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000,
         });
