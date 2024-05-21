@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Menu, MenuItem, Header, Icon, Input, Button } from 'semantic-ui-react';
 import { useAxios } from '../../utils/useAxios';
 import './EntryCodeModal.css';
-import { useWebSocket } from '../../hooks/webSocket';
+import { useRoomStore } from '../../stores/room';
 
 interface ModalProps {
 	changeModal: () => void;
@@ -12,13 +12,18 @@ interface ModalProps {
 export const EntryCodeModal = ({ changeModal, successConnect }: ModalProps) => {
 	const [entryCode, setEntryCode] = useState('');
 	const axios = useAxios();
-	const webSocket = useWebSocket();
+	const roomStore = useRoomStore();
 
 	const checkCode = () => {
 		axios.get(`/room/enter/${entryCode}`)
 		.then((res: { data: string }) => {
 			const roomId = res.data;
-			webSocket.connect(roomId);
+			roomStore.getClient()?.publish({
+					destination: '/app/enterRoom',
+					body: JSON.stringify({
+						roomId : roomId,
+					}),
+				});
 			successConnect();
 		})
 		.catch(() => {

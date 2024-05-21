@@ -41,6 +41,8 @@ const MainPage: React.FC = () => {
 			
 		}
 
+		webSocket.connect();
+
 		try{
 			ax.delete('/sessions/'+rtcStore.getSessionId() + '/connection/' + rtcStore.getConnectionId());
 			ax.delete('/sessions/'+rtcStore.getSessionId());
@@ -49,23 +51,6 @@ const MainPage: React.FC = () => {
 		catch(_e){
 			
 		}
-		//if(roomStore.client || roomStore.userInfo?.myUserNickName || roomStore.roomInfo?.roomId){
-		//	if(roomStore.roomInfo?.roomId){
-				// roomStore.client?.publish({
-				// 	destination: '/app/leaveRoom',
-				// 	body: JSON.stringify({
-				// 		roomId: roomStore.roomInfo.roomId,
-				// 		isHost: roomStore.roomInfo.host
-				// 	}),
-				// })
-		//	}
-		// 	roomStore.clearRoom();
-		// }
-		// if(rtcStore.getOpenVidu() || rtcStore.getSessionId() || rtcStore.getConnectionId()){
-		// 	ax.delete('/sessions/'+rtcStore.getSessionId() + '/connection/' + rtcStore.getConnectionId());
-		// 	ax.delete('/sessions/'+rtcStore.getSessionId());
-		// 	rtcStore.clearRtc();
-		// }
 	}
 
 	useEffect(() => {
@@ -84,13 +69,19 @@ const MainPage: React.FC = () => {
 		if (authStore.accessToken === undefined || authStore.accessToken === null || authStore.memberId === undefined) {
 			return;
 		}
-		clearMainLogic();
-		webSocket.connect();
+		//clearMainLogic();
+		roomStore.getClient()?.publish({
+                            destination: '/app/createRoom',
+                            body: JSON.stringify({
+                            memberId : authStore.memberId,
+                            }),
+                        });
+		//webSocket.connect();
 		setOpen(true);
 	};
 
 	const enterEntryCode = () => {
-		clearMainLogic();
+		//clearMainLogic();
 		setOpenModal(true);
 	};
 

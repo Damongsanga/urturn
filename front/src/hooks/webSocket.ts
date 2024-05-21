@@ -19,7 +19,7 @@ export const useWebSocket = () => {
     const rtcStore = useRtcStore();
     const openVidu = useOpenVidu();
     
-    const connect = (roomId: string|null = null) => {
+    const connect = () => {
         const userId = authStore.memberId;
         const token = authStore.accessToken;
 
@@ -66,11 +66,11 @@ export const useWebSocket = () => {
         });
 
         client.onConnect = function () {
-            const subscribeRoomInfo = client.subscribe('/user/' + userId + '/roomInfo', (msg) => {
+            client.subscribe('/user/' + userId + '/roomInfo', (msg) => {
                 const roomInfo = JSON.parse(msg.body);
                 roomStore.setRoomInfo(roomInfo);
             });
-            const subscribeUserInfo = client.subscribe('/user/' + userId + '/userInfo', (msg) => {
+            client.subscribe('/user/' + userId + '/userInfo', (msg) => {
                 const userInfo = JSON.parse(msg.body);
                 if(roomStore.getRoomInfo()?.host && userInfo.relativeUserNickName===null){
                     openVidu.masterCreate();
@@ -86,27 +86,27 @@ export const useWebSocket = () => {
                 }
                 roomStore.setUserInfo(userInfo);
             });
-            const publishTimer = setInterval(() => {
-                if(subscribeRoomInfo.id && subscribeUserInfo.id){
-                    clearInterval(publishTimer);
-                    if(roomId===null){
-                        client.publish({
-                            destination: '/app/createRoom',
-                            body: JSON.stringify({
-                            memberId : userId,
-                            }),
-                        });
-                    }
-                    else{
-                        client.publish({
-                            destination: '/app/enterRoom',
-                            body: JSON.stringify({
-                                roomId : roomId,
-                            }),
-                        });
-                    }
-                }
-            }, 1000)
+            // const publishTimer = setInterval(() => {
+            //     if(subscribeRoomInfo.id && subscribeUserInfo.id){
+            //         clearInterval(publishTimer);
+            //         if(roomId===null){
+            //             client.publish({
+            //                 destination: '/app/createRoom',
+            //                 body: JSON.stringify({
+            //                 memberId : userId,
+            //                 }),
+            //             });
+            //         }
+            //         else{
+            //             client.publish({
+            //                 destination: '/app/enterRoom',
+            //                 body: JSON.stringify({
+            //                     roomId : roomId,
+            //                 }),
+            //             });
+            //         }
+            //     }
+            // }, 1000)
 
             client.subscribe('/user/' + userId + '/receiveOVSession', (msg) => {
                 const sessionId = msg.body;
