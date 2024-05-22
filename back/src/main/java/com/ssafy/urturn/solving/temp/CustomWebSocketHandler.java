@@ -1,11 +1,9 @@
 package com.ssafy.urturn.solving.temp;
-import org.springframework.web.socket.CloseStatus;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-
-import java.io.IOException;
 
 /*
 웹 소켓 핸들로로서, 웹소켓 연결의 생명 주기 이벤트를 관리.

@@ -199,9 +199,6 @@ public class RoomService {
     @Transactional
     public SubmitResponse submitCode(SubmitRequest submitRequest){
 
-        // 제출 광클 방지 Lock by Redis-> AOP로 디벨롭하면 좋을듯
-//        String key = requestLockService.generateLockKey(GRADING, submitRequest.getRoomId(), submitRequest.isHost());
-//        requestLockService.ifLockedThrowExceptionElseLock(key, GRADING.getDuration());
 
         // db 조회 후 채점 서버로 Code 및 문제 데이터, 테케 전송
         // 결과 수신
@@ -219,9 +216,6 @@ public class RoomService {
         }
 
         // 페어프로그래밍 모드 전환 메시지 전송
-
-        // Lock 해제
-//        requestLockService.unlock(key);
 
         // 결과 반환
         return SubmitResponse.builder()
