@@ -1,0 +1,29 @@
+.Entire {
+  width: 100vw;
+  height: 100vh;
+}
+
+.SecondPage {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #F8F8F8;
+}
+
+.SecondContent {
+  width: 90vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.SecondText {
+  display: flex;
+  flex-direction: column;
+}
+
+

@@ -1,0 +1,29 @@
+.Entire {
+  width: 100vw;
+  height: 100vh;
+}
+
+.FourthPage {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #F8F8F8;
+}
+
+.FourthContent {
+  width: 90vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.FourthText {
+  display: flex;
+  flex-direction: column;
+}
+
+

@@ -1,0 +1,119 @@
+.MyPage {
+  width: 100vw;
+  height: 100vh;
+  background-color: #efefef;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.MainHeader {
+  width: 100vw;
+  height: 70px;
+}
+
+.MyRecord {
+  width: 100vw;
+  height: calc(100vh - 70px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Profile {
+  width: 42vw;
+  height: calc(100vh - 70px);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.CardTextColor {
+  color: black !important;
+}
+
+.ProfileCard {
+  width: 30vw !important;
+
+  background-color: white !important;
+
+  padding: 20px !important;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25) !important;
+}
+
+.MyProfile {
+  width: calc(35vw - 40px) !important;
+  background-color: white !important;
+  color: white !important;
+
+  border-radius: 15px !important;
+
+}
+
+.ExpBar {
+  margin: 3vh 0 3vh 0;
+}
+
+.EditButton {
+  background-color: #000034 !important;
+  color: white !important;
+
+}
+
+.EditButton:hover,
+.EditButton:active {
+  background-color: #5c5c96 !important;
+  border-color: #5c5c96 !important;
+
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.History {
+  width: 50vw;
+  height: calc(100vh - 70px);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.Questions {
+  width: 40vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: 3px solid white !important;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25) !important;
+}
+
+.QuestionName {
+  width: 20vw;
+  margin-left: 2vw !important;
+  margin-top: 0px !important;
+
+  border: 3px solid white !important;
+}
+
+.QuestionAlign {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Success {
+  background-color: #5EC09A !important;
+}
+
+.Fail {
+  background-color: #F05B61 !important;
+}
+
+.ContentBorder {
+  border-top: 3px solid white !important;
+}

@@ -1,0 +1,82 @@
+.HeaderBar {
+  width: 100vw;
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #000034 !important;
+  margin-bottom: 0px;
+  border-radius: 0;
+}
+
+.HeaderBar.Main {
+  background-color: #000034 !important;
+  margin-bottom: 0px;
+  border-radius: 0;
+}
+
+.HeaderBar.Ide {
+  background-color: #000034 !important;
+  margin-bottom: 0px;
+  border-radius: 0;
+
+  border-bottom: solid 0.3px #D4DBE2;
+}
+
+.HeaderAlign {
+  margin-left: 18vw;
+}
+
+.ModeAlign {
+  margin-left: 47% !important;
+}
+
+.ProfileAlign {
+  margin-right: 15vw !important;
+}
+
+.QuitButton {
+  margin-right: 2vw;
+}
+
+.FontColor {
+  color: white; !important;
+}
+.FontColor2 {
+  color: white; !important;
+}
+
+.Main .ButtonColor {
+  background-color: white !important;
+  border-color: white  !important;
+
+  color: black !important;
+  font-size: 1.2rem !important;
+}
+
+.Main .ButtonColor:hover,
+.Main .ButtonColor:active  {
+  background-color: #b7b7b7 !important;
+  color: white !important;
+
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
+}
+
+.Ide .ButtonColor {
+  background-color: white !important;
+  border-color: white  !important;
+  color: black !important;
+
+  font-size: 1.2rem !important;
+}
+
+.Ide .ButtonColor:hover,
+.Ide .ButtonColor:active  {
+
+  background-color: #b7b7b7 !important;
+  color: white !important;
+
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
+}

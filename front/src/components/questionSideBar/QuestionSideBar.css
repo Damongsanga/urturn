@@ -1,0 +1,22 @@
+.PopUp {
+  padding: 20px !important; 
+}
+
+.Row {
+  display: flex;
+
+}
+
+.FooterVolume {
+  width: 30vw !important;
+}
+
+
+.Mic {
+  /*background-color: #b7b7b7 !important*/
+  color: white !important
+}
+
+.ui.right.center.popup {
+  margin-left: 0px;
+}

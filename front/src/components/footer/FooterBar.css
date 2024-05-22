@@ -1,0 +1,88 @@
+.FooterBar {
+  width: 100vw;
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: white !important;
+  margin-top: 0px !important;
+  border-radius: 0 !important;
+
+  position: relative;
+
+  border-left: 0px !important;
+}
+
+.FooterBar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: 66px;
+  height: calc(100% + 1px); /* 가상 요소의 높이를 조정 */
+  background-color: #000034 !important; /* 원하는 색상 코드로 변경 */ 
+  z-index: 256;
+}
+
+.ProfileSection {
+  margin-left: 2vw !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.RunButton {
+  margin-right: 2vw;
+}
+
+.FontColor {
+  color: white !important;
+}
+
+.RunButtonColor {
+  background-color: #000034 !important;
+  color: white !important;
+
+  margin-left: 2vw !important;
+}
+
+.RunButtonColor:hover,
+.RunButtonColor:active  {
+  background-color: #5c5c96 !important;
+  border-color: #5c5c96 !important;
+
+  color: white !important;
+
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
+}
+
+.ReviewButtonColor {
+  background-color: #000034 !important;
+  color: white !important;
+
+  margin-left: 2vw !important;
+}
+
+.ReviewButtonColor:hover,
+.ReviewButtonColor:active  {
+  background-color: #5c5c96 !important;
+  border-color: #5c5c96 !important;
+
+  color: white !important;
+
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
+}
+
+.PopUp {
+  padding: 20px !important; 
+}
+
+.Row {
+  display: flex;
+  justify-content: center !important;
+}
+
+.FooterVolume {
+  width: 30vw !important;
+}

@@ -1,0 +1,25 @@
+.Entire {
+  width: 100vw;
+  height: 100vh;
+}
+
+.ThirdPage {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ThirdContent {
+  width: 90vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.ThirdText {
+  display: flex;
+  flex-direction: column;
+}

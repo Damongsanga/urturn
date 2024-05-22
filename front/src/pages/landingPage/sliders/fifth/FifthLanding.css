@@ -1,0 +1,84 @@
+.Entire {
+  width: 100vw;
+  height: 100vh;
+}
+
+.FifthPage {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.FifthContent {
+  width: 75vw;
+  height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.CTABox {
+  width: 65vw;
+  height: 10vh;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-radius: 10px;
+  background-color: #000034;
+}
+
+.CTAText {
+  margin-left: 2vw;
+}
+
+.BottomCTAButton {
+  background-color: white !important;
+  color: black !important;
+
+  height: 6vh !important;
+
+  display: flex !important;
+  align-items: center !important; 
+  justify-content: center !important; 
+
+  padding: 11px 21px 9px 17px !important;
+}
+
+.BottomCTAButton:hover,
+.BottomCTAButton:active  {
+  background-color: #b7b7b7 !important; 
+  border-color: #b7b7b7 !important;
+
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; 
+}
+
+.InnerButton {
+  display: flex !important;
+  align-items: center !important; 
+  justify-content: center !important;
+}
+
+.Copyright {
+  width: 100vw;
+  height: 100px;
+  
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  background-color: #F8F8F8;
+}
+
+.CopyrightText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
