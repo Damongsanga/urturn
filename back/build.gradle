@@ -1,0 +1,113 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.5'
+	id 'io.spring.dependency-management' version '1.1.4'
+	id "org.sonarqube" version "4.2.0.3129"
+}
+
+group = 'com.ssafy'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	//validation
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
+
+	//Querydsl 추가
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	// @Entity 어노테이션 선언한 클래스 탐색하고 Q클래스를 생성
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api" // javax->jakarta 변경 에러 대응 코드
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api" // javax->jakarta 변경 에러 대응 코드
+
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	// s3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' // 현재 3.0.0이 최신임, 나중에 되는지 확인
+
+	// Apache Commons Lang for RandomUtil
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+
+	//JJWT
+	runtimeOnly 'io.jsonwebtoken:jjwt-api:0.11.2'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.1'
+
+	// actuator & prometheus
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
+
+	//swagger
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+
+	// webclient
+	implementation 'org.springframework:spring-webflux'
+
+	// openvidu
+	implementation 'io.openvidu:openvidu-java-client:2.29.0'
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+// querydsl 저장 위치
+def querydslSrcDir = 'src/main/generated'
+tasks.withType(JavaCompile) {
+	options.generatedSourceOutputDirectory = file(querydslSrcDir)
+}
+
+clean {
+	// clean 실행 시 생성된 QClass 삭제
+	delete file('src/main/generated')
+}
+
+sonarqube {
+	properties {
+		property "sonar.host.url", "https://sonarqube.ssafy.com/"
+		property "sonar.projectKey", "urturn"
+
+		property "sonar.java.binaries", "${buildDir}/classes/java/main"
+		property "sonar.sourceEncoding", "UTF-8"
+		property "sonar.sources", "src/main/java"
+		// property "sonar.exclusions", "**/util/**, **/support/**, **/dto/**"
+
+		property "sonar.tests", "src/test/java"
+		property "sonar.test.inclusions", "**/*Test.java"
+		property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+	}
+}
