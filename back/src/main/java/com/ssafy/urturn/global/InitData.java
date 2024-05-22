@@ -985,7 +985,7 @@ public class InitData {
                 .roles(List.of(Role.USER)).build();
             return memberRepository.save(member).getId();
         }
-        return memberRepository.findByNickname(nickname).get().getId();
+        return memberRepository.findByNickname(nickname).orElseThrow(() -> new RestApiException(NO_MEMBER)).getId();
     }
 
     // language가 null이면 못푼 것으로 간주

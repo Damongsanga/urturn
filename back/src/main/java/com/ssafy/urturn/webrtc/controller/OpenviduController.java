@@ -2,7 +2,6 @@ package com.ssafy.urturn.webrtc.controller;
 
 import io.openvidu.java.client.Connection;
 import io.openvidu.java.client.ConnectionProperties;
-import io.openvidu.java.client.KurentoOptions;
 import io.openvidu.java.client.OpenVidu;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
@@ -26,16 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class OpenviduController {
 
     @Value("${OPENVIDU_URL}")
-    private String OPENVIDU_URL;
+    private String openviduUrl;
 
     @Value("${OPENVIDU_SECRET}")
-    private String OPENVIDU_SECRET;
+    private String openviduSecret;
 
     private OpenVidu openvidu;
 
     @PostConstruct
     public void init() {
-        this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+        this.openvidu = new OpenVidu(openviduUrl, openviduSecret);
     }
 
     @PostMapping("")

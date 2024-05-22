@@ -73,6 +73,8 @@ public class GradingService {
             try {
                 Thread.sleep(waitTime);
             } catch (InterruptedException e) {
+                log.error("interrupted Exception", e);
+                Thread.currentThread().interrupt();
                 throw new RestApiException(INTERNAL_SERVER_ERROR);
             }
 

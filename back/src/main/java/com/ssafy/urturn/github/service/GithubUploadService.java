@@ -6,7 +6,6 @@ import com.ssafy.urturn.github.GithubUploadClient;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
 import com.ssafy.urturn.history.dto.HistoryRetroDto;
-import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.history.repository.HistoryRepository;
 import com.ssafy.urturn.member.entity.Member;
 import com.ssafy.urturn.member.repository.MemberRepository;
