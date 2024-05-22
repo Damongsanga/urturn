@@ -1,12 +1,13 @@
-package com.ssafy.urturn.solving.temp;
+package com.ssafy.urturn.global.websocket;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 @Component
 @Slf4j
 public class WebSocketSessionManager {
@@ -23,8 +24,6 @@ public class WebSocketSessionManager {
     public void removeSession(Long userId) {
         sessions.remove(userId);
     }
-
-
 
     public void sendMessage(Long userId, String message) {
         WebSocketSession session = sessions.get(userId);

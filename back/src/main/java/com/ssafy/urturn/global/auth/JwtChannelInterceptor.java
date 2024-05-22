@@ -1,9 +1,7 @@
-package com.ssafy.urturn.solving.socket;
+package com.ssafy.urturn.global.auth;
 
-import com.ssafy.urturn.global.auth.JwtTokenProvider;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -15,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * WebSocket 채널에 JWT 검증하는 인터셉터

@@ -29,7 +29,7 @@ import com.ssafy.urturn.problem.entity.Testcase;
 import com.ssafy.urturn.problem.repository.MemberProblemRepository;
 import com.ssafy.urturn.problem.repository.ProblemRepository;
 import com.ssafy.urturn.problem.repository.TestcaseRepository;
-import com.ssafy.urturn.solving.cache.CacheDatas;
+import com.ssafy.urturn.global.cache.CacheDatas;
 import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;

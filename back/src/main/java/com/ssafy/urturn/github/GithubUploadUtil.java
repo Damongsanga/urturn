@@ -48,18 +48,12 @@ public class GithubUploadUtil {
         return Base64.getEncoder().encodeToString(sb.toString().getBytes());
     }
 
-    public String makeMessage(){
-        return "test message";
-    }
-
-    // history 제작 완료 후 진행, Lazy Loading 문제 발생 여부 확인 필요
     public String makeMessage(HistoryRetroDto dto, String myNickname){
         String myPairNickname = dto.getManagerNickname().equals(myNickname)? dto.getPairNickname() : dto.getManagerNickname();
         return dto.getResult() + " with " + myPairNickname + " at " + dto.getEndTime().format(
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
-    // 매우 임시로 만든 URL
     public String makeURl(Member member){
         return GITHUB_API_URL + member.getNickname() + "/" + member.getRepository() + "/contents/" + makeDirectoryName() + makeFileName();
     }

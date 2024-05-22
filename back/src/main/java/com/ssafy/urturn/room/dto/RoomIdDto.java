@@ -1,7 +1,6 @@
-package com.ssafy.urturn.solving.dto;
+package com.ssafy.urturn.room.dto;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

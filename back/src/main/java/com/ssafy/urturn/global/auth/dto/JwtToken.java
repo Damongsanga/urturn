@@ -1,11 +1,11 @@
-package com.ssafy.urturn.global.auth;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+package com.ssafy.urturn.global.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 @Builder
 @AllArgsConstructor

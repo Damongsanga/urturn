@@ -1,5 +1,6 @@
-package com.ssafy.urturn.solving.socket;
+package com.ssafy.urturn.global.config;
 
+import com.ssafy.urturn.global.auth.JwtChannelInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;

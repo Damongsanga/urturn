@@ -1,17 +1,18 @@
-package com.ssafy.urturn.solving.cache;
+package com.ssafy.urturn.global.cache;
 
-import com.ssafy.urturn.solving.dto.RoomInfoDto;
+import com.ssafy.urturn.room.dto.RoomInfoDto;
 import com.ssafy.urturn.solving.dto.UserCodeDto;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.locks.ReentrantLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @RequiredArgsConstructor

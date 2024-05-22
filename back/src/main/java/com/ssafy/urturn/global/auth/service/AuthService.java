@@ -2,7 +2,7 @@ package com.ssafy.urturn.global.auth.service;
 
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_MEMBER;
 
-import com.ssafy.urturn.global.auth.JwtToken;
+import com.ssafy.urturn.global.auth.dto.JwtToken;
 import com.ssafy.urturn.global.auth.JwtTokenProvider;
 import com.ssafy.urturn.global.auth.Role;
 import com.ssafy.urturn.global.auth.dto.LoginReqeust;

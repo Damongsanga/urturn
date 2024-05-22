@@ -1,8 +1,7 @@
-package com.ssafy.urturn.solving.temp;
+package com.ssafy.urturn.global.websocket;
 
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.util.MemberUtil;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
@@ -10,6 +9,8 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
+
+import java.util.Map;
 
 
 /*
@@ -56,15 +57,10 @@ public class MemberIdHandshakeInterceptor implements HandshakeInterceptor {
         }
     }
 
-
     /*
      웹소켓 핸드셰이크 과정이 완료된 후 호출. 이 메서드는 핸드셰이크의 성공 여부를 로그로 남김.
      Exception 파라미터를 확인하여 핸드셰이크 과정에서 예외가 발생했는지 확인.
      예외가 없으면 성공적으로 핸드셰이크가 완료되었음을 로그에 기록.
-     질문? Exception은 따로 구현??
      */
-
-
-
 
 }
