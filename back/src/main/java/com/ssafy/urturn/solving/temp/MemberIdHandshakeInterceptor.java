@@ -2,15 +2,14 @@ package com.ssafy.urturn.solving.temp;
 
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.util.MemberUtil;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.server.HandshakeInterceptor;
-
-import java.util.Map;
 
 
 /*
@@ -30,6 +29,7 @@ attributes 핸드셰이크 요청 당 한 번 생성, 각각의 웹소켓 핸드
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class MemberIdHandshakeInterceptor implements HandshakeInterceptor {
 
     @Override
@@ -37,10 +37,10 @@ public class MemberIdHandshakeInterceptor implements HandshakeInterceptor {
         // SecurityContextHolder를 통해 사용자 ID를 추출하고, 웹소켓 세션 속성에 추가
         try {
             Long memberId = MemberUtil.getMemberId();  // 사용자 ID를 추출
-            attributes.put("memberId", memberId);  // 웹소켓 세션 속성에 사용자 ID 저장    -> 그럼 세션은 사용자 별로 있는건지?
+            attributes.put("memberId", memberId);  // 웹소켓 세션 속성에 사용자 ID 저장
             return true;  // 핸드셰이크를 계속 진행
         } catch (RestApiException e) {
-            System.out.println("멤버 아이디 추출에 실패 하였습니다. " + e.getMessage());
+            log.info("멤버 아이디 추출에 실패 하였습니다. {}", e.getMessage());
             return false;  // 핸드셰이크 실패 처리
         }
     }
@@ -49,13 +49,10 @@ public class MemberIdHandshakeInterceptor implements HandshakeInterceptor {
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
         if (exception == null) {
             // 핸드셰이크가 성공적으로 완료된 경우
-            System.out.println("핸드셰이크 성공");
+            log.info("핸드셰이크 성공");
         } else {
             // 핸드셰이크 과정에서 예외가 발생한 경우
-            System.out.println("핸드셰이크 도중 에러 발생 : " + exception.getMessage());
-
-            // 핸드셰이크 실패 시 필요한 에러 처리 로직을 추가할 수 있습니다.
-
+            log.error("핸드셰이크 도중 에러 발생 : {}", exception.getMessage());
         }
     }
 

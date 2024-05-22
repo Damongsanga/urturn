@@ -2,15 +2,20 @@ package com.ssafy.urturn.global;
 
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_MEMBER;
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_PROBLEM;
-import static com.ssafy.urturn.history.HistoryResult.*;
-import static com.ssafy.urturn.member.Level.*;
+import static com.ssafy.urturn.history.HistoryResult.FAILURE;
+import static com.ssafy.urturn.history.HistoryResult.SUCCESS;
+import static com.ssafy.urturn.history.HistoryResult.SURRENDER;
+import static com.ssafy.urturn.member.Level.LEVEL1;
+import static com.ssafy.urturn.member.Level.LEVEL2;
+import static com.ssafy.urturn.member.Level.LEVEL3;
+import static com.ssafy.urturn.member.Level.LEVEL4;
+import static com.ssafy.urturn.member.Level.LEVEL5;
 import static com.ssafy.urturn.problem.Language.CPP;
 import static com.ssafy.urturn.problem.Language.JAVA;
 import static com.ssafy.urturn.problem.Language.PYTHON;
 
 import com.ssafy.urturn.global.auth.Role;
 import com.ssafy.urturn.global.exception.RestApiException;
-import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.history.repository.HistoryRepository;
@@ -61,18 +66,6 @@ public class InitData {
 
         Long testMemberId1 = createTestMember("test1", "test1");
         Long testMemberId2 = createTestMember("test2", "test2");
-
-//        createProblem("두배로 늘려요", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/0000%EB%B2%88+%ED%85%8C%EC%8A%A4%ED%8A%B8+%EB%AC%B8%EC%A0%9C.md", LEVEL1);
-//
-//        createTestcase("두배로 늘려요", "2", "4", true);
-//        createTestcase("두배로 늘려요", "0", "0", false);
-//        createTestcase("두배로 늘려요", "-2", "-4", false);
-//
-//        createProblem("안녕하세요 감사해요 잘있어요 다시 만나요", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/0000%EB%B2%88+%ED%85%8C%EC%8A%A4%ED%8A%B8+%EB%AC%B8%EC%A0%9C2.md", LEVEL1);
-//
-//        createTestcase("안녕하세요 감사해요 잘있어요 다시 만나요", "SSAFY", "SSAFYHELLO", true);
-//        createTestcase("안녕하세요 감사해요 잘있어요 다시 만나요", "010", "010HELLO", false);
-//        createTestcase("안녕하세요 감사해요 잘있어요 다시 만나요", "재길", "재길HELLO", false);
 
         createProblem("유기농 양상추", "https://urturn-problem.s3.ap-northeast-2.amazonaws.com/problem/1012%EB%B2%88+%EC%9C%A0%EA%B8%B0%EB%86%8D+%EC%96%91%EC%83%81%EC%B6%94.md", LEVEL1);
 

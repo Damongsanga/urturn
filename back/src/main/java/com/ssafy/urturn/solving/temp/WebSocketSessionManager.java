@@ -1,14 +1,14 @@
 package com.ssafy.urturn.solving.temp;
 
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
-
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 @Component
+@Slf4j
 public class WebSocketSessionManager {
 
     // 사용자 ID 별로 웹소켓 세션을 저장하는 맵.
@@ -32,11 +32,11 @@ public class WebSocketSessionManager {
             try {
                 session.sendMessage(new TextMessage(message));
             } catch (IOException e) {
-                System.err.println("Failed to send message to user " + userId + ": " + e.getMessage());
+                log.error("Failed to send message to user {} : {}", userId, e.getMessage());
                 // Handle exceptions, possibly close session
             }
         } else {
-            System.err.println("No active session for user ID " + userId);
+            log.error("No active session for user ID {}", userId);
         }
     }
 }

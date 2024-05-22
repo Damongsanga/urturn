@@ -17,8 +17,8 @@ public class JwtToken{
     private String refreshToken;
 
     public String deleteRefreshToken(){
-        String refreshToken = this.refreshToken;
+        String token = this.refreshToken;
         this.refreshToken = null;
-        return refreshToken;
+        return token;
     }
 }

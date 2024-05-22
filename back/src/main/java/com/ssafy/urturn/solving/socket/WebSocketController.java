@@ -38,11 +38,11 @@ public class WebSocketController {
 
     @MessageMapping("/createRoom")
     public void createRoom(@Payload MemberIdDto memberIddto) {
-//        cachedatas.clearAllCache();
         log.info("방 생성 로직 멤버ID Dto = {}",memberIddto);
         Long userId=memberIddto.getMemberId();
         RoomInfoResponse roomInfoResponse = roomService.createRoom(userId);
         UserInfoResponse userInfoResponse = roomService.getUserInfo(userId,null);
+
 //        // response에 포함된 방 정보를 이용하여 방을 생성한 사용자에게만 응답을 보냄
         log.info("roomInfoResponse : {}", roomInfoResponse);
         log.info("userInfoResponse : {}", userInfoResponse);
@@ -91,7 +91,7 @@ public class WebSocketController {
 
     @MessageMapping("/sendOVSession")
     public void sendOVSSession(@Payload SessionIdDto sessionIdDto){
-        System.out.println(sessionIdDto.toString());
+        log.info("sessionId: {}", sessionIdDto.getSessionId());
         Long pairId=cachedatas.cacheroomInfoDto(sessionIdDto.getRoomId()).getPairId();
         log.info("receiveOVSession : {}", sessionIdDto.getSessionId());
         simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/receiveOVSession",sessionIdDto.getSessionId());

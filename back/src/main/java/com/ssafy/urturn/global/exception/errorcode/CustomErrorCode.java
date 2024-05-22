@@ -34,6 +34,11 @@ public enum CustomErrorCode implements ErrorCode{
     //Problem
     NO_PROBLEM(HttpStatus.BAD_REQUEST, "ID에 해당하는 문제가 존재하지 않습니다"),
 
+    // Room
+    NO_ROOM(HttpStatus.BAD_REQUEST, "ID에 해당하는 방이 존재하지 않습니다"),
+    NO_ROOMINFO(HttpStatus.BAD_REQUEST, "방 정보를 가져올 수 없습니다."),
+    CANNOT_ENTER_ROOM(HttpStatus.BAD_REQUEST, "방에 입장할 수 없습니다"),
+
     // Grading
     TOO_MUCH_TRAFFIC(HttpStatus.TOO_MANY_REQUESTS, "채점 서버가 많은 부하를 받고 있습니다. 잠시 후에 다시 시도해주세요!"),
 

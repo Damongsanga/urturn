@@ -1,6 +1,9 @@
 package com.ssafy.urturn.solving.service;
 
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.CANNOT_ENTER_ROOM;
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_HISTORY;
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_ROOM;
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_ROOMINFO;
 
 import com.ssafy.urturn.global.RequestLockService;
 import com.ssafy.urturn.global.exception.RestApiException;
@@ -89,18 +92,18 @@ public class RoomService {
         // 캐시된 방 ID 가져오기
         String roomId = cachedatas.cacheRoomId(entryCode);
         if (roomId == null) {
-            throw new RuntimeException("해당 방이 존재하지 않습니다.");
+            throw new RestApiException(NO_ROOM);
         }
 
         // 방 정보 가져오기
         RoomInfoDto roomInfo = cachedatas.cacheroomInfoDto(roomId);
         if (roomInfo == null) {
-            throw new RuntimeException("방 정보를 가져올 수 없습니다.");
+            throw new RestApiException(NO_ROOMINFO);
         }
 
         // 방 상태 확인
         if (roomInfo.getRoomStatus() != RoomStatus.WAITING) {
-            throw new RuntimeException("해당 방은 현재 " + roomInfo.getRoomStatus()+ " 상태입니다.");
+            throw new RestApiException(CANNOT_ENTER_ROOM, "해당 방은 현재 " + roomInfo.getRoomStatus()+ " 상태입니다.");
         }
 
         // 참여자 ID 설정
@@ -276,12 +279,11 @@ public class RoomService {
 
     @CachePut(value = "responseCache", key = "#roomId + '_' + #questionId")
     public List<UserCodeDto> updateCodeCache(String roomId, String questionId, UserCodeDto newCode) {
-//        System.out.println("[UpdateCodeCache]  roomId = "+roomId+" questionId = "+questionId+" round = "+newCode.getRound()+" code = "+newCode.getCode());
         List<UserCodeDto> currentCodes = cachedatas.cacheCodes(roomId, questionId);
         if (currentCodes == null) {
             currentCodes = new ArrayList<>();
         }
-        System.out.println("사이즈 = "+currentCodes.size());
+        log.info("현재 코드 사이즈 = {}", currentCodes.size());
         if(newCode!=null){
             currentCodes.add(newCode);
         }

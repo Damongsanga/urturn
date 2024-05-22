@@ -1,9 +1,10 @@
 package com.ssafy.urturn.global.auth;
 
 
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_AUTHORIZATION;
+
 import com.ssafy.urturn.global.auth.repository.JwtRedisRepository;
 import com.ssafy.urturn.global.exception.RestApiException;
-import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
 import com.ssafy.urturn.global.util.AES128Util;
 import com.ssafy.urturn.global.util.KeyUtil;
 import io.jsonwebtoken.Claims;
@@ -21,7 +22,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -120,7 +119,7 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get("roles") == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new RestApiException(NO_AUTHORIZATION, "권한 정보가 없는 토큰입니다.");
         }
 
         // 클레임에서 권한 정보 가져오기 (권한 정보가 Set<String>으로 저장되어 있다고 가정)
