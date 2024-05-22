@@ -79,7 +79,6 @@ public class OAuthService {
 
     // memberId로 조회하는 것으로 수정 필요
     private void updateAccessToken(OAuthMemberInfoResponse res){
-//        Long memberId = MemberUtil.getMemberId();
         Member member = memberRepository.findByGithubUniqueId(res.getOauthId()).orElseThrow(() -> new RestApiException(NO_MEMBER));
         member.updateGithubTokens(res.getAccessToken());
     }

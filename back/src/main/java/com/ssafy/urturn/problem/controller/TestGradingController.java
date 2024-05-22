@@ -1,9 +1,12 @@
 package com.ssafy.urturn.problem.controller;
 
+import com.ssafy.urturn.problem.dto.GradingResponse;
+import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.problem.dto.TestGetResultDto;
 import com.ssafy.urturn.problem.dto.TestSelectProblemDto;
 import com.ssafy.urturn.problem.service.GradingService;
 import com.ssafy.urturn.problem.service.ProblemService;
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +23,12 @@ public class TestGradingController {
     private final ProblemService problemService;
 
     @PostMapping("/getResult")
-    public ResponseEntity<?> getResult(@RequestBody TestGetResultDto inputCode) {
+    public ResponseEntity<GradingResponse> getResult(@RequestBody TestGetResultDto inputCode) {
         return ResponseEntity.ok(gradingService.getResult(inputCode.getProblemId(), inputCode.getInputCode(), inputCode.getLanguage()));
     }
 
     @PostMapping("/select2Problem")
-    public ResponseEntity<?> getResult(@RequestBody TestSelectProblemDto dto) {
+    public ResponseEntity<List<ProblemTestcaseDto>> getResult(@RequestBody TestSelectProblemDto dto) {
         return ResponseEntity.ok(problemService.getTwoProblem(dto.getMemberId(), dto.getPairId(), dto.getLevel()));
     }
 

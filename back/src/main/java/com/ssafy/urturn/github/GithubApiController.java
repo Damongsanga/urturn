@@ -21,7 +21,7 @@ public class GithubApiController {
     private final OAuthService oAuthService;
 
     @GetMapping("/upload")
-    public ResponseEntity<?> refreshAccessToken(@RequestParam String code){
+    public ResponseEntity<Void> refreshAccessToken(@RequestParam String code){
         log.info("code : {}", code);
         String githubUniqueId = oAuthService.refreshAccessToken(code);
         githubUploadService.upload(githubUniqueId);

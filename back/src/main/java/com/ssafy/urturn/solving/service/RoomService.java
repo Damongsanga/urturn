@@ -1,6 +1,6 @@
 package com.ssafy.urturn.solving.service;
 
-import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.*;
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_HISTORY;
 
 import com.ssafy.urturn.global.RequestLockService;
 import com.ssafy.urturn.global.exception.RestApiException;
@@ -15,17 +15,30 @@ import com.ssafy.urturn.problem.dto.GradingResponse;
 import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.problem.service.GradingService;
 import com.ssafy.urturn.problem.service.ProblemService;
-import com.ssafy.urturn.solving.dto.*;
+import com.ssafy.urturn.solving.cache.CacheDatas;
+import com.ssafy.urturn.solving.dto.LeaveRoomDto;
+import com.ssafy.urturn.solving.dto.ReadyInfoRequest;
+import com.ssafy.urturn.solving.dto.RetroCodeResponse;
+import com.ssafy.urturn.solving.dto.RetroCreateRequest;
+import com.ssafy.urturn.solving.dto.RoomInfoDto;
+import com.ssafy.urturn.solving.dto.RoomInfoResponse;
+import com.ssafy.urturn.solving.dto.RoomStatus;
+import com.ssafy.urturn.solving.dto.SubmitRequest;
+import com.ssafy.urturn.solving.dto.SubmitResponse;
+import com.ssafy.urturn.solving.dto.SwitchCodeRequest;
+import com.ssafy.urturn.solving.dto.SwitchCodeResponse;
+import com.ssafy.urturn.solving.dto.UserCodeDto;
+import com.ssafy.urturn.solving.dto.UserInfoResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.locks.ReentrantLock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import lombok.extern.slf4j.Slf4j;
-import com.ssafy.urturn.solving.cache.CacheDatas;
-
-import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -99,31 +112,6 @@ public class RoomService {
         return roomId;
     }
 
-//    public ProblemResponse[] getproblem(String roomId, Difficulty difficulty){
-//
-//
-//
-//        ProblemResponse[] problem = new ProblemResponse[2];
-//
-//
-//        // 일단은 하드코딩
-//        // ************* 이부분 사용자가 푼 문제 히스토리 참고해서 두 문제 조회하는 로직으로 변경. ****************
-//        problem[0]=new ProblemResponse(0L,"https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/problem/SheepAndWolves.txt",
-//                "양늑이");
-//        problem[1]=new ProblemResponse(1L,"https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/problem/test.txt"
-//        ,"늑양이");
-//
-//        roomInfoDto roomInfoDto=cachedatas.cacheroomInfoDto(roomId);
-//
-//        // ******************* 가져온 문제 아이디 캐싱 필요. ****************************
-//        roomInfoDto.setProblem1Id(0L);
-//        roomInfoDto.setProblem2Id(1L);
-//        cachedatas.cacheroomInfoDto(roomId,roomInfoDto);
-//
-//
-//        return problem;
-//    }
-
     public List<ProblemTestcaseDto> getproblem(String roomId, Level level){
 
         RoomInfoDto roomInfoDto = cachedatas.cacheroomInfoDto(roomId);
@@ -155,10 +143,8 @@ public class RoomService {
         if (areBothpairsReady(roomId, roomInfo)) {
             // 두 사용자가 모두 준비완료를 했을 경우.
             roomInfo.setRoomStatus(RoomStatus.IN_GAME);
-//            roomInfo.setStartTime(LocalDateTime.now());
             return true;
         }
-
 
         return false;
     }
@@ -230,12 +216,6 @@ public class RoomService {
         }
 
         // 페어프로그래밍 모드 전환 메시지 전송
-        /*
-        ex)
-        submitResponse.setResult(false);
-        submitResponse.setMessage("테케 1 정답\n 테케 2 오답");
-        dto 채점서버 반환 형태에 따라 수정 필요하면 수정 후 API 명세에 적어주세용 -> 반환 엔티티 및 API 명세 수정했습니돠
-         */
 
         // Lock 해제
 //        requestLockService.unlock(key);

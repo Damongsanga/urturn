@@ -40,23 +40,6 @@ public class MemberService {
         currentMember.updateGithubRepository(repository);
     }
 
-//    public userInfoResponse getMemberInfo(Long myUserId, Long pairId) {
-//        userInfoResponse userInfo = new userInfoResponse();
-//        if(myUserId!=null) {
-//            Member member = memberRepository.findById(myUserId).orElseThrow(() -> new IllegalArgumentException("Invalid member ID"));
-//            userInfo.setMyUserProfileUrl(member.getProfileImage());
-//            userInfo.setMyUserNickName(member.getNickname());
-//        }
-//
-//        if(pairId!=null) {
-//            Member member = memberRepository.findById(pairId).orElseThrow(() -> new IllegalArgumentException("Invalid member ID"));
-//            userInfo.setpairProfileUrl(member.getProfileImage());
-//            userInfo.setpairNickName(member.getNickname());
-//        }
-//
-//        return userInfo;
-//    }
-
     public UserInfoResponse getMemberInfo(Long myUserId, Long pairId) {
         UserInfoResponse userInfo = new UserInfoResponse();
 

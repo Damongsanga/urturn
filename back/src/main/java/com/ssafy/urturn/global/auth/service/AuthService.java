@@ -7,9 +7,7 @@ import com.ssafy.urturn.global.auth.JwtTokenProvider;
 import com.ssafy.urturn.global.auth.Role;
 import com.ssafy.urturn.global.auth.dto.LoginReqeust;
 import com.ssafy.urturn.global.auth.dto.LoginResponse;
-import com.ssafy.urturn.global.auth.repository.JwtRedisRepository;
 import com.ssafy.urturn.global.exception.RestApiException;
-import com.ssafy.urturn.global.util.AES128Util;
 import com.ssafy.urturn.member.Level;
 import com.ssafy.urturn.member.entity.Member;
 import com.ssafy.urturn.member.repository.MemberRepository;
@@ -33,10 +31,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final OAuthClient githubOAuthClient;
     private final PasswordEncoder passwordEncoder;
-    private final JwtRedisRepository jwtRedisRepository;
-    private final AES128Util aes128Util;
 
     @Value("spring.security.oauth2.client.registration.password-salt")
     private String salt;
@@ -44,17 +39,23 @@ public class AuthService {
 
     @Transactional
     public LoginResponse createAndLogin(LoginReqeust req) {
+
+        String default_image = "https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/UserProfileImage/baseImage.jpg";
+        String default_email = "damongsanga@email.com";
+        String default_token = "githubAccessToken";
+
         if (!memberRepository.existsByNickname(req.getNickname())){
             Member member = Member.builder()
                 .nickname(req.getNickname())
                 .password(passwordEncoder.encode(req.getPassword() + salt))
-                .profileImage("https://a305-project-bucket.s3.ap-northeast-2.amazonaws.com/UserProfileImage/baseImage.jpg")
-                .githubAccessToken("githubAccessToken")
-                .email("damongsanga@email.com")
+                .profileImage(default_image)
+                .githubAccessToken(default_token)
+                .email(default_email)
                 .level(Level.LEVEL1)
                 .roles(List.of(Role.USER)).build();
             memberRepository.save(member);
         }
+
         return login(req);
     }
 

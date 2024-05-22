@@ -60,21 +60,16 @@ public class OpenviduController {
 
 
     @PostMapping("/{sessionId}/connection")
-    public ResponseEntity<Map> createConnection(@PathVariable("sessionId") String sessionId,
+    public ResponseEntity<Map<String, String>> createConnection(@PathVariable("sessionId") String sessionId,
         @RequestBody(required = false) Map<String, Object> params)
+
         throws OpenViduJavaClientException, OpenViduHttpException {
         Session session = openvidu.getActiveSession(sessionId);
         if (session == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        // Connection 필터에 필요한 것을 제공
-//        ConnectionProperties properties = new ConnectionProperties.Builder().kurentoOptions(
-//            new KurentoOptions.Builder()
-//                .allowedFilters(new String[]{"GStreamerFilter", "FaceOverlayFilter", "ChromaFilter"})
-//                .build()).build();
         ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
-
 
         Connection connection = session.createConnection(properties);
         Map<String, String> connectionInfo = new HashMap<>();

@@ -47,12 +47,6 @@ public class WebSocketController {
         log.info("roomInfoResponse : {}", roomInfoResponse);
         log.info("userInfoResponse : {}", userInfoResponse);
         simpMessagingTemplate.convertAndSendToUser(userId.toString(), "/roomInfo", roomInfoResponse);
-
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException ignored){
-        }
-
         simpMessagingTemplate.convertAndSendToUser(userId.toString(),"/userInfo",userInfoResponse);
     }
 
@@ -69,12 +63,6 @@ public class WebSocketController {
         RoomInfoResponse roomInfoResponse=new RoomInfoResponse(roomId,null, false);
 
         simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/roomInfo", roomInfoResponse);
-
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException ignored){
-        }
-
         simpMessagingTemplate.convertAndSendToUser(pairId.toString(),"/userInfo",userInfoResponse);
         UserInfoResponse userInfoResponse2=roomService.getUserInfo(managerId,pairId);
         simpMessagingTemplate.convertAndSendToUser(managerId.toString(),"/userInfo",userInfoResponse2);
@@ -311,26 +299,8 @@ public class WebSocketController {
             simpMessagingTemplate.convertAndSendToUser(pairId.toString(), "/finishSocket/githubUpload", memberService.hasGithubRepository(pairId));
 
         //  캐시 삭제.
-
+        cachedatas.evictRoomInfoDto(req.getRoomId()); // 정상 종료 시 데이터는 삭제 -> 특정 기간동안 남겨놓는 방법도 고민할 수 있음
 
     }
 
 }
-/*
-convertAndSendToUser(String user, String destination, Object payload)
-user : 메시지를 받을 사용자의 식별자. 고유ID
-destination : 메시지를 보낼 목적지(경로) -> 클라이언트가 메시지를 수신하기 위해 구독하는 경로.
-payload 전송할 메시지의 내용
-
-목적지 /queue/roomCreated 는  /user/{userId}/queue/roomCreated로 변환 됨.
-이때 /user라는 접두사는 Spring 메시지 브로커가 메시지를 해당 사용자의 세션에 자동으로 라우팅하는데 사용 표준 접두사
-{userId} 사용자를 식별하는 고유 키 인증 과정에서 얻어지며, Principal 객체의 이름 또는 특정 필드로부터 추출.
-
-자동 처리: 사용자가 직접 /user/{userId}/queue/... 형태의 경로를 구독할 필요는 없습니다.
-클라이언트는 보다 일반적인 경로(예: /queue/roomCreated)를 구독하고,
-Spring 웹소켓 인프라가 자동으로 /user/{userId}/queue/roomCreated 형태로 변환하여 해당 사용자의 메시지만을 받도록 합니다.
-
-사용자 ID 전달: 일반적으로 userId는 서버가 사용자의 인증 정보에서 자동으로 추출합니다.
-
-response는 서버에서 내부 로직 처리 후 클라이언트에게 보낼 객체.
- */

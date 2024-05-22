@@ -2,15 +2,16 @@ package com.ssafy.urturn.solving.cache;
 
 import com.ssafy.urturn.solving.dto.RoomInfoDto;
 import com.ssafy.urturn.solving.dto.UserCodeDto;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.locks.ReentrantLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.stereotype.Service;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,9 +22,8 @@ public class CacheDatas {
     private final RedisCacheManager redisCacheManager;
 
     public void clearAllCache(){
-
         redisCacheManager.getCacheNames().forEach(cacheName ->{
-            redisCacheManager.getCache(cacheName).clear();
+            Objects.requireNonNull(redisCacheManager.getCache(cacheName)).clear();
         });
     }
 
@@ -39,7 +39,6 @@ public class CacheDatas {
     }
 
 
-
     @CachePut(value = "roomInfoDtoCache", key="#roomId")
     public RoomInfoDto cacheroomInfoDto(String roomId, RoomInfoDto roomInfoDto){
         return roomInfoDto;
@@ -52,7 +51,7 @@ public class CacheDatas {
 
     @CacheEvict(value = "roomInfoDtoCache", key="#roomId")
     public void evictRoomInfoDto(String roomId){
-
+        // delete cache
     }
 
 
@@ -64,7 +63,7 @@ public class CacheDatas {
     @Cacheable(value = "responseCache", key = "#roomId + '_' + #questionId")
     public List<UserCodeDto> cacheCodes(String roomId, String questionId) {
         // 실제 캐시 저장소에서 데이터를 가져오는 로직은 필요하지 않음. 캐시 미스 시 null 반환.
-        return null;
+        return Collections.emptyList();
     }
 
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class testController {
     private final RoomService roomService;
     @GetMapping("/test")
-    public ResponseEntity<?> checkRoomEntry(){
+    public ResponseEntity<String> checkRoomEntry(){
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("성공");
     }
 }

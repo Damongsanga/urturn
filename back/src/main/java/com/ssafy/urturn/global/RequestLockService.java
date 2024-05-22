@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RequestLockService {
 
-
     private final RedisTemplate<String, String> redisTemplate;
 
     public String generateLockKey(RequestLockType requestLockType, Object... params) {
@@ -30,7 +29,6 @@ public class RequestLockService {
                 throw new RestApiException(CustomErrorCode.REQUEST_LOCKED);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             throw new RestApiException(INTERNAL_SERVER_ERROR, "redis error");
         }
     }

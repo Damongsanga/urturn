@@ -18,9 +18,8 @@ public class RoomInfoDto {
     private Long problem1Id;
     // 문제2 ID
     private Long problem2Id;
-//    private LocalDateTime startTime;
-//    private LocalDateTime endTime;
-    private Long historyId; // 추가해야함
+
+    private Long historyId;
 
     private boolean managerIsSubmitting;
     private boolean pairIsSubmitting;
