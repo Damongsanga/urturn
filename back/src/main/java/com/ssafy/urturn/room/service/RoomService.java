@@ -50,10 +50,10 @@ public class RoomService {
         roominfodto.setRoomStatus(RoomStatus.WAITING);
 
         // 초대코드 키로 방 ID 캐시
-        cachedatas.cacheRoomId(entryCode,roomId);
+        cachedatas.putRoomIdCache(entryCode,roomId);
 
         // 방 ID 키로 방정보 캐시
-        cachedatas.cacheroomInfoDto(roomId,roominfodto);
+        cachedatas.putRoomInfo(roomId,roominfodto);
 
         return new RoomInfoResponse(roomId, entryCode, true);
 
@@ -77,13 +77,13 @@ public class RoomService {
 
     public String canEnterRoom(String entryCode) {
         // 캐시된 방 ID 가져오기
-        String roomId = cachedatas.cacheRoomId(entryCode);
+        String roomId = cachedatas.getRoomIdCache(entryCode);
         if (roomId == null) {
             throw new RestApiException(NO_ROOM);
         }
 
         // 방 정보 가져오기
-        RoomInfoDto roomInfo = cachedatas.cacheroomInfoDto(roomId);
+        RoomInfoDto roomInfo = cachedatas.getRoomInfo(roomId);
         if (roomInfo == null) {
             throw new RestApiException(NO_ROOMINFO);
         }
@@ -97,7 +97,7 @@ public class RoomService {
         roomInfo.setPairId(MemberUtil.getMemberId());
 
         // 방 정보 업데이트
-        cachedatas.cacheroomInfoDto(roomId, roomInfo);
+        cachedatas.putRoomInfo(roomId, roomInfo);
 
         return roomId;
     }
@@ -106,10 +106,10 @@ public class RoomService {
         // 방장 인 경우
         if(leaveRoomDto.isHost()){
             // 방 삭제.
-            cachedatas.evictRoomInfoDto(leaveRoomDto.getRoomId());
+            cachedatas.deleteRoomInfo(leaveRoomDto.getRoomId());
         }else{
             // 방 정보에서 pairId null로 수정
-            cachedatas.cacheroomInfoDto(leaveRoomDto.getRoomId()).setPairId(null);
+            cachedatas.getRoomInfo(leaveRoomDto.getRoomId()).setPairId(null);
         }
     }
 

@@ -94,11 +94,11 @@ public class RoomWebSocketController {
     }
 
     private Long getManagerIdFromCache(String roomId) {
-        return cacheDatas.cacheroomInfoDto(roomId).getManagerId();
+        return cacheDatas.getRoomInfo(roomId).getManagerId();
     }
 
     private Long getPairIdFromCache(String roomId) {
-        return cacheDatas.cacheroomInfoDto(roomId).getPairId();
+        return cacheDatas.getRoomInfo(roomId).getPairId();
     }
 
 }

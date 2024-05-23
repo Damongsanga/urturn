@@ -1,5 +1,9 @@
 package com.ssafy.urturn.solving.controller;
 
+import static com.ssafy.urturn.solving.PairProgrammingRole.DRIVER;
+import static com.ssafy.urturn.solving.PairProgrammingRole.NAVIGATOR;
+
+import com.ssafy.urturn.global.cache.CacheDatas;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.history.HistoryResult;
@@ -8,21 +12,24 @@ import com.ssafy.urturn.member.service.MemberService;
 import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.problem.service.ProblemService;
 import com.ssafy.urturn.room.dto.RoomInfoDto;
-import com.ssafy.urturn.global.cache.CacheDatas;
-import com.ssafy.urturn.solving.dto.*;
+import com.ssafy.urturn.solving.dto.ReadyInfoRequest;
+import com.ssafy.urturn.solving.dto.RetroCodeResponse;
+import com.ssafy.urturn.solving.dto.RetroCreateRequest;
+import com.ssafy.urturn.solving.dto.SelectLevelRequest;
+import com.ssafy.urturn.solving.dto.SubmitRequest;
+import com.ssafy.urturn.solving.dto.SubmitResponse;
+import com.ssafy.urturn.solving.dto.SwitchCodeRequest;
+import com.ssafy.urturn.solving.dto.SwitchCodeResponse;
+import com.ssafy.urturn.solving.dto.UserCodeDto;
 import com.ssafy.urturn.solving.service.SolveService;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Map;
-
-import static com.ssafy.urturn.solving.PairProgrammingRole.DRIVER;
-import static com.ssafy.urturn.solving.PairProgrammingRole.NAVIGATOR;
 
 @RestController
 @RequiredArgsConstructor
@@ -74,8 +81,8 @@ public class SolveWebSocketController {
         solveService.updateCodeCache(req.getRoomId(), req.getProblemId().toString(), new UserCodeDto(req));
 
         String roomId = req.getRoomId();
-        Long pairId = cacheDatas.cacheroomInfoDto(roomId).getPairId();
-        Long managerId = cacheDatas.cacheroomInfoDto(roomId).getManagerId();
+        Long pairId = cacheDatas.getRoomInfo(roomId).getPairId();
+        Long managerId = cacheDatas.getRoomInfo(roomId).getManagerId();
 
         // 라운드가 최대라운드인 경우
         if (req.getRound() == ROUND_LIMIT) {
@@ -173,7 +180,7 @@ public class SolveWebSocketController {
                 throw new RestApiException(CustomErrorCode.REQUEST_LOCKED);
             roomInfoDto.setPairIsSubmitting(true);
         }
-        cacheDatas.cacheroomInfoDto(submitRequest.getRoomId(), roomInfoDto);
+        cacheDatas.putRoomInfo(submitRequest.getRoomId(), roomInfoDto);
     }
 
     // 중복 요청 방지 원복
@@ -183,7 +190,7 @@ public class SolveWebSocketController {
         } else {
             roomInfoDto.setPairIsSubmitting(false);
         }
-        cacheDatas.cacheroomInfoDto(submitRequest.getRoomId(), roomInfoDto);
+        cacheDatas.putRoomInfo(submitRequest.getRoomId(), roomInfoDto);
     }
 
     @MessageMapping("/submitRetro")
@@ -199,8 +206,11 @@ public class SolveWebSocketController {
         Long pairId = getPairIdFromCache(req.getRoomId());
         sendGithubUploadRequest(managerId, pairId);
 
-        //  캐시 삭제.
-        cacheDatas.evictRoomInfoDto(req.getRoomId()); // 정상 종료 시 데이터는 삭제 -> 특정 기간동안 남겨놓는 방법도 고민할 수 있음
+        RoomInfoDto roomInfoDto = getRoomInfoDto(req.getRoomId());
+        //  캐시 삭제. 정상 종료 시 데이터는 삭제 -> 특정 기간동안 남겨놓는 방법도 고민할 수 있음
+        cacheDatas.deleteRoomInfo(req.getRoomId());
+        cacheDatas.deleteCacheCodes(req.getRoomId(), roomInfoDto.getProblem1Id().toString());
+        cacheDatas.deleteCacheCodes(req.getRoomId(), roomInfoDto.getProblem2Id().toString());
     }
 
     private void sendGithubUploadRequest(Long managerId, Long pairId) {
@@ -237,14 +247,14 @@ public class SolveWebSocketController {
     }
 
     private Long getManagerIdFromCache(String roomId) {
-        return cacheDatas.cacheroomInfoDto(roomId).getManagerId();
+        return cacheDatas.getRoomInfo(roomId).getManagerId();
     }
 
     private Long getPairIdFromCache(String roomId) {
-        return cacheDatas.cacheroomInfoDto(roomId).getPairId();
+        return cacheDatas.getRoomInfo(roomId).getPairId();
     }
 
     private RoomInfoDto getRoomInfoDto(String roomId) {
-        return cacheDatas.cacheroomInfoDto(roomId);
+        return cacheDatas.getRoomInfo(roomId);
     }
 }

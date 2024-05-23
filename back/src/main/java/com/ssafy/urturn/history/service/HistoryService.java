@@ -34,7 +34,7 @@ public class HistoryService {
     // RoomInfoDto에 historyId 저장
     @Transactional
     public Long createHistory(String roomId){
-        RoomInfoDto roomInfoDto = cacheDatas.cacheroomInfoDto(roomId);
+        RoomInfoDto roomInfoDto = cacheDatas.getRoomInfo(roomId);
 
         History history = History.builder()
             .manager(memberRepository.findById(roomInfoDto.getManagerId()).orElseThrow(() -> new RestApiException(
@@ -47,7 +47,7 @@ public class HistoryService {
         Long id = historyRepository.save(history).getId();
 
         roomInfoDto.setHistoryId(id);
-        cacheDatas.cacheroomInfoDto(roomId, roomInfoDto);
+        cacheDatas.putRoomInfo(roomId, roomInfoDto);
 
         return id;
     }
