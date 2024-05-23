@@ -207,7 +207,6 @@ public class SolveWebSocketController {
         sendGithubUploadRequest(managerId, pairId);
 
         //  캐시 삭제는 현재 방에 속한 유저(방장, 페어 무관)가 다시 방을 만들거나 들어갈 때 삭제한다
-        //  TTL인 하루동안은 데이터를 남겨놓도록 한다.
     }
 
     private void sendGithubUploadRequest(Long managerId, Long pairId) {

@@ -1,6 +1,5 @@
 package com.ssafy.urturn.history.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.member.dto.MemberSimpleDto;
 import com.ssafy.urturn.member.dto.ProblemSimpleDto;

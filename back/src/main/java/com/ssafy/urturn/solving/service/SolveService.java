@@ -187,8 +187,7 @@ public class SolveService {
     }
     @Transactional
     public void updateRetro(RetroCreateRequest req, Long historyId) {
-        historyRepository.findById(historyId).orElseThrow(() -> new RestApiException(NO_HISTORY))
-                .setRetro(req);
+        historyRepository.findById(historyId).orElseThrow(() -> new RestApiException(NO_HISTORY)).setRetro(req);
     }
 
     @Transactional
