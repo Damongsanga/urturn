@@ -1,33 +1,37 @@
 package com.ssafy.urturn.solving.service;
 
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_HISTORY;
+
+import com.ssafy.urturn.global.cache.CacheDatas;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
 import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.history.repository.HistoryRepository;
 import com.ssafy.urturn.member.Level;
-import com.ssafy.urturn.member.repository.MemberRepository;
 import com.ssafy.urturn.problem.dto.GradingResponse;
 import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.problem.service.GradingService;
 import com.ssafy.urturn.problem.service.ProblemService;
-import com.ssafy.urturn.room.dto.RoomInfoDto;
 import com.ssafy.urturn.room.RoomStatus;
-import com.ssafy.urturn.global.cache.CacheDatas;
-import com.ssafy.urturn.solving.dto.*;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.ssafy.urturn.room.dto.RoomInfoDto;
+import com.ssafy.urturn.solving.dto.ReadyInfoRequest;
+import com.ssafy.urturn.solving.dto.RetroCodeResponse;
+import com.ssafy.urturn.solving.dto.RetroCreateRequest;
+import com.ssafy.urturn.solving.dto.SubmitRequest;
+import com.ssafy.urturn.solving.dto.SubmitResponse;
+import com.ssafy.urturn.solving.dto.SwitchCodeRequest;
+import com.ssafy.urturn.solving.dto.SwitchCodeResponse;
+import com.ssafy.urturn.solving.dto.UserCodeDto;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
-
-import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_HISTORY;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +43,6 @@ public class SolveService {
     private final CacheDatas cachedatas;
     private final ReentrantLock lock;
     private final HistoryRepository historyRepository;
-    private final MemberRepository memberRepository;
 
     public List<ProblemTestcaseDto> getTwoProblems(String roomId, Level level){
 
@@ -186,7 +189,7 @@ public class SolveService {
                 .setRetro(req);
     }
 
-    @CachePut(value = "responseCache", key = "#roomId + '_' + #questionId")
+    @Transactional
     public List<UserCodeDto> updateCodeCache(String roomId, String questionId, UserCodeDto newCode) {
         List<UserCodeDto> currentCodes = cachedatas.cacheCodes(roomId, questionId);
         if (currentCodes == null) {

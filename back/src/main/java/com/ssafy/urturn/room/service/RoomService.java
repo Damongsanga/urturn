@@ -1,5 +1,11 @@
 package com.ssafy.urturn.room.service;
 
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.CANNOT_ENTER_ROOM;
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_MEMBER;
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_ROOM;
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_ROOMINFO;
+
+import com.ssafy.urturn.global.cache.CacheDatas;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.util.MemberUtil;
 import com.ssafy.urturn.history.repository.HistoryRepository;
@@ -7,21 +13,17 @@ import com.ssafy.urturn.member.entity.Member;
 import com.ssafy.urturn.member.repository.MemberRepository;
 import com.ssafy.urturn.problem.service.GradingService;
 import com.ssafy.urturn.problem.service.ProblemService;
+import com.ssafy.urturn.room.RoomStatus;
 import com.ssafy.urturn.room.dto.LeaveRoomDto;
 import com.ssafy.urturn.room.dto.RoomInfoDto;
 import com.ssafy.urturn.room.dto.RoomInfoResponse;
-import com.ssafy.urturn.room.RoomStatus;
 import com.ssafy.urturn.room.dto.UserInfoResponse;
-import com.ssafy.urturn.global.cache.CacheDatas;
+import java.util.UUID;
+import java.util.concurrent.locks.ReentrantLock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
-import java.util.concurrent.locks.ReentrantLock;
-
-import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
