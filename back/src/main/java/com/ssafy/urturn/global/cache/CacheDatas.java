@@ -60,7 +60,7 @@ public class CacheDatas {
         return null;
     }
 
-    @CacheEvict(value = RedisCacheKey.ROOMINFODTOCACHE, key="#roomId", allEntries = true)
+    @CacheEvict(value = RedisCacheKey.ROOMINFODTOCACHE, key="#roomId")
     public void deleteRoomInfo(String roomId){
         // delete cache
     }
@@ -76,7 +76,7 @@ public class CacheDatas {
         return new ArrayList<>();
     }
 
-    @CacheEvict(value = RedisCacheKey.ROUNDCODECACHE, key = "#roomId + '_' + #questionId", allEntries = true)
+    @CacheEvict(value = RedisCacheKey.ROUNDCODECACHE, key = "#roomId + '_' + #questionId")
     public void deleteCacheCodes(String roomId, String questionId) {
         // delete cache
     }
