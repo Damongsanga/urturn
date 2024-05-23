@@ -189,7 +189,7 @@ public class SolveService {
     }
 
     @Transactional
-    public List<UserCodeDto> updateCodeCache(String roomId, String questionId, UserCodeDto newCode) {
+    public void updateCodeCache(String roomId, String questionId, UserCodeDto newCode) {
         List<UserCodeDto> currentCodes = cachedatas.cacheCodes(roomId, questionId);
         log.info("현재 코드 사이즈 = {}", currentCodes.size());
         if(newCode!=null){
@@ -197,8 +197,6 @@ public class SolveService {
         }
 
         cachedatas.cacheCodes(roomId, questionId, currentCodes);
-
-        return currentCodes;
 
     }
 }

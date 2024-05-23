@@ -2,8 +2,10 @@ package com.ssafy.urturn.solving.dto;
 
 import com.ssafy.urturn.problem.Language;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class UserCodeDto {
 
    private int round;
