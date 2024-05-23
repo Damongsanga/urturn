@@ -38,12 +38,18 @@ public class CacheConfig {
             .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
     }
 
+    /**
+     * [ROOMIDCACHE] 입장코드 : 방ID = 2시간. 2시간동안 페어가 구해지지 않으면 방 입장 불가.
+     * [ROOMINFODTOCACHE] 방ID : 방 정보 = 6시간. ROOMIDCACHE + ROUNDCODECACHE 시간으로 방이 만들어지고 메인 플로우가 끝날 때까지의 예상 시간동안 유지
+     * [RECENTROOMID] 유저ID : 방ID = 6시간. 방 정보와 동일.
+     * [ROUNDCODECACHE] 방ID+문저ID : 라운드별 코드 = 4시간 (240분). 최대 라운드 모두 소요시 20 라운드 * 10분으로 200분 소요.
+     * */
     private Map<String, RedisCacheConfiguration> customConfigurationMap() {
         Map<String, RedisCacheConfiguration> customConfigurationMap = new HashMap<>();
-        customConfigurationMap.put(RedisCacheKey.ROOMIDCACHE, defaultConfiguration().entryTtl(Duration.ofMinutes(5L)));
-        customConfigurationMap.put(RedisCacheKey.RECENTROOMID, defaultConfiguration().entryTtl(Duration.ofSeconds(5L)));
-        customConfigurationMap.put(RedisCacheKey.ROOMINFODTOCACHE, defaultConfiguration().entryTtl(Duration.ofSeconds(5L)));
-        customConfigurationMap.put(RedisCacheKey.ROUNDCODECACHE, defaultConfiguration().entryTtl(Duration.ofSeconds(5L)));
+        customConfigurationMap.put(RedisCacheKey.ROOMIDCACHE, defaultConfiguration().entryTtl(Duration.ofHours(2L)));
+        customConfigurationMap.put(RedisCacheKey.RECENTROOMID, defaultConfiguration().entryTtl(Duration.ofHours(6L)));
+        customConfigurationMap.put(RedisCacheKey.ROOMINFODTOCACHE, defaultConfiguration().entryTtl(Duration.ofHours(6L)));
+        customConfigurationMap.put(RedisCacheKey.ROUNDCODECACHE, defaultConfiguration().entryTtl(Duration.ofMinutes(4L)));
         return customConfigurationMap;
     }
 }

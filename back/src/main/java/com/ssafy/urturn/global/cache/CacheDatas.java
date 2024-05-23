@@ -28,55 +28,55 @@ public class CacheDatas {
     }
 
     // entrycode를 키로 하여 roomId를 roomIdCache라는 이름의 캐시에 저장.
-    @CachePut(value = "roomIdCache", key="#entrycode")
+    @CachePut(value = RedisCacheKey.ROOMIDCACHE, key="#entrycode")
     public String putRoomIdCache(String entrycode, String roomId) {
         return roomId;
     }
 
-    @Cacheable(value ="roomIdCache", key="#entrycode")
+    @Cacheable(value =RedisCacheKey.ROOMIDCACHE, key="#entrycode")
     public String getRoomIdCache(String entrycode) {
         return null;
     }
 
 
-    @CachePut(value = "recentRoomId", key="#memberId")
+    @CachePut(value = RedisCacheKey.RECENTROOMID, key="#memberId")
     public String putRecentRoomId(String memberId, String roomId){
         return roomId;
     };
 
-    @Cacheable(value = "recentRoomId", key="#memberId")
+    @Cacheable(value = RedisCacheKey.RECENTROOMID, key="#memberId")
     public String getRecentRoomId(String memberId){
         return null;
     };
 
 
-    @CachePut(value = "roomInfoDtoCache", key="#roomId")
+    @CachePut(value = RedisCacheKey.ROOMINFODTOCACHE, key="#roomId")
     public RoomInfoDto putRoomInfo(String roomId, RoomInfoDto roomInfoDto){
         return roomInfoDto;
     }
 
-    @Cacheable(value = "roomInfoDtoCache", key="#roomId")
+    @Cacheable(value = RedisCacheKey.ROOMINFODTOCACHE, key="#roomId")
     public RoomInfoDto getRoomInfo(String roomId){
         return null;
     }
 
-    @CacheEvict(value = "roomInfoDtoCache", key="#roomId", allEntries = true)
+    @CacheEvict(value = RedisCacheKey.ROOMINFODTOCACHE, key="#roomId", allEntries = true)
     public void deleteRoomInfo(String roomId){
         // delete cache
     }
 
 
-    @CachePut(value = "roundCodeCache", key = "#roomId + '_' + #questionId")
+    @CachePut(value = RedisCacheKey.ROUNDCODECACHE, key = "#roomId + '_' + #questionId")
     public List<UserCodeDto> putCacheCodes(String roomId, String questionId, List<UserCodeDto> list){
         return list;
     }
 
-    @Cacheable(value = "roundCodeCache", key = "#roomId + '_' + #questionId")
+    @Cacheable(value = RedisCacheKey.ROUNDCODECACHE, key = "#roomId + '_' + #questionId")
     public List<UserCodeDto> getCacheCodes(String roomId, String questionId) {
         return new ArrayList<>();
     }
 
-    @CacheEvict(value = "roundCodeCache", key = "#roomId + '_' + #questionId", allEntries = true)
+    @CacheEvict(value = RedisCacheKey.ROUNDCODECACHE, key = "#roomId + '_' + #questionId", allEntries = true)
     public void deleteCacheCodes(String roomId, String questionId) {
         // delete cache
     }
