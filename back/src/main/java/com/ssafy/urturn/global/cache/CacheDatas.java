@@ -60,7 +60,7 @@ public class CacheDatas {
         return null;
     }
 
-    @CacheEvict(value = "roomInfoDtoCache", key="#roomId")
+    @CacheEvict(value = "roomInfoDtoCache", key="#roomId", allEntries = true)
     public void deleteRoomInfo(String roomId){
         // delete cache
     }
@@ -76,7 +76,7 @@ public class CacheDatas {
         return new ArrayList<>();
     }
 
-    @CacheEvict(value = "responseCache", key = "#roomId + '_' + #questionId")
+    @CacheEvict(value = "responseCache", key = "#roomId + '_' + #questionId", allEntries = true)
     public void deleteCacheCodes(String roomId, String questionId) {
         // delete cache
     }

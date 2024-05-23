@@ -119,6 +119,7 @@ public class RoomService {
     @Transactional
     public void deleteRoomCaches(String memberId){
         String recentRoomId = cacheDatas.getRecentRoomId(memberId);
+        log.info("recentRoomId : {}", recentRoomId);
         if (recentRoomId == null) return;
 
         RoomInfoDto roomInfoDto = cacheDatas.getRoomInfo(recentRoomId);
