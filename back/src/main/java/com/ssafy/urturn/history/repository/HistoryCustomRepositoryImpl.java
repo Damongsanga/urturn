@@ -48,7 +48,7 @@ public class HistoryCustomRepositoryImpl implements HistoryCustomRepository{
                     .otherwise(Projections.constructor(MemberSimpleDto.class,
                         manager.id,
                         manager.nickname,
-                        manager.profileImage)),
+                        manager.profileImage)).as("pair"),
                 Projections.constructor(ProblemSimpleDto.class,
                     problem1.id,
                     problem1.title,
