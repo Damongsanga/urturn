@@ -23,7 +23,6 @@ import com.ssafy.urturn.solving.dto.SubmitResponse;
 import com.ssafy.urturn.solving.dto.SwitchCodeRequest;
 import com.ssafy.urturn.solving.dto.SwitchCodeResponse;
 import com.ssafy.urturn.solving.dto.UserCodeDto;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -192,9 +191,6 @@ public class SolveService {
     @Transactional
     public List<UserCodeDto> updateCodeCache(String roomId, String questionId, UserCodeDto newCode) {
         List<UserCodeDto> currentCodes = cachedatas.cacheCodes(roomId, questionId);
-        if (currentCodes == null) {
-            currentCodes = new ArrayList<>();
-        }
         log.info("현재 코드 사이즈 = {}", currentCodes.size());
         if(newCode!=null){
             currentCodes.add(newCode);
