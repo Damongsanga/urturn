@@ -2,17 +2,16 @@ package com.ssafy.urturn.global.cache;
 
 import com.ssafy.urturn.room.dto.RoomInfoDto;
 import com.ssafy.urturn.solving.dto.UserCodeDto;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.locks.ReentrantLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @RequiredArgsConstructor
@@ -63,8 +62,7 @@ public class CacheDatas {
 
     @Cacheable(value = "responseCache", key = "#roomId + '_' + #questionId")
     public List<UserCodeDto> cacheCodes(String roomId, String questionId) {
-        // 실제 캐시 저장소에서 데이터를 가져오는 로직은 필요하지 않음. 캐시 미스 시 null 반환.
-        return Collections.emptyList();
+        return new ArrayList<>();
     }
 
 
