@@ -122,6 +122,7 @@ public class RoomService {
         if (recentRoomId == null) return;
 
         RoomInfoDto roomInfoDto = cacheDatas.getRoomInfo(recentRoomId);
+        log.info("roomInfoDto : {}", roomInfoDto);
         if (roomInfoDto == null) return;
 
         cacheDatas.deleteRoomInfo(recentRoomId);
