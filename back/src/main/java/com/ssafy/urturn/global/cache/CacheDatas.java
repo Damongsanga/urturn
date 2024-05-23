@@ -66,17 +66,17 @@ public class CacheDatas {
     }
 
 
-    @CachePut(value = "responseCache", key = "#roomId + '_' + #questionId")
+    @CachePut(value = "roundCodeCache", key = "#roomId + '_' + #questionId")
     public List<UserCodeDto> putCacheCodes(String roomId, String questionId, List<UserCodeDto> list){
         return list;
     }
 
-    @Cacheable(value = "responseCache", key = "#roomId + '_' + #questionId")
+    @Cacheable(value = "roundCodeCache", key = "#roomId + '_' + #questionId")
     public List<UserCodeDto> getCacheCodes(String roomId, String questionId) {
         return new ArrayList<>();
     }
 
-    @CacheEvict(value = "responseCache", key = "#roomId + '_' + #questionId", allEntries = true)
+    @CacheEvict(value = "roundCodeCache", key = "#roomId + '_' + #questionId", allEntries = true)
     public void deleteCacheCodes(String roomId, String questionId) {
         // delete cache
     }
