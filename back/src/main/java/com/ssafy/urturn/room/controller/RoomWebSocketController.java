@@ -24,6 +24,9 @@ public class RoomWebSocketController {
         log.info("방 생성 로직 멤버ID Dto = {}", memberIdDto);
 
         Long userId = memberIdDto.getMemberId();
+        // 해당 유저가 최근에 플레이한 방에 대한 캐시 데이터 삭제
+        roomService.deleteRoomCaches(userId.toString());
+
         RoomInfoResponse roomInfoResponse = roomService.createRoom(userId);
         UserInfoResponse userInfoResponse = roomService.getUserInfo(userId, null);
         sendUserAndRoomInfo(userId, roomInfoResponse, userInfoResponse);
@@ -40,12 +43,18 @@ public class RoomWebSocketController {
         Long pairId = getPairIdFromCache(roomId);
         Long managerId = getManagerIdFromCache(roomId);
 
-        // Pair
+
+        // 해당 유저가 최근에 플레이한 방에 대한 캐시 데이터 삭제
+        roomService.deleteRoomCaches(pairId.toString());
+        // 현재 유저의 최근 방 정보 수정
+        cacheDatas.putRecentRoomId(pairId.toString(), roomId);
+
+        // Pair 정보 반환
         UserInfoResponse managerInfoResponse = roomService.getUserInfo(pairId, managerId);
         RoomInfoResponse roomInfoResponse = RoomInfoResponse.makeResponseForPair(roomId);
         sendUserAndRoomInfo(pairId, roomInfoResponse, managerInfoResponse);
 
-        // Manager
+        // Manager 정보 반환
         UserInfoResponse pairInfoResponse = roomService.getUserInfo(managerId, pairId);
         sendPairInfoToManager(managerId, pairInfoResponse);
 

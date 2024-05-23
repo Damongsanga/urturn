@@ -11,9 +11,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
+@Repository
 @RequiredArgsConstructor
 public class CacheDatas {
 
@@ -40,12 +40,12 @@ public class CacheDatas {
 
 
     @CachePut(value = "recentRoomId", key="#memberId")
-    public String getRecentRoomId(String memberId, String roomId){
+    public String putRecentRoomId(String memberId, String roomId){
         return roomId;
     };
 
     @Cacheable(value = "recentRoomId", key="#memberId")
-    public String putRecentRoomId(String memberId){
+    public String getRecentRoomId(String memberId){
         return null;
     };
 

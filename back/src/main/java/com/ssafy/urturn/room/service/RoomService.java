@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoomService {
     private final GradingService gradingService;
     private final ProblemService problemService;
-    private final CacheDatas cachedatas;
+    private final CacheDatas cacheDatas;
     private final ReentrantLock lock;
     private final HistoryRepository historyRepository;
     private final MemberRepository memberRepository;
@@ -50,10 +50,13 @@ public class RoomService {
         roominfodto.setRoomStatus(RoomStatus.WAITING);
 
         // 초대코드 키로 방 ID 캐시
-        cachedatas.putRoomIdCache(entryCode,roomId);
+        cacheDatas.putRoomIdCache(entryCode,roomId);
 
         // 방 ID 키로 방정보 캐시
-        cachedatas.putRoomInfo(roomId,roominfodto);
+        cacheDatas.putRoomInfo(roomId,roominfodto);
+
+        // 현재 유저의 최근 방 정보 수정
+        cacheDatas.putRecentRoomId(userId.toString(), roomId);
 
         return new RoomInfoResponse(roomId, entryCode, true);
 
@@ -77,13 +80,13 @@ public class RoomService {
 
     public String canEnterRoom(String entryCode) {
         // 캐시된 방 ID 가져오기
-        String roomId = cachedatas.getRoomIdCache(entryCode);
+        String roomId = cacheDatas.getRoomIdCache(entryCode);
         if (roomId == null) {
             throw new RestApiException(NO_ROOM);
         }
 
         // 방 정보 가져오기
-        RoomInfoDto roomInfo = cachedatas.getRoomInfo(roomId);
+        RoomInfoDto roomInfo = cacheDatas.getRoomInfo(roomId);
         if (roomInfo == null) {
             throw new RestApiException(NO_ROOMINFO);
         }
@@ -97,7 +100,7 @@ public class RoomService {
         roomInfo.setPairId(MemberUtil.getMemberId());
 
         // 방 정보 업데이트
-        cachedatas.putRoomInfo(roomId, roomInfo);
+        cacheDatas.putRoomInfo(roomId, roomInfo);
 
         return roomId;
     }
@@ -106,11 +109,24 @@ public class RoomService {
         // 방장 인 경우
         if(leaveRoomDto.isHost()){
             // 방 삭제.
-            cachedatas.deleteRoomInfo(leaveRoomDto.getRoomId());
+            cacheDatas.deleteRoomInfo(leaveRoomDto.getRoomId());
         }else{
             // 방 정보에서 pairId null로 수정
-            cachedatas.getRoomInfo(leaveRoomDto.getRoomId()).setPairId(null);
+            cacheDatas.getRoomInfo(leaveRoomDto.getRoomId()).setPairId(null);
         }
+    }
+
+    @Transactional
+    public void deleteRoomCaches(String memberId){
+        String recentRoomId = cacheDatas.getRecentRoomId(memberId);
+        if (recentRoomId == null) return;
+
+        RoomInfoDto roomInfoDto = cacheDatas.getRoomInfo(recentRoomId);
+        if (roomInfoDto == null) return;
+
+        cacheDatas.deleteRoomInfo(recentRoomId);
+        cacheDatas.deleteCacheCodes(recentRoomId, roomInfoDto.getProblem1Id().toString());
+        cacheDatas.deleteCacheCodes(recentRoomId, roomInfoDto.getProblem2Id().toString());
     }
 
 }
