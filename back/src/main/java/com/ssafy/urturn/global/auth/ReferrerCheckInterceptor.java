@@ -13,7 +13,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Slf4j
 public class ReferrerCheckInterceptor implements HandlerInterceptor {
 
-    private final List<String> allowedReferer = Arrays.asList("localhost:3000", "localhost:3002", "localhost:3003");
+    private final List<String> allowedHost = Arrays.asList("localhost:3000", "localhost:3002", "localhost:3003");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -21,7 +21,7 @@ public class ReferrerCheckInterceptor implements HandlerInterceptor {
         String host = request.getHeader("Host");
         log.info("referer : {}", referer);
         log.info("host : {}", host);
-        if (referer == null || !(referer.contains(host) || allowedReferer.contains(referer))) {
+        if (referer == null || !(referer.contains(host) || allowedHost.contains(host))) {
             throw new RestApiException(CommonErrorCode.WRONG_REQUEST, "referer 헤더 정보가 설정되어있지 않거나 잘못되었습니다");
         }
         return true;
