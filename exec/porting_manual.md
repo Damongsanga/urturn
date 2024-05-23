@@ -361,7 +361,7 @@
             proxy_pass $service_url;
             proxy_set_header X-Forwarded-Prefix /api;
             proxy_pass_request_headers on;
-
+            proxy_set_header Host $host;
 
       }
 
