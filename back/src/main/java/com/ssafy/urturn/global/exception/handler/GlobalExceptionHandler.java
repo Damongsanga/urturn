@@ -28,7 +28,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleCustomArgument(RestApiException e) {
         log.warn("RestApiException : {}", e.getMessage());
         log.warn("RestApiException : {}", (Object) e.getStackTrace());
-        e.printStackTrace(); // 개발 끝나고 삭제 필요
         ErrorCode errorCode = e.getErrorCode();
         return handleExceptionInternal(errorCode, e.getMessage());
     }
@@ -56,7 +55,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleAllException(Exception e) {
         log.warn("handleAllException : {}", e.getMessage());
         log.warn("handleAllException : {}", (Object) e.getStackTrace());
-        e.printStackTrace(); // 개발 끝나고 삭제 필요
 
         ErrorCode errorCode = CommonErrorCode.INTERNAL_SERVER_ERROR;
         return handleExceptionInternal(errorCode, e.getMessage());
@@ -66,7 +64,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         log.warn("handleAllException : {}", e.getMessage());
         log.warn("handleAllException : {}", (Object) e.getStackTrace());
-        e.printStackTrace(); // 개발 끝나고 삭제 필요
 
         ErrorCode errorCode = CommonErrorCode.INTERNAL_SERVER_ERROR;
         return handleExceptionInternal(errorCode, "data 제한조건에 위반되는 요청입니다");

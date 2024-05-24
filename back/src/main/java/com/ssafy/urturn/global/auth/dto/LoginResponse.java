@@ -1,7 +1,6 @@
 package com.ssafy.urturn.global.auth.dto;
 
 
-import com.ssafy.urturn.global.auth.JwtToken;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

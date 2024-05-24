@@ -40,11 +40,7 @@ public class GradingService {
         "", "In Queue", "Processing", "Accepted", "Wrong Answer", "Time Limit Exceeded", "Compilation Error", "Runtime Error (SIGSEGV)", "Runtime Error (SIGXFSZ)", "Runtime Error (SIGFPE)", "Runtime Error (SIGABRT)", "Runtime Error (NZEC)", "Runtime Error (Other)", "Internal Error", "Exec Format Error"
     };
 
-    // 정답인 status Id
-    private final int answerStatusId = 3;
-
     public GradingResponse getResult(Long problemId, String inputCode, Language language){
-        int count = 0;
 
         // 문제 id를 기반으로 문제 + 전체 테스트케이스 조회
         ProblemTestcaseDto problemTestcaseDto = problemRepository.getProblemAndTestcase(problemId).orElseThrow(() -> new RestApiException(
@@ -68,24 +64,27 @@ public class GradingService {
         SubmissionBatchResponseDto submissionsBatchResponse = null;
         SubmissionStatus status = PROCESSING;
 
+        int maxRetries = 5;
+        int waitTime = 3000;
+
         // 3초 대기 & 총 5회 재요청.
-        outer : while(count < 5){
+        for (int count = 0; count < maxRetries; count++) {
             // 3초 대기, 바로 토큰 결과를 요청하면 채점 서버에서 완료하지 못함
             try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e){
+                Thread.sleep(waitTime);
+            } catch (InterruptedException e) {
+                log.error("interrupted Exception", e);
+                Thread.currentThread().interrupt();
                 throw new RestApiException(INTERNAL_SERVER_ERROR);
             }
+
             // 응답받은 토큰을 기반으로 다시 응답 추출
             submissionsBatchResponse = getSubmissions(tokens).block();
 
-            switch (status = confirmStatus(Objects.requireNonNull(submissionsBatchResponse).getSubmissions())){
-                case PROCESSING -> {
-                    count++;
-                }
-                case ALL_ACCEPTED, FAILED -> {
-                    break outer;
-                }
+            status = confirmStatus(Objects.requireNonNull(submissionsBatchResponse).getSubmissions());
+
+            if (status == ALL_ACCEPTED || status == FAILED) {
+                break;
             }
         }
 
@@ -119,6 +118,8 @@ public class GradingService {
     private SubmissionStatus confirmStatus(List<SubmissionDto> submissions){
         boolean processingFlag = false;
         for (SubmissionDto sub : submissions) {
+            // 정답인 status Id
+            int answerStatusId = 3;
             if (sub.getStatusId() > answerStatusId) return FAILED;
             if (sub.getStatusId() < answerStatusId) processingFlag = true;
         }

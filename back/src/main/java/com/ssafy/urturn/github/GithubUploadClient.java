@@ -27,12 +27,12 @@ public class GithubUploadClient {
         if (member.getRepository() == null) throw new RestApiException(NO_REPOSITORY);
 
         log.info("url : {}", githubUtil.makeURl(member));
-
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(member.getGithubAccessToken());
+        String message = githubUtil.makeMessage(historyDto, member.getNickname());
 
         HttpEntity<GithubUploadRequestDto> entity = new HttpEntity<>(
-            new GithubUploadRequestDto(githubUtil.makeMessage(historyDto, member.getNickname()), member.getNickname(), member.getEmail(), githubUtil.makeContent(historyDto)),
+            new GithubUploadRequestDto(message, member.getNickname(), member.getEmail(), githubUtil.makeContent(historyDto)),
             headers
         );
 

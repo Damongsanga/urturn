@@ -1,5 +1,6 @@
-package com.ssafy.urturn.solving.dto;
+package com.ssafy.urturn.room.dto;
 
+import com.ssafy.urturn.room.RoomStatus;
 import lombok.*;
 
 @AllArgsConstructor
@@ -18,9 +19,8 @@ public class RoomInfoDto {
     private Long problem1Id;
     // 문제2 ID
     private Long problem2Id;
-//    private LocalDateTime startTime;
-//    private LocalDateTime endTime;
-    private Long historyId; // 추가해야함
+
+    private Long historyId;
 
     private boolean managerIsSubmitting;
     private boolean pairIsSubmitting;

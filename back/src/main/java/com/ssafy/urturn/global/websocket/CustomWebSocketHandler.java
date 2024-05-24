@@ -1,11 +1,9 @@
-package com.ssafy.urturn.solving.temp;
-import org.springframework.web.socket.CloseStatus;
+package com.ssafy.urturn.global.websocket;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-
-import java.io.IOException;
 
 /*
 웹 소켓 핸들로로서, 웹소켓 연결의 생명 주기 이벤트를 관리.
@@ -14,10 +12,7 @@ import java.io.IOException;
 public class CustomWebSocketHandler extends TextWebSocketHandler {
 
     private final WebSocketSessionManager sessionManager;
-
-
-
-
+    
     // 웹소켓 연결이 성공적으로 수립되었을 때 호출. 사용자의 웹소켓 세션을 WebSocketSessionManager을 통해 등록.
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {

@@ -14,9 +14,10 @@ public class SwitchCodeRequest {
     @JsonProperty("algoQuestionId")
     private Long problemId;
     private int round;
+    // 방장여부
     @JsonProperty("isHost")
     private boolean isHost;
-
+    // 페어프로그래밍 모드 여부
     @JsonProperty("isPair")
     private boolean isPair;
 

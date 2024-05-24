@@ -1,33 +1,23 @@
 package com.ssafy.urturn.history.repository;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.group.GroupBy.list;
 import static com.ssafy.urturn.history.entity.QHistory.history;
-import static com.ssafy.urturn.member.entity.QMember.member;
-import static com.ssafy.urturn.problem.entity.QProblem.problem;
-import static com.ssafy.urturn.problem.entity.QTestcase.testcase;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.urturn.history.dto.HistoryResponse;
+import com.ssafy.urturn.history.dto.HistoryResponseDto;
 import com.ssafy.urturn.history.dto.HistoryRetroDto;
-import com.ssafy.urturn.history.entity.History;
-import com.ssafy.urturn.history.entity.QHistory;
 import com.ssafy.urturn.member.dto.MemberSimpleDto;
 import com.ssafy.urturn.member.dto.ProblemSimpleDto;
 import com.ssafy.urturn.member.entity.QMember;
-import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
-import com.ssafy.urturn.problem.dto.TestcaseDto;
 import com.ssafy.urturn.problem.entity.QProblem;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
@@ -41,15 +31,22 @@ public class HistoryCustomRepositoryImpl implements HistoryCustomRepository{
         QProblem problem1 = new QProblem("problem1");
         QProblem problem2 = new QProblem("problem2");
 
-        List<HistoryResponse> content = jpaQueryFactory
+        QMember manager = new QMember("manager");
+        QMember pair = new QMember("pair");
+
+
+        List<HistoryResponseDto> dtoContent = jpaQueryFactory
             .select(Projections.constructor(
-                HistoryResponse.class,
+                HistoryResponseDto.class,
                 history.id,
                 Projections.constructor(MemberSimpleDto.class,
-                    member.id,
-                    member.nickname,
-                    member.profileImage
-                    ),
+                    manager.id,
+                    manager.nickname,
+                    manager.profileImage),
+                Projections.constructor(MemberSimpleDto.class,
+                    pair.id,
+                    pair.nickname,
+                    pair.profileImage),
                 Projections.constructor(ProblemSimpleDto.class,
                     problem1.id,
                     problem1.title,
@@ -66,7 +63,8 @@ public class HistoryCustomRepositoryImpl implements HistoryCustomRepository{
                 history.endTime
             ))
             .from(history)
-            .leftJoin(history.pair, member)
+            .leftJoin(history.manager, manager)
+            .leftJoin(history.pair, pair)
             .leftJoin(history.problem1, problem1)
             .leftJoin(history.problem2, problem2)
             .where(history.manager.id.eq(memberId).or(history.pair.id.eq(memberId)), history.result.isNotNull())
@@ -75,6 +73,8 @@ public class HistoryCustomRepositoryImpl implements HistoryCustomRepository{
             .limit(pageable.getPageSize())
             .fetch();
 
+        List<HistoryResponse> content = dtoContent.stream().map(m -> m.toResponse(memberId)).toList();
+
         Long count = jpaQueryFactory.select(history.count())
             .from(history)
             .where(history.manager.id.eq(memberId))
@@ -82,6 +82,7 @@ public class HistoryCustomRepositoryImpl implements HistoryCustomRepository{
 
         return new PageImpl<>(content, pageable, count);
     }
+
 
     @Override
     public HistoryRetroDto getMostRecentHistoryByMemberId(Long memberId) {

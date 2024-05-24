@@ -1,6 +1,6 @@
-package com.ssafy.urturn.solving.controller;
+package com.ssafy.urturn.room.controller;
 
-import com.ssafy.urturn.solving.service.RoomService;
+import com.ssafy.urturn.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoomController {
     private final RoomService roomService;
     @GetMapping("/enter/{entryCode}")
-    public ResponseEntity<?> checkRoomEntry(@PathVariable String entryCode){
+    public ResponseEntity<String> checkRoomEntry(@PathVariable String entryCode){
         String roomId= roomService.canEnterRoom(entryCode);
-        // 방 ID 반환.
         if(roomId!=null) return ResponseEntity.ok(roomId);
-        // 서비스단에서 처리했으니 추 후 바꿔야함.
-        else return ResponseEntity.status(HttpStatus.FORBIDDEN).body("입장 불가");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("입장 불가");
     }
 }

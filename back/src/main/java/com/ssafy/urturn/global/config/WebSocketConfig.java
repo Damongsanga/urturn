@@ -1,5 +1,6 @@
-package com.ssafy.urturn.solving.socket;
+package com.ssafy.urturn.global.config;
 
+import com.ssafy.urturn.global.auth.JwtChannelInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -13,19 +14,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final JwtChannelInterceptor jwtChannelInterceptor;
 
-    // /wss  경로로 연결
-//    @Override
-//    public void registerStompEndpoints(StompEndpointRegistry registry) {
-//        System.out.println("test");
-////        registry.addEndpoint("/wss")
-////                .setAllowedOriginPatterns("*") // 변경된 부분
-////                .withSockJS();
-//        registry.addEndpoint("/ws").setAllowedOrigins("*");
-//    }
-
     @Override
+    // enableSimpleBroker를 설정하지 않음
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-//        registry.enableSimpleBroker("/topic","/queue");
         registry.setApplicationDestinationPrefixes("/app");
     }
 
@@ -34,7 +25,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
                 .setAllowedOrigins("*");
-//                .withSockJS();
     }
 
     @Override

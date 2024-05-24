@@ -1,36 +1,20 @@
 package com.ssafy.urturn.global.auth;
 
 
+import com.ssafy.urturn.global.auth.dto.JwtToken;
 import com.ssafy.urturn.global.auth.repository.JwtRedisRepository;
 import com.ssafy.urturn.global.exception.RestApiException;
-import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
 import com.ssafy.urturn.global.util.AES128Util;
 import com.ssafy.urturn.global.util.KeyUtil;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,6 +23,17 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_AUTHORIZATION;
 
 @Slf4j
 @Component
@@ -120,7 +115,7 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get("roles") == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new RestApiException(NO_AUTHORIZATION, "권한 정보가 없는 토큰입니다.");
         }
 
         // 클레임에서 권한 정보 가져오기 (권한 정보가 Set<String>으로 저장되어 있다고 가정)

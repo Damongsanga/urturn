@@ -6,6 +6,8 @@ import com.ssafy.urturn.global.auth.dto.GithubOAuthMemberInfoResponse;
 import com.ssafy.urturn.global.auth.dto.GithubOAuthRefreshTokenRequest;
 import com.ssafy.urturn.global.auth.dto.OAuthAccessTokenResponse;
 import com.ssafy.urturn.global.auth.dto.OAuthMemberInfoResponse;
+import com.ssafy.urturn.global.exception.RestApiException;
+import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -48,6 +50,8 @@ public class GithubOAuthClient implements OAuthClient {
                 new HttpEntity<>(headers),
                 GithubOAuthMemberInfoResponse.class
         ).getBody();
+
+        if (res == null) throw new RestApiException(CustomErrorCode.GITHUB_AUTHORIZATION_ERROR);
 
         res.setAccessToken(tokens.getAccessToken());
         return res;

@@ -3,7 +3,7 @@ package com.ssafy.urturn.global.auth.service;
 
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_MEMBER;
 
-import com.ssafy.urturn.global.auth.JwtToken;
+import com.ssafy.urturn.global.auth.dto.JwtToken;
 import com.ssafy.urturn.global.auth.JwtTokenProvider;
 import com.ssafy.urturn.global.auth.Role;
 import com.ssafy.urturn.global.auth.dto.LoginResponse;
@@ -12,13 +12,12 @@ import com.ssafy.urturn.global.auth.dto.OAuthMemberInfoResponse;
 import com.ssafy.urturn.global.auth.repository.JwtRedisRepository;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
-import com.ssafy.urturn.global.util.AES128Util;
 import com.ssafy.urturn.global.util.KeyUtil;
 import com.ssafy.urturn.global.util.MemberUtil;
 import com.ssafy.urturn.member.Level;
 import com.ssafy.urturn.member.entity.Member;
 import com.ssafy.urturn.member.repository.MemberRepository;
-import io.jsonwebtoken.Claims;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +78,6 @@ public class OAuthService {
 
     // memberId로 조회하는 것으로 수정 필요
     private void updateAccessToken(OAuthMemberInfoResponse res){
-//        Long memberId = MemberUtil.getMemberId();
         Member member = memberRepository.findByGithubUniqueId(res.getOauthId()).orElseThrow(() -> new RestApiException(NO_MEMBER));
         member.updateGithubTokens(res.getAccessToken());
     }

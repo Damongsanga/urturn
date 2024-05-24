@@ -8,11 +8,11 @@ import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.history.repository.HistoryRepository;
 import com.ssafy.urturn.member.repository.MemberRepository;
 import com.ssafy.urturn.problem.repository.ProblemRepository;
-import com.ssafy.urturn.solving.dto.RoomInfoDto;
+import com.ssafy.urturn.global.cache.CacheDatas;
+import com.ssafy.urturn.room.dto.RoomInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +24,7 @@ public class HistoryService {
     private final HistoryRepository historyRepository;
     private final MemberRepository memberRepository;
     private final ProblemRepository problemRepository;
+    private final CacheDatas cacheDatas;
 
     public Page<HistoryResponse> getHistories(Pageable pageable) {
         Long currentMemberId = MemberUtil.getMemberId();
@@ -32,7 +33,9 @@ public class HistoryService {
 
     // RoomInfoDto에 historyId 저장
     @Transactional
-    public Long createHistory(RoomInfoDto roomInfoDto){
+    public Long createHistory(String roomId){
+        RoomInfoDto roomInfoDto = cacheDatas.getRoomInfo(roomId);
+
         History history = History.builder()
             .manager(memberRepository.findById(roomInfoDto.getManagerId()).orElseThrow(() -> new RestApiException(
                 CustomErrorCode.NO_MEMBER)))
@@ -41,9 +44,10 @@ public class HistoryService {
             .problem1(problemRepository.findById(roomInfoDto.getProblem1Id()).orElseThrow(() -> new RestApiException(CustomErrorCode.NO_PROBLEM)))
             .problem2(problemRepository.findById(roomInfoDto.getProblem2Id()).orElseThrow(() -> new RestApiException(CustomErrorCode.NO_PROBLEM)))
             .build();
-
         Long id = historyRepository.save(history).getId();
+
         roomInfoDto.setHistoryId(id);
+        cacheDatas.putRoomInfo(roomId, roomInfoDto);
 
         return id;
     }

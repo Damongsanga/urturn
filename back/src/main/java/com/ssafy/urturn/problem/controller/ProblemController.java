@@ -2,6 +2,7 @@ package com.ssafy.urturn.problem.controller;
 
 import com.ssafy.urturn.member.Level;
 import com.ssafy.urturn.problem.dto.ProblemCreateRequest;
+import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.problem.dto.TestcaseCreateRequest;
 import com.ssafy.urturn.problem.service.ProblemService;
 import com.ssafy.urturn.problem.service.S3UploadService;
@@ -46,18 +47,18 @@ public class ProblemController {
 
     // validation 필요
     @PostMapping("/testcase/{problemId}")
-    public ResponseEntity<?> createTestcases(@RequestBody List<TestcaseCreateRequest> reqs, @PathVariable Long problemId){
+    public ResponseEntity<List<Long>> createTestcases(@RequestBody List<TestcaseCreateRequest> reqs, @PathVariable Long problemId){
         return ResponseEntity.ok(testcaseService.createTestcases(reqs, problemId));
     }
 
     @GetMapping("/{problemId}")
-    public ResponseEntity<?> getProblem(@PathVariable Long problemId){
+    public ResponseEntity<ProblemTestcaseDto> getProblem(@PathVariable Long problemId){
         return ResponseEntity.ok(problemService.getProblemWithPublicTestcase(problemId));
     }
 
     // admin만 조회 가능하도록 or 삭제
     @GetMapping("/all/{problemId}")
-    public ResponseEntity<?> getProblemWithAllTestcases(@PathVariable Long problemId){
+    public ResponseEntity<ProblemTestcaseDto> getProblemWithAllTestcases(@PathVariable Long problemId){
         return ResponseEntity.ok(problemService.getProblem(problemId));
     }
 

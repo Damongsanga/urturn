@@ -2,7 +2,7 @@ package com.ssafy.urturn.history.controller;
 
 import com.ssafy.urturn.history.dto.HistoryResponse;
 import com.ssafy.urturn.history.service.HistoryService;
-import com.ssafy.urturn.solving.cache.CacheDatas;
+import com.ssafy.urturn.global.cache.CacheDatas;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;

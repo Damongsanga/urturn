@@ -1,17 +1,14 @@
-package com.ssafy.urturn.solving.dto;
+package com.ssafy.urturn.room.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
 @ToString
+@Builder
 public class UserInfoResponse {
     private String myUserProfileUrl;
     private String myUserNickName;
@@ -20,4 +17,6 @@ public class UserInfoResponse {
     private String pairProfileUrl;
     @JsonProperty("relativeUserNickName")
     private String pairNickName;
+
+
 }

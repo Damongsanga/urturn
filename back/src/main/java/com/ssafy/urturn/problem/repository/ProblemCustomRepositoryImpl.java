@@ -59,25 +59,6 @@ public class ProblemCustomRepositoryImpl implements ProblemCustomRepository{
     @Override
     public Optional<ProblemTestcaseDto> getProblemWithPublicTestcase(Long problemId) {
 
-//        Problem prob = jpaQueryFactory.selectFrom(problem)
-//            .where(problem.id.eq(problemId))
-//            .fetchOne();
-//
-//        if (prob == null) return Optional.ofNullable(null);
-//
-//        List<TestcaseDto> testcases = jpaQueryFactory.select(Projections.constructor(
-//            TestcaseDto.class,
-//            testcase.id,
-//            testcase.language,
-//            testcase.stdin,
-//            testcase.expectedOutput
-//            ))
-//            .from(testcase)
-//            .where(testcase.problem.id.eq(problemId).and(testcase.isPublic.isTrue()))
-//            .fetch();
-//
-//        return Optional.of(new ProblemTestcaseDto(prob, testcases));
-
         return Optional.ofNullable(jpaQueryFactory.select(problem)
             .from(problem)
             .leftJoin(problem.testcases, testcase)

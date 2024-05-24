@@ -1,6 +1,5 @@
-package com.ssafy.urturn.solving.dto;
+package com.ssafy.urturn.room.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @AllArgsConstructor
@@ -12,4 +11,8 @@ public class RoomInfoResponse {
     private String roomId;
     private String entryCode;
     private boolean isHost;
+
+    public static RoomInfoResponse makeResponseForPair(String roomId){
+        return new RoomInfoResponse(roomId, null, false);
+    }
 }
