@@ -158,8 +158,6 @@ public class SolveService {
                         .setCode(submitRequest.getProblemId(), submitRequest.getCode(), submitRequest.getLanguage());
             }
 
-            // 페어프로그래밍 모드 전환 메시지 전송
-
             // 결과 반환
             return SubmitResponse.builder()
                     .result(gradingResponse.isSucceeded())
