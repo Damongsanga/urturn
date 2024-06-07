@@ -1,5 +1,6 @@
-package com.ssafy.urturn.global.auth;
+package com.ssafy.urturn.global.websocket;
 
+import com.ssafy.urturn.global.auth.JwtTokenProvider;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
 import lombok.RequiredArgsConstructor;

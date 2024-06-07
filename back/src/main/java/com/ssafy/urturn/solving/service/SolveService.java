@@ -3,6 +3,8 @@ package com.ssafy.urturn.solving.service;
 import static com.ssafy.urturn.global.exception.errorcode.CommonErrorCode.*;
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_HISTORY;
 
+import com.ssafy.urturn.global.RequestLockService;
+import com.ssafy.urturn.global.RequestLockType;
 import com.ssafy.urturn.global.cache.CacheDatas;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.history.HistoryResult;
@@ -45,7 +47,7 @@ public class SolveService {
     private final CacheDatas cacheDatas;
     private final ReentrantLock lock;
     private final HistoryRepository historyRepository;
-    private final RedissonClient redissonClient;
+    private final RequestLockService requestLockService;
 
 
     public List<ProblemTestcaseDto> getTwoProblems(String roomId, Level level){
@@ -133,8 +135,9 @@ public class SolveService {
     public SubmitResponse submitCode(SubmitRequest submitRequest){
 
         // 중복 요청 방지를 위한 Lock
-        final String lockName = submitRequest.getRoomId() + ":lock";
-        final RLock lock = redissonClient.getLock(lockName);
+
+        final String lockName = requestLockService.generateLockKey(RequestLockType.GRADING, submitRequest.getRoomId());
+        final RLock lock = requestLockService.getLock(lockName);
 
         try {
             // 1초간 대기, 15초간 락 유지
