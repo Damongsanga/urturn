@@ -78,6 +78,10 @@ dependencies {
 	// openvidu
 	implementation 'io.openvidu:openvidu-java-client:2.29.0'
 
+	// redisson for Distributed Lock
+	implementation 'org.redisson:redisson-spring-boot-starter:3.16.3'
+
+
 
 }
 

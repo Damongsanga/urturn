@@ -1,10 +1,10 @@
 package com.ssafy.urturn.solving.service;
 
+import static com.ssafy.urturn.global.exception.errorcode.CommonErrorCode.*;
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_HISTORY;
 
 import com.ssafy.urturn.global.cache.CacheDatas;
 import com.ssafy.urturn.global.exception.RestApiException;
-import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
 import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.history.repository.HistoryRepository;
@@ -26,9 +26,12 @@ import com.ssafy.urturn.solving.dto.UserCodeDto;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +45,8 @@ public class SolveService {
     private final CacheDatas cacheDatas;
     private final ReentrantLock lock;
     private final HistoryRepository historyRepository;
+    private final RedissonClient redissonClient;
+
 
     public List<ProblemTestcaseDto> getTwoProblems(String roomId, Level level){
 
@@ -124,35 +129,49 @@ public class SolveService {
         }
     }
 
-    // GradeService로 이동하면 좋을 것 같습니다.
     @Transactional
     public SubmitResponse submitCode(SubmitRequest submitRequest){
 
+        // 중복 요청 방지를 위한 Lock
+        final String lockName = submitRequest.getRoomId() + ":lock";
+        final RLock lock = redissonClient.getLock(lockName);
 
-        // db 조회 후 채점 서버로 Code 및 문제 데이터, 테케 전송
-        // 결과 수신
-        GradingResponse gradingResponse = gradingService.getResult(submitRequest.getProblemId(),
-                submitRequest.getCode(), submitRequest.getLanguage());
+        try {
+            // 1초간 대기, 15초간 락 유지
+            if (!lock.tryLock(1, 15, TimeUnit.SECONDS))
+                throw new RestApiException(WRONG_REQUEST, "이미 채점이 진행되고 있습니다. 잠시 후에 다시 요청해주세요");
 
-        // 오답 일 경우 실패 응답 + 관련 메시지 전송
-        // 정답 일 경우 DB에 정답 코드 저장.
+            // db 조회 후 채점 서버로 Code 및 문제 데이터, 테케 전송
+            // 결과 수신
+            GradingResponse gradingResponse = gradingService.getResult(submitRequest.getProblemId(),
+                    submitRequest.getCode(), submitRequest.getLanguage());
 
-        if (gradingResponse.isSucceeded()){
-            Long historyId = cacheDatas.getRoomInfo(submitRequest.getRoomId()).getHistoryId();
+            // 오답 일 경우 실패 응답 + 관련 메시지 전송
+            // 정답 일 경우 DB에 정답 코드 저장.
+            if (gradingResponse.isSucceeded()) {
+                Long historyId = cacheDatas.getRoomInfo(submitRequest.getRoomId()).getHistoryId();
 
-            historyRepository.findById(historyId).orElseThrow(() -> new RestApiException(NO_HISTORY))
-                    .setCode(submitRequest.getProblemId(), submitRequest.getCode(), submitRequest.getLanguage());
+                historyRepository.findById(historyId).orElseThrow(() -> new RestApiException(NO_HISTORY))
+                        .setCode(submitRequest.getProblemId(), submitRequest.getCode(), submitRequest.getLanguage());
+            }
+
+            // 페어프로그래밍 모드 전환 메시지 전송
+
+            // 결과 반환
+            return SubmitResponse.builder()
+                    .result(gradingResponse.isSucceeded())
+                    .testcaseResults(gradingResponse.getTestcaseResults())
+                    .build();
+
+        } catch (InterruptedException e){
+            throw new RestApiException(INTERNAL_SERVER_ERROR);
+        } finally {
+            if (lock != null && lock.isLocked()) {
+                lock.unlock();
+            }
         }
 
-        // 페어프로그래밍 모드 전환 메시지 전송
-
-        // 결과 반환
-        return SubmitResponse.builder()
-                .result(gradingResponse.isSucceeded())
-                .testcaseResults(gradingResponse.getTestcaseResults())
-                .build();
     }
-
 
     @Transactional
     public Map<Long, RetroCodeResponse> makeRetroCodeResponse(String roomId){
@@ -160,7 +179,7 @@ public class SolveService {
         Map<Long, RetroCodeResponse> map= new HashMap<>();
         RoomInfoDto roomInfoDto = cacheDatas.getRoomInfo(roomId);
         History history = historyRepository.findById(roomInfoDto.getHistoryId())
-                .orElseThrow(()->new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND, "히스토리를 찾을 수 없습니다"));
+                .orElseThrow(()->new RestApiException(RESOURCE_NOT_FOUND, "히스토리를 찾을 수 없습니다"));
 
         log.info("code 1 : {}", history.getCode1());
         log.info("code 2 : {}", history.getCode2());

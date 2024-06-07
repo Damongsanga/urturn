@@ -2,6 +2,9 @@ package com.ssafy.urturn.global.config;
 
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
@@ -56,6 +59,14 @@ public class RedisConfig {
     @Bean
     public PlatformTransactionManager transactionManager(){
         return new JpaTransactionManager(entityManagerFactory);
+    }
+
+    // redisson client
+    @Bean
+    public RedissonClient redissonClient() {
+        Config config = new Config();
+        config.useSingleServer().setAddress("redis://" + host + ":" + port).setPassword(password);
+        return Redisson.create(config);
     }
 
 }
