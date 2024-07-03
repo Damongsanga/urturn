@@ -56,7 +56,6 @@ public class ExecutionService {
             ProcessBuilder pb = new ProcessBuilder("javac", javaFilePath);
             Process process = pb.start();
             process.waitFor();
-            log.info("{}", process.exitValue());
             return process.exitValue() == 0;
         } catch (IOException | InterruptedException e) {
             log.error("{}", e.getMessage());
@@ -107,26 +106,24 @@ public class ExecutionService {
             Process process = pb.start();
             writeInput(grade, process);
 
+            // Time Limit 체크
             boolean finished = process.waitFor(TIMELIMIT, TimeUnit.SECONDS); // 10초 이내에 종료되지 않으면 false 반환
-
             if (!finished) {
                 process.destroy(); // 프로세스 강제 종료
                 gradeRepository.save(grade.updateStatus(TIME_LIMIT_EXCEEDED));
-                log.info("{}", TIME_LIMIT_EXCEEDED.getDescription());
                 return;
             }
 
-            // 프로세스 종료된 상태임
+            // Runtime Error 체크
             int exitValue = process.exitValue();
             if (exitValue != 0) {
                 InputStream errorStream = process.getErrorStream();
                 String errorMessage = readOutput(errorStream);
                 gradeRepository.save(grade.updateRuntimeErrorStatus(errorMessage));
-                log.info("{}", RUNTIME_ERROR_OTHER.getDescription());
-                log.info("error message : {}", errorMessage);
                 return;
             }
 
+            // 정답 여부 체크
             evaluateOutput(grade, process);
 
         } catch (IOException | InterruptedException e) {
