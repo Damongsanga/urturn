@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.core.RedisKeyValueAdapter;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
@@ -38,9 +37,7 @@ public class RedisConfig {
     @Primary
     public RedisTemplate<String, String> redisTemplate() {
         StringRedisTemplate redisTemplate = new StringRedisTemplate(redisConnectionFactory());
-//        redisTemplate.setEnableTransactionSupport(true); // redis @Transaction 사용시
         return redisTemplate;
     }
-
 
 }
