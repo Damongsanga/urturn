@@ -2,6 +2,7 @@ package com.ssafy.urturn.grading.service;
 
 import com.ssafy.urturn.grading.domain.Grade;
 import com.ssafy.urturn.grading.domain.repository.GradeRepository;
+import com.ssafy.urturn.grading.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.ssafy.urturn.grading.GradeStatus.*;
+import static com.ssafy.urturn.grading.global.exception.CommonErrorCode.INTERNAL_SERVER_ERROR;
+import static com.ssafy.urturn.grading.global.exception.CustomErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class ExecutionService {
-
 
     private final GradeRepository gradeRepository;
 
@@ -46,7 +48,6 @@ public class ExecutionService {
 
         runCode(grade);
         deleteFile(grade);
-
     }
 
     private boolean compileCode(Grade grade) {
@@ -59,22 +60,31 @@ public class ExecutionService {
             return process.exitValue() == 0;
         } catch (IOException | InterruptedException e) {
             log.error("{}", e.getMessage());
-            e.printStackTrace();
             return false;
         }
     }
 
-    private static void makeFile(Grade grade) throws IOException {
+    private static void makeFile(Grade grade) {
+        makeDir(grade);
+
+        String filePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/Main.java";
+        File file = new File(filePath);
+        try{
+            if (file.createNewFile()){
+                Files.writeString(Paths.get(filePath), grade.getSourceCode());
+            } else {
+                throw new CustomException(INTERNAL_SERVER_ERROR, "내부에 동일한 이름의 파일이 존재합니다.");
+            }
+        } catch (IOException e){
+            log.error("{}", e.getMessage());
+            throw new CustomException(FILE_CREATE_ERROR);
+        }
+    }
+
+    private static void makeDir(Grade grade) {
         String dirPath = SOLUTIONFILEROOTDIR + grade.getToken();
         File dir = new File(dirPath);
         dir.mkdir();
-        String filePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/Main.java";
-        File file = new File(filePath);
-        if (file.createNewFile()){
-            Files.writeString(Paths.get(filePath), grade.getSourceCode());
-        } else {
-            throw new RuntimeException("이미 파일이 있는거같아..");
-        }
     }
 
     private static void deleteFile(Grade grade) {
@@ -88,7 +98,8 @@ public class ExecutionService {
                 Files.delete(classPath);
             }
         } catch (IOException e){
-            e.printStackTrace();
+            log.error("{}", e.getMessage());
+            throw new CustomException(FILE_DELETE_ERROR);
         }
     }
 
@@ -127,7 +138,8 @@ public class ExecutionService {
             evaluateOutput(grade, process);
 
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
+            throw new CustomException(RUN_CODE_ERROR);
         }
     }
 
@@ -160,7 +172,8 @@ public class ExecutionService {
                 output.append(line).append("\n");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
+            throw new CustomException(RUN_CODE_ERROR);
         }
         return output.toString().trim();
     }

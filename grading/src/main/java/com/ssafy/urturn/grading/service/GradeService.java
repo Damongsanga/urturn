@@ -24,9 +24,8 @@ public class GradeService {
                 .map(Grade::from)
                 .map(a -> a.setToken(tokenCreator.createToken()))
                 .toList();
-
         // 저장
-
+        grades.forEach(gradeRepository::save);
         // 채점 로직 실행
         grades.forEach(executionService::execute);
 
