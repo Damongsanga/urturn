@@ -22,4 +22,9 @@ public class FakeGradeRepository implements GradeRepository {
     public Optional<Grade> findByToken(String token) {
         return Optional.ofNullable(data.get(token));
     }
+
+    @Override
+    public void deleteByToken(String token) {
+        return;
+    }
 }

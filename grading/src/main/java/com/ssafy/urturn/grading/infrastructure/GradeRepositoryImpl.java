@@ -13,11 +13,18 @@ public class GradeRepositoryImpl implements GradeRepository {
 
     private final GradeRedisRepository gradeRedisRepository;
 
+    @Override
     public void save(Grade grade){
         gradeRedisRepository.save(GradeEntity.from(grade));
     }
 
+    @Override
     public Optional<Grade> findByToken(String token){
         return gradeRedisRepository.findByToken(token).map(GradeEntity::toModel);
+    }
+
+    @Override
+    public void deleteByToken(String token) {
+        gradeRedisRepository.deleteByToken(token);
     }
 }

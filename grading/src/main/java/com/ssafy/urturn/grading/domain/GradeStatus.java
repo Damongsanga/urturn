@@ -1,4 +1,4 @@
-package com.ssafy.urturn.grading;
+package com.ssafy.urturn.grading.domain;
 
 import lombok.Getter;
 

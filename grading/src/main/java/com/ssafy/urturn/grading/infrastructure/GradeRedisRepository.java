@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface GradeRedisRepository extends CrudRepository<GradeEntity, String> {
     Optional<GradeEntity> findByToken(String token);
+    void deleteByToken(String token);
 }

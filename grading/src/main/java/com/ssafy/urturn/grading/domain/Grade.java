@@ -1,6 +1,5 @@
 package com.ssafy.urturn.grading.domain;
 
-import com.ssafy.urturn.grading.GradeStatus;
 import com.ssafy.urturn.grading.domain.request.GradeCreate;
 import lombok.Builder;
 import lombok.Getter;
@@ -71,12 +70,16 @@ public class Grade {
                 .build();
     }
 
-    public static Grade empty(){
-        return EMPTY;
-    }
-
     public boolean isEmpty() {
         return this == EMPTY;
+    }
+
+    public String getStrategyName(){
+        return LanguageExecutionMapper.getExecutionService(this.languageId);
+    }
+
+    public static Grade empty(){
+        return EMPTY;
     }
 
 }

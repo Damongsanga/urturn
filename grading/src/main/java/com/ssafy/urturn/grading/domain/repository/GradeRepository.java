@@ -8,4 +8,6 @@ public interface GradeRepository {
     void save(Grade grade);
     Optional<Grade> findByToken(String token);
 
+    void deleteByToken(String token);
+
 }
