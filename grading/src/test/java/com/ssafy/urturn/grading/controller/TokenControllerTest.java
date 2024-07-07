@@ -1,64 +1,64 @@
-package com.ssafy.urturn.grading.service;
+package com.ssafy.urturn.grading.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.urturn.grading.controller.response.TokenResponse;
-import com.ssafy.urturn.grading.domain.Grade;
-import com.ssafy.urturn.grading.domain.GradeStatus;
 import com.ssafy.urturn.grading.domain.repository.GradeRepository;
 import com.ssafy.urturn.grading.domain.request.GradeCreate;
-import com.ssafy.urturn.grading.mock.TestTokenCreator;
-import com.ssafy.urturn.grading.service.strategy.ExecutionStrategy;
-import com.ssafy.urturn.grading.service.strategy.JavaExecutionStrategy;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@AutoConfigureMockMvc
 @SpringBootTest
-@ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-public class GradeServiceTest {
+public class TokenControllerTest {
 
-    GradeService gradeService;
+    public static final MediaType APPLICATION_JSON_UTF8 = MediaType.APPLICATION_JSON;
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private GradeRepository gradeRepository;
-
-    @BeforeEach
-    void init(){
-        TestTokenCreator testTokenCreator = new TestTokenCreator();
-        Map<String, ExecutionStrategy> strategyMap = new HashMap<>();
-        JavaExecutionStrategy executionStrategy = new JavaExecutionStrategy(gradeRepository);
-        strategyMap.put("javaExecutionStrategy", executionStrategy);
-        gradeService = new GradeService(gradeRepository, testTokenCreator, strategyMap);
-    }
 
     @AfterEach
     void clear(){
         gradeRepository.deleteAll();
     }
 
-
     @Test
-    void Grade를_만들_수_있다() {
+    void 정답_코드를_반환받는다() throws Exception {
 
-        // given
         String sourceCode = """
                 import java.io.*;
                 import java.util.*;
@@ -149,20 +149,87 @@ public class GradeServiceTest {
                 .build();
 
         List<GradeCreate> gradeCreates = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            gradeCreates.add(gradeCreate);
-        }
+        gradeCreates.add(gradeCreate);
 
-        // when
-        List<Grade> grades = gradeService.createGrades(gradeCreates);
-        Grade grade = grades.get(0);
+        MvcResult result = mockMvc.perform(post("/submissions/batch")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(gradeCreates)))
+                .andExpect(status().isOk())
+                .andReturn();
 
-        // then
-        assertThat(grades.size()).isEqualTo(10);
-        assertThat(grades.get(0).getToken()).isEqualTo("fake-token-1");
-        assertThat(grade.getStatusId()).isEqualTo(1);
-        assertThat(grade.getLanguageId()).isEqualTo(1);
+        List<TokenResponse> tokenResponses = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                new TypeReference<>() {});
 
+        String createdToken = tokenResponses.get(0).getToken();
+
+        assertThat(tokenResponses.size()).isEqualTo(1);
+        assertThat(gradeRepository.findByToken(createdToken).get().getStatusId()).isEqualTo(1);
     }
 
+    @Test
+    void 소스코드_인풋_예상아웃풋은_빈칸일_수_없다() throws Exception {
+
+        String sourceCode = "";
+        String stdIn = "1";
+        String expectedOutput = "1";
+
+        GradeCreate gradeCreate = GradeCreate.builder()
+                .sourceCode(sourceCode)
+                .languageId(1)
+                .stdin(stdIn)
+                .expectedOutput(expectedOutput)
+                .build();
+
+        List<GradeCreate> gradeCreates = new ArrayList<>();
+        gradeCreates.add(gradeCreate);
+
+        mockMvc.perform(post("/submissions/batch")
+                        .contentType(APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(gradeCreates)))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void language_id는_1에서_62사이_값이다() throws Exception {
+
+        String sourceCode = "sourceCode";
+        String stdIn = "1";
+        String expectedOutput = "1";
+
+        GradeCreate gradeCreate = GradeCreate.builder()
+                .sourceCode(sourceCode)
+                .languageId(1)
+                .stdin(stdIn)
+                .expectedOutput(expectedOutput)
+                .build();
+
+        GradeCreate gradeCreateLow = GradeCreate.builder()
+                .sourceCode(sourceCode)
+                .languageId(0)
+                .stdin(stdIn)
+                .expectedOutput(expectedOutput)
+                .build();
+
+        GradeCreate gradeCreateHigh = GradeCreate.builder()
+                .sourceCode(sourceCode)
+                .languageId(63)
+                .stdin(stdIn)
+                .expectedOutput(expectedOutput)
+                .build();
+
+        List<GradeCreate> gradeCreateLows = List.of(gradeCreateLow, gradeCreate);
+
+        mockMvc.perform(post("/submissions/batch")
+                        .contentType(APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(gradeCreateLows)))
+                .andExpect(status().is4xxClientError());
+
+        List<GradeCreate> gradeCreateHighs = List.of(gradeCreateHigh, gradeCreate);
+
+        mockMvc.perform(post("/submissions/batch")
+                        .contentType(APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(gradeCreateHighs)))
+                .andExpect(status().is4xxClientError());
+    }
 }

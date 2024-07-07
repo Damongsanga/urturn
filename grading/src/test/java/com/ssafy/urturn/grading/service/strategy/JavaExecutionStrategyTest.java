@@ -6,6 +6,8 @@ import com.ssafy.urturn.grading.domain.repository.GradeRepository;
 import com.ssafy.urturn.grading.service.dto.TokenWithStatus;
 import com.ssafy.urturn.grading.service.strategy.ExecutionStrategy;
 import com.ssafy.urturn.grading.service.strategy.JavaExecutionStrategy;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +26,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-@TestPropertySource("classpath:application-test.yml")
 class JavaExecutionStrategyTest {
 
     @Autowired
     ExecutionStrategy javaExecutionStrategy;
     @Autowired
     GradeRepository gradeRepository;
+
+    @AfterEach
+    void clear(){
+        gradeRepository.deleteAll();
+    }
 
     @Test
     void 정상_정답_테스트() throws ExecutionException, InterruptedException {
@@ -134,7 +140,7 @@ class JavaExecutionStrategyTest {
     }
 
     @Test
-    void 오답_테스트() throws ExecutionException, InterruptedException {
+    void 오답_테스트() {
         // given
         String sourceCode = """
                 import java.io.*;
@@ -229,13 +235,13 @@ class JavaExecutionStrategyTest {
         gradeRepository.save(grade);
 
         CompletableFuture<TokenWithStatus> future = javaExecutionStrategy.execute(grade);
-        TokenWithStatus res = future.get();
+        TokenWithStatus res = future.join();
         assertThat(res.getStatus()).isEqualTo(GradeStatus.WRONG_ANSWER);
 
     }
 
     @Test
-    void 컴파일_에러_테스트() throws ExecutionException, InterruptedException {
+    void 컴파일_에러_테스트() {
 
         // given
         String sourceCode = """
@@ -331,13 +337,13 @@ class JavaExecutionStrategyTest {
         gradeRepository.save(grade);
 
         CompletableFuture<TokenWithStatus> future = javaExecutionStrategy.execute(grade);
-        TokenWithStatus res = future.get();
+        TokenWithStatus res = future.join();
         assertThat(res.getStatus()).isEqualTo(GradeStatus.COMPILATION_ERROR);
 
     }
 
     @Test
-    void 런타임_에러_테스트() throws ExecutionException, InterruptedException {
+    void 런타임_에러_테스트(){
 
         // given
         String sourceCode = """
@@ -433,13 +439,13 @@ class JavaExecutionStrategyTest {
         gradeRepository.save(grade);
 
         CompletableFuture<TokenWithStatus> future = javaExecutionStrategy.execute(grade);
-        TokenWithStatus res = future.get();
+        TokenWithStatus res = future.join();
         assertThat(res.getStatus()).isEqualTo(GradeStatus.RUNTIME_ERROR_OTHER);
 
     }
 
     @Test
-    void 중복_요청() throws InterruptedException {
+    void 중복_요청() {
 
         String sourceCode = """
                 import java.io.*;
@@ -540,14 +546,9 @@ class JavaExecutionStrategyTest {
         }
 
         grades.stream().map(javaExecutionStrategy::execute).forEach(
-                future -> {
-                    try {
-                        assertThat(future.get().getStatus()).isEqualTo(GradeStatus.ACCEPTED);
-                    } catch (InterruptedException | ExecutionException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                future -> assertThat(future.join().getStatus()).isEqualTo(GradeStatus.ACCEPTED)
         );
+
     }
 
 }

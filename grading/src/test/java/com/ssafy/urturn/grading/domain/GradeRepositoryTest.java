@@ -1,6 +1,7 @@
 package com.ssafy.urturn.grading.domain;
 
 import com.ssafy.urturn.grading.domain.repository.GradeRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,11 @@ class GradeRepositoryTest {
 
     @Autowired
     private GradeRepository gradeRepository;
+
+    @AfterEach
+    void clear(){
+        gradeRepository.deleteAll();
+    }
 
     @Test
     void grade를_저장_및_조회할_수_있다(){

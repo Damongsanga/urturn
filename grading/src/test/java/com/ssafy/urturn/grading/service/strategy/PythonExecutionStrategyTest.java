@@ -7,6 +7,7 @@ import com.ssafy.urturn.grading.service.dto.TokenWithStatus;
 import com.ssafy.urturn.grading.service.strategy.ExecutionStrategy;
 import com.ssafy.urturn.grading.service.strategy.JavaExecutionStrategy;
 import com.ssafy.urturn.grading.service.strategy.PythonExecutionStrategy;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-@TestPropertySource("classpath:application-test.yml")
+//@TestPropertySource("classpath:application-test.yml")
 public class PythonExecutionStrategyTest {
 
     @Autowired
@@ -33,8 +34,13 @@ public class PythonExecutionStrategyTest {
     @Autowired
     GradeRepository gradeRepository;
 
+    @AfterEach
+    void clear(){
+        gradeRepository.deleteAll();
+    }
+
     @Test
-    void 정상_정답_테스트() throws ExecutionException, InterruptedException {
+    void 정상_정답_테스트() {
 
         String sourceCode = """
                 def main():
@@ -68,12 +74,12 @@ public class PythonExecutionStrategyTest {
         gradeRepository.save(grade);
 
         CompletableFuture<TokenWithStatus> future = pythonExecutionStrategy.execute(grade);
-        TokenWithStatus res = future.get();
+        TokenWithStatus res = future.join();
         assertThat(res.getStatus()).isEqualTo(GradeStatus.ACCEPTED);
     }
 
     @Test
-    void 오답_테스트() throws ExecutionException, InterruptedException {
+    void 오답_테스트() {
 
         String sourceCode = """
                 def main():
@@ -107,13 +113,13 @@ public class PythonExecutionStrategyTest {
         gradeRepository.save(grade);
 
         CompletableFuture<TokenWithStatus> future = pythonExecutionStrategy.execute(grade);
-        TokenWithStatus res = future.get();
+        TokenWithStatus res = future.join();
         assertThat(res.getStatus()).isEqualTo(GradeStatus.WRONG_ANSWER);
 
     }
 
     @Test
-    void 런타임_에러_테스트() throws ExecutionException, InterruptedException {
+    void 런타임_에러_테스트() {
 
         String sourceCode = """
                 def main():
@@ -149,7 +155,7 @@ public class PythonExecutionStrategyTest {
 
 
         CompletableFuture<TokenWithStatus> future = pythonExecutionStrategy.execute(grade);
-        TokenWithStatus res = future.get();
+        TokenWithStatus res = future.join();
         assertThat(res.getStatus()).isEqualTo(GradeStatus.RUNTIME_ERROR_OTHER);
 
     }
@@ -193,14 +199,9 @@ public class PythonExecutionStrategyTest {
             gradeRepository.save(grade);
         }
 
+
         grades.stream().map(pythonExecutionStrategy::execute).forEach(
-                future -> {
-                    try {
-                        assertThat(future.get().getStatus()).isEqualTo(GradeStatus.ACCEPTED);
-                    } catch (InterruptedException | ExecutionException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                future -> assertThat(future.join().getStatus()).isEqualTo(GradeStatus.ACCEPTED)
         );
 
     }

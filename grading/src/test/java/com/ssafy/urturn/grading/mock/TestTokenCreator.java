@@ -8,7 +8,7 @@ import java.util.List;
 public class TestTokenCreator implements TokenCreator {
 
     private int id;
-    private final String fakeUUID = "aaaaaaaa-aaaa-aaaa-aaaa-aaaa";
+    private final String fakeUUID = "fake-token-";
 
     @Override
     public String createToken() {

@@ -27,4 +27,9 @@ public class FakeGradeRepository implements GradeRepository {
     public void deleteByToken(String token) {
         return;
     }
+
+    @Override
+    public void deleteAll() {
+        return;
+    }
 }
