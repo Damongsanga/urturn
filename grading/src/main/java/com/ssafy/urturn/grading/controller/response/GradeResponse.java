@@ -1,11 +1,12 @@
 package com.ssafy.urturn.grading.controller.response;
 
 import com.ssafy.urturn.grading.domain.Grade;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
-@Builder
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@Builder
 public class GradeResponse {
     private int languageId;
     private String stdout;

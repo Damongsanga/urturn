@@ -10,4 +10,5 @@ public interface GradeRepository {
 
     void deleteByToken(String token);
 
+    void deleteAll();
 }

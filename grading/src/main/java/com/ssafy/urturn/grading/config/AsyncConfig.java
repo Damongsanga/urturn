@@ -13,7 +13,6 @@ import java.util.concurrent.Executor;
 
 @EnableAsync
 @Configuration
-@Slf4j
 public class AsyncConfig {
 
     @Bean
@@ -36,8 +35,8 @@ public class AsyncConfig {
     @ConditionalOnProperty(name="async.executor", havingValue = "test")
     public Executor getAsyncExecutorForTest() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(1);
-        executor.setMaxPoolSize(1);
+        executor.setCorePoolSize(4);
+        executor.setMaxPoolSize(4);
         executor.setQueueCapacity(100);
         executor.setKeepAliveSeconds(30);
         executor.setThreadNamePrefix("async-executor-채점-");

@@ -3,6 +3,7 @@ package com.ssafy.urturn.grading.controller;
 import com.ssafy.urturn.grading.domain.request.GradeCreate;
 import com.ssafy.urturn.grading.controller.response.TokenResponse;
 import com.ssafy.urturn.grading.service.GradeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class TokenController {
     private final GradeService gradeService;
 
     @PostMapping("")
-    public ResponseEntity<List<TokenResponse>> createTokens(@RequestBody List<GradeCreate> gradeCreates){
+    public ResponseEntity<List<TokenResponse>> createTokens(@Valid @RequestBody List<GradeCreate> gradeCreates){
         return ResponseEntity.ok(gradeService.createGrades(gradeCreates)
                     .stream().map(TokenResponse::from)
                     .toList());

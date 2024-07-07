@@ -1,4 +1,7 @@
 spring:
+  profile:
+    active: test
+
   data:
     redis:
       host: localhost
@@ -11,4 +14,4 @@ spring:
       max-request-size: -1
 
 async:
-  executor: prod
+  executor: test

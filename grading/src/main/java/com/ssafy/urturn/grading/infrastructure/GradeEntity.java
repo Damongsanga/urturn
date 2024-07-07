@@ -1,6 +1,7 @@
 package com.ssafy.urturn.grading.infrastructure;
 
 import com.ssafy.urturn.grading.domain.Grade;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,7 @@ import org.springframework.data.redis.core.index.Indexed;
 
 @Getter
 @RedisHash(value = "grade", timeToLive = 3600)
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GradeEntity {
     @Id
     private String token;

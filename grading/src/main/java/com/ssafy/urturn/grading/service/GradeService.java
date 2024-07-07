@@ -22,7 +22,6 @@ public class GradeService {
     private final TokenCreator tokenCreator;
     private final Map<String, ExecutionStrategy> strategyMap;
 
-//    @Transactional
     public List<Grade> createGrades(List<GradeCreate> gradeCreates) {
         // Grade 기본 생성 with token 생성
         List<Grade> grades = gradeCreates.stream()
@@ -35,10 +34,11 @@ public class GradeService {
         // 채점 로직 실행
         log.info("{}", strategyMap.keySet().toString());
         log.info("{}", strategyMap.values().toString());
-        List<CompletableFuture<TokenWithStatus>> list = grades.stream().map(grade ->
-                strategyMap.get(grade.getStrategyName()).execute(grade)).toList();
 
-        list.forEach(r -> r.thenAccept(
+        grades.stream()
+                .map(grade ->
+                strategyMap.get(grade.getStrategyName()).execute(grade))
+                .forEach(r -> r.thenAccept(
                 res -> log.info("Token : {}, STATUS : {}", res.getToken(), res.getStatus())
         ));
 

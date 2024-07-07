@@ -27,4 +27,9 @@ public class GradeRepositoryImpl implements GradeRepository {
     public void deleteByToken(String token) {
         gradeRedisRepository.deleteByToken(token);
     }
+
+    @Override
+    public void deleteAll(){
+        gradeRedisRepository.deleteAll();
+    }
 }
