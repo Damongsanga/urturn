@@ -49,7 +49,6 @@ public class PythonExecutionStrategy extends AbstractBasicStrategy {
     @Override
     protected void makeFile(Grade grade) {
         makeDir(grade);
-
         String filePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/Solution.py";
         File file = new File(filePath);
         try{
@@ -86,26 +85,7 @@ public class PythonExecutionStrategy extends AbstractBasicStrategy {
             Process process = pb.start();
             writeInput(grade, process);
 
-            // Time Limit 체크
-            boolean finished = process.waitFor(TIMELIMIT, TimeUnit.SECONDS); // 10초 이내에 종료되지 않으면 false 반환
-            if (!finished) {
-                process.destroy(); // 프로세스 강제 종료
-                gradeRepository.save(grade.updateStatus(TIME_LIMIT_EXCEEDED));
-                return TIME_LIMIT_EXCEEDED;
-            }
-
-            // Runtime Error 체크
-            int exitValue = process.exitValue();
-            if (exitValue != 0) {
-                InputStream errorStream = process.getErrorStream();
-                String errorMessage = readOutput(errorStream);
-                log.info("RUNTIME ERROR : {}", errorMessage);
-                gradeRepository.save(grade.updateRuntimeErrorStatus(errorMessage));
-                return RUNTIME_ERROR_OTHER;
-            }
-
-            // 정답 여부 체크
-            return evaluateOutput(grade, process);
+            return checkAndSaveStatus(grade, process);
 
         } catch (IOException | InterruptedException e) {
             log.error(e.getMessage());

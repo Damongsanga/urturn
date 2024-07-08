@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -82,5 +83,28 @@ public abstract class AbstractBasicStrategy implements ExecutionStrategy{
             }
         }
         return output.toString().trim();
+    }
+
+    protected GradeStatus checkAndSaveStatus(Grade grade, Process process) throws InterruptedException, IOException {
+        // Time Limit 체크
+        boolean finished = process.waitFor(TIMELIMIT, TimeUnit.SECONDS); // 10초 이내에 종료되지 않으면 false 반환
+        if (!finished) {
+            process.destroy(); // 프로세스 강제 종료
+            gradeRepository.save(grade.updateStatus(TIME_LIMIT_EXCEEDED));
+            return TIME_LIMIT_EXCEEDED;
+        }
+
+        // Runtime Error 체크
+        int exitValue = process.exitValue();
+        if (exitValue != 0) {
+            InputStream errorStream = process.getErrorStream();
+            String errorMessage = readOutput(errorStream);
+            gradeRepository.save(grade.updateRuntimeErrorStatus(errorMessage));
+            log.info("RUNTIME ERROR : {}", errorMessage);
+            return RUNTIME_ERROR_OTHER;
+        }
+
+        // 정답 여부 체크
+        return evaluateOutput(grade, process);
     }
 }

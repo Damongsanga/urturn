@@ -24,15 +24,12 @@ import static com.ssafy.urturn.grading.global.exception.CommonErrorCode.INTERNAL
 import static com.ssafy.urturn.grading.global.exception.CustomErrorCode.*;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
-public class CExecutionStrategy implements ExecutionStrategy {
+public class CExecutionStrategy extends AbstractBasicStrategy {
 
-    private final GradeRepository gradeRepository;
-
-    private static final String SOLUTIONFILEROOTDIR = "src/main/resources/tmpFiles/";
-    private static final int TIMELIMIT = 10; // 10 seconds
-    private static final int MEMORYLIMIT = 256 * 1024 * 1024; // 256 MB
+    public CExecutionStrategy(GradeRepository gradeRepository) {
+        super(gradeRepository);
+    }
 
 //    @Async
     @Override
@@ -59,8 +56,9 @@ public class CExecutionStrategy implements ExecutionStrategy {
     private boolean compileCode(Grade grade) {
         try {
             makeFile(grade);
-            String javaFilePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/example.c";
-            ProcessBuilder pb = new ProcessBuilder("gcc", javaFilePath, "-o", "example");
+            String cFilePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/example.c";
+            String complieFilePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/example";
+            ProcessBuilder pb = new ProcessBuilder("gcc", cFilePath, "-o", complieFilePath);
             Process process = pb.start();
             process.waitFor();
             return process.exitValue() == 0;
@@ -70,10 +68,11 @@ public class CExecutionStrategy implements ExecutionStrategy {
         }
     }
 
-    private static void makeFile(Grade grade) {
+    @Override
+    protected void makeFile(Grade grade) {
         makeDir(grade);
 
-        String filePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/example";
+        String filePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/example.c";
         File file = new File(filePath);
         try{
             if (file.createNewFile()){
@@ -87,13 +86,8 @@ public class CExecutionStrategy implements ExecutionStrategy {
         }
     }
 
-    private static void makeDir(Grade grade) {
-        String dirPath = SOLUTIONFILEROOTDIR + grade.getToken();
-        File dir = new File(dirPath);
-        dir.mkdir();
-    }
-
-    private static void deleteFile(Grade grade) {
+    @Override
+    protected void deleteFile(Grade grade) {
         try {
             Path cFilePath = Paths.get(SOLUTIONFILEROOTDIR + grade.getToken() + "/example.c");
             Path compileFilePath = Paths.get(SOLUTIONFILEROOTDIR + grade.getToken() + "/example");
@@ -108,77 +102,20 @@ public class CExecutionStrategy implements ExecutionStrategy {
     }
 
 
-    private boolean checkCodeValidation(String sourceCode) {
-        Pattern pattern = Pattern.compile("(?<!\\w)(Runtime\\.getRuntime\\(\\)\\.exec\\(\"[^\"]+\"\\)|ProcessBuilder\\s*\\([^)]+\\))");
-        Matcher matcher = pattern.matcher(sourceCode);
-        return matcher.find();
-    }
-
-    private GradeStatus runCode(Grade grade) {
+    @Override
+    protected GradeStatus runCode(Grade grade) {
         try {
             String filePath = SOLUTIONFILEROOTDIR + grade.getToken();
-            ProcessBuilder pb = new ProcessBuilder("."+filePath+"/example");
+            ProcessBuilder pb = new ProcessBuilder(filePath+"/example");
             Process process = pb.start();
             writeInput(grade, process);
 
-            // Time Limit 체크
-            boolean finished = process.waitFor(TIMELIMIT, TimeUnit.SECONDS); // 10초 이내에 종료되지 않으면 false 반환
-            if (!finished) {
-                process.destroy(); // 프로세스 강제 종료
-                gradeRepository.save(grade.updateStatus(TIME_LIMIT_EXCEEDED));
-                return TIME_LIMIT_EXCEEDED;
-            }
-
-            // Runtime Error 체크
-            int exitValue = process.exitValue();
-            if (exitValue != 0) {
-                InputStream errorStream = process.getErrorStream();
-                String errorMessage = readOutput(errorStream);
-                gradeRepository.save(grade.updateRuntimeErrorStatus(errorMessage));
-                return RUNTIME_ERROR_OTHER;
-            }
-
-            // 정답 여부 체크
-            return evaluateOutput(grade, process);
+            return checkAndSaveStatus(grade, process);
 
         } catch (IOException | InterruptedException e) {
             log.error(e.getMessage());
             throw new CustomException(RUN_CODE_ERROR);
         }
     }
-
-    private GradeStatus evaluateOutput(Grade grade, Process process) throws IOException {
-        InputStream inputStream = process.getInputStream();
-        String actualOutput = readOutput(inputStream);
-        log.info("output : {}", actualOutput);
-        log.info("ExpectedOutput : {}", grade.getExpectedOutput());
-
-        if (actualOutput.equals(grade.getExpectedOutput())) {
-            gradeRepository.save(grade.updateStatus(ACCEPTED));
-            return ACCEPTED;
-        } else {
-            gradeRepository.save(grade.updateStatus(WRONG_ANSWER));
-            return WRONG_ANSWER;
-        }
-    }
-
-    private static void writeInput(Grade grade, Process process) throws IOException {
-        try (BufferedOutputStream br = new BufferedOutputStream(process.getOutputStream())) {
-            br.write(grade.getStdin().getBytes());
-            br.flush();
-        }
-    }
-
-    private String readOutput(InputStream inputStream) throws IOException {
-        StringBuilder output = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                output.append(line).append("\n");
-            }
-        }
-        return output.toString().trim();
-    }
-
 
 }
