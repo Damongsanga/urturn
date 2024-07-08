@@ -39,7 +39,7 @@ class JavaExecutionStrategyTest {
     }
 
     @Test
-    void 정상_정답_테스트() throws ExecutionException, InterruptedException {
+    void 정상_정답_테스트() {
 
         String sourceCode = """
                 import java.io.*;
@@ -134,7 +134,7 @@ class JavaExecutionStrategyTest {
         gradeRepository.save(grade);
 
         CompletableFuture<TokenWithStatus> future = javaExecutionStrategy.execute(grade);
-        TokenWithStatus res = future.get();
+        TokenWithStatus res = future.join();
         assertThat(res.getStatus()).isEqualTo(GradeStatus.ACCEPTED);
 
     }

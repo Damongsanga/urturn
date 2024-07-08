@@ -4,7 +4,6 @@ import com.ssafy.urturn.grading.domain.Grade;
 import com.ssafy.urturn.grading.domain.GradeStatus;
 import com.ssafy.urturn.grading.domain.repository.GradeRepository;
 import com.ssafy.urturn.grading.service.dto.TokenWithStatus;
-import com.ssafy.urturn.grading.service.strategy.ExecutionStrategy;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,10 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @TestPropertySource("classpath:application-test.yml")
-public class CExecutionStrategyTest {
+public class CppExecutionStrategyTest {
 
     @Autowired
-    ExecutionStrategy CExecutionStrategy;
+    ExecutionStrategy cppExecutionStrategy;
     @Autowired
     GradeRepository gradeRepository;
 
@@ -39,37 +38,37 @@ public class CExecutionStrategyTest {
     @Test
     void 정상_정답_테스트(){
         String sourceCode = """
-                #include <stdio.h>
-                #include <stdlib.h>
+                #include <iostream>
+                #include <cstdlib>
+                #include <cstring>
+                #include <algorithm>
                                 
-                typedef struct {
+                struct info {
                     int age;
                     char name[101];
-                } info;
+                };
                                 
-                int compare(const void* arg1, const void* arg2) {
-                    info *a = (info*)arg1;
-                    info *b = (info*)arg2;
-                    if (a->age > b->age) return 1;
-                    else if (a->age < b->age) return -1;
-                    else return 0;
+                bool compare(const info& a, const info& b) {
+                    // 오름차순 정렬
+                    if (a.age < b.age) return true;
+                    else if (a.age > b.age) return false;
+                    else return false;
                 }
                                 
-                int main(void)
-                {
+                int main() {
                     int n;
-                    scanf("%d", &n);
-                    info* p_info = (info*)malloc(sizeof(info) * n);
+                    std::cin >> n;
+                    info* p_info = new info[n];
                                 
                     for (int i = 0; i < n; i++) {
-                        scanf("%d%*c%s", &p_info[i].age, p_info[i].name);
+                        std::cin >> p_info[i].age >> p_info[i].name;
                     }
-                    qsort(p_info, n, sizeof(info), compare);   //나이 순 정렬
+                    std::sort(p_info, p_info + n, compare);   // 나이 순 정렬
                                 
                     for (int i = 0; i < n; i++) {
-                        printf("%d %s\\n", p_info[i].age, p_info[i].name);
+                        std::cout << p_info[i].age << " " << p_info[i].name << std::endl;
                     }
-                    free(p_info);
+                    delete[] p_info;
                     return 0;
                 }
                 """;
@@ -86,7 +85,7 @@ public class CExecutionStrategyTest {
                 21 Dohyun""";
 
         Grade grade = Grade.builder()
-                .token("token-aaaa-aaaa-c-accepted")
+                .token("token-aaaa-aaaa-cpp-accepted")
                 .languageId(2)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
@@ -95,7 +94,7 @@ public class CExecutionStrategyTest {
                 .build();
         gradeRepository.save(grade);
 
-        CompletableFuture<TokenWithStatus> future = CExecutionStrategy.execute(grade);
+        CompletableFuture<TokenWithStatus> future = cppExecutionStrategy.execute(grade);
         TokenWithStatus res = future.join();
         assertThat(res.getStatus()).isEqualTo(GradeStatus.ACCEPTED);
     }
@@ -103,37 +102,37 @@ public class CExecutionStrategyTest {
     @Test
     void 오답_테스트(){
         String sourceCode = """
-                #include <stdio.h>
-                #include <stdlib.h>
+                #include <iostream>
+                #include <cstdlib>
+                #include <cstring>
+                #include <algorithm>
                                 
-                typedef struct {
+                struct info {
                     int age;
                     char name[101];
-                } info;
+                };
                                 
-                int compare(const void* arg1, const void* arg2) {
-                    info *a = (info*)arg1;
-                    info *b = (info*)arg2;
-                    if (a->age > b->age) return 1;
-                    else if (a->age < b->age) return -1;
-                    else return 0;
+                bool compare(const info& a, const info& b) {
+                    // 오름차순 정렬
+                    if (a.age < b.age) return true;
+                    else if (a.age > b.age) return false;
+                    else return false;
                 }
                                 
-                int main(void)
-                {
+                int main() {
                     int n;
-                    scanf("%d", &n);
-                    info* p_info = (info*)malloc(sizeof(info) * n);
+                    std::cin >> n;
+                    info* p_info = new info[n];
                                 
                     for (int i = 0; i < n; i++) {
-                        scanf("%d%*c%s", &p_info[i].age, p_info[i].name);
+                        std::cin >> p_info[i].age >> p_info[i].name;
                     }
-                    qsort(p_info, n, sizeof(info), compare);   //나이 순 정렬
+                    std::sort(p_info, p_info + n, compare);   // 나이 순 정렬
                                 
                     for (int i = 0; i < n; i++) {
-                        printf("%d %s\\n", p_info[i].age, p_info[i].name);
+                        std::cout << p_info[i].age << " " << p_info[i].name << std::endl;
                     }
-                    free(p_info);
+                    delete[] p_info;
                     return 0;
                 }
                 """;
@@ -149,7 +148,7 @@ public class CExecutionStrategyTest {
                 21 Dohyun""";
 
         Grade grade = Grade.builder()
-                .token("token-aaaa-aaaa-c-wrong")
+                .token("token-aaaa-aaaa-cpp-wrong")
                 .languageId(2)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
@@ -158,50 +157,51 @@ public class CExecutionStrategyTest {
                 .build();
         gradeRepository.save(grade);
 
-        CompletableFuture<TokenWithStatus> future = CExecutionStrategy.execute(grade);
+        CompletableFuture<TokenWithStatus> future = cppExecutionStrategy.execute(grade);
         TokenWithStatus res = future.join();
         assertThat(res.getStatus()).isEqualTo(GradeStatus.WRONG_ANSWER);
     }
 
     @Test
     void 컴파일_에러_테스트(){
+
         String sourceCode = """
-                #include <stdio.h>
-                #include <stdlib.h>
+                #include <iostream>
+                #include <cstdlib>
+                #include <cstring>
+                #include <algorithm>
+                
+                컴파일 에러
                                 
-                컴파일 에러 
-                typedef struct {
+                struct info {
                     int age;
                     char name[101];
-                } info;
+                };
                                 
-                int compare(const void* arg1, const void* arg2) {
-                    info *a = (info*)arg1;
-                    info *b = (info*)arg2;
-                    if (a->age > b->age) return 1;
-                    else if (a->age < b->age) return -1;
-                    else return 0;
+                bool compare(const info& a, const info& b) {
+                    // 오름차순 정렬
+                    if (a.age < b.age) return true;
+                    else if (a.age > b.age) return false;
+                    else return false;
                 }
                                 
-                int main(void)
-                {
+                int main() {
                     int n;
-                    scanf("%d", &n);
-                    info* p_info = (info*)malloc(sizeof(info) * n);
+                    std::cin >> n;
+                    info* p_info = new info[n];
                                 
                     for (int i = 0; i < n; i++) {
-                        scanf("%d%*c%s", &p_info[i].age, p_info[i].name);
+                        std::cin >> p_info[i].age >> p_info[i].name;
                     }
-                    qsort(p_info, n, sizeof(info), compare);   //나이 순 정렬
+                    std::sort(p_info, p_info + n, compare);   // 나이 순 정렬
                                 
                     for (int i = 0; i < n; i++) {
-                        printf("%d %s\\n", p_info[i].age, p_info[i].name);
+                        std::cout << p_info[i].age << " " << p_info[i].name << std::endl;
                     }
-                    free(p_info);
+                    delete[] p_info;
                     return 0;
                 }
                 """;
-
         String stdIn = """
                 3
                 21 Junkyu
@@ -214,7 +214,7 @@ public class CExecutionStrategyTest {
                 21 Dohyun""";
 
         Grade grade = Grade.builder()
-                .token("token-aaaa-aaaa-c-complie")
+                .token("token-aaaa-aaaa-cpp-complie")
                 .languageId(2)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
@@ -223,7 +223,7 @@ public class CExecutionStrategyTest {
                 .build();
         gradeRepository.save(grade);
 
-        CompletableFuture<TokenWithStatus> future = CExecutionStrategy.execute(grade);
+        CompletableFuture<TokenWithStatus> future = cppExecutionStrategy.execute(grade);
         TokenWithStatus res = future.join();
         assertThat(res.getStatus()).isEqualTo(GradeStatus.COMPILATION_ERROR);
     }
@@ -231,40 +231,40 @@ public class CExecutionStrategyTest {
     @Test
     void 런타임_에러_테스트(){
         String sourceCode = """
-                #include <stdio.h>
-                #include <stdlib.h>
-                                
-                typedef struct {
+                #include <iostream>
+                #include <cstdlib>
+                #include <cstring>
+                #include <algorithm>
+                               
+                struct info {
                     int age;
-                    char name[1];
-                } info;
-                                
-                int compare(const void* arg1, const void* arg2) {
-                    info *a = (info*)arg1;
-                    info *b = (info*)arg2;
-                    if (a->age > b->age) return 1;
-                    else if (a->age < b->age) return -1;
-                    else return 0;
+                    char name[101];
+                };
+                               
+                bool compare(const info& a, const info& b) {
+                    // 오름차순 정렬
+                    if (a.age < b.age) return true;
+                    else if (a.age > b.age) return false;
+                    else return false;
                 }
-                                
-                int main(void)
-                {
+                               
+                int main() {
                     int *ptr = NULL;
                     *ptr = 10; // 런타임 에러 발생 (Segmentation Fault)
                     
                     int n;
-                    scanf("%d", &n);
-                    info* p_info = (info*)malloc(sizeof(info) * n);
-                                
-                    for (int i = 0; i < n; i++) { 
-                        scanf("%d%*c%s", &p_info[i].age, p_info[i].name);
-                    }
-                    qsort(p_info, n, sizeof(info), compare);   //나이 순 정렬
-                                
+                    std::cin >> n;
+                    info* p_info = new info[n];
+                               
                     for (int i = 0; i < n; i++) {
-                        printf("%d %s\\n", p_info[i].age, p_info[i].name);
+                        std::cin >> p_info[i].age >> p_info[i].name;
                     }
-                    free(p_info);
+                    std::sort(p_info, p_info + n, compare);   // 나이 순 정렬
+                               
+                    for (int i = 0; i < n; i++) {
+                        std::cout << p_info[i].age << " " << p_info[i].name << std::endl;
+                    }
+                    delete[] p_info;
                     return 0;
                 }
                 """;
@@ -281,7 +281,7 @@ public class CExecutionStrategyTest {
                 21 Dohyun""";
 
         Grade grade = Grade.builder()
-                .token("token-aaaa-aaaa-c-runtime")
+                .token("token-aaaa-aaaa-cpp-runtime")
                 .languageId(2)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
@@ -290,7 +290,7 @@ public class CExecutionStrategyTest {
                 .build();
         gradeRepository.save(grade);
 
-        CompletableFuture<TokenWithStatus> future = CExecutionStrategy.execute(grade);
+        CompletableFuture<TokenWithStatus> future = cppExecutionStrategy.execute(grade);
         TokenWithStatus res = future.join();
         assertThat(res.getStatus()).isEqualTo(GradeStatus.RUNTIME_ERROR_OTHER);
     }
@@ -299,37 +299,37 @@ public class CExecutionStrategyTest {
     void 중복_요청() {
 
         String sourceCode = """
-                #include <stdio.h>
-                #include <stdlib.h>
+                #include <iostream>
+                #include <cstdlib>
+                #include <cstring>
+                #include <algorithm>
                                 
-                typedef struct {
+                struct info {
                     int age;
                     char name[101];
-                } info;
+                };
                                 
-                int compare(const void* arg1, const void* arg2) {
-                    info *a = (info*)arg1;
-                    info *b = (info*)arg2;
-                    if (a->age > b->age) return 1;
-                    else if (a->age < b->age) return -1;
-                    else return 0;
+                bool compare(const info& a, const info& b) {
+                    // 오름차순 정렬
+                    if (a.age < b.age) return true;
+                    else if (a.age > b.age) return false;
+                    else return false;
                 }
                                 
-                int main(void)
-                {
+                int main() {
                     int n;
-                    scanf("%d", &n);
-                    info* p_info = (info*)malloc(sizeof(info) * n);
-                                
-                    for (int i = 0; i < n; i++) { 
-                        scanf("%d%*c%s", &p_info[i].age, p_info[i].name);
-                    }
-                    qsort(p_info, n, sizeof(info), compare);   //나이 순 정렬
+                    std::cin >> n;
+                    info* p_info = new info[n];
                                 
                     for (int i = 0; i < n; i++) {
-                        printf("%d %s\\n", p_info[i].age, p_info[i].name);
+                        std::cin >> p_info[i].age >> p_info[i].name;
                     }
-                    free(p_info);
+                    std::sort(p_info, p_info + n, compare);   // 나이 순 정렬
+                                
+                    for (int i = 0; i < n; i++) {
+                        std::cout << p_info[i].age << " " << p_info[i].name << std::endl;
+                    }
+                    delete[] p_info;
                     return 0;
                 }
                 """;
@@ -345,12 +345,11 @@ public class CExecutionStrategyTest {
                 21 Junkyu
                 21 Dohyun""";
 
-
         List<Grade> grades = new ArrayList<>();
 
         for (int idx = 0; idx < 10; idx++) {
             Grade grade = Grade.builder()
-                    .token("token-aaaa-aaaa-c-" + idx)
+                    .token("token-aaaa-aaaa-cpp-" + idx)
                     .languageId(1)
                     .sourceCode(sourceCode)
                     .stdin(stdIn)
@@ -361,7 +360,7 @@ public class CExecutionStrategyTest {
             gradeRepository.save(grade);
         }
 
-        grades.stream().map(CExecutionStrategy::execute).forEach(
+        grades.stream().map(cppExecutionStrategy::execute).forEach(
                 future -> assertThat(future.join().getStatus()).isEqualTo(GradeStatus.ACCEPTED)
         );
 
