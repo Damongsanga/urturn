@@ -57,6 +57,7 @@ public class JavaExecutionStrategy extends AbstractBasicStrategy {
             String javaFilePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/Main.java";
             ProcessBuilder pb = new ProcessBuilder("javac", javaFilePath);
             Process process = pb.start();
+
             process.waitFor();
             return process.exitValue() == 0;
         } catch (IOException | InterruptedException e) {
@@ -102,8 +103,14 @@ public class JavaExecutionStrategy extends AbstractBasicStrategy {
     protected GradeStatus runCode(Grade grade) {
         try {
             String filePath = SOLUTIONFILEROOTDIR + grade.getToken();
-            ProcessBuilder pb = new ProcessBuilder("java", "-Xmx" + MEMORYLIMIT, "-Xss256k", "-cp", filePath, "Main");
+
+//            ProcessBuilder pb = new ProcessBuilder("java", "-Xmx" + MEMORYLIMIT, "-Xss256k", "-cp", filePath, "Main");
+            ProcessBuilder pb = new ProcessBuilder("docker", "run", "--memory="+MEMORYLIMIT+"mb",
+                    "--rm", "-i", "-v", filePath+"/:/app", "openjdk:17", "java", "-Xss256k", "-cp", "/app", "Main");
+//            pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+//            pb.redirectError(ProcessBuilder.Redirect.INHERIT);
             Process process = pb.start();
+
             writeInput(grade, process);
 
             return checkAndSaveStatus(grade, process);

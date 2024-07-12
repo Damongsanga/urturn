@@ -56,9 +56,14 @@ public class CExecutionStrategy extends AbstractBasicStrategy {
     private boolean compileCode(Grade grade) {
         try {
             makeFile(grade);
-            String cFilePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/example.c";
-            String complieFilePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/example";
-            ProcessBuilder pb = new ProcessBuilder("gcc", cFilePath, "-o", complieFilePath);
+//            String cFilePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/example.c";
+//            String complieFilePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/example";
+//            ProcessBuilder pb = new ProcessBuilder("gcc", cFilePath, "-o", complieFilePath);
+            String cFilePath = SOLUTIONFILEROOTDIR + grade.getToken();
+            ProcessBuilder pb = new ProcessBuilder(
+                    "docker", "run", "--rm", "-v", cFilePath + "/:/app/", "gcc:latest",
+                    "gcc", "/app/example.c", "-o", "/app/example"
+            );
             Process process = pb.start();
             process.waitFor();
             return process.exitValue() == 0;
@@ -105,8 +110,10 @@ public class CExecutionStrategy extends AbstractBasicStrategy {
     @Override
     protected GradeStatus runCode(Grade grade) {
         try {
+//            ProcessBuilder pb = new ProcessBuilder(filePath+"/example");
             String filePath = SOLUTIONFILEROOTDIR + grade.getToken();
-            ProcessBuilder pb = new ProcessBuilder(filePath+"/example");
+            ProcessBuilder pb = new ProcessBuilder("docker", "run", "--memory="+MEMORYLIMIT+"mb", "--rm", "-i", "-v", filePath + "/:/app", "gcc:latest",
+                    "/app/example");
             Process process = pb.start();
             writeInput(grade, process);
 

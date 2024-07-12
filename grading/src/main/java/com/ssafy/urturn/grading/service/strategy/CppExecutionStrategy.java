@@ -53,9 +53,14 @@ public class CppExecutionStrategy extends AbstractBasicStrategy {
     private boolean compileCode(Grade grade) {
         try {
             makeFile(grade);
-            String cFilePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/example.cpp";
-            String complieFilePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/example";
-            ProcessBuilder pb = new ProcessBuilder("g++", cFilePath, "-o", complieFilePath);
+//            String cFilePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/example.cpp";
+//            String complieFilePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/example";
+//            ProcessBuilder pb = new ProcessBuilder("g++", cFilePath, "-o", complieFilePath);
+            String cFilePath = SOLUTIONFILEROOTDIR + grade.getToken();
+            ProcessBuilder pb = new ProcessBuilder(
+                    "docker", "run", "--rm", "-v", cFilePath + "/:/app/", "gcc:latest",
+                    "g++", "/app/example.cpp", "-o", "/app/example"
+            );
             Process process = pb.start();
             process.waitFor();
             return process.exitValue() == 0;
@@ -103,7 +108,9 @@ public class CppExecutionStrategy extends AbstractBasicStrategy {
     protected GradeStatus runCode(Grade grade) {
         try {
             String filePath = SOLUTIONFILEROOTDIR + grade.getToken();
-            ProcessBuilder pb = new ProcessBuilder(filePath+"/example");
+//            ProcessBuilder pb = new ProcessBuilder(filePath+"/example");
+            ProcessBuilder pb = new ProcessBuilder("docker", "run", "--memory="+MEMORYLIMIT+"mb",
+                    "--rm", "-i", "-v", filePath + "/:/app", "gcc:latest", "/app/example");
             Process process = pb.start();
             writeInput(grade, process);
 

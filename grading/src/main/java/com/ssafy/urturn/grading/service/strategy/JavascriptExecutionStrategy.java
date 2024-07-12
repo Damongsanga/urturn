@@ -24,6 +24,8 @@ import static com.ssafy.urturn.grading.global.exception.CustomErrorCode.*;
 @Slf4j
 public class JavascriptExecutionStrategy extends AbstractBasicStrategy {
 
+    private static final int MEMORYLIMIT = 256; // 256 MB
+
     public JavascriptExecutionStrategy(GradeRepository gradeRepository) {
         super(gradeRepository);
     }
@@ -82,7 +84,12 @@ public class JavascriptExecutionStrategy extends AbstractBasicStrategy {
     protected GradeStatus runCode(Grade grade) {
         try {
             String filePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/script.js";
-            ProcessBuilder pb = new ProcessBuilder("node", filePath);
+            ProcessBuilder pb = new ProcessBuilder("node", "--max-old-space-size="+MEMORYLIMIT, filePath);
+//            String filePath = SOLUTIONFILEROOTDIR + grade.getToken();
+//            ProcessBuilder pb = new ProcessBuilder("docker", "run", "--memory="+MEMORYLIMIT+"mb",
+//                    "--rm", "-i", "-v", filePath+"/:/app", "node:14", "node", "/app/script.js");
+
+
             Process process = pb.start();
             writeInput(grade, process);
 

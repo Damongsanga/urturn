@@ -25,9 +25,9 @@ public abstract class AbstractBasicStrategy implements ExecutionStrategy{
 
     protected final GradeRepository gradeRepository;
 
-    protected static final String SOLUTIONFILEROOTDIR = "src/main/resources/tmpFiles/";
+    protected static final String SOLUTIONFILEROOTDIR = "./src/main/resources/tmpFiles/";
     protected static final int TIMELIMIT = 10; // 10 seconds
-    protected static final int MEMORYLIMIT = 256 * 1024 * 1024; // 256 MB
+    protected static final int MEMORYLIMIT = 256; // 256 MB
 
     @Async
     @Override
@@ -53,8 +53,7 @@ public abstract class AbstractBasicStrategy implements ExecutionStrategy{
     protected abstract GradeStatus runCode(Grade grade);
 
     protected GradeStatus evaluateOutput(Grade grade, Process process) throws IOException {
-        InputStream inputStream = process.getInputStream();
-        String actualOutput = readOutput(inputStream);
+        String actualOutput = readOutput(process.getInputStream());
         log.info("output : {}", actualOutput);
         log.info("ExpectedOutput : {}", grade.getExpectedOutput());
 

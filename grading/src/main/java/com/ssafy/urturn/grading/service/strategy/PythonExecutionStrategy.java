@@ -24,6 +24,8 @@ import static com.ssafy.urturn.grading.global.exception.CustomErrorCode.*;
 @Slf4j
 public class PythonExecutionStrategy extends AbstractBasicStrategy {
 
+    private static final int MEMORYLIMIT = 512;
+
     public PythonExecutionStrategy(GradeRepository gradeRepository) {
         super(gradeRepository);
     }
@@ -81,7 +83,9 @@ public class PythonExecutionStrategy extends AbstractBasicStrategy {
     protected GradeStatus runCode(Grade grade) {
         try {
             String filePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/Solution.py";
-            ProcessBuilder pb = new ProcessBuilder("python3", filePath);
+//            ProcessBuilder pb = new ProcessBuilder("ulimit", "-v", MEMORYLIMIT+"" , "&&", "python3", filePath);
+            ProcessBuilder pb = new ProcessBuilder("docker", "run", "--memory="+MEMORYLIMIT+"mb", "--rm", "-i", "-v", filePath+":/app/Solution.py", "python:3.9", "python3", "/app/Solution.py");
+
             Process process = pb.start();
             writeInput(grade, process);
 
