@@ -32,7 +32,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class GradingService {
 
-    private final WebClient webClient;
+    private final GradingServerClient gradingServerClient;
     private final ProblemRepository problemRepository;
 
     // status Id -> status 변환 배열. 채점 서버가 변환되지 않을 예정이며 매번 확인할 필요가 없음
@@ -55,7 +55,7 @@ public class GradingService {
 
         // 제출한 코드를 기반으로 채점
         // 토큰 추출
-        List<TokenDto> tokens = createTokens(problemTestcaseDto.getTestcases(), inputCode, language).block();
+        List<TokenDto> tokens = gradingServerClient.createTokens(problemTestcaseDto.getTestcases(), inputCode, language).block();
 
         for (TokenDto token : tokens) {
             log.info("token : {}", token.getToken());
@@ -79,7 +79,7 @@ public class GradingService {
             }
 
             // 응답받은 토큰을 기반으로 다시 응답 추출
-            submissionsBatchResponse = getSubmissions(tokens).block();
+            submissionsBatchResponse = gradingServerClient.getSubmissions(tokens).block();
 
             status = confirmStatus(Objects.requireNonNull(submissionsBatchResponse).getSubmissions());
 
@@ -127,31 +127,6 @@ public class GradingService {
         return ALL_ACCEPTED;
     }
 
-    // 채점 서버에 inputCode들을 제공하여 토큰을 반환받음
-    private Mono<List<TokenDto>> createTokens(List<TestcaseDto> testcases, String inputCode, Language language){
 
-        return webClient.post().uri(uriBuilder -> uriBuilder
-            .path(CREATE_TOKENS.getPath())
-            .query(CREATE_TOKENS.getQuery())
-            .build())
-            .body(BodyInserters
-                .fromValue(new TokenBatchCreateDto(testcases, inputCode, language)))
-            .retrieve()
-            .bodyToFlux(TokenDto.class)
-            .collectList();
-    }
-
-    // 채점 서버에 token들을 제공하여 submission(결과)를 제공받음
-    private Mono<SubmissionBatchResponseDto> getSubmissions(List<TokenDto> tokens){
-        return webClient.get().uri(uriBuilder -> uriBuilder
-                .path(GET_GRADES.getPath())
-                .query(GET_GRADES.getQuery(tokens))
-                .build()).retrieve()
-            .bodyToMono(SubmissionBatchResponseDto.class) //BASE64 -> UTF-8로 인코딩
-            .map(submissionBatch -> {
-                submissionBatch.decodeBase64toUTF8();
-                return submissionBatch;
-            });
-    }
 
 }
