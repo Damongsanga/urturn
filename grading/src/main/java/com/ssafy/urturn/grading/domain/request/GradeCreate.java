@@ -7,10 +7,15 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GradeCreate {
+
+
     @NotBlank
     private String sourceCode;
     @Min(1) @Max(74)

@@ -1,5 +1,6 @@
 package com.ssafy.urturn.grading.controller;
 
+import com.ssafy.urturn.grading.domain.request.GradeBatchCreate;
 import com.ssafy.urturn.grading.domain.request.GradeCreate;
 import com.ssafy.urturn.grading.controller.response.TokenResponse;
 import com.ssafy.urturn.grading.service.GradeService;
@@ -21,8 +22,8 @@ public class TokenController {
     private final GradeService gradeService;
 
     @PostMapping("")
-    public ResponseEntity<List<TokenResponse>> createTokens(@Valid @RequestBody List<GradeCreate> gradeCreates){
-        return ResponseEntity.ok(gradeService.createGrades(gradeCreates)
+    public ResponseEntity<List<TokenResponse>> createTokens(@Valid @RequestBody GradeBatchCreate gradeBatchCreate){
+        return ResponseEntity.ok(gradeService.createGrades(gradeBatchCreate.getSubmissions())
                     .stream().map(TokenResponse::from)
                     .toList());
     }

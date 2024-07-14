@@ -12,7 +12,7 @@ public class LanguageExecutionMapper {
             return "pythonExecutionStrategy";
         } else if (languageId == 63) {
             return "javascriptExecutionStrategy";
-        }  else if (languageId == 49) {
+        }  else if (languageId == 50) {
             return "CExecutionStrategy";
         } else if (languageId == 54) {
             return "cppExecutionStrategy";

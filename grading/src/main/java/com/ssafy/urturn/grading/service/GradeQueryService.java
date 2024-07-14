@@ -6,6 +6,7 @@ import com.ssafy.urturn.grading.domain.request.GradeGetRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -14,8 +15,11 @@ public class GradeQueryService {
 
     private final GradeRepository gradeRepository;
 
-    public List<Grade> getGrades(GradeGetRequest request) {
-        return request.getTokens().stream().map(gradeRepository::findByToken).
+    public List<Grade> getGrades(String tokens) {
+
+        List<String> tokenList = Arrays.asList(tokens.split(","));
+
+        return tokenList.stream().map(gradeRepository::findByToken).
                 map(optional -> optional.orElse(Grade.empty())).toList();
     }
 }
