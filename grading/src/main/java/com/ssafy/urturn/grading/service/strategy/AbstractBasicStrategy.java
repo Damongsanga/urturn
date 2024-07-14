@@ -106,4 +106,5 @@ public abstract class AbstractBasicStrategy implements ExecutionStrategy{
         // 정답 여부 체크
         return evaluateOutput(grade, process);
     }
+
 }

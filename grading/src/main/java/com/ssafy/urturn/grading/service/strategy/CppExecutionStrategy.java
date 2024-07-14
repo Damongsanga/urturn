@@ -6,6 +6,7 @@ import com.ssafy.urturn.grading.domain.repository.GradeRepository;
 import com.ssafy.urturn.grading.global.exception.CustomException;
 import com.ssafy.urturn.grading.service.dto.TokenWithStatus;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -15,8 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.CompletableFuture;
 
-import static com.ssafy.urturn.grading.domain.GradeStatus.COMPILATION_ERROR;
-import static com.ssafy.urturn.grading.domain.GradeStatus.EXEC_FORMAT_ERROR;
+import static com.ssafy.urturn.grading.domain.GradeStatus.*;
 import static com.ssafy.urturn.grading.global.exception.CommonErrorCode.INTERNAL_SERVER_ERROR;
 import static com.ssafy.urturn.grading.global.exception.CustomErrorCode.*;
 
@@ -28,26 +28,29 @@ public class CppExecutionStrategy extends AbstractBasicStrategy {
         super(gradeRepository);
     }
 
-//    @Async
+    @Async
     @Override
     public CompletableFuture<TokenWithStatus> execute(Grade grade){
 
-         if (checkCodeValidation(grade.getSourceCode())){
-            gradeRepository.save(grade.updateStatus(EXEC_FORMAT_ERROR));
-            log.info("{}", EXEC_FORMAT_ERROR.getDescription());
-            return CompletableFuture.completedFuture(TokenWithStatus.from(grade.getToken(), EXEC_FORMAT_ERROR));
-        }
+        try{
+            if (checkCodeValidation(grade.getSourceCode())){
+                gradeRepository.save(grade.updateStatus(EXEC_FORMAT_ERROR));
+                log.info("{}", EXEC_FORMAT_ERROR.getDescription());
+                return CompletableFuture.completedFuture(TokenWithStatus.from(grade.getToken(), EXEC_FORMAT_ERROR));
+            }
 
-        if (!compileCode(grade)){
-            gradeRepository.save(grade.updateStatus(COMPILATION_ERROR));
-            log.info("{}", COMPILATION_ERROR.getDescription());
+            if (!compileCode(grade)){
+                gradeRepository.save(grade.updateStatus(COMPILATION_ERROR));
+                log.info("{}", COMPILATION_ERROR.getDescription());
+                deleteFile(grade);
+                return CompletableFuture.completedFuture(TokenWithStatus.from(grade.getToken(), COMPILATION_ERROR));
+            }
+
+            GradeStatus status = runCode(grade);
+            return CompletableFuture.completedFuture(TokenWithStatus.from(grade.getToken(), status));
+        } finally {
             deleteFile(grade);
-            return CompletableFuture.completedFuture(TokenWithStatus.from(grade.getToken(), COMPILATION_ERROR));
         }
-
-        GradeStatus status = runCode(grade);
-        deleteFile(grade);
-        return CompletableFuture.completedFuture(TokenWithStatus.from(grade.getToken(), status));
     }
 
     private boolean compileCode(Grade grade) {
@@ -65,7 +68,7 @@ public class CppExecutionStrategy extends AbstractBasicStrategy {
             process.waitFor();
             return process.exitValue() == 0;
         } catch (IOException | InterruptedException e) {
-            log.error("{}", e.getMessage());
+            log.info("{}", e.getMessage());
             return false;
         }
     }
@@ -83,7 +86,7 @@ public class CppExecutionStrategy extends AbstractBasicStrategy {
                 throw new CustomException(INTERNAL_SERVER_ERROR, "내부에 동일한 이름의 파일이 존재합니다.");
             }
         } catch (IOException e){
-            log.error("{}", e.getMessage());
+            gradeRepository.save(grade.updateStatus(INTERNAL_ERROR));
             throw new CustomException(FILE_CREATE_ERROR);
         }
     }
@@ -98,7 +101,6 @@ public class CppExecutionStrategy extends AbstractBasicStrategy {
             Files.deleteIfExists(compileFilePath);
             Files.deleteIfExists(dirPath);
         } catch (IOException e){
-            log.error("{}", e.getMessage());
             throw new CustomException(FILE_DELETE_ERROR);
         }
     }
@@ -117,7 +119,7 @@ public class CppExecutionStrategy extends AbstractBasicStrategy {
             return checkAndSaveStatus(grade, process);
 
         } catch (IOException | InterruptedException e) {
-            log.error(e.getMessage());
+            gradeRepository.save(grade.updateStatus(INTERNAL_ERROR));
             throw new CustomException(RUN_CODE_ERROR);
         }
     }

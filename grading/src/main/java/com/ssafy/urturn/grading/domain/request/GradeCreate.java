@@ -13,7 +13,7 @@ import lombok.*;
 public class GradeCreate {
     @NotBlank
     private String sourceCode;
-    @Min(1) @Max(62)
+    @Min(1) @Max(74)
     private int languageId;
 
     @NotBlank

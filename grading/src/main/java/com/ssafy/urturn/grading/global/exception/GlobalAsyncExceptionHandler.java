@@ -13,7 +13,7 @@ public class GlobalAsyncExceptionHandler implements AsyncUncaughtExceptionHandle
 
     @Override
     public void handleUncaughtException(Throwable ex, Method method, Object... params) {
-        log.error("Method name : {}, param Count : {}\n\nException Cause -{}", method.getName(), params.length, ex.getMessage());
+        log.error("Exception Cause -{}", ex.getMessage());
     }
 
 }

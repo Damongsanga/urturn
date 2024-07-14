@@ -61,7 +61,7 @@ public class JavascriptExecutionStrategy extends AbstractBasicStrategy {
                 throw new CustomException(INTERNAL_SERVER_ERROR, "내부에 동일한 이름의 파일이 존재합니다.");
             }
         } catch (IOException e){
-            log.error("{}", e.getMessage());
+            gradeRepository.save(grade.updateStatus(INTERNAL_ERROR));
             throw new CustomException(FILE_CREATE_ERROR);
         }
     }
@@ -74,7 +74,6 @@ public class JavascriptExecutionStrategy extends AbstractBasicStrategy {
             Files.deleteIfExists(pythonFilePath);
             Files.deleteIfExists(dirPath);
         } catch (IOException e){
-            log.error("{}", e.getMessage());
             throw new CustomException(FILE_DELETE_ERROR);
         }
     }
@@ -89,14 +88,13 @@ public class JavascriptExecutionStrategy extends AbstractBasicStrategy {
 //            ProcessBuilder pb = new ProcessBuilder("docker", "run", "--memory="+MEMORYLIMIT+"mb",
 //                    "--rm", "-i", "-v", filePath+"/:/app", "node:14", "node", "/app/script.js");
 
-
             Process process = pb.start();
             writeInput(grade, process);
 
             return checkAndSaveStatus(grade, process);
 
         } catch (IOException | InterruptedException e) {
-            log.error(e.getMessage());
+            gradeRepository.save(grade.updateStatus(INTERNAL_ERROR));
             throw new CustomException(RUN_CODE_ERROR);
         }
     }

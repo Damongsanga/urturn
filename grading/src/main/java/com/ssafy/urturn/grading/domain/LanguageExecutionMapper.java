@@ -6,13 +6,17 @@ import org.springframework.stereotype.Component;
 public class LanguageExecutionMapper {
 
     public static String getExecutionService(int languageId) {
-        if (languageId == 1) {
+        if (languageId == 62) {
             return "javaExecutionStrategy";
-        } else if (languageId == 2) {
+        } else if (languageId == 71) {
             return "pythonExecutionStrategy";
-        } else if (languageId == 3) {
+        } else if (languageId == 63) {
             return "javascriptExecutionStrategy";
-        } else {
+        }  else if (languageId == 49) {
+            return "CExecutionStrategy";
+        } else if (languageId == 54) {
+            return "cppExecutionStrategy";
+        }  else {
             throw new IllegalArgumentException("Unsupported language ID: " + languageId);
         }
 
