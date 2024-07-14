@@ -28,7 +28,7 @@ spring:
     redis:
       host:
       port:
-#      password:
+      password:
 
   security:
     oauth2:
