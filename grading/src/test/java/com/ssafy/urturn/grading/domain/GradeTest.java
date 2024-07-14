@@ -124,7 +124,7 @@ class GradeTest {
                 .build();
         Grade cGrade = Grade.builder()
                 .token("token1")
-                .languageId(49)
+                .languageId(50)
                 .stdout("stdout1")
                 .statusId(1)
                 .build();

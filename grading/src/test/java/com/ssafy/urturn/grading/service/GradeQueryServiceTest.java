@@ -54,7 +54,7 @@ public class GradeQueryServiceTest {
    @Test
    void getGrades는_존재하는_결과값을_반환할_수_있다(){
        // given
-       GradeGetRequest request = new GradeGetRequest(List.of("token1", "token2", "token3"));
+       String request = "token1,token2,token3";
        // when
        // then
 
@@ -69,7 +69,7 @@ public class GradeQueryServiceTest {
     @Test
     void getGrades는_존재하지_결과값을_Empty_객체로_반환할_수_있다(){
         // given
-        GradeGetRequest request = new GradeGetRequest(List.of("token4", "token5", "token6"));
+        String request = "token4,token5,token6";
         // when
         // then
         List<Grade> result = gradeQueryService.getGrades(request);
@@ -79,4 +79,5 @@ public class GradeQueryServiceTest {
         assertThat(result.get(2).getStdin()).isEqualTo(null);
         assertThat(result.get(2).isEmpty()).isTrue();
     }
+
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.urturn.grading.controller.response.TokenResponse;
 import com.ssafy.urturn.grading.domain.GradeStatus;
 import com.ssafy.urturn.grading.domain.repository.GradeRepository;
+import com.ssafy.urturn.grading.domain.request.GradeBatchCreate;
 import com.ssafy.urturn.grading.domain.request.GradeCreate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
@@ -153,9 +154,11 @@ public class TokenControllerTest {
         List<GradeCreate> gradeCreates = new ArrayList<>();
         gradeCreates.add(gradeCreate);
 
+        GradeBatchCreate gradeBatchCreate = new GradeBatchCreate(gradeCreates);
+
         MvcResult result = mockMvc.perform(post("/submissions/batch")
-                .contentType(APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsString(gradeCreates)))
+                        .contentType(APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(gradeBatchCreate)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -203,9 +206,11 @@ public class TokenControllerTest {
         List<GradeCreate> gradeCreates = new ArrayList<>();
         gradeCreates.add(gradeCreate);
 
+        GradeBatchCreate gradeBatchCreate = new GradeBatchCreate(gradeCreates);
+
         MvcResult result = mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeCreates)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreate)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -254,9 +259,11 @@ public class TokenControllerTest {
         List<GradeCreate> gradeCreates = new ArrayList<>();
         gradeCreates.add(gradeCreate);
 
+        GradeBatchCreate gradeBatchCreate = new GradeBatchCreate(gradeCreates);
+
         MvcResult result = mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeCreates)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreate)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -322,7 +329,7 @@ public class TokenControllerTest {
 
         GradeCreate gradeCreate = GradeCreate.builder()
                 .sourceCode(sourceCode)
-                .languageId(49)
+                .languageId(50)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
                 .build();
@@ -330,9 +337,11 @@ public class TokenControllerTest {
         List<GradeCreate> gradeCreates = new ArrayList<>();
         gradeCreates.add(gradeCreate);
 
+        GradeBatchCreate gradeBatchCreate = new GradeBatchCreate(gradeCreates);
+
         MvcResult result = mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeCreates)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreate)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -406,9 +415,11 @@ public class TokenControllerTest {
         List<GradeCreate> gradeCreates = new ArrayList<>();
         gradeCreates.add(gradeCreate);
 
+        GradeBatchCreate gradeBatchCreate = new GradeBatchCreate(gradeCreates);
+
         MvcResult result = mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeCreates)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreate)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -475,17 +486,23 @@ public class TokenControllerTest {
 
         List<GradeCreate> gradeCreateLows = List.of(gradeCreateLow, gradeCreate);
 
+        GradeBatchCreate gradeBatchCreateLows = new GradeBatchCreate(gradeCreateLows);
+
         mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeCreateLows)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreateLows)))
                 .andExpect(status().is4xxClientError());
+
 
         List<GradeCreate> gradeCreateHighs = List.of(gradeCreateHigh, gradeCreate);
 
+        GradeBatchCreate gradeBatchCreateHighs = new GradeBatchCreate(gradeCreateHighs);
+
         mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeCreateHighs)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreateHighs)))
                 .andExpect(status().is4xxClientError());
+
     }
 
     @Test
@@ -591,9 +608,11 @@ public class TokenControllerTest {
         gradeCreates.add(gradeCreate1);
         gradeCreates.add(gradeCreate2);
 
+        GradeBatchCreate gradeBatchCreate = new GradeBatchCreate(gradeCreates);
+
         MvcResult result = mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeCreates)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreate)))
                 .andExpect(status().isOk())
                 .andReturn();
 
