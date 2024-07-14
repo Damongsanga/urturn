@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
+import org.redisson.config.SingleServerConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 @RequiredArgsConstructor
 @Configuration
 @EnableRedisRepositories
-//@EnableTransactionManagement (@Transaction 사용 X)
 public class RedisConfig {
 
     private final EntityManagerFactory entityManagerFactory;
@@ -65,7 +65,11 @@ public class RedisConfig {
     @Bean
     public RedissonClient redissonClient() {
         Config config = new Config();
-        config.useSingleServer().setAddress("redis://" + host + ":" + port).setPassword(password);
+        SingleServerConfig singleServerConfig = config.useSingleServer().setAddress("redis://" + host + ":" + port);
+        if (!password.isBlank()){
+            System.out.println(password);
+            singleServerConfig.setPassword(password);
+        }
         return Redisson.create(config);
     }
 
