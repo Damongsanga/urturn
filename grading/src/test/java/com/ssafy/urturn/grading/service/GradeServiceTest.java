@@ -56,7 +56,7 @@ public class GradeServiceTest {
 
 
     @Test
-    void Grade를_만들_수_있다() {
+    void Grade_엔티티를_만들_수_있다() {
 
         // given
         String sourceCode = """
@@ -143,7 +143,7 @@ public class GradeServiceTest {
 
         GradeCreate gradeCreate = GradeCreate.builder()
                 .sourceCode(sourceCode)
-                .languageId(1)
+                .languageId(62)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
                 .build();
@@ -161,7 +161,7 @@ public class GradeServiceTest {
         assertThat(grades.size()).isEqualTo(10);
         assertThat(grades.get(0).getToken()).isEqualTo("fake-token-1");
         assertThat(grade.getStatusId()).isEqualTo(1);
-        assertThat(grade.getLanguageId()).isEqualTo(1);
+        assertThat(grade.getLanguageId()).isEqualTo(62);
 
     }
 

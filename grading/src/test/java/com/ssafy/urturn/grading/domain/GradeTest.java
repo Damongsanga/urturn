@@ -4,6 +4,7 @@ import com.ssafy.urturn.grading.domain.request.GradeCreate;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class GradeTest {
 
@@ -72,6 +73,26 @@ class GradeTest {
     }
 
     @Test
+    void 런타임_에러_메세지와_상태를_업데이트_할_수_있다(){
+        // given
+        Grade grade = Grade.builder()
+                .token("token1")
+                .languageId(1)
+                .stdout("stdout1")
+                .statusId(1)
+                .build();
+
+        // when
+        grade = grade.updateRuntimeErrorStatus("에러메세지");
+
+        // then
+        assertThat(grade.isEmpty()).isFalse();
+        assertThat(grade.getStatusId()).isEqualTo(GradeStatus.RUNTIME_ERROR_OTHER.getId());
+        assertThat(grade.getStdout()).isEqualTo("에러메세지");
+        assertThat(grade.getToken()).isEqualTo("token1");
+    }
+
+    @Test
     void EMPTY_객체를_만들고_EMPTY_객체인지_확인할_수_있다() {
         Grade emptyGrade = Grade.EMPTY;
 
@@ -83,13 +104,52 @@ class GradeTest {
 
     @Test
     void languageId에_따라_Strategy_이름을_선정할_수_있다(){
-        Grade grade = Grade.builder()
+        Grade javaGrade = Grade.builder()
                 .token("token1")
-                .languageId(2)
+                .languageId(62)
+                .stdout("stdout1")
+                .statusId(1)
+                .build();
+        Grade pythonGrade = Grade.builder()
+                .token("token1")
+                .languageId(71)
+                .stdout("stdout1")
+                .statusId(1)
+                .build();
+        Grade javascriptGrade = Grade.builder()
+                .token("token1")
+                .languageId(63)
+                .stdout("stdout1")
+                .statusId(1)
+                .build();
+        Grade cGrade = Grade.builder()
+                .token("token1")
+                .languageId(49)
+                .stdout("stdout1")
+                .statusId(1)
+                .build();
+        Grade cppGrade = Grade.builder()
+                .token("token1")
+                .languageId(54)
+                .stdout("stdout1")
+                .statusId(1)
+                .build();
+        Grade wrongGrade = Grade.builder()
+                .token("token1")
+                .languageId(0)
                 .stdout("stdout1")
                 .statusId(1)
                 .build();
 
-        assertThat(grade.getStrategyName()).isEqualTo("pythonExecutionStrategy");
+        assertThat(javaGrade.getStrategyName()).isEqualTo("javaExecutionStrategy");
+        assertThat(pythonGrade.getStrategyName()).isEqualTo("pythonExecutionStrategy");
+        assertThat(javascriptGrade.getStrategyName()).isEqualTo("javascriptExecutionStrategy");
+        assertThat(cGrade.getStrategyName()).isEqualTo("CExecutionStrategy");
+        assertThat(cppGrade.getStrategyName()).isEqualTo("cppExecutionStrategy");
+        assertThatThrownBy(wrongGrade::getStrategyName)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Unsupported language ID: 0");
     }
+
+
 }

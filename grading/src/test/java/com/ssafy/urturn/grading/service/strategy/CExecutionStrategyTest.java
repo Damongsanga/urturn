@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-@TestPropertySource("classpath:application-test.yml")
 public class CExecutionStrategyTest {
 
     @Autowired
@@ -37,7 +36,7 @@ public class CExecutionStrategyTest {
     }
 
     @Test
-    void 정상_정답_테스트(){
+    void 정답을_반환할_수_있다(){
         String sourceCode = """
                 #include <stdio.h>
                 #include <stdlib.h>
@@ -87,7 +86,7 @@ public class CExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-c-accepted")
-                .languageId(2)
+                .languageId(49)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -101,7 +100,7 @@ public class CExecutionStrategyTest {
     }
 
     @Test
-    void 오답_테스트(){
+    void 오답을_반환할_수_있다(){
         String sourceCode = """
                 #include <stdio.h>
                 #include <stdlib.h>
@@ -150,7 +149,7 @@ public class CExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-c-wrong")
-                .languageId(2)
+                .languageId(49)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -164,7 +163,7 @@ public class CExecutionStrategyTest {
     }
 
     @Test
-    void 컴파일_에러_테스트(){
+    void 컴파일_에러를_반환할_수_있다(){
         String sourceCode = """
                 #include <stdio.h>
                 #include <stdlib.h>
@@ -215,7 +214,7 @@ public class CExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-c-complie")
-                .languageId(2)
+                .languageId(49)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -229,7 +228,7 @@ public class CExecutionStrategyTest {
     }
 
     @Test
-    void 런타임_에러_테스트(){
+    void 런타임_에러를_반환할_수_있다(){
         String sourceCode = """
                 #include <stdio.h>
                 #include <stdlib.h>
@@ -282,7 +281,7 @@ public class CExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-c-runtime")
-                .languageId(2)
+                .languageId(49)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -296,7 +295,7 @@ public class CExecutionStrategyTest {
     }
 
     @Test
-    void 중복_요청() {
+    void 중복_요청에_대해_정상적으로_동작한다() {
 
         String sourceCode = """
                 #include <stdio.h>
@@ -351,7 +350,7 @@ public class CExecutionStrategyTest {
         for (int idx = 0; idx < 10; idx++) {
             Grade grade = Grade.builder()
                     .token("token-aaaa-aaaa-c-" + idx)
-                    .languageId(1)
+                    .languageId(49)
                     .sourceCode(sourceCode)
                     .stdin(stdIn)
                     .expectedOutput(expectedOutput)

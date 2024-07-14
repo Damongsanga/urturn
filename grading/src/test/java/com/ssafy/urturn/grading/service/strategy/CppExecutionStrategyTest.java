@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-@TestPropertySource("classpath:application-test.yml")
 public class CppExecutionStrategyTest {
 
     @Autowired
@@ -36,7 +35,7 @@ public class CppExecutionStrategyTest {
     }
 
     @Test
-    void 정상_정답_테스트(){
+    void 정답을_반환할_수_있다(){
         String sourceCode = """
                 #include <iostream>
                 #include <cstdlib>
@@ -86,7 +85,7 @@ public class CppExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-cpp-accepted")
-                .languageId(2)
+                .languageId(54)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -100,7 +99,7 @@ public class CppExecutionStrategyTest {
     }
 
     @Test
-    void 오답_테스트(){
+    void 오답을_반환할_수_있다(){
         String sourceCode = """
                 #include <iostream>
                 #include <cstdlib>
@@ -149,7 +148,7 @@ public class CppExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-cpp-wrong")
-                .languageId(2)
+                .languageId(54)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -163,7 +162,7 @@ public class CppExecutionStrategyTest {
     }
 
     @Test
-    void 컴파일_에러_테스트(){
+    void 컴파일_에러를_반환할_수_있다(){
 
         String sourceCode = """
                 #include <iostream>
@@ -215,7 +214,7 @@ public class CppExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-cpp-complie")
-                .languageId(2)
+                .languageId(54)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -229,7 +228,7 @@ public class CppExecutionStrategyTest {
     }
 
     @Test
-    void 런타임_에러_테스트(){
+    void 런타임_에러를_반환할_수_있다(){
         String sourceCode = """
                 #include <iostream>
                 #include <cstdlib>
@@ -282,7 +281,7 @@ public class CppExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-cpp-runtime")
-                .languageId(2)
+                .languageId(54)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -296,7 +295,7 @@ public class CppExecutionStrategyTest {
     }
 
     @Test
-    void 중복_요청() {
+    void 중복_요청에_대해_정상적으로_동작한다() {
 
         String sourceCode = """
                 #include <iostream>
@@ -350,7 +349,7 @@ public class CppExecutionStrategyTest {
         for (int idx = 0; idx < 10; idx++) {
             Grade grade = Grade.builder()
                     .token("token-aaaa-aaaa-cpp-" + idx)
-                    .languageId(1)
+                    .languageId(54)
                     .sourceCode(sourceCode)
                     .stdin(stdIn)
                     .expectedOutput(expectedOutput)

@@ -37,7 +37,7 @@ public class JavascriptExecutionStrategyTest {
     }
 
     @Test
-    void 정상_정답_테스트(){
+    void 정답을_반환할_수_있다(){
         String sourceCode = """
                 const readline = require('readline').createInterface({
                     input: process.stdin,
@@ -62,7 +62,7 @@ public class JavascriptExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-javascript-accepted")
-                .languageId(2)
+                .languageId(63)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -76,7 +76,7 @@ public class JavascriptExecutionStrategyTest {
     }
 
     @Test
-    void 오답_테스트() {
+    void 오답을_반환할_수_있다() {
         // when
         String sourceCode = """
                 const readline = require('readline').createInterface({
@@ -102,7 +102,7 @@ public class JavascriptExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-javascript-wrong")
-                .languageId(2)
+                .languageId(63)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -119,7 +119,7 @@ public class JavascriptExecutionStrategyTest {
     }
 
     @Test
-    void 런타임_에러_테스트(){
+    void 런타임_에러를_반환할_수_있다(){
         String sourceCode = """
                 const readline = require('readline').createInterface({
                     input: process.stdin,
@@ -146,7 +146,7 @@ public class JavascriptExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-javascript-runtime")
-                .languageId(2)
+                .languageId(63)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -160,7 +160,7 @@ public class JavascriptExecutionStrategyTest {
     }
 
     @Test
-    void 중복_요청(){
+    void 중복_요청에_대해_정상적으로_동작한다(){
         String sourceCode = """
                 const readline = require('readline').createInterface({
                     input: process.stdin,
@@ -188,7 +188,7 @@ public class JavascriptExecutionStrategyTest {
         for (int idx = 0; idx < 10; idx++) {
             Grade grade = Grade.builder()
                     .token("token-aaaa-aaaa-javascript-" + idx)
-                    .languageId(1)
+                    .languageId(63)
                     .sourceCode(sourceCode)
                     .stdin(stdIn)
                     .expectedOutput(expectedOutput)
