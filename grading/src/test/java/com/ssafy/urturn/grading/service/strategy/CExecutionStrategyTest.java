@@ -86,7 +86,7 @@ public class CExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-c-accepted")
-                .languageId(49)
+                .languageId(50)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -149,7 +149,7 @@ public class CExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-c-wrong")
-                .languageId(49)
+                .languageId(50)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -214,7 +214,7 @@ public class CExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-c-complie")
-                .languageId(49)
+                .languageId(50)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -281,7 +281,7 @@ public class CExecutionStrategyTest {
 
         Grade grade = Grade.builder()
                 .token("token-aaaa-aaaa-c-runtime")
-                .languageId(49)
+                .languageId(50)
                 .sourceCode(sourceCode)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
@@ -350,7 +350,7 @@ public class CExecutionStrategyTest {
         for (int idx = 0; idx < 10; idx++) {
             Grade grade = Grade.builder()
                     .token("token-aaaa-aaaa-c-" + idx)
-                    .languageId(49)
+                    .languageId(50)
                     .sourceCode(sourceCode)
                     .stdin(stdIn)
                     .expectedOutput(expectedOutput)
