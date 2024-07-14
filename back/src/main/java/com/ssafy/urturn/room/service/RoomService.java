@@ -33,7 +33,6 @@ public class RoomService {
     private final GradingService gradingService;
     private final ProblemService problemService;
     private final CacheDatas cacheDatas;
-    private final ReentrantLock lock;
     private final HistoryRepository historyRepository;
     private final MemberRepository memberRepository;
 
