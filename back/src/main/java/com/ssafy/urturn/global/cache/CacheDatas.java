@@ -17,8 +17,6 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class CacheDatas {
 
-    private final ReentrantLock lock;
-
     private final RedisCacheManager redisCacheManager;
 
     public void clearAllCache(){
