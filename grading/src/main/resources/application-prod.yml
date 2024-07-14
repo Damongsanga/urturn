@@ -1,8 +1,7 @@
 spring:
-
   data:
     redis:
-      host: root
+      host: localhost # root
       port: 6379
       password:
 
