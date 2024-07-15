@@ -19,9 +19,9 @@ public class GradeQueryServiceTest {
 
     @BeforeEach
     void init(){
-        TestTokenManager testTokenCreator = new TestTokenManager();
+        TestTokenManager testTokenManager = new TestTokenManager();
         FakeGradeRepository fakeGradeRepository = new FakeGradeRepository();
-        this.gradeQueryService = new GradeQueryService(fakeGradeRepository);
+        this.gradeQueryService = new GradeQueryService(fakeGradeRepository, testTokenManager);
 
         Grade grade1 = Grade.builder()
                 .token("token1")

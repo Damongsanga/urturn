@@ -35,11 +35,11 @@ public class GradeServiceTest {
 
     @BeforeEach
     void init(){
-        TestTokenManager testTokenCreator = new TestTokenManager();
+        TestTokenManager testTokenManager = new TestTokenManager();
         Map<String, ExecutionStrategy> strategyMap = new HashMap<>();
         JavaExecutionStrategy executionStrategy = new JavaExecutionStrategy(gradeRepository);
         strategyMap.put("javaExecutionStrategy", executionStrategy);
-        gradeService = new GradeService(gradeRepository, testTokenCreator, strategyMap);
+        gradeService = new GradeService(gradeRepository, testTokenManager, strategyMap);
     }
 
     @AfterEach
