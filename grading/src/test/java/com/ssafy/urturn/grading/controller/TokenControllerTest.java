@@ -1,32 +1,20 @@
 package com.ssafy.urturn.grading.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.urturn.grading.controller.response.TokenResponse;
-import com.ssafy.urturn.grading.domain.GradeStatus;
+import com.ssafy.urturn.grading.dto.response.TokenResponse;
 import com.ssafy.urturn.grading.domain.repository.GradeRepository;
-import com.ssafy.urturn.grading.domain.request.GradeBatchCreate;
-import com.ssafy.urturn.grading.domain.request.GradeCreate;
-import org.assertj.core.api.Assertions;
+import com.ssafy.urturn.grading.dto.request.GradeBatchCreateRequest;
+import com.ssafy.urturn.grading.dto.request.GradeCreateRequest;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,21 +132,21 @@ public class TokenControllerTest {
 
         String expectedOutput = "2";
 
-        GradeCreate gradeCreate = GradeCreate.builder()
+        GradeCreateRequest gradeCreateRequest = GradeCreateRequest.builder()
                 .sourceCode(sourceCode)
                 .languageId(62)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
                 .build();
 
-        List<GradeCreate> gradeCreates = new ArrayList<>();
-        gradeCreates.add(gradeCreate);
+        List<GradeCreateRequest> GradeCreateRequests = new ArrayList<>();
+        GradeCreateRequests.add(gradeCreateRequest);
 
-        GradeBatchCreate gradeBatchCreate = new GradeBatchCreate(gradeCreates);
+        GradeBatchCreateRequest gradeBatchCreateRequest = new GradeBatchCreateRequest(GradeCreateRequests);
 
         MvcResult result = mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeBatchCreate)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreateRequest)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -166,7 +154,7 @@ public class TokenControllerTest {
                 result.getResponse().getContentAsString(),
                 new TypeReference<>() {});
 
-        String createdToken = tokenResponses.get(0).getToken();
+        String createdToken = tokenResponses.get(0).token();
 
         assertThat(tokenResponses.size()).isEqualTo(1);
         assertThat(gradeRepository.findByToken(createdToken).get().getStatusId()).isEqualTo(1);
@@ -196,21 +184,21 @@ public class TokenControllerTest {
 
         String expectedOutput = "2";
 
-        GradeCreate gradeCreate = GradeCreate.builder()
+        GradeCreateRequest gradeCreateRequest = GradeCreateRequest.builder()
                 .sourceCode(sourceCode)
                 .languageId(71)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
                 .build();
 
-        List<GradeCreate> gradeCreates = new ArrayList<>();
-        gradeCreates.add(gradeCreate);
+        List<GradeCreateRequest> gradeCreateRequests = new ArrayList<>();
+        gradeCreateRequests.add(gradeCreateRequest);
 
-        GradeBatchCreate gradeBatchCreate = new GradeBatchCreate(gradeCreates);
+        GradeBatchCreateRequest gradeBatchCreateRequest = new GradeBatchCreateRequest(gradeCreateRequests);
 
         MvcResult result = mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeBatchCreate)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreateRequest)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -218,7 +206,7 @@ public class TokenControllerTest {
                 result.getResponse().getContentAsString(),
                 new TypeReference<>() {});
 
-        String createdToken = tokenResponses.get(0).getToken();
+        String createdToken = tokenResponses.get(0).token();
 
         assertThat(tokenResponses.size()).isEqualTo(1);
         assertThat(gradeRepository.findByToken(createdToken).get().getStatusId()).isEqualTo(1);
@@ -249,21 +237,21 @@ public class TokenControllerTest {
 
         String expectedOutput = "3";
 
-        GradeCreate gradeCreate = GradeCreate.builder()
+        GradeCreateRequest gradeCreateRequest = GradeCreateRequest.builder()
                 .sourceCode(sourceCode)
                 .languageId(63)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
                 .build();
 
-        List<GradeCreate> gradeCreates = new ArrayList<>();
-        gradeCreates.add(gradeCreate);
+        List<GradeCreateRequest> gradeCreateRequests = new ArrayList<>();
+        gradeCreateRequests.add(gradeCreateRequest);
 
-        GradeBatchCreate gradeBatchCreate = new GradeBatchCreate(gradeCreates);
+        GradeBatchCreateRequest gradeBatchCreateRequest = new GradeBatchCreateRequest(gradeCreateRequests);
 
         MvcResult result = mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeBatchCreate)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreateRequest)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -271,7 +259,7 @@ public class TokenControllerTest {
                 result.getResponse().getContentAsString(),
                 new TypeReference<>() {});
 
-        String createdToken = tokenResponses.get(0).getToken();
+        String createdToken = tokenResponses.get(0).token();
 
         assertThat(tokenResponses.size()).isEqualTo(1);
         assertThat(gradeRepository.findByToken(createdToken).get().getStatusId()).isEqualTo(1);
@@ -327,21 +315,21 @@ public class TokenControllerTest {
                 21 Junkyu
                 21 Dohyun""";
 
-        GradeCreate gradeCreate = GradeCreate.builder()
+        GradeCreateRequest gradeCreateRequest = GradeCreateRequest.builder()
                 .sourceCode(sourceCode)
                 .languageId(50)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
                 .build();
 
-        List<GradeCreate> gradeCreates = new ArrayList<>();
-        gradeCreates.add(gradeCreate);
+        List<GradeCreateRequest> gradeCreateRequests = new ArrayList<>();
+        gradeCreateRequests.add(gradeCreateRequest);
 
-        GradeBatchCreate gradeBatchCreate = new GradeBatchCreate(gradeCreates);
+        GradeBatchCreateRequest gradeBatchCreateRequest = new GradeBatchCreateRequest(gradeCreateRequests);
 
         MvcResult result = mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeBatchCreate)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreateRequest)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -349,7 +337,7 @@ public class TokenControllerTest {
                 result.getResponse().getContentAsString(),
                 new TypeReference<>() {});
 
-        String createdToken = tokenResponses.get(0).getToken();
+        String createdToken = tokenResponses.get(0).token();
 
         assertThat(tokenResponses.size()).isEqualTo(1);
         assertThat(gradeRepository.findByToken(createdToken).get().getStatusId()).isEqualTo(1);
@@ -405,21 +393,21 @@ public class TokenControllerTest {
                 21 Junkyu
                 21 Dohyun""";
 
-        GradeCreate gradeCreate = GradeCreate.builder()
+        GradeCreateRequest gradeCreateRequest = GradeCreateRequest.builder()
                 .sourceCode(sourceCode)
                 .languageId(54)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
                 .build();
 
-        List<GradeCreate> gradeCreates = new ArrayList<>();
-        gradeCreates.add(gradeCreate);
+        List<GradeCreateRequest> gradeCreateRequests = new ArrayList<>();
+        gradeCreateRequests.add(gradeCreateRequest);
 
-        GradeBatchCreate gradeBatchCreate = new GradeBatchCreate(gradeCreates);
+        GradeBatchCreateRequest gradeBatchCreateRequest = new GradeBatchCreateRequest(gradeCreateRequests);
 
         MvcResult result = mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeBatchCreate)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreateRequest)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -427,7 +415,7 @@ public class TokenControllerTest {
                 result.getResponse().getContentAsString(),
                 new TypeReference<>() {});
 
-        String createdToken = tokenResponses.get(0).getToken();
+        String createdToken = tokenResponses.get(0).token();
 
         assertThat(tokenResponses.size()).isEqualTo(1);
         assertThat(gradeRepository.findByToken(createdToken).get().getStatusId()).isEqualTo(1);
@@ -440,19 +428,19 @@ public class TokenControllerTest {
         String stdIn = "1";
         String expectedOutput = "1";
 
-        GradeCreate gradeCreate = GradeCreate.builder()
+        GradeCreateRequest gradeCreateRequest = GradeCreateRequest.builder()
                 .sourceCode(sourceCode)
                 .languageId(1)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
                 .build();
 
-        List<GradeCreate> gradeCreates = new ArrayList<>();
-        gradeCreates.add(gradeCreate);
+        List<GradeCreateRequest> gradeCreateRequests = new ArrayList<>();
+        gradeCreateRequests.add(gradeCreateRequest);
 
         mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeCreates)))
+                        .content(objectMapper.writeValueAsString(gradeCreateRequests)))
                 .andExpect(status().is4xxClientError());
     }
 
@@ -463,44 +451,44 @@ public class TokenControllerTest {
         String stdIn = "1";
         String expectedOutput = "1";
 
-        GradeCreate gradeCreate = GradeCreate.builder()
+        GradeCreateRequest gradeCreateRequest = GradeCreateRequest.builder()
                 .sourceCode(sourceCode)
                 .languageId(1)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
                 .build();
 
-        GradeCreate gradeCreateLow = GradeCreate.builder()
+        GradeCreateRequest gradeCreateRequestLow = GradeCreateRequest.builder()
                 .sourceCode(sourceCode)
                 .languageId(0)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
                 .build();
 
-        GradeCreate gradeCreateHigh = GradeCreate.builder()
+        GradeCreateRequest gradeCreateRequestHigh = GradeCreateRequest.builder()
                 .sourceCode(sourceCode)
                 .languageId(77)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
                 .build();
 
-        List<GradeCreate> gradeCreateLows = List.of(gradeCreateLow, gradeCreate);
+        List<GradeCreateRequest> gradeCreateRequestLows = List.of(gradeCreateRequestLow, gradeCreateRequest);
 
-        GradeBatchCreate gradeBatchCreateLows = new GradeBatchCreate(gradeCreateLows);
+        GradeBatchCreateRequest gradeBatchCreateRequestLows = new GradeBatchCreateRequest(gradeCreateRequestLows);
 
         mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeBatchCreateLows)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreateRequestLows)))
                 .andExpect(status().is4xxClientError());
 
 
-        List<GradeCreate> gradeCreateHighs = List.of(gradeCreateHigh, gradeCreate);
+        List<GradeCreateRequest> gradeCreateRequestHighs = List.of(gradeCreateRequestHigh, gradeCreateRequest);
 
-        GradeBatchCreate gradeBatchCreateHighs = new GradeBatchCreate(gradeCreateHighs);
+        GradeBatchCreateRequest gradeBatchCreateRequestHighs = new GradeBatchCreateRequest(gradeCreateRequestHighs);
 
         mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeBatchCreateHighs)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreateRequestHighs)))
                 .andExpect(status().is4xxClientError());
 
     }
@@ -591,28 +579,28 @@ public class TokenControllerTest {
         String expectedOutput = "2";
         String wrongExpectedOutput = "2";
 
-        GradeCreate gradeCreate1 = GradeCreate.builder()
+        GradeCreateRequest gradeCreateRequest1 = GradeCreateRequest.builder()
                 .sourceCode(sourceCode)
                 .languageId(62)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
                 .build();
-        GradeCreate gradeCreate2 = GradeCreate.builder()
+        GradeCreateRequest gradeCreateRequest2 = GradeCreateRequest.builder()
                 .sourceCode(sourceCode)
                 .languageId(62)
                 .stdin(stdIn)
                 .expectedOutput(wrongExpectedOutput)
                 .build();
 
-        List<GradeCreate> gradeCreates = new ArrayList<>();
-        gradeCreates.add(gradeCreate1);
-        gradeCreates.add(gradeCreate2);
+        List<GradeCreateRequest> gradeCreateRequests = new ArrayList<>();
+        gradeCreateRequests.add(gradeCreateRequest1);
+        gradeCreateRequests.add(gradeCreateRequest2);
 
-        GradeBatchCreate gradeBatchCreate = new GradeBatchCreate(gradeCreates);
+        GradeBatchCreateRequest gradeBatchCreateRequest = new GradeBatchCreateRequest(gradeCreateRequests);
 
         MvcResult result = mockMvc.perform(post("/submissions/batch")
                         .contentType(APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(gradeBatchCreate)))
+                        .content(objectMapper.writeValueAsString(gradeBatchCreateRequest)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -620,8 +608,8 @@ public class TokenControllerTest {
                 result.getResponse().getContentAsString(),
                 new TypeReference<>() {});
 
-        String createdToken1 = tokenResponses.get(0).getToken();
-        String createdToken2 = tokenResponses.get(1).getToken();
+        String createdToken1 = tokenResponses.get(0).token();
+        String createdToken2 = tokenResponses.get(1).token();
 
         assertThat(tokenResponses.size()).isEqualTo(2);
         assertThat(gradeRepository.findByToken(createdToken1).get().getStatusId()).isEqualTo(IN_QUEUE.getId());

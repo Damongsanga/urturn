@@ -2,12 +2,17 @@ package com.ssafy.urturn.grading.global.exception;
 
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ssafy.urturn.grading.global.exception.code.CommonErrorCode;
+import com.ssafy.urturn.grading.global.exception.code.ErrorCode;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -91,5 +96,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .message(errorCode.getMessage())
                 .errors(validationErrorList)
                 .build();
+    }
+
+    @Builder
+    private record ErrorResponse (
+        String code,
+        String message,
+        // 에러가 없을 경우 응답에서 제외
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        List<ValidationError> errors
+    ){
+        // @Valid에 의한 에러 발생시 어떤 필드에서 에러 발생햇는지에 대한 응답
+        @Builder
+        private record ValidationError(String field, String message) {
+            public static ValidationError of(final FieldError fieldError) {
+                return new ValidationError(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+        }
     }
 }

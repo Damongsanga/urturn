@@ -1,27 +1,21 @@
-package com.ssafy.urturn.grading.controller.response;
+package com.ssafy.urturn.grading.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.ssafy.urturn.grading.domain.Grade;
 import lombok.*;
-import org.apache.tomcat.util.buf.Utf8Encoder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.List;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class GradeResponse {
-    private int languageId;
-    private String stdout;
-    private int statusId;
-    private String stderr;
-    private String token;
+public record GradeResponse (
+         int languageId,
+         String stdout,
+         int statusId,
+         String stderr,
+         String token
+){
 
     private static final Base64.Encoder encoder = Base64.getEncoder();
 

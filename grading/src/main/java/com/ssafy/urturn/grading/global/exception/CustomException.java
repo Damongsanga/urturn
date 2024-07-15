@@ -1,5 +1,6 @@
 package com.ssafy.urturn.grading.global.exception;
 
+import com.ssafy.urturn.grading.global.exception.code.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

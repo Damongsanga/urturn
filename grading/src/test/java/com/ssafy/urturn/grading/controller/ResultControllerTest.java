@@ -1,18 +1,10 @@
 package com.ssafy.urturn.grading.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.urturn.grading.controller.response.GradeBatchResponse;
-import com.ssafy.urturn.grading.controller.response.GradeResponse;
-import com.ssafy.urturn.grading.controller.response.TokenResponse;
+import com.ssafy.urturn.grading.dto.response.GradeBatchResponse;
 import com.ssafy.urturn.grading.domain.Grade;
 import com.ssafy.urturn.grading.domain.repository.GradeRepository;
-import com.ssafy.urturn.grading.domain.request.GradeGetRequest;
-import com.ssafy.urturn.grading.mock.FakeGradeRepository;
-import com.ssafy.urturn.grading.mock.TestTokenCreator;
-import com.ssafy.urturn.grading.service.GradeQueryService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +14,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -92,17 +81,17 @@ class ResultControllerTest {
                 result.getResponse().getContentAsString(),
                 new TypeReference<>(){});
 
-        assertThat(response.getSubmissions().get(0).getToken()).isEqualTo("token1");
-        assertThat(response.getSubmissions().get(0).getStdout()).isEqualTo("stdout1");
-        assertThat(response.getSubmissions().get(0).getStatusId()).isEqualTo(1);
+        assertThat(response.submissions().get(0).token()).isEqualTo("token1");
+        assertThat(response.submissions().get(0).stdout()).isEqualTo("stdout1");
+        assertThat(response.submissions().get(0).statusId()).isEqualTo(1);
 
-        assertThat(response.getSubmissions().get(1).getToken()).isEqualTo("token2");
-        assertThat(response.getSubmissions().get(1).getStdout()).isEqualTo("stdout2");
-        assertThat(response.getSubmissions().get(1).getStatusId()).isEqualTo(2);
+        assertThat(response.submissions().get(1).token()).isEqualTo("token2");
+        assertThat(response.submissions().get(1).stdout()).isEqualTo("stdout2");
+        assertThat(response.submissions().get(1).statusId()).isEqualTo(2);
 
-        assertThat(response.getSubmissions().get(2).getToken()).isEqualTo("token3");
-        assertThat(response.getSubmissions().get(2).getStdout()).isEqualTo("stdout3");
-        assertThat(response.getSubmissions().get(2).getStatusId()).isEqualTo(3);
+        assertThat(response.submissions().get(2).token()).isEqualTo("token3");
+        assertThat(response.submissions().get(2).stdout()).isEqualTo("stdout3");
+        assertThat(response.submissions().get(2).statusId()).isEqualTo(3);
 
 
     }
@@ -118,7 +107,7 @@ class ResultControllerTest {
                 result.getResponse().getContentAsString(),
                 new TypeReference<>() {});
 
-        assertThat(new String(Base64.getDecoder().decode(response.getSubmissions().get(0).getStderr()), StandardCharsets.UTF_8)).isEqualTo("잘못된 토큰입니다.");
+        assertThat(new String(Base64.getDecoder().decode(response.submissions().get(0).stderr()), StandardCharsets.UTF_8)).isEqualTo("잘못된 토큰입니다.");
 
     }
 }

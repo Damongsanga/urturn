@@ -1,16 +1,12 @@
 package com.ssafy.urturn.grading.controller;
 
-import com.ssafy.urturn.grading.controller.response.GradeBatchResponse;
-import com.ssafy.urturn.grading.controller.response.GradeResponse;
-import com.ssafy.urturn.grading.domain.request.GradeGetRequest;
+import com.ssafy.urturn.grading.dto.response.GradeBatchResponse;
+import com.ssafy.urturn.grading.dto.response.GradeResponse;
 import com.ssafy.urturn.grading.service.GradeQueryService;
-import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path= "/submissions/batch", produces = MediaType.APPLICATION_JSON_VALUE)
