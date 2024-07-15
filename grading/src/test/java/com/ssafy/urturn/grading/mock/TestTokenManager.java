@@ -1,11 +1,11 @@
 package com.ssafy.urturn.grading.mock;
 
-import com.ssafy.urturn.grading.service.TokenCreator;
+import com.ssafy.urturn.grading.service.TokenManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestTokenCreator implements TokenCreator {
+public class TestTokenManager implements TokenManager {
 
     private int id;
     private final String fakeUUID = "fake-token-";
@@ -22,5 +22,10 @@ public class TestTokenCreator implements TokenCreator {
             tokens.add(fakeUUID + ++id);
         }
         return tokens;
+    }
+
+    @Override
+    public boolean isValidToken(String token) {
+        return token.equals(fakeUUID);
     }
 }
