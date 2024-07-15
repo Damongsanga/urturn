@@ -1,14 +1,11 @@
 package com.ssafy.urturn.grading.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.ssafy.urturn.grading.controller.response.TokenResponse;
 import com.ssafy.urturn.grading.domain.Grade;
-import com.ssafy.urturn.grading.domain.GradeStatus;
 import com.ssafy.urturn.grading.domain.repository.GradeRepository;
-import com.ssafy.urturn.grading.domain.request.GradeCreate;
-import com.ssafy.urturn.grading.mock.TestTokenCreator;
-import com.ssafy.urturn.grading.service.strategy.ExecutionStrategy;
-import com.ssafy.urturn.grading.service.strategy.JavaExecutionStrategy;
+import com.ssafy.urturn.grading.dto.request.GradeCreateRequest;
+import com.ssafy.urturn.grading.mock.TestTokenManager;
+import com.ssafy.urturn.grading.domain.strategy.ExecutionStrategy;
+import com.ssafy.urturn.grading.domain.strategy.JavaExecutionStrategy;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,10 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +22,6 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -42,7 +35,7 @@ public class GradeServiceTest {
 
     @BeforeEach
     void init(){
-        TestTokenCreator testTokenCreator = new TestTokenCreator();
+        TestTokenManager testTokenCreator = new TestTokenManager();
         Map<String, ExecutionStrategy> strategyMap = new HashMap<>();
         JavaExecutionStrategy executionStrategy = new JavaExecutionStrategy(gradeRepository);
         strategyMap.put("javaExecutionStrategy", executionStrategy);
@@ -141,20 +134,20 @@ public class GradeServiceTest {
 
         String expectedOutput = "2";
 
-        GradeCreate gradeCreate = GradeCreate.builder()
+        GradeCreateRequest gradeCreateRequest = GradeCreateRequest.builder()
                 .sourceCode(sourceCode)
                 .languageId(62)
                 .stdin(stdIn)
                 .expectedOutput(expectedOutput)
                 .build();
 
-        List<GradeCreate> gradeCreates = new ArrayList<>();
+        List<GradeCreateRequest> gradeCreateRequests = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            gradeCreates.add(gradeCreate);
+            gradeCreateRequests.add(gradeCreateRequest);
         }
 
         // when
-        List<Grade> grades = gradeService.createGrades(gradeCreates);
+        List<Grade> grades = gradeService.createGrades(gradeCreateRequests);
         Grade grade = grades.get(0);
 
         // then
