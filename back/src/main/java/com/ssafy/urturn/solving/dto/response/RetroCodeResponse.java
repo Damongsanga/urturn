@@ -1,8 +1,9 @@
-package com.ssafy.urturn.solving.dto;
+package com.ssafy.urturn.solving.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.urturn.problem.Language;
+import com.ssafy.urturn.solving.dto.UserCodeDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

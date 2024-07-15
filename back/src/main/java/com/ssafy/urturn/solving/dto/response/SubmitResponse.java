@@ -1,4 +1,4 @@
-package com.ssafy.urturn.solving.dto;
+package com.ssafy.urturn.solving.dto.response;
 
 import com.ssafy.urturn.problem.dto.GradingTestcaseDto;
 import java.util.List;

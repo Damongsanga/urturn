@@ -1,4 +1,4 @@
-package com.ssafy.urturn.solving.dto;
+package com.ssafy.urturn.solving.dto.request;
 
 import com.ssafy.urturn.member.Level;
 import lombok.Getter;

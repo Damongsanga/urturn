@@ -1,7 +1,7 @@
 package com.ssafy.urturn.member.controller;
 
 
-import com.ssafy.urturn.member.dto.MemberDetailResponse;
+import com.ssafy.urturn.member.dto.response.MemberDetailResponse;
 import com.ssafy.urturn.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

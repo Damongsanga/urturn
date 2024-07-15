@@ -1,31 +1,27 @@
 package com.ssafy.urturn.problem.service;
 
 import static com.ssafy.urturn.global.exception.errorcode.CommonErrorCode.INTERNAL_SERVER_ERROR;
-import static com.ssafy.urturn.problem.Grading.*;
 import static com.ssafy.urturn.problem.SubmissionStatus.*;
 
 import com.ssafy.urturn.global.exception.RestApiException;
-import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.problem.Language;
 import com.ssafy.urturn.problem.SubmissionStatus;
-import com.ssafy.urturn.problem.dto.GradingResponse;
+import com.ssafy.urturn.problem.dto.response.GradingResponse;
 import com.ssafy.urturn.problem.dto.GradingTestcaseDto;
 import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.problem.dto.SubmissionBatchResponseDto;
 import com.ssafy.urturn.problem.dto.TestcaseDto;
 import com.ssafy.urturn.problem.dto.TokenDto;
-import com.ssafy.urturn.problem.dto.TokenBatchCreateDto;
 import com.ssafy.urturn.problem.dto.SubmissionDto;
 import com.ssafy.urturn.problem.repository.ProblemRepository;
 import java.util.List;
 import java.util.Objects;
+
+import com.ssafy.urturn.problem.service.client.GradingServerClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor

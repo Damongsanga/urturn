@@ -2,7 +2,7 @@ package com.ssafy.urturn.problem.service;
 
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
-import com.ssafy.urturn.problem.dto.TestcaseCreateRequest;
+import com.ssafy.urturn.problem.dto.request.TestcaseCreateRequest;
 import com.ssafy.urturn.problem.entity.Problem;
 import com.ssafy.urturn.problem.entity.Testcase;
 import com.ssafy.urturn.problem.repository.ProblemRepository;
@@ -26,10 +26,10 @@ public class TestcaseService {
 
     // ADMIN만 접근할 수 있도록 검증해야함
     @Transactional
-    public List<Long> createTestcases(List<TestcaseCreateRequest> reqs, Long problemId) {
+    public List<Long> createTestcases(List<TestcaseCreateRequest> requests, Long problemId) {
 
         Problem problem = problemRepository.findById(problemId).orElseThrow(() -> new RestApiException(CustomErrorCode.NO_PROBLEM));
-        List<Testcase> list = reqs.stream().map(req -> new Testcase(req, problem)).toList();
+        List<Testcase> list = requests.stream().map(req -> new Testcase(req, problem)).toList();
 
         List<Long> res = new ArrayList<>();
         for (Testcase testcase : list) {

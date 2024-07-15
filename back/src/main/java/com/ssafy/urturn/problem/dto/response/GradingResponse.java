@@ -1,7 +1,9 @@
-package com.ssafy.urturn.problem.dto;
+package com.ssafy.urturn.problem.dto.response;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.ssafy.urturn.problem.dto.GradingTestcaseDto;
 import lombok.Builder;
 import lombok.Getter;
 

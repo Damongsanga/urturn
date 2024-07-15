@@ -8,18 +8,16 @@ import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_ROO
 import com.ssafy.urturn.global.cache.CacheDatas;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.util.MemberUtil;
-import com.ssafy.urturn.history.repository.HistoryRepository;
 import com.ssafy.urturn.member.entity.Member;
 import com.ssafy.urturn.member.repository.MemberRepository;
-import com.ssafy.urturn.problem.service.GradingService;
-import com.ssafy.urturn.problem.service.ProblemService;
 import com.ssafy.urturn.room.RoomStatus;
-import com.ssafy.urturn.room.dto.LeaveRoomDto;
-import com.ssafy.urturn.room.dto.RoomInfoDto;
-import com.ssafy.urturn.room.dto.RoomInfoResponse;
-import com.ssafy.urturn.room.dto.UserInfoResponse;
+import com.ssafy.urturn.room.dto.*;
+
 import java.util.UUID;
-import java.util.concurrent.locks.ReentrantLock;
+
+import com.ssafy.urturn.room.dto.response.LeaveRoomResponse;
+import com.ssafy.urturn.room.dto.response.RoomInfoResponse;
+import com.ssafy.urturn.room.dto.response.UserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,10 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @Slf4j
 public class RoomService {
-    private final GradingService gradingService;
-    private final ProblemService problemService;
     private final CacheDatas cacheDatas;
-    private final HistoryRepository historyRepository;
     private final MemberRepository memberRepository;
 
     @Transactional
@@ -77,9 +72,10 @@ public class RoomService {
                 .pairProfileUrl(pair.getProfileImage()).build();
     }
 
-    public String canEnterRoom(String entryCode) {
+    public String getEnterRoomId(String entryCode) {
         // 캐시된 방 ID 가져오기
         String roomId = cacheDatas.getRoomIdCache(entryCode);
+
         if (roomId == null) {
             throw new RestApiException(NO_ROOM);
         }
@@ -104,7 +100,10 @@ public class RoomService {
         return roomId;
     }
 
-    public void leaveRoom(LeaveRoomDto leaveRoomDto){
+    public LeaveRoomResponse leaveRoom(LeaveRoomDto leaveRoomDto){
+        Long managerId = getManagerIdFromCache(leaveRoomDto.getRoomId());
+        Long pairId = getPairIdFromCache(leaveRoomDto.getRoomId());
+
         // 방장 인 경우
         if(leaveRoomDto.isHost()){
             // 방 삭제.
@@ -113,6 +112,7 @@ public class RoomService {
             // 방 정보에서 pairId null로 수정
             cacheDatas.getRoomInfo(leaveRoomDto.getRoomId()).setPairId(null);
         }
+        return new LeaveRoomResponse(managerId, pairId, leaveRoomDto);
     }
 
     @Transactional
@@ -128,6 +128,18 @@ public class RoomService {
         cacheDatas.deleteRoomInfo(recentRoomId);
         cacheDatas.deleteCacheCodes(recentRoomId, roomInfoDto.getProblem1Id().toString());
         cacheDatas.deleteCacheCodes(recentRoomId, roomInfoDto.getProblem2Id().toString());
+    }
+
+    public Long getManagerIdFromCache(String roomId) {
+        return cacheDatas.getRoomInfo(roomId).getManagerId();
+    }
+
+    public Long getPairIdFromCache(String roomId) {
+        return cacheDatas.getRoomInfo(roomId).getPairId();
+    }
+
+    public RoomInfoDto getRoomInfoDto(String roomId) {
+        return cacheDatas.getRoomInfo(roomId);
     }
 
 }

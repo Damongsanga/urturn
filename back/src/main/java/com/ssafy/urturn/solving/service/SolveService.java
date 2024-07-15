@@ -11,19 +11,19 @@ import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.history.repository.HistoryRepository;
 import com.ssafy.urturn.member.Level;
-import com.ssafy.urturn.problem.dto.GradingResponse;
+import com.ssafy.urturn.problem.dto.response.GradingResponse;
 import com.ssafy.urturn.problem.dto.ProblemTestcaseDto;
 import com.ssafy.urturn.problem.service.GradingService;
 import com.ssafy.urturn.problem.service.ProblemService;
 import com.ssafy.urturn.room.RoomStatus;
 import com.ssafy.urturn.room.dto.RoomInfoDto;
-import com.ssafy.urturn.solving.dto.ReadyInfoRequest;
-import com.ssafy.urturn.solving.dto.RetroCodeResponse;
-import com.ssafy.urturn.solving.dto.RetroCreateRequest;
-import com.ssafy.urturn.solving.dto.SubmitRequest;
-import com.ssafy.urturn.solving.dto.SubmitResponse;
-import com.ssafy.urturn.solving.dto.SwitchCodeRequest;
-import com.ssafy.urturn.solving.dto.SwitchCodeResponse;
+import com.ssafy.urturn.solving.dto.request.ReadyInfoRequest;
+import com.ssafy.urturn.solving.dto.response.RetroCodeResponse;
+import com.ssafy.urturn.solving.dto.request.RetroCreateRequest;
+import com.ssafy.urturn.solving.dto.request.SubmitRequest;
+import com.ssafy.urturn.solving.dto.response.SubmitResponse;
+import com.ssafy.urturn.solving.dto.request.SwitchCodeRequest;
+import com.ssafy.urturn.solving.dto.response.PairCodeResponse;
 import com.ssafy.urturn.solving.dto.UserCodeDto;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +33,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
-import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,31 +48,34 @@ public class SolveService {
     private final HistoryRepository historyRepository;
     private final RequestLockService requestLockService;
 
-
     public List<ProblemTestcaseDto> getTwoProblems(String roomId, Level level){
 
         RoomInfoDto roomInfoDto = cacheDatas.getRoomInfo(roomId);
 
-        List<ProblemTestcaseDto> selectedProblems = problemService.getTwoProblem(
+        List<ProblemTestcaseDto> selectedProblems = problemService.getTwoProblems(
                 roomInfoDto.getManagerId(),
                 roomInfoDto.getPairId(), level);
 
         roomInfoDto.setProblem1Id(selectedProblems.get(0).getProblemId());
         roomInfoDto.setProblem2Id(selectedProblems.get(1).getProblemId());
-
         cacheDatas.putRoomInfo(roomId,roomInfoDto);
 
         return selectedProblems;
     }
 
     public void setReadyInRoomInfo(ReadyInfoRequest readyInfoRequest) {
-        String roomId = readyInfoRequest.getRoomId();
-        RoomInfoDto roomInfo = cacheDatas.getRoomInfo(roomId);
-        boolean isHost = readyInfoRequest.isHost();
+        lock.lock();
+        try {
+            String roomId = readyInfoRequest.getRoomId();
+            RoomInfoDto roomInfo = cacheDatas.getRoomInfo(roomId);
+            boolean isHost = readyInfoRequest.isHost();
 
-        // 준비 상태 업데이트
-        updateReadyStatus(roomId, roomInfo, isHost);
-        updateCodeCache(roomId, readyInfoRequest.getProblemId().toString(), null);
+            // 준비 상태 업데이트
+            updateReadyStatus(roomId, roomInfo, isHost);
+            updateCodeCache(roomId, readyInfoRequest.getProblemId().toString(), null);
+        } finally {
+            lock.unlock();
+        }
     }
 
     public boolean isReadyToSolve(String roomId){
@@ -119,15 +121,14 @@ public class SolveService {
         }
     }
 
-    public SwitchCodeResponse getPairsCode(SwitchCodeRequest switchCodeRequest){
-
+    public PairCodeResponse getPairsCode(SwitchCodeRequest switchCodeRequest){
         if(switchCodeRequest.getProblemId().equals(
             cacheDatas.getRoomInfo(switchCodeRequest.getRoomId()).getProblem1Id())){
             List<UserCodeDto> codes= cacheDatas.getCacheCodes(switchCodeRequest.getRoomId(), cacheDatas.getRoomInfo(switchCodeRequest.getRoomId()).getProblem2Id().toString());
-            return new SwitchCodeResponse(codes.get(codes.size()-1).getCode(), switchCodeRequest.getRound()+1, codes.get(codes.size()-1).getLanguage());
+            return new PairCodeResponse(codes.get(codes.size()-1).getCode(), switchCodeRequest.getRound()+1, codes.get(codes.size()-1).getLanguage());
         }else{
             List<UserCodeDto> codes= cacheDatas.getCacheCodes(switchCodeRequest.getRoomId(), cacheDatas.getRoomInfo(switchCodeRequest.getRoomId()).getProblem1Id().toString());
-            return new SwitchCodeResponse(codes.get(codes.size()-1).getCode(), switchCodeRequest.getRound()+1, codes.get(codes.size()-1).getLanguage());
+            return new PairCodeResponse(codes.get(codes.size()-1).getCode(), switchCodeRequest.getRound()+1, codes.get(codes.size()-1).getLanguage());
         }
     }
 
@@ -188,11 +189,14 @@ public class SolveService {
         RetroCodeResponse problem1CodeResponse=new RetroCodeResponse(
             cacheDatas.getCacheCodes(roomId, roomInfoDto.getProblem1Id().toString())
                 , history.getCode1(), history.getLanguage1());
+
         RetroCodeResponse problem2CodeResponse=new RetroCodeResponse(
             cacheDatas.getCacheCodes(roomId, roomInfoDto.getProblem2Id().toString())
                 , history.getCode2(), history.getLanguage2());
+
         map.put(roomInfoDto.getProblem1Id(), problem1CodeResponse);
         map.put(roomInfoDto.getProblem2Id(), problem2CodeResponse);
+
         log.info("problem1CodeResponse : {}", problem1CodeResponse);
         log.info("problem2CodeResponse : {}", problem2CodeResponse);
 

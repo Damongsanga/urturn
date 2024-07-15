@@ -1,9 +1,9 @@
-package com.ssafy.urturn.room.dto;
+package com.ssafy.urturn.room.dto.request;
 
 import lombok.Getter;
 
 @Getter
-public class SessionIdDto {
+public class SessionIdRequest {
     private String roomId;
     private String sessionId;
 }

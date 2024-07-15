@@ -16,8 +16,7 @@ public class RoomController {
     private final RoomService roomService;
     @GetMapping("/enter/{entryCode}")
     public ResponseEntity<String> checkRoomEntry(@PathVariable String entryCode){
-        String roomId= roomService.canEnterRoom(entryCode);
-        if(roomId!=null) return ResponseEntity.ok(roomId);
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("입장 불가");
+        String roomId= roomService.getEnterRoomId(entryCode);
+        return ResponseEntity.ok(roomId);
     }
 }

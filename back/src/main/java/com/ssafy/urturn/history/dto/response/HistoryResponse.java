@@ -1,4 +1,4 @@
-package com.ssafy.urturn.history.dto;
+package com.ssafy.urturn.history.dto.response;
 
 import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.member.dto.MemberSimpleDto;

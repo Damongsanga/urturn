@@ -1,4 +1,4 @@
-package com.ssafy.urturn.solving.dto;
+package com.ssafy.urturn.solving.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.urturn.problem.Language;

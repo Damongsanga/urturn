@@ -4,7 +4,7 @@ import com.ssafy.urturn.problem.Language;
 import com.ssafy.urturn.problem.dto.SubmissionBatchResponseDto;
 import com.ssafy.urturn.problem.dto.TestcaseDto;
 import com.ssafy.urturn.problem.dto.TokenDto;
-import org.assertj.core.api.Assertions;
+import com.ssafy.urturn.problem.service.client.GradingServerClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)

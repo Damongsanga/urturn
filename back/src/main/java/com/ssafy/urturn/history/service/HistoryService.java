@@ -3,7 +3,7 @@ package com.ssafy.urturn.history.service;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.global.util.MemberUtil;
-import com.ssafy.urturn.history.dto.HistoryResponse;
+import com.ssafy.urturn.history.dto.response.HistoryResponse;
 import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.history.repository.HistoryRepository;
 import com.ssafy.urturn.member.repository.MemberRepository;

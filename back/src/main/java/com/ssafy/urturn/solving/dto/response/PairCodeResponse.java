@@ -1,4 +1,4 @@
-package com.ssafy.urturn.solving.dto;
+package com.ssafy.urturn.solving.dto.response;
 
 import com.ssafy.urturn.problem.Language;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class SwitchCodeResponse {
+public class PairCodeResponse {
     private String code;
     private int round;
     private Language language;

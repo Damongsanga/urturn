@@ -16,6 +16,7 @@ import static com.ssafy.urturn.problem.Language.PYTHON;
 
 import com.ssafy.urturn.global.auth.Role;
 import com.ssafy.urturn.global.exception.RestApiException;
+import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.history.repository.HistoryRepository;
@@ -1026,7 +1027,7 @@ public class InitData {
     }
 
     private void createTestcase(String title, String stdin, String expectedOutput, boolean isPublic){
-        Problem problem = problemRepository.findByTitle(title);
+        Problem problem = problemRepository.findByTitle(title).orElseThrow(() -> new RestApiException(NO_PROBLEM));
 
         if (testcaseRepository.existsByStdin(stdin)) return;
         testcaseRepository.save(Testcase.builder()

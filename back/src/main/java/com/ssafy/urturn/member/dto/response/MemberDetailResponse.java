@@ -1,4 +1,4 @@
-package com.ssafy.urturn.member.dto;
+package com.ssafy.urturn.member.dto.response;
 
 import com.ssafy.urturn.member.Level;
 import com.ssafy.urturn.member.entity.Member;

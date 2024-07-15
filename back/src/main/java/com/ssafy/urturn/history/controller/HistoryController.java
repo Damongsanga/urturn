@@ -1,6 +1,6 @@
 package com.ssafy.urturn.history.controller;
 
-import com.ssafy.urturn.history.dto.HistoryResponse;
+import com.ssafy.urturn.history.dto.response.HistoryResponse;
 import com.ssafy.urturn.history.service.HistoryService;
 import com.ssafy.urturn.global.cache.CacheDatas;
 import lombok.RequiredArgsConstructor;

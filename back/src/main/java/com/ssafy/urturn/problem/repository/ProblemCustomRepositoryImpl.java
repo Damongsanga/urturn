@@ -82,7 +82,7 @@ public class ProblemCustomRepositoryImpl implements ProblemCustomRepository{
     }
 
     @Override
-    public List<ProblemTestcaseDto> selectTwoProblemByLevel(Level level, Long memberId, Long pairId) {
+    public List<ProblemTestcaseDto> selectTwoProblemsByLevel(Level level, Long memberId, Long pairId) {
 
         Long count = jpaQueryFactory
             .select(problem.count())

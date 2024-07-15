@@ -1,4 +1,4 @@
-package com.ssafy.urturn.problem.dto;
+package com.ssafy.urturn.problem.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.urturn.member.Level;

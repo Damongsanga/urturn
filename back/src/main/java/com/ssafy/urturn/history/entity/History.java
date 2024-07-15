@@ -9,7 +9,7 @@ import com.ssafy.urturn.history.HistoryResult;
 import com.ssafy.urturn.member.entity.Member;
 import com.ssafy.urturn.problem.Language;
 import com.ssafy.urturn.problem.entity.Problem;
-import com.ssafy.urturn.solving.dto.RetroCreateRequest;
+import com.ssafy.urturn.solving.dto.request.RetroCreateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

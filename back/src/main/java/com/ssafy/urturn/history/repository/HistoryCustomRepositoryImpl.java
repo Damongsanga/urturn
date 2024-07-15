@@ -5,7 +5,7 @@ import static com.ssafy.urturn.history.entity.QHistory.history;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.urturn.history.dto.HistoryResponse;
+import com.ssafy.urturn.history.dto.response.HistoryResponse;
 import com.ssafy.urturn.history.dto.HistoryResponseDto;
 import com.ssafy.urturn.history.dto.HistoryRetroDto;
 import com.ssafy.urturn.member.dto.MemberSimpleDto;

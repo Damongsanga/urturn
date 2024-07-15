@@ -1,4 +1,4 @@
-package com.ssafy.urturn.problem.service;
+package com.ssafy.urturn.problem.service.client;
 
 import com.ssafy.urturn.problem.Language;
 import com.ssafy.urturn.problem.dto.SubmissionBatchResponseDto;

@@ -1,4 +1,4 @@
-package com.ssafy.urturn.room.dto;
+package com.ssafy.urturn.room.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

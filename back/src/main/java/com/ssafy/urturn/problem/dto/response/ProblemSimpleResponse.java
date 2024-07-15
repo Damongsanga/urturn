@@ -1,4 +1,4 @@
-package com.ssafy.urturn.problem.dto;
+package com.ssafy.urturn.problem.dto.response;
 
 import com.ssafy.urturn.member.Level;
 import lombok.AllArgsConstructor;
