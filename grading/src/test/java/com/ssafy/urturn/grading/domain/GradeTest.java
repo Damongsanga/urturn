@@ -1,6 +1,6 @@
 package com.ssafy.urturn.grading.domain;
 
-import com.ssafy.urturn.grading.domain.request.GradeCreate;
+import com.ssafy.urturn.grading.dto.request.GradeCreateRequest;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,14 +11,14 @@ class GradeTest {
     @Test
     void Grade를_생성할_수_있다() {
         // given
-        GradeCreate gradeCreate = GradeCreate.builder()
+        GradeCreateRequest gradeCreateRequest = GradeCreateRequest.builder()
                 .stdin("stdin1")
                 .expectedOutput("expectedOutput1")
                 .sourceCode("sourceCode1")
                 .languageId(1).build();
 
         // when
-        Grade grade = Grade.from(gradeCreate);
+        Grade grade = Grade.from(gradeCreateRequest);
 
         // then
         assertThat(grade.isEmpty()).isFalse();
@@ -33,12 +33,12 @@ class GradeTest {
     @Test
     void token을_삽입할_수_있다() {
         // given
-        GradeCreate gradeCreate = GradeCreate.builder()
+        GradeCreateRequest gradeCreateRequest = GradeCreateRequest.builder()
                 .stdin("stdin1")
                 .expectedOutput("expectedOutput1")
                 .sourceCode("sourceCode1")
                 .languageId(1).build();
-        Grade grade = Grade.from(gradeCreate);
+        Grade grade = Grade.from(gradeCreateRequest);
 
         // when
         grade = grade.setToken("token1");

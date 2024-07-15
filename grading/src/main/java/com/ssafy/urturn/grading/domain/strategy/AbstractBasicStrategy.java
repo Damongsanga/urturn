@@ -1,4 +1,4 @@
-package com.ssafy.urturn.grading.service.strategy;
+package com.ssafy.urturn.grading.domain.strategy;
 
 import com.ssafy.urturn.grading.domain.Grade;
 import com.ssafy.urturn.grading.domain.GradeStatus;

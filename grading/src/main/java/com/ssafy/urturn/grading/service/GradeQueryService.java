@@ -2,7 +2,6 @@ package com.ssafy.urturn.grading.service;
 
 import com.ssafy.urturn.grading.domain.Grade;
 import com.ssafy.urturn.grading.domain.repository.GradeRepository;
-import com.ssafy.urturn.grading.domain.request.GradeGetRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

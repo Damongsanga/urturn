@@ -1,4 +1,4 @@
-package com.ssafy.urturn.grading.config;
+package com.ssafy.urturn.grading.global.config;
 
 import com.ssafy.urturn.grading.global.exception.GlobalAsyncExceptionHandler;
 import lombok.extern.slf4j.Slf4j;

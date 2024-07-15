@@ -1,11 +1,10 @@
-package com.ssafy.urturn.grading.service.strategy;
+package com.ssafy.urturn.grading.domain.strategy;
 
 import com.ssafy.urturn.grading.domain.Grade;
 import com.ssafy.urturn.grading.domain.GradeStatus;
 import com.ssafy.urturn.grading.domain.repository.GradeRepository;
 import com.ssafy.urturn.grading.global.exception.CustomException;
 import com.ssafy.urturn.grading.service.dto.TokenWithStatus;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -15,13 +14,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.ssafy.urturn.grading.domain.GradeStatus.*;
-import static com.ssafy.urturn.grading.global.exception.CommonErrorCode.INTERNAL_SERVER_ERROR;
-import static com.ssafy.urturn.grading.global.exception.CustomErrorCode.*;
+import static com.ssafy.urturn.grading.global.exception.code.CommonErrorCode.INTERNAL_SERVER_ERROR;
+import static com.ssafy.urturn.grading.global.exception.code.CustomErrorCode.*;
 
 @Component
 @Slf4j

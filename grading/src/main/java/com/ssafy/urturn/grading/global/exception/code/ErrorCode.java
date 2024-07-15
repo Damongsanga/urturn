@@ -1,4 +1,4 @@
-package com.ssafy.urturn.grading.global.exception;
+package com.ssafy.urturn.grading.global.exception.code;
 
 import org.springframework.http.HttpStatus;
 

@@ -1,4 +1,4 @@
-package com.ssafy.urturn.grading.service.strategy;
+package com.ssafy.urturn.grading.domain.strategy;
 
 import com.ssafy.urturn.grading.domain.Grade;
 import com.ssafy.urturn.grading.domain.GradeStatus;
@@ -14,19 +14,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 import static com.ssafy.urturn.grading.domain.GradeStatus.*;
-import static com.ssafy.urturn.grading.global.exception.CommonErrorCode.INTERNAL_SERVER_ERROR;
-import static com.ssafy.urturn.grading.global.exception.CustomErrorCode.*;
+import static com.ssafy.urturn.grading.global.exception.code.CommonErrorCode.INTERNAL_SERVER_ERROR;
+import static com.ssafy.urturn.grading.global.exception.code.CustomErrorCode.*;
 
 @Component
 @Slf4j
-public class PythonExecutionStrategy extends AbstractBasicStrategy {
+public class JavaExecutionStrategy extends AbstractBasicStrategy {
 
-    private static final int MEMORYLIMIT = 512;
-
-    public PythonExecutionStrategy(GradeRepository gradeRepository) {
+    public JavaExecutionStrategy(GradeRepository gradeRepository) {
         super(gradeRepository);
     }
 
@@ -40,7 +37,13 @@ public class PythonExecutionStrategy extends AbstractBasicStrategy {
                 return CompletableFuture.completedFuture(TokenWithStatus.from(grade.getToken(), EXEC_FORMAT_ERROR));
             }
 
-            makeFile(grade);
+            if (!compileCode(grade)){
+                gradeRepository.save(grade.updateStatus(COMPILATION_ERROR));
+                log.info("{}", COMPILATION_ERROR.getDescription());
+                deleteFile(grade);
+                return CompletableFuture.completedFuture(TokenWithStatus.from(grade.getToken(), COMPILATION_ERROR));
+            }
+
             GradeStatus status = runCode(grade);
             return CompletableFuture.completedFuture(TokenWithStatus.from(grade.getToken(), status));
         } finally {
@@ -48,10 +51,26 @@ public class PythonExecutionStrategy extends AbstractBasicStrategy {
         }
     }
 
+    private boolean compileCode(Grade grade) {
+        try {
+            makeFile(grade);
+            String javaFilePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/Main.java";
+            ProcessBuilder pb = new ProcessBuilder("javac", javaFilePath);
+            Process process = pb.start();
+
+            process.waitFor();
+            return process.exitValue() == 0;
+        } catch (IOException | InterruptedException e) {
+            log.info("{}", e.getMessage());
+            return false;
+        }
+    }
+
     @Override
     protected void makeFile(Grade grade) {
         makeDir(grade);
-        String filePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/Solution.py";
+
+        String filePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/Main.java";
         File file = new File(filePath);
         try{
             if (file.createNewFile()){
@@ -68,29 +87,33 @@ public class PythonExecutionStrategy extends AbstractBasicStrategy {
     @Override
     protected void deleteFile(Grade grade) {
         try {
-            Path pythonFilePath = Paths.get(SOLUTIONFILEROOTDIR + grade.getToken() + "/Solution.py");
+            Path javaFilePath = Paths.get(SOLUTIONFILEROOTDIR + grade.getToken() + "/Main.java");
+            Path classPath = Paths.get(SOLUTIONFILEROOTDIR + grade.getToken() + "/Main.class");
             Path dirPath = Paths.get(SOLUTIONFILEROOTDIR + grade.getToken());
-            Files.deleteIfExists(pythonFilePath);
+            Files.deleteIfExists(javaFilePath);
+            Files.deleteIfExists(classPath);
             Files.deleteIfExists(dirPath);
         } catch (IOException e){
             throw new CustomException(FILE_DELETE_ERROR);
         }
     }
 
-
     @Override
     protected GradeStatus runCode(Grade grade) {
         try {
-            String filePath = SOLUTIONFILEROOTDIR + grade.getToken() + "/Solution.py";
-//            ProcessBuilder pb = new ProcessBuilder("ulimit", "-v", MEMORYLIMIT+"" , "&&", "python3", filePath);
-            ProcessBuilder pb = new ProcessBuilder("docker", "run", "--memory="+MEMORYLIMIT+"mb", "--rm", "-i", "-v", filePath+":/app/Solution.py", "python:3.9", "python3", "/app/Solution.py");
+            String filePath = SOLUTIONFILEROOTDIR + grade.getToken();
 
+//            ProcessBuilder pb = new ProcessBuilder("java", "-Xmx" + MEMORYLIMIT, "-Xss256k", "-cp", filePath, "Main");
+            ProcessBuilder pb = new ProcessBuilder("docker", "run", "--memory="+MEMORYLIMIT+"mb",
+                    "--rm", "-i", "-v", filePath+"/:/app", "openjdk:17", "java", "-Xss256k", "-cp", "/app", "Main");
             Process process = pb.start();
+
             writeInput(grade, process);
 
             return checkAndSaveStatus(grade, process);
 
         } catch (IOException | InterruptedException e) {
+            log.error(e.getMessage());
             gradeRepository.save(grade.updateStatus(INTERNAL_ERROR));
             throw new CustomException(RUN_CODE_ERROR);
         }

@@ -1,9 +1,8 @@
 package com.ssafy.urturn.grading.service;
 
 import com.ssafy.urturn.grading.domain.Grade;
-import com.ssafy.urturn.grading.domain.request.GradeGetRequest;
 import com.ssafy.urturn.grading.mock.FakeGradeRepository;
-import com.ssafy.urturn.grading.mock.TestTokenCreator;
+import com.ssafy.urturn.grading.mock.TestTokenManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +19,7 @@ public class GradeQueryServiceTest {
 
     @BeforeEach
     void init(){
-        TestTokenCreator testTokenCreator = new TestTokenCreator();
+        TestTokenManager testTokenCreator = new TestTokenManager();
         FakeGradeRepository fakeGradeRepository = new FakeGradeRepository();
         this.gradeQueryService = new GradeQueryService(fakeGradeRepository);
 

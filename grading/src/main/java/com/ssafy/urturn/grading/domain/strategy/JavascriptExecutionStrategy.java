@@ -1,4 +1,4 @@
-package com.ssafy.urturn.grading.service.strategy;
+package com.ssafy.urturn.grading.domain.strategy;
 
 import com.ssafy.urturn.grading.domain.Grade;
 import com.ssafy.urturn.grading.domain.GradeStatus;
@@ -14,11 +14,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 import static com.ssafy.urturn.grading.domain.GradeStatus.*;
-import static com.ssafy.urturn.grading.global.exception.CommonErrorCode.INTERNAL_SERVER_ERROR;
-import static com.ssafy.urturn.grading.global.exception.CustomErrorCode.*;
+import static com.ssafy.urturn.grading.global.exception.code.CommonErrorCode.INTERNAL_SERVER_ERROR;
+import static com.ssafy.urturn.grading.global.exception.code.CustomErrorCode.*;
 
 @Component
 @Slf4j

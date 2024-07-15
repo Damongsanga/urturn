@@ -1,4 +1,4 @@
-package com.ssafy.urturn.grading.config;
+package com.ssafy.urturn.grading.global.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

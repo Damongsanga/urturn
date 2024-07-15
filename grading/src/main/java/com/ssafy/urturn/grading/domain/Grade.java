@@ -1,6 +1,6 @@
 package com.ssafy.urturn.grading.domain;
 
-import com.ssafy.urturn.grading.domain.request.GradeCreate;
+import com.ssafy.urturn.grading.dto.request.GradeCreateRequest;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -60,12 +60,12 @@ public class Grade {
                 .build();
     }
 
-    public static Grade from(GradeCreate gradeCreate){
+    public static Grade from(GradeCreateRequest gradeCreateRequest){
         return Grade.builder()
-                .sourceCode(gradeCreate.getSourceCode())
-                .stdin(gradeCreate.getStdin())
-                .expectedOutput(gradeCreate.getExpectedOutput())
-                .languageId(gradeCreate.getLanguageId())
+                .sourceCode(gradeCreateRequest.sourceCode())
+                .stdin(gradeCreateRequest.stdin())
+                .expectedOutput(gradeCreateRequest.expectedOutput())
+                .languageId(gradeCreateRequest.languageId())
                 .statusId(GradeStatus.IN_QUEUE.getId())
                 .build();
     }
