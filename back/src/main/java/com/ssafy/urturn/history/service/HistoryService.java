@@ -2,7 +2,7 @@ package com.ssafy.urturn.history.service;
 
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
-import com.ssafy.urturn.global.util.MemberUtil;
+import com.ssafy.urturn.global.util.SecurityUtil;
 import com.ssafy.urturn.history.dto.response.HistoryResponse;
 import com.ssafy.urturn.history.entity.History;
 import com.ssafy.urturn.history.repository.HistoryRepository;
@@ -27,7 +27,7 @@ public class HistoryService {
     private final CacheDatas cacheDatas;
 
     public Page<HistoryResponse> getHistories(Pageable pageable) {
-        Long currentMemberId = MemberUtil.getMemberId();
+        Long currentMemberId = SecurityUtil.getMemberId();
         return historyRepository.getHistories(currentMemberId, pageable);
     }
 

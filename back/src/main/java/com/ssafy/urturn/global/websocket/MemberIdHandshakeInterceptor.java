@@ -1,7 +1,7 @@
 package com.ssafy.urturn.global.websocket;
 
 import com.ssafy.urturn.global.exception.RestApiException;
-import com.ssafy.urturn.global.util.MemberUtil;
+import com.ssafy.urturn.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
@@ -37,7 +37,7 @@ public class MemberIdHandshakeInterceptor implements HandshakeInterceptor {
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
         // SecurityContextHolder를 통해 사용자 ID를 추출하고, 웹소켓 세션 속성에 추가
         try {
-            Long memberId = MemberUtil.getMemberId();  // 사용자 ID를 추출
+            Long memberId = SecurityUtil.getMemberId();  // 사용자 ID를 추출
             attributes.put("memberId", memberId);  // 웹소켓 세션 속성에 사용자 ID 저장
             return true;  // 핸드셰이크를 계속 진행
         } catch (RestApiException e) {

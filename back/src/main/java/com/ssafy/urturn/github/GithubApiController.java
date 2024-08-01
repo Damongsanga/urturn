@@ -20,9 +20,9 @@ public class GithubApiController {
     private final GithubUploadService githubUploadService;
     private final OAuthService oAuthService;
 
+    // github repository에 업로드하기 전에 githubApi AccessToken을 refresh
     @GetMapping("/upload")
     public ResponseEntity<Void> refreshAccessToken(@RequestParam String code){
-        log.info("code : {}", code);
         String githubUniqueId = oAuthService.refreshAccessToken(code);
         githubUploadService.upload(githubUniqueId);
         return ResponseEntity.ok().build();

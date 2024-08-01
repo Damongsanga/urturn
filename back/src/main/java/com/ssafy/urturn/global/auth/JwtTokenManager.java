@@ -11,7 +11,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +36,7 @@ import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_AUT
 
 @Slf4j
 @Component
-public class JwtTokenProvider {
+public class JwtTokenManager {
 
     private JwtRedisRepository jwtRedisRepository;
     private Key key;
@@ -50,13 +49,13 @@ public class JwtTokenProvider {
 
     // application.yml에서 secret 값 가져와서 key에 저장
     @Autowired
-    public JwtTokenProvider(@Value("${spring.jwt.secret}") String secretKey,
-                            @Value("${spring.jwt.access-token-validity-in-seconds}") long accessTokenValidityInSeconds,
-                            @Value("${spring.jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInSeconds,
-                            JwtRedisRepository jwtRedisRepository,
-                            AES128Util aes128Util) {
+    public JwtTokenManager(@Value("${spring.jwt.secret}") String secretKey,
+                           @Value("${spring.jwt.access-token-validity-in-seconds}") long accessTokenValidityInSeconds,
+                           @Value("${spring.jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInSeconds,
+                           JwtRedisRepository jwtRedisRepository,
+                           AES128Util aes128Util) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey); // base64로 디코딩 -> 바이트 배열로 변환
-        this.key = Keys.hmacShaKeyFor(keyBytes); // hmacsha256으로 다시 암호화?
+        this.key = Keys.hmacShaKeyFor(keyBytes); // hmacsha256으로 다시 암호화
         this.accessTokenValidityInSeconds = accessTokenValidityInSeconds;
         this.refreshTokenValidityInSeconds = refreshTokenValidityInSeconds;
         this.jwtRedisRepository = jwtRedisRepository;
@@ -162,19 +161,6 @@ public class JwtTokenProvider {
         }
     }
 
-    // accessToken claim parsing (만료된 토큰도 복호화)
-    public Claims parseClaims(String token) {
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token) // JWT 토큰 검증과 파싱 모두 수행
-                    .getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
-    }
-
     // Request Header에서 토큰 정보 추출
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(HEADER);
@@ -183,21 +169,7 @@ public class JwtTokenProvider {
         }
         return null;
     }
-
-    public String resolveRefreshToken(HttpServletRequest req){
-        Cookie[] cookies = req.getCookies();
-        if (cookies == null) return null;
-
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("refreshToken")){
-                return URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
-            }
-        }
-        return null;
-    }
-
     public String generateNewAccessToken(String refreshToken){
-
         Authentication authentication = this.getAuthentication(refreshToken);
         String memberId = authentication.getName();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -211,14 +183,37 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+
+    public String resolveRefreshToken(HttpServletRequest req){
+        Cookie[] cookies = req.getCookies();
+        if (cookies == null) return null;
+
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("refreshToken")){
+                return URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+            }
+        }
+        return null;
+    }
+
+
+
     public boolean existsRefreshToken(String refreshToken) {
-        // userId 정보를 가져와서 redis에 있는 refreshtoken과 같은지 확인
-        Claims claims = this.parseClaims(refreshToken);
+        Claims claims = parseClaims(refreshToken);
         String memberId = claims.getSubject();
         return refreshToken.equals(jwtRedisRepository.find(KeyUtil.getRefreshTokenKey(memberId)).orElse(""));
     }
 
-    public void setHeaderAccessToken(HttpServletResponse response, String accessToken) {
-        response.setHeader("authorization", "bearer "+ accessToken);
+    // accessToken claim parsing (만료된 토큰도 복호화)
+    private Claims parseClaims(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token) // JWT 토큰 검증과 파싱 모두 수행
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
     }
 }

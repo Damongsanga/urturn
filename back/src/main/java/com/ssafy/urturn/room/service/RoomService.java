@@ -7,7 +7,7 @@ import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_ROO
 
 import com.ssafy.urturn.global.cache.CacheDatas;
 import com.ssafy.urturn.global.exception.RestApiException;
-import com.ssafy.urturn.global.util.MemberUtil;
+import com.ssafy.urturn.global.util.SecurityUtil;
 import com.ssafy.urturn.member.entity.Member;
 import com.ssafy.urturn.member.repository.MemberRepository;
 import com.ssafy.urturn.room.RoomStatus;
@@ -92,7 +92,7 @@ public class RoomService {
         }
 
         // 참여자 ID 설정
-        roomInfo.setPairId(MemberUtil.getMemberId());
+        roomInfo.setPairId(SecurityUtil.getMemberId());
 
         // 방 정보 업데이트
         cacheDatas.putRoomInfo(roomId, roomInfo);

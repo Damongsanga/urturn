@@ -3,14 +3,13 @@ package com.ssafy.urturn.global.util;
 import static com.ssafy.urturn.global.exception.errorcode.CustomErrorCode.NO_USER;
 
 import com.ssafy.urturn.global.exception.RestApiException;
-import com.ssafy.urturn.global.exception.errorcode.CustomErrorCode;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
-public class MemberUtil {
+public class SecurityUtil {
 
-    private MemberUtil(){
+    private SecurityUtil(){
         throw new IllegalStateException("Utility class");
     }
     

@@ -1,7 +1,7 @@
 package com.ssafy.urturn.member.service;
 
 import com.ssafy.urturn.global.exception.RestApiException;
-import com.ssafy.urturn.global.util.MemberUtil;
+import com.ssafy.urturn.global.util.SecurityUtil;
 import com.ssafy.urturn.member.dto.response.MemberDetailResponse;
 import com.ssafy.urturn.member.entity.Member;
 import com.ssafy.urturn.member.repository.MemberRepository;
@@ -21,7 +21,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public MemberDetailResponse getCurrentMember() {
-        Long currentMemberId = MemberUtil.getMemberId();
+        Long currentMemberId = SecurityUtil.getMemberId();
         Member currentMember = memberRepository.findById(currentMemberId).orElseThrow(() -> new RestApiException(
                 NO_MEMBER));
         return MemberDetailResponse.makeResponse(currentMember);
@@ -29,7 +29,7 @@ public class MemberService {
 
     @Transactional
     public void updateGithubRepository(String repository) {
-        Long currentMemberId = MemberUtil.getMemberId();
+        Long currentMemberId = SecurityUtil.getMemberId();
         Member currentMember = memberRepository.findByIdForUpdate(currentMemberId).orElseThrow(() -> new RestApiException(
                 NO_MEMBER));
         currentMember.updateGithubRepository(repository);

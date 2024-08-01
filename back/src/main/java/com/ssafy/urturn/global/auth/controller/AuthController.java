@@ -1,6 +1,6 @@
 package com.ssafy.urturn.global.auth.controller;
 
-import com.ssafy.urturn.global.auth.dto.LoginReqeust;
+import com.ssafy.urturn.global.auth.dto.LoginRequest;
 import com.ssafy.urturn.global.auth.dto.LoginResponse;
 import com.ssafy.urturn.global.auth.service.AuthService;
 import jakarta.validation.Valid;
@@ -28,8 +28,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> createAndLogin(@RequestBody @Valid LoginReqeust req){
-        LoginResponse res = authService.createAndLogin(req);
+    public ResponseEntity<LoginResponse> createAndLogin(@RequestBody @Valid LoginRequest req){
+        LoginResponse res = authService.joinAndLogin(req);
         HttpHeaders headers = getHeadersWithCookie(res);
         return new ResponseEntity<>(res, headers, HttpStatus.OK);
     }

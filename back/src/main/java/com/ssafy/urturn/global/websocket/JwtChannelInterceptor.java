@@ -1,6 +1,6 @@
 package com.ssafy.urturn.global.websocket;
 
-import com.ssafy.urturn.global.auth.JwtTokenProvider;
+import com.ssafy.urturn.global.auth.JwtTokenManager;
 import com.ssafy.urturn.global.exception.RestApiException;
 import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 public class JwtChannelInterceptor implements ChannelInterceptor {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenManager jwtTokenManager;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -34,16 +34,16 @@ public class JwtChannelInterceptor implements ChannelInterceptor {
         // 연결 요청시 JWT 검증
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             // Authorization 헤더 추출
-            List<String> authorization = accessor.getNativeHeader(JwtTokenProvider.HEADER);
+            List<String> authorization = accessor.getNativeHeader(JwtTokenManager.HEADER);
             if (authorization != null && !authorization.isEmpty()) {
-                String token = authorization.get(0).substring(JwtTokenProvider.TOKEN_PREFIX.length());
+                String token = authorization.get(0).substring(JwtTokenManager.TOKEN_PREFIX.length());
                 log.info("interceptor jwt token : {}", token);
                 try {
                     // JWT 토큰 검증
-                    if(token == null || !jwtTokenProvider.validateToken(token)) return null;
+                    if(token == null || !jwtTokenManager.validateToken(token)) return null;
 
                     // 유저 정보 저장
-                    Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                    Authentication authentication = jwtTokenManager.getAuthentication(token);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
 
                     Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

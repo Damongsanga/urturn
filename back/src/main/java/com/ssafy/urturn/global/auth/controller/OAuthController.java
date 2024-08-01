@@ -3,14 +3,6 @@ package com.ssafy.urturn.global.auth.controller;
 
 import com.ssafy.urturn.global.auth.dto.LoginResponse;
 import com.ssafy.urturn.global.auth.service.OAuthService;
-import com.ssafy.urturn.global.exception.RestApiException;
-import com.ssafy.urturn.global.exception.errorcode.CommonErrorCode;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,7 +30,7 @@ public class OAuthController {
     @GetMapping("/oauth2/login/github")
     public ResponseEntity<LoginResponse> gitHubLogin(@RequestParam String code){
         log.info("code : {}", code);
-        LoginResponse res = oAuthService.githubOAuthLogin(code);
+        LoginResponse res = oAuthService.joinAndLogin(code);
         HttpHeaders headers = getHeadersWithCookie(res);
         return new ResponseEntity<>(res, headers, HttpStatus.OK);
     }

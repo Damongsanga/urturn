@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginReqeust {
+public class LoginRequest {
 
     private String nickname;
     private String password;
