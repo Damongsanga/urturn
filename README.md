@@ -68,9 +68,12 @@
 
 ## 🎨 아키텍처
 
-채점 서버 오픈 소스 ([judge 0](https://ce.judge0.com/)) 사용시 아키텍처
+- 채점 서버 오픈 소스 ([judge 0](https://ce.judge0.com/)) 사용시 아키텍처
+
 ![image](./exec/Architecture_urturn.PNG)
-최종 아키텍처 (채점 서버 구현)
+
+- 최종 아키텍처 (채점 서버 구현)
+
 ![image](./exec/Architecture_urturn_final.jpeg)
 
 ## 🌐 Version Info & Setting
